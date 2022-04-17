@@ -1,7 +1,7 @@
 {
-  "name": "@sitym/future-slider",
-  "version": "1.0.1-0",
-  "description": "Lightweight react slider ",
+  "name": "react-layouts-dnd",
+  "version": "0.1.0",
+  "description": "Lightweight and powerfull react layouts drag and drop",
   "main": "packages/index.js",
   "types": "packages/index.d.ts",
   "module": "packages/esm/index.js",
@@ -21,15 +21,14 @@
   },
   "keywords": [
     "React",
-    "caroussel",
-    "slide",
-    "slder",
-    "slideshow",
-    "inifite",
-    "loop",
+    "drag and drop",
+    "layouts",
+    "section",
+    "row",
+    "column",
+    "typescript",
     "javascript",
-    "node",
-    "typescript"
+    "node"
   ],
   "author": "Mahady Manana",
   "license": "MIT",
