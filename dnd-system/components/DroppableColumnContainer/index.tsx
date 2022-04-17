@@ -60,7 +60,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
     e.preventDefault();
     const targetEl = e.currentTarget;
     const targetDom = targetEl.getAttribute('target-droppable-item');
-    console.log(targetDom, isSection);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -120,7 +119,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   const handleDragEnd = () => {
     onResizeEnd();
   };
-  // console.log("resizingWidth", resizingWidth)
 
   return (
     <div

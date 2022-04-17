@@ -1,5 +1,5 @@
-import { FC, ReactNode, DragEvent } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType';
+import { FC, ReactNode, DragEvent } from "react";
+import { DropTargetPlaceEnum } from "../../interface/internalType";
 interface DraggableProps {
     index: number;
     children: ReactNode | JSX.Element;

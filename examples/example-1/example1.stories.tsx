@@ -1,4 +1,7 @@
 import React from 'react';
+import App from '.';
+import './index.css';
+
 export default {
   title: 'EXAMLE 1 | Sipmle DND',
   parameters: {
@@ -14,5 +17,5 @@ export default {
 //   );
 // };
 export const Test = () => {
-  return <h1>Test</h1>;
+  return <App />;
 };

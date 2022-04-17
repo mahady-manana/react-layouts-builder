@@ -3,7 +3,6 @@ import {
   IRenderableColumn,
   IRenderableLayout
 } from "../interface/renderableInterface"
-import { sortLayoutLayerOrder } from "./sortLayoutLayer"
 
 export const createRenderableLayout = (
   data: any[],
@@ -29,7 +28,6 @@ export const createRenderableLayout = (
             }
             return renderedCol
           })
-          .sort(sortLayoutLayerOrder("order"))
           .filter((col) => col.items.length > 0)
       }
       return renderedLayout

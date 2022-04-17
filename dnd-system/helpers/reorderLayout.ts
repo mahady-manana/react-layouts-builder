@@ -52,43 +52,15 @@ export const removeSectionFromLayout = (
   return layoutWithoutDraggedItem
 }
 
-const addToLeftColumn = (
+const addToNewColumn = (
   targetColumn: IColumn[],
   targetColumnId: string,
-  sourceItemKey: string
+  sourceItemKey: string,
+  place: DropTargetPlaceEnum
 ) => {
   const newCols = targetColumn.reduce((acc, next) => {
-    const newWidth = Math.round(100 / (targetColumn.length + 1))
-    const shouldRemoveFromRestWidth = Math.round(newWidth / targetColumn.length)
-    if (next.id !== targetColumnId) {
-      return acc.concat({
-        ...next,
-        width: next.width - shouldRemoveFromRestWidth
-      })
-    }
-    const newCol: IColumn = {
-      childIds: [sourceItemKey],
-      id: new Date().getTime().toString(),
-      order: 999,
-      className: "w-full",
-      width: newWidth - shouldRemoveFromRestWidth
-    }
-    const current = {
-      ...next,
-      width: next.width - shouldRemoveFromRestWidth
-    }
-    return acc.concat([newCol, current])
-  }, [] as IColumn[])
-  const checkedWidth = keepRowFullWidth(newCols)
-  return checkedWidth
-}
-const addToRightColumn = (
-  targetColumn: IColumn[],
-  targetColumnId: string,
-  sourceItemKey: string
-) => {
-  const newCols = targetColumn.reduce((acc, next) => {
-    const newWidth = Math.round(100 / (targetColumn.length + 1))
+    const virtualLength = targetColumn.length > 1 ? targetColumn.length : 1
+    const newWidth = Math.round(100 / virtualLength)
     const shouldRemoveFromRestWidth = Math.round(
       newWidth / (targetColumn.length + 1)
     )
@@ -109,9 +81,12 @@ const addToRightColumn = (
       ...next,
       width: next.width - shouldRemoveFromRestWidth
     }
-    return acc.concat([current, newCol])
+    const reorder =
+      place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol]
+    return acc.concat(reorder)
   }, [] as IColumn[])
   const checkedWidth = keepRowFullWidth(newCols)
+
   return checkedWidth
 }
 
@@ -176,10 +151,20 @@ const addItemToColumn = (
   place: DropTargetPlaceEnum
 ) => {
   if (place === DropTargetPlaceEnum.LEFT) {
-    return addToLeftColumn(column, dest.columnId, source.itemKey)
+    return addToNewColumn(
+      column,
+      dest.columnId,
+      source.itemKey,
+      DropTargetPlaceEnum.LEFT
+    )
   }
   if (place === DropTargetPlaceEnum.RIGHT) {
-    return addToRightColumn(column, dest.columnId, source.itemKey)
+    return addToNewColumn(
+      column,
+      dest.columnId,
+      source.itemKey,
+      DropTargetPlaceEnum.RIGHT
+    )
   }
   if (place === DropTargetPlaceEnum.TOP) {
     return addToColmunElementToTop(

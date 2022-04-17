@@ -1,2 +1,2 @@
-export * from './DnDContainer';
+export * from './LayoutContainer';
 export * from './interface';

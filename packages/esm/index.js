@@ -51,7 +51,7 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     e.stopPropagation();
     e.preventDefault();
     var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-item');
+    var targetDom = targetEl.getAttribute("target-droppable-item");
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -59,23 +59,23 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   };
 
   var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'border-2 rounded-sm border-dashed bg-gray-200 border-gray-500 text-center p-2 my-1' : 'h-2';
+    return conditions ? "border-2 rounded-sm border-dashed bg-gray-200 border-gray-500 text-center p-2 my-1" : "h-2";
   };
 
   var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget('');
+    setDroppableTarget("");
   };
 
   var handleDropToTop = function handleDropToTop(e) {
     e.preventDefault();
     onDropItem(e, DropTargetPlaceEnum.TOP);
-    setDroppableTarget('');
+    setDroppableTarget("");
   };
 
   var handleDropToBottom = function handleDropToBottom(e) {
     e.preventDefault();
     onDropItem(e, DropTargetPlaceEnum.BOTTOM);
-    setDroppableTarget('');
+    setDroppableTarget("");
   };
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -84,13 +84,13 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null), children, /*#__PURE__*/React.createElement("div", {
+  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? "Add item to column..." : null), children, /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-bottom"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null));
+  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? "Add item to column..." : null));
 };
 
 var DroppableSection = function DroppableSection(_a) {
@@ -109,7 +109,7 @@ var DroppableSection = function DroppableSection(_a) {
     e.stopPropagation();
     e.preventDefault();
     var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-section');
+    var targetDom = targetEl.getAttribute("target-droppable-section");
 
     if (targetDom && !disableDrag) {
       setDroppableTarget(targetDom);
@@ -117,11 +117,11 @@ var DroppableSection = function DroppableSection(_a) {
   };
 
   var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'border-2 rounded-sm border-dashed border-gray-300 text-center p-4 my-1' : 'h-5';
+    return conditions ? "border-2 rounded-sm border-dashed border-gray-300 text-center p-4 my-1" : "h-5";
   };
 
   var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget('');
+    setDroppableTarget("");
   };
 
   return /*#__PURE__*/React.createElement("div", {
@@ -134,7 +134,7 @@ var DroppableSection = function DroppableSection(_a) {
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
       onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
-      setDroppableTarget('');
+      setDroppableTarget("");
     },
     onDragLeave: handleDragOverLeave
   }, droppableTarget === "".concat(dndTargetKey, "-top") ? "Drop here as a section..." : null) : null, /*#__PURE__*/React.createElement("div", {
@@ -146,9 +146,9 @@ var DroppableSection = function DroppableSection(_a) {
     onDragLeave: handleDragOverLeave,
     onDrop: function onDrop(e) {
       onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
-      setDroppableTarget('');
+      setDroppableTarget("");
     }
-  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Drop here as a section...' : null));
+  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? "Drop here as a section..." : null));
 };
 
 /*! *****************************************************************************
@@ -265,7 +265,6 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     e.preventDefault();
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-item');
-    console.log(targetDom, isSection);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -322,8 +321,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
 
   var handleDragEnd = function handleDragEnd() {
     onResizeEnd();
-  }; // console.log("resizingWidth", resizingWidth)
-
+  };
 
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('column flex relative', // `w-[${widthNumber}%]`,
@@ -365,7 +363,6 @@ var keepRowFullWidth = function keepRowFullWidth(columns) {
   var diffWidth = columns.reduce(function (acc, next) {
     return acc + next.width;
   }, 0);
-  console.log("Check width", columns);
 
   if (diffWidth !== 100) {
     var rest = 100 - diffWidth;
@@ -508,18 +505,17 @@ function v4(options, buf, offset) {
 }
 
 var createNewLayout = function createNewLayout(data, stableDataKey) {
-  console.log(data);
   return data.map(function (item, index) {
     var columns = [{
       childIds: [item[stableDataKey]],
       id: "column-".concat(v4()),
       order: 0,
-      className: "w-full",
+      className: 'w-full',
       styles: {},
       width: 100
     }];
     var section = {
-      className: "",
+      className: '',
       id: "section-".concat(v4()),
       order: 0,
       columns: columns
@@ -559,12 +555,6 @@ var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   return currentLayouts.concat(newLayouts);
 };
 
-var sortLayoutLayerOrder = function sortLayoutLayerOrder(key) {
-  return function (a, b) {
-    return a[key] - b[key];
-  };
-};
-
 var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
   var dataLayout = layouts.map(function (layout) {
     var renderedLayout = {
@@ -583,7 +573,7 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
           width: cols.width
         };
         return renderedCol;
-      }).sort(sortLayoutLayerOrder("order")).filter(function (col) {
+      }).filter(function (col) {
         return col.items.length > 0;
       })
     };
@@ -626,38 +616,10 @@ var removeItemFromLayout = function removeItemFromLayout(layouts, source) {
   return removedEmpty;
 };
 
-var addToLeftColumn = function addToLeftColumn(targetColumn, targetColumnId, sourceItemKey) {
+var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
   var newCols = targetColumn.reduce(function (acc, next) {
-    var newWidth = Math.round(100 / (targetColumn.length + 1));
-    var shouldRemoveFromRestWidth = Math.round(newWidth / targetColumn.length);
-
-    if (next.id !== targetColumnId) {
-      return acc.concat(__assign(__assign({}, next), {
-        width: next.width - shouldRemoveFromRestWidth
-      }));
-    }
-
-    var newCol = {
-      childIds: [sourceItemKey],
-      id: new Date().getTime().toString(),
-      order: 999,
-      className: "w-full",
-      width: newWidth - shouldRemoveFromRestWidth
-    };
-
-    var current = __assign(__assign({}, next), {
-      width: next.width - shouldRemoveFromRestWidth
-    });
-
-    return acc.concat([newCol, current]);
-  }, []);
-  var checkedWidth = keepRowFullWidth(newCols);
-  return checkedWidth;
-};
-
-var addToRightColumn = function addToRightColumn(targetColumn, targetColumnId, sourceItemKey) {
-  var newCols = targetColumn.reduce(function (acc, next) {
-    var newWidth = Math.round(100 / (targetColumn.length + 1));
+    var virtualLength = targetColumn.length > 1 ? targetColumn.length : 1;
+    var newWidth = Math.round(100 / virtualLength);
     var shouldRemoveFromRestWidth = Math.round(newWidth / (targetColumn.length + 1));
 
     if (next.id !== targetColumnId) {
@@ -678,7 +640,8 @@ var addToRightColumn = function addToRightColumn(targetColumn, targetColumnId, s
       width: next.width - shouldRemoveFromRestWidth
     });
 
-    return acc.concat([current, newCol]);
+    var reorder = place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol];
+    return acc.concat(reorder);
   }, []);
   var checkedWidth = keepRowFullWidth(newCols);
   return checkedWidth;
@@ -732,11 +695,11 @@ var addToColmunElementToBottom = function addToColmunElementToBottom(targetColum
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {
   if (place === DropTargetPlaceEnum.LEFT) {
-    return addToLeftColumn(column, dest.columnId, source.itemKey);
+    return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.LEFT);
   }
 
   if (place === DropTargetPlaceEnum.RIGHT) {
-    return addToRightColumn(column, dest.columnId, source.itemKey);
+    return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.RIGHT);
   }
 
   if (place === DropTargetPlaceEnum.TOP) {
@@ -820,7 +783,7 @@ var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place)
   return removeEmptyLayout(finalLayouts);
 };
 
-var DNDContainer = function DNDContainer(_a) {
+var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -1086,4 +1049,4 @@ var DNDContainer = function DNDContainer(_a) {
   })));
 };
 
-export { DNDContainer };
+export { LayoutContainer };

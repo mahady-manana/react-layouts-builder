@@ -1,19 +1,19 @@
-import React, { FC, ReactNode, DragEvent, useRef } from 'react';
+import React, { FC, ReactNode, DragEvent, useRef } from "react"
 
 interface DraggableProps {
-  children: ReactNode | JSX.Element;
-  dndTargetKey: string;
-  disableDrag: boolean;
-  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+  children: ReactNode | JSX.Element
+  dndTargetKey: string
+  disableDrag: boolean
+  onDragStart: (e: DragEvent<HTMLDivElement>) => void
   // onResize: ()
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   disableDrag,
-  onDragStart,
+  onDragStart
 }) => {
-  const element = useRef<HTMLDivElement>(null);
+  const element = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -25,5 +25,5 @@ export const DraggableItem: FC<DraggableProps> = ({
     >
       {children}
     </div>
-  );
-};
+  )
+}

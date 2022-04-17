@@ -1,4 +1,4 @@
-import { ISection } from "../interface";
+import { ISection } from '../interface';
 /**
  *
  * @param data   data used in the layer, Type : any[]

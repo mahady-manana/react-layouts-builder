@@ -25,9 +25,8 @@ import {
   IRenderableColumn,
   IRenderableLayout,
 } from '../interface/renderableInterface';
-import '../styles/index.css';
 
-export const DNDContainer: FC<IDNDContainer> = ({
+export const LayoutContainer: FC<IDNDContainer> = ({
   data,
   renderComponent,
   onLayoutChange,
@@ -39,19 +38,19 @@ export const DNDContainer: FC<IDNDContainer> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [disableDrag, setDisableDrag] = useState<boolean>(false);
   const [actualLayout, setActualLayout] = useState<ISection[]>([]);
-  const [isSectionDragged, setIsSectionDragged] = useState<boolean>(
-    false,
-  );
+  const [isSectionDragged, setIsSectionDragged] =
+    useState<boolean>(false);
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
-  const [initialSize, setInitialSize] = useState<{
-    widthPx: number;
-    currentPercentWidth: number;
-    onePixel: number;
-    initialPosPx: number;
-    colId: string;
-  }>();
+  const [initialSize, setInitialSize] =
+    useState<{
+      widthPx: number;
+      currentPercentWidth: number;
+      onePixel: number;
+      initialPosPx: number;
+      colId: string;
+    }>();
   const [currentColWidth, setCurentColWidth] = useState<number>();
   const [resizedSectionId, setResizedSectionId] = useState<string>();
 
