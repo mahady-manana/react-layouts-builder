@@ -1,4 +1,4 @@
-import { FC, ReactNode, DragEvent } from "react";
+import { FC, ReactNode, DragEvent } from 'react';
 interface DraggableProps {
     children: ReactNode | JSX.Element;
     dndTargetKey: string;

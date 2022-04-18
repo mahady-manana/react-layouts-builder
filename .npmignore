@@ -1,6 +1,6 @@
 __mocks__
 .storybook
-dnd-system
+layouts-builders
 examples
 assets
 node_modules

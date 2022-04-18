@@ -1,6 +1,6 @@
 {
-  "name": "react-layouts-dnd",
-  "version": "0.1.5",
+  "name": "react-layouts-builder",
+  "version": "0.0.1-2",
   "description": "Lightweight and powerfull react layouts drag and drop",
   "main": "packages/index.js",
   "types": "packages/index.d.ts",
@@ -32,7 +32,6 @@
   ],
   "author": "Mahady Manana",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.13.16",
@@ -65,7 +64,6 @@
     "postcss": "^8.4.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-layouts-dnd": "^0.1.0",
     "rollup": "^2.45.2",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",

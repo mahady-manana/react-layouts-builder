@@ -1,4 +1,4 @@
-# REACT LAYOUTS DND
+# REACT LAYOUTS BUILDER
 
 This project use TailwindCSS.
 
@@ -6,11 +6,11 @@ This project use TailwindCSS.
 
 ```js
 
-npm install react-layouts-dnd
+npm install react-layouts-builder
 
 // or
 
-yarn add react-layouts-dnd
+yarn add react-layouts-builder
 
 ```
 

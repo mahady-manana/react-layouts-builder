@@ -1,6 +1,6 @@
 {
   "name": "mylib",
-  "version": "0.1.0",
+  "version": "0.1.0-1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -13,7 +13,7 @@
     "classnames": "^2.3.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-layouts-dnd": "^0.1.5",
+    "react-layouts-builder": "^0.0.1-2",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "uuid": "^8.3.2",

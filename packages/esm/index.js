@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 function _typeof(obj) {
   "@babel/helpers - typeof";
@@ -12,16 +12,13 @@ function _typeof(obj) {
 
 var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
-      dndTargetKey = _a.dndTargetKey;
-      _a.disableDrag;
-      var onDragStart = _a.onDragStart;
-  var element = useRef(null);
+      dndTargetKey = _a.dndTargetKey,
+      onDragStart = _a.onDragStart;
   return /*#__PURE__*/React.createElement("div", {
     draggable: true,
     onDragStart: onDragStart,
     className: "flex-grow",
-    "target-dnd-droppable": "".concat(dndTargetKey),
-    ref: element
+    "target-dnd-droppable": "".concat(dndTargetKey)
   }, children);
 };
 
@@ -38,9 +35,8 @@ var DropTargetPlaceEnum;
 
 var DroppableColumnItem = function DroppableColumnItem(_a) {
   var children = _a.children,
-      dndTargetKey = _a.dndTargetKey;
-      _a.disableDrag;
-      var isSection = _a.isSection,
+      dndTargetKey = _a.dndTargetKey,
+      isSection = _a.isSection,
       onDropItem = _a.onDropItem;
 
   var _b = useState(),
@@ -51,7 +47,7 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     e.stopPropagation();
     e.preventDefault();
     var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute("target-droppable-item");
+    var targetDom = targetEl.getAttribute('target-droppable-item');
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -59,23 +55,23 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   };
 
   var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? "border-2 rounded-sm border-dashed bg-gray-200 border-gray-500 text-center p-2 my-1" : "h-2";
+    return conditions ? 'border-2 rounded-sm border-dashed bg-gray-200 border-gray-500 text-center p-2 my-1' : 'h-2';
   };
 
   var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget("");
+    setDroppableTarget('');
   };
 
   var handleDropToTop = function handleDropToTop(e) {
     e.preventDefault();
     onDropItem(e, DropTargetPlaceEnum.TOP);
-    setDroppableTarget("");
+    setDroppableTarget('');
   };
 
   var handleDropToBottom = function handleDropToBottom(e) {
     e.preventDefault();
     onDropItem(e, DropTargetPlaceEnum.BOTTOM);
-    setDroppableTarget("");
+    setDroppableTarget('');
   };
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -84,13 +80,13 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? "Add item to column..." : null), children, /*#__PURE__*/React.createElement("div", {
+  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null), children, /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-bottom"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? "Add item to column..." : null));
+  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null));
 };
 
 var DroppableSection = function DroppableSection(_a) {
@@ -265,6 +261,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     e.preventDefault();
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-item');
+    console.log(targetDom, isSection);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -321,7 +318,8 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
 
   var handleDragEnd = function handleDragEnd() {
     onResizeEnd();
-  };
+  }; // console.log("resizingWidth", resizingWidth)
+
 
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('column flex relative', // `w-[${widthNumber}%]`,
@@ -363,6 +361,7 @@ var keepRowFullWidth = function keepRowFullWidth(columns) {
   var diffWidth = columns.reduce(function (acc, next) {
     return acc + next.width;
   }, 0);
+  console.log('Check width', columns);
 
   if (diffWidth !== 100) {
     var rest = 100 - diffWidth;
@@ -505,6 +504,7 @@ function v4(options, buf, offset) {
 }
 
 var createNewLayout = function createNewLayout(data, stableDataKey) {
+  console.log(data);
   return data.map(function (item, index) {
     var columns = [{
       childIds: [item[stableDataKey]],
@@ -562,16 +562,20 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       order: layout.order,
       className: layout.className,
       columns: layout.columns.map(function (cols) {
+        var items = cols.childIds.map(function (item) {
+          return data.find(function (dt) {
+            return dt[key] === item;
+          }) || {};
+        });
         var renderedCol = {
           id: cols.id,
           order: cols.order,
           className: cols.className,
-          items: data.filter(function (item) {
-            return cols.childIds.includes(item[key]);
-          }) || [],
+          items: items,
           styles: cols.styles,
           width: cols.width
         };
+        console.log(cols.childIds, renderedCol.items);
         return renderedCol;
       }).filter(function (col) {
         return col.items.length > 0;
@@ -632,7 +636,7 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
       childIds: [sourceItemKey],
       id: new Date().getTime().toString(),
       order: 999,
-      className: "w-full",
+      className: 'w-full',
       width: newWidth - shouldRemoveFromRestWidth
     };
 
@@ -722,7 +726,7 @@ var addNewSectionFromDrag = function addNewSectionFromDrag(layouts, source, dest
 
     var id = new Date().getTime();
     var newSection = {
-      className: "",
+      className: '',
       id: id.toString(),
       order: 0,
       columns: [{
@@ -730,7 +734,7 @@ var addNewSectionFromDrag = function addNewSectionFromDrag(layouts, source, dest
         id: id.toString(),
         order: 0,
         width: 100,
-        className: "",
+        className: '',
         styles: {}
       }]
     };

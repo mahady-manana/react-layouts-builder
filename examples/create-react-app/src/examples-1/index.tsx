@@ -1,16 +1,16 @@
 import { FormEvent, useEffect, useState } from "react"
 
 import { mockData } from "../data/data"
-import { LayoutContainer, ISection } from "react-layouts-dnd"
+import { LayoutContainer, ILayoutSection } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
 
 export const Layouts1 = () => {
-  const [layoutTest, setLayoutTest] = useState<ISection[]>([])
+  const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
   const [data, setData] = useState<any[]>([])
   const [value, setValue] = useState("")
   const [loading, setLoading] = useState(true)
-  const handleLayoutChange = (layouts: ISection[]) => {
+  const handleLayoutChange = (layouts: ILayoutSection[]) => {
     storage.set(layouts)
     // setLayoutTest(layouts)
   }

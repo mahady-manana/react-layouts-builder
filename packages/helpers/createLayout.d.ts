@@ -1,4 +1,4 @@
-import { ISection } from '../interface';
+import { ILayoutSection } from '../interface';
 /**
  *
  * @param data   data used in the layer, Type : any[]
@@ -11,4 +11,4 @@ import { ISection } from '../interface';
  *
  * @returns
  */
-export declare const createLayout: (data: any[], stableDataKey: string, currentLayouts?: ISection[] | undefined) => ISection[];
+export declare const createLayout: (data: any[], stableDataKey: string, currentLayouts?: ILayoutSection[] | undefined) => ILayoutSection[];

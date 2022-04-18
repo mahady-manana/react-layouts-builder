@@ -1,19 +1,6 @@
 import { CSSProperties, ReactNode } from 'react';
 
 export interface ILayoutColumn {
-  sectionKey: string;
-  columnCount: number;
-  dataKey: string;
-  data: any;
-}
-export interface ILayout {
-  sectionKey: string;
-  sectionOrder: number;
-  columnsDataKeys: string[];
-  dataKey: string;
-}
-
-export interface ILayoutColumn {
   id: any;
   order: number;
   childIds: (string | number)[];

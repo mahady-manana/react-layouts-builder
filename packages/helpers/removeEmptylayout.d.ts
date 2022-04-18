@@ -1,6 +1,6 @@
-import { ISection } from "../interface";
-export declare const removeEmptyLayout: (layouts: ISection[]) => {
-    columns: import("../interface").IColumn[];
+import { ILayoutSection } from '../interface';
+export declare const removeEmptyLayout: (layouts: ILayoutSection[]) => {
+    columns: import("../interface").ILayoutColumn[];
     id: any;
     order: number;
     className: string;
