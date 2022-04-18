@@ -7,7 +7,6 @@ export const keepRowFullWidth = (
     (acc, next) => acc + next.width,
     0,
   );
-  console.log('Check width', columns);
 
   if (diffWidth !== 100) {
     const rest = 100 - diffWidth;

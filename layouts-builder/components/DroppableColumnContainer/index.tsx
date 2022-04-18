@@ -10,7 +10,7 @@ import React, {
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {
-  children: ReactNode | JSX.Element;
+  children: ReactNode;
   dndTargetKey: string;
   currentColumLength: number;
   width: number;
@@ -60,7 +60,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
     e.preventDefault();
     const targetEl = e.currentTarget;
     const targetDom = targetEl.getAttribute('target-droppable-item');
-    console.log(targetDom, isSection);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -69,8 +68,8 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
 
   const isHoveredTargetClassNameSide = (conditions: boolean) => {
     return conditions
-      ? 'border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2'
-      : 'w-4';
+      ? 'rlb-droppable-side-hover'
+      : 'rlb-droppable-side';
   };
   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -120,12 +119,11 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   const handleDragEnd = () => {
     onResizeEnd();
   };
-  // console.log("resizingWidth", resizingWidth)
 
   return (
     <div
       className={classNames(
-        'column flex relative',
+        'rlb-col',
         // `w-[${widthNumber}%]`,
         className,
       )}
@@ -135,17 +133,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         width: resizingWidth ? `${resizingWidth}%` : `${width}%`,
       }}
     >
-      {!droppableTarget ? (
-        <div
-          className="w-2 relative left-4 bottom-0 cursor-col-resize	opacity-0 hover:opacity-1 focus:bg-gray-800"
-          draggable
-          onDrag={handleResizeLeft}
-          onDragEnd={() => {
-            handleDragEnd();
-          }}
-          // onDragStart={onDragStart}
-        ></div>
-      ) : null}
       <div
         className={`${isHoveredTargetClassNameSide(
           droppableTarget === `item-${dndTargetKey}-left`,
@@ -159,9 +146,30 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           ? 'Drop new column...'
           : null}
       </div>
+      {!droppableTarget ? (
+        <div
+          className="rlb-resize-handler"
+          draggable
+          onDrag={handleResizeLeft}
+          onDragEnd={() => {
+            handleDragEnd();
+          }}
+          // onDragStart={onDragStart}
+        ></div>
+      ) : null}
 
       {children}
-
+      {!droppableTarget ? (
+        <div
+          className="rlb-resize-handler"
+          draggable
+          onDrag={handleResize}
+          onDragEnd={() => {
+            handleDragEnd();
+          }}
+          // onDragStart={onDragStart}
+        ></div>
+      ) : null}
       <div
         className={`${isHoveredTargetClassNameSide(
           droppableTarget === `item-${dndTargetKey}-right`,
@@ -175,18 +183,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           ? 'Drop new column...'
           : null}
       </div>
-
-      {!droppableTarget ? (
-        <div
-          className="w-2 relative right-4 bottom-0 cursor-col-resize	opacity-0 hover:opacity-1 focus:bg-gray-800"
-          draggable
-          onDrag={handleResize}
-          onDragEnd={() => {
-            handleDragEnd();
-          }}
-          // onDragStart={onDragStart}
-        ></div>
-      ) : null}
     </div>
   );
 };

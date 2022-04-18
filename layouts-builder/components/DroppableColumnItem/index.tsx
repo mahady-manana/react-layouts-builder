@@ -2,7 +2,7 @@ import React, { FC, ReactNode, DragEvent, useState } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {
-  children: ReactNode | JSX.Element;
+  children: ReactNode;
   dndTargetKey?: string;
   disableDrag: boolean;
   isSection?: boolean;
@@ -33,8 +33,8 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
   };
   const isHoveredTargetClassName = (conditions: boolean) => {
     return conditions
-      ? 'border-2 rounded-sm border-dashed bg-gray-200 border-gray-500 text-center p-2 my-1'
-      : 'h-2';
+      ? 'rlb-droppable-item-hover'
+      : 'rlb-droppable-item';
   };
 
   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {

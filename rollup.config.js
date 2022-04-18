@@ -19,12 +19,13 @@ export default {
       dir: './packages/esm',
       format: 'esm',
       sourcemap: false,
+      preserveModules: true,
     },
   ],
   plugins: [
     postcss({
       minimize: true,
-      modules: true,
+      modules: false,
       use: {
         sass: null,
         stylus: null,

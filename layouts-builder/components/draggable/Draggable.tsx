@@ -1,7 +1,7 @@
-import React, { FC, ReactNode, DragEvent, useRef } from 'react';
+import React, { FC, ReactNode, DragEvent } from 'react';
 
 interface DraggableProps {
-  children: ReactNode | JSX.Element;
+  children: ReactNode;
   dndTargetKey: string;
   disableDrag: boolean;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;

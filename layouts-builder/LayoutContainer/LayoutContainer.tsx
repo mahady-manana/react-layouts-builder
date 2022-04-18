@@ -25,6 +25,7 @@ import {
   IRenderableColumn,
   IRenderableLayout,
 } from '../interface/renderableInterface';
+import '../index.css';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -45,14 +46,13 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
-  const [initialSize, setInitialSize] =
-    useState<{
-      widthPx: number;
-      currentPercentWidth: number;
-      onePixel: number;
-      initialPosPx: number;
-      colId: string;
-    }>();
+  const [initialSize, setInitialSize] = useState<{
+    widthPx: number;
+    currentPercentWidth: number;
+    onePixel: number;
+    initialPosPx: number;
+    colId: string;
+  }>();
   const [currentColWidth, setCurentColWidth] = useState<number>();
   const [resizedSectionId, setResizedSectionId] = useState<string>();
 
@@ -285,7 +285,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 handleDragSectionStart(e, sectionData.id)
               }
             >
-              <div className="row flex w-full">
+              <div className="rlb-row">
                 {sectionData.columns.map((columnData) => {
                   return (
                     <DroppableColumnContainer
@@ -341,7 +341,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     >
                       <div
                         key={columnData.id}
-                        className={`column-container flex flex-col w-full  ${''}`}
+                        className={`rlb-col-inner  ${''}`}
                       >
                         {columnData.items.map((items) => {
                           return (

@@ -1,16 +1,16 @@
-import React, { FC, ReactNode, DragEvent, useState } from "react"
-import { DropTargetPlaceEnum } from "../../interface/internalType"
+import React, { FC, ReactNode, DragEvent, useState } from 'react';
+import { DropTargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {
-  index: number
-  children: ReactNode | JSX.Element
-  dndTargetKey?: string
-  disableDrag: boolean
-  onDragStart: (e: DragEvent<HTMLDivElement>) => void
+  index: number;
+  children: ReactNode;
+  dndTargetKey?: string;
+  disableDrag: boolean;
+  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum
-  ) => void
+    target: DropTargetPlaceEnum,
+  ) => void;
 }
 export const DroppableSection: FC<DraggableProps> = ({
   children,
@@ -18,44 +18,47 @@ export const DroppableSection: FC<DraggableProps> = ({
   dndTargetKey,
   disableDrag,
   onDropItem,
-  onDragStart
+  onDragStart,
 }) => {
-  const [droppableTarget, setDroppableTarget] = useState<string>()
+  const [droppableTarget, setDroppableTarget] = useState<string>();
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    e.preventDefault()
-    const targetEl = e.currentTarget
-    const targetDom = targetEl.getAttribute("target-droppable-section")
+    e.stopPropagation();
+    e.preventDefault();
+    const targetEl = e.currentTarget;
+    const targetDom = targetEl.getAttribute(
+      'target-droppable-section',
+    );
     if (targetDom && !disableDrag) {
-      setDroppableTarget(targetDom)
+      setDroppableTarget(targetDom);
     }
-  }
+  };
   const isHoveredTargetClassName = (conditions: boolean) => {
     return conditions
-      ? "border-2 rounded-sm border-dashed border-gray-300 text-center p-4 my-1"
-      : "h-5"
-  }
+      ? 'rlb-droppable-setion-hover'
+      : 'rlb-droppable-setion';
+  };
   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
-    setDroppableTarget("")
-  }
+    setDroppableTarget('');
+  };
 
   return (
-    <div
-      className="section hover:bg-gray-200"
-      draggable
-      onDragStart={onDragStart}
-    >
+    <div className="rlb-section" draggable onDragStart={onDragStart}>
+      <div className="rlb-setion-settings">
+        <div className="rlb-section-setting-title">
+          Section Settings
+        </div>
+      </div>
       {index === 0 ? (
         <div
           className={`${isHoveredTargetClassName(
-            droppableTarget === `${dndTargetKey}-top`
+            droppableTarget === `${dndTargetKey}-top`,
           )}`}
           target-droppable-section={`${dndTargetKey}-top`}
           onDragOver={handleDragOver}
           onDrop={(e) => {
-            onDropItem(e, DropTargetPlaceEnum.SECTION_TOP)
-            setDroppableTarget("")
+            onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
+            setDroppableTarget('');
           }}
           onDragLeave={handleDragOverLeave}
         >
@@ -68,20 +71,20 @@ export const DroppableSection: FC<DraggableProps> = ({
 
       <div
         className={`${isHoveredTargetClassName(
-          droppableTarget === `${dndTargetKey}-bottom`
+          droppableTarget === `${dndTargetKey}-bottom`,
         )}`}
         target-droppable-section={`${dndTargetKey}-bottom`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragOverLeave}
         onDrop={(e) => {
-          onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM)
-          setDroppableTarget("")
+          onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
+          setDroppableTarget('');
         }}
       >
         {droppableTarget === `${dndTargetKey}-bottom`
-          ? "Drop here as a section..."
+          ? 'Drop here as a section...'
           : null}
       </div>
     </div>
-  )
-}
+  );
+};

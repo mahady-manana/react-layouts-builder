@@ -1,7 +1,7 @@
 import { FC, ReactNode, DragEvent } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 interface DraggableProps {
-    children: ReactNode | JSX.Element;
+    children: ReactNode;
     dndTargetKey?: string;
     disableDrag: boolean;
     isSection?: boolean;

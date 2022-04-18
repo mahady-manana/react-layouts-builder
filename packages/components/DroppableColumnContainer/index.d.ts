@@ -1,7 +1,7 @@
 import { FC, ReactNode, DragEvent, CSSProperties } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 interface DraggableProps {
-    children: ReactNode | JSX.Element;
+    children: ReactNode;
     dndTargetKey: string;
     currentColumLength: number;
     width: number;

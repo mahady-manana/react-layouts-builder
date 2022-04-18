@@ -16,7 +16,7 @@ export interface ILayoutSection {
 export interface ILayoutContainer {
     data: any[];
     stableDataKey: string;
-    renderComponent: (data: any) => ReactNode | JSX.Element;
+    renderComponent: (data: any) => ReactNode | any;
     onLayoutChange: (data: ILayoutSection[]) => void;
     layouts?: ILayoutSection[];
     loading?: boolean;

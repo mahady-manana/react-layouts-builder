@@ -1,0 +1,105 @@
+.h-2 {
+    height: 0.5rem;
+}
+.h-5 {
+    height: 1rem;
+}
+.flex {
+    display: flex;
+}
+.flex-col {
+    flex-direction: column;
+}
+.w-2 {
+  width: 0.5rem;
+}
+.relative {
+    position: relative;
+}
+.rlb-section {
+    position: relative;
+}
+.rlb-section:hover {
+    border: 2px dashed #ccc;
+    padding-top: 20px;
+}
+.rlb-section:hover .rlb-setion-settings {
+    visibility: visible;
+}
+.rlb-setion-settings {
+    visibility: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #444;
+    padding: 5px;
+    display: flex;
+    z-index: 500;
+}
+.rlb-section-setting-title {
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+}
+.rlb-row {
+    display: flex;
+    width: 100%;
+}
+.rlb-col {
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+.rlb-col-inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.rlb-resize-handler {
+    cursor: col-resize;
+    width: 5px;
+}
+.rlb-droppable-setion {
+    height: 15px;
+}
+
+.rlb-droppable-section-hover {
+    padding: 20px;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.rlb-droppable-side {
+    width: 8px;
+}
+/* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
+.rlb-droppable-side-hover {
+    padding: 15px;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    margin-right: 8px;
+    display: flex;
+}
+
+.rlb-droppable-item {
+    height: 10px;
+}
+
+.rlb-droppable-item-hover {
+    padding: 15px;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.white {
+    color: white;
+}

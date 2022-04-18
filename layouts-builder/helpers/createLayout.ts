@@ -5,8 +5,6 @@ const createNewLayout = (
   data: any[],
   stableDataKey: string,
 ): ILayoutSection[] => {
-  console.log(data);
-
   return data.map((item: any, index: number) => {
     const columns: ILayoutColumn[] = [
       {
