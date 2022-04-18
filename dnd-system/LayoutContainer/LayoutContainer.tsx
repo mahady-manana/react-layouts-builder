@@ -1,24 +1,30 @@
-import { DragEvent, FC, useEffect, useRef, useState } from "react"
+import React, {
+  DragEvent,
+  FC,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   DraggableItem,
   DroppableColumnItem,
   DroppableSection,
-  DroppableColumnContainer
-} from "../components"
-import { changeColumnWidth } from "../helpers/changeColumnWidth"
-import { createLayout } from "../helpers/createLayout"
-import { createRenderableLayout } from "../helpers/createRendrableLayout"
-import { reorderLayoutItem } from "../helpers/reorderLayout"
-import { IDNDContainer, ISection } from "../interface"
+  DroppableColumnContainer,
+} from '../components';
+import { changeColumnWidth } from '../helpers/changeColumnWidth';
+import { createLayout } from '../helpers/createLayout';
+import { createRenderableLayout } from '../helpers/createRendrableLayout';
+import { reorderLayoutItem } from '../helpers/reorderLayout';
+import { IDNDContainer, ISection } from '../interface';
 import {
   DestinationType,
   DropTargetPlaceEnum,
-  SourceType
-} from "../interface/internalType"
+  SourceType,
+} from '../interface/internalType';
 import {
   IRenderableColumn,
-  IRenderableLayout
-} from "../interface/renderableInterface"
+  IRenderableLayout,
+} from '../interface/renderableInterface';
 
 export const LayoutContainer: FC<IDNDContainer> = ({
   data,
@@ -26,71 +32,77 @@ export const LayoutContainer: FC<IDNDContainer> = ({
   onLayoutChange,
   stableDataKey: stableKey,
   layouts,
-  loading
+  loading,
 }) => {
-  const containeRef = useRef<HTMLDivElement>(null)
-  const [isDragging, setIsDragging] = useState<boolean>(false)
-  const [disableDrag, setDisableDrag] = useState<boolean>(false)
-  const [actualLayout, setActualLayout] = useState<ISection[]>([])
-  const [isSectionDragged, setIsSectionDragged] = useState<boolean>(false)
-  const [renderableLayout, setRenderableLayout] = useState<IRenderableLayout[]>(
-    []
-  )
-  const [initialSize, setInitialSize] = useState<{
-    widthPx: number
-    currentPercentWidth: number
-    onePixel: number
-    initialPosPx: number
-    colId: string
-  }>()
-  const [currentColWidth, setCurentColWidth] = useState<number>()
-  const [resizedSectionId, setResizedSectionId] = useState<string>()
+  const containeRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [disableDrag, setDisableDrag] = useState<boolean>(false);
+  const [actualLayout, setActualLayout] = useState<ISection[]>([]);
+  const [isSectionDragged, setIsSectionDragged] =
+    useState<boolean>(false);
+  const [renderableLayout, setRenderableLayout] = useState<
+    IRenderableLayout[]
+  >([]);
+  const [initialSize, setInitialSize] =
+    useState<{
+      widthPx: number;
+      currentPercentWidth: number;
+      onePixel: number;
+      initialPosPx: number;
+      colId: string;
+    }>();
+  const [currentColWidth, setCurentColWidth] = useState<number>();
+  const [resizedSectionId, setResizedSectionId] = useState<string>();
 
   useEffect(() => {
     if (layouts) {
-      setActualLayout(layouts)
+      setActualLayout(layouts);
     }
-  }, [layouts])
+  }, [layouts]);
 
   useEffect(() => {
     if (layouts) {
-      setActualLayout(layouts)
+      setActualLayout(layouts);
     }
-  }, [layouts, loading])
+  }, [layouts, loading]);
 
   useEffect(() => {
-    const renderable = createRenderableLayout(data, actualLayout, stableKey)
-    setRenderableLayout(renderable)
-  }, [actualLayout, data, stableKey])
+    const renderable = createRenderableLayout(
+      data,
+      actualLayout,
+      stableKey,
+    );
+    setRenderableLayout(renderable);
+  }, [actualLayout, data, stableKey]);
 
   // create new layout if new data is added
   // Do not incldes 'stableKey and layouts and hooks-deps'
   useEffect(() => {
-    const newLayouts = createLayout(data, stableKey, layouts)
-    setActualLayout(newLayouts)
+    const newLayouts = createLayout(data, stableKey, layouts);
+    setActualLayout(newLayouts);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
     if (actualLayout.length > 0) {
-      onLayoutChange(actualLayout)
+      onLayoutChange(actualLayout);
     }
-  }, [actualLayout, onLayoutChange])
+  }, [actualLayout, onLayoutChange]);
 
   const handleDragStart = (
     e: DragEvent<HTMLDivElement>,
     sectionId: string,
     columnId: string,
-    itemkey: any
+    itemkey: any,
   ) => {
-    e.stopPropagation()
-    const itemKeyType = typeof itemkey
-    e.dataTransfer.setData("itemKey", itemkey)
-    e.dataTransfer.setData("itemKeyType", itemKeyType)
-    e.dataTransfer.setData("sectionId", sectionId)
-    e.dataTransfer.setData("colmunId", columnId)
-    setIsSectionDragged(false)
-  }
+    e.stopPropagation();
+    const itemKeyType = typeof itemkey;
+    e.dataTransfer.setData('itemKey', itemkey);
+    e.dataTransfer.setData('itemKeyType', itemKeyType);
+    e.dataTransfer.setData('sectionId', sectionId);
+    e.dataTransfer.setData('colmunId', columnId);
+    setIsSectionDragged(false);
+  };
 
   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
@@ -98,106 +110,108 @@ export const LayoutContainer: FC<IDNDContainer> = ({
     target: DropTargetPlaceEnum,
     sectionId: string,
     columnId: string,
-    itemKey: any
+    itemKey: any,
   ) => {
-    const sourceItemKey = e.dataTransfer.getData("itemKey")
-    const isSection = e.dataTransfer.getData("isSection")
-    const sourceSectionId = e.dataTransfer.getData("sectionId")
-    const sourceColumnKey = e.dataTransfer.getData("colmunId")
-    const itemKeyType = e.dataTransfer.getData("itemKeyType")
+    const sourceItemKey = e.dataTransfer.getData('itemKey');
+    const isSection = e.dataTransfer.getData('isSection');
+    const sourceSectionId = e.dataTransfer.getData('sectionId');
+    const sourceColumnKey = e.dataTransfer.getData('colmunId');
+    const itemKeyType = e.dataTransfer.getData('itemKeyType');
     const source: SourceType = {
       columnId: sourceColumnKey,
       itemKey:
-        itemKeyType === "number" ? parseFloat(sourceItemKey) : sourceItemKey,
+        itemKeyType === 'number'
+          ? parseFloat(sourceItemKey)
+          : sourceItemKey,
       sectionId: sourceSectionId,
-      isSection: !!isSection
-    }
+      isSection: !!isSection,
+    };
     const destination: DestinationType = {
       columnId: columnId,
       itemKey: itemKey,
       sectionId: sectionId,
-      targetPlace: target
-    }
+      targetPlace: target,
+    };
     const newLayout = reorderLayoutItem(
       actualLayout,
       source,
       destination,
-      target
-    )
+      target,
+    );
 
-    setIsSectionDragged(false)
-    setActualLayout(newLayout)
-  }
+    setIsSectionDragged(false);
+    setActualLayout(newLayout);
+  };
 
   const handleResize = (
     e: DragEvent<HTMLDivElement>,
     colmunId: string,
     sectionId: string,
-    isInvert?: boolean
+    isInvert?: boolean,
   ) => {
-    if (!initialSize) return
-    setResizedSectionId(sectionId)
-    const containerWidth = containeRef.current?.offsetWidth || 0
-    const onPercentInPixel = containerWidth / 100
+    if (!initialSize) return;
+    setResizedSectionId(sectionId);
+    const containerWidth = containeRef.current?.offsetWidth || 0;
+    const onPercentInPixel = containerWidth / 100;
 
-    const offset2 = e.clientX - initialSize.initialPosPx
-    const offsetPercent = offset2 / onPercentInPixel
-    const initialWidth = initialSize.currentPercentWidth
+    const offset2 = e.clientX - initialSize.initialPosPx;
+    const offsetPercent = offset2 / onPercentInPixel;
+    const initialWidth = initialSize.currentPercentWidth;
     const newWidth = isInvert
       ? initialWidth - offsetPercent
-      : initialWidth + offsetPercent
-    setIsDragging(true)
+      : initialWidth + offsetPercent;
+    setIsDragging(true);
     if (e.clientX === 0) {
-      setDisableDrag(false)
-      return
+      setDisableDrag(false);
+      return;
     }
 
-    setDisableDrag(true)
-    setCurentColWidth(Math.round(newWidth))
-  }
+    setDisableDrag(true);
+    setCurentColWidth(Math.round(newWidth));
+  };
   const handleResizeStart = (
     colId: string,
     widthPx: number,
     currentPercentWidth: number,
     onePixel: number,
-    initialPosPx: number
+    initialPosPx: number,
   ) => {
-    setIsDragging(true)
+    setIsDragging(true);
     setInitialSize({
       widthPx,
       currentPercentWidth,
       onePixel,
       initialPosPx,
-      colId
-    })
-  }
+      colId,
+    });
+  };
   const handleResizeEnd = (
     cols: IRenderableColumn[],
     colId: string,
     initialWidth: number,
-    colCount: number
+    colCount: number,
   ) => {
-    setIsDragging(false)
+    setIsDragging(false);
     const restWidth = cols.reduce((acc, next) => {
-      if (next.id === colId) return acc
-      return acc + next.width
-    }, 0)
-    const diff = 100 - ((currentColWidth || 0) + restWidth)
-    const shouldAdd = diff / (colCount - 1)
+      if (next.id === colId) return acc;
+      return acc + next.width;
+    }, 0);
+    const diff = 100 - ((currentColWidth || 0) + restWidth);
+    const shouldAdd = diff / (colCount - 1);
     const siblingsCols = cols
       .map((colm) => ({
         colId: colm.id,
-        width: colm.width + shouldAdd
+        width: colm.width + shouldAdd,
       }))
-      .filter((col) => col.colId !== colId)
+      .filter((col) => col.colId !== colId);
 
     const newsLayoutModified = changeColumnWidth(
       actualLayout,
       colId,
       currentColWidth || initialWidth,
-      siblingsCols
-    )
-    setActualLayout(newsLayoutModified)
+      siblingsCols,
+    );
+    setActualLayout(newsLayoutModified);
     // const layouts = addClassnameToColumn(
     //   actualLayout,
     //   colId,
@@ -211,39 +225,40 @@ export const LayoutContainer: FC<IDNDContainer> = ({
     //   }
     // )
 
-    setInitialSize(undefined)
+    setInitialSize(undefined);
     // setActualLayout(layouts)
-    setCurentColWidth(undefined)
-    setResizedSectionId("")
-  }
+    setCurentColWidth(undefined);
+    setResizedSectionId('');
+  };
   const generateNewColumnWidth = (
     cols: IRenderableColumn[],
     colId: string,
     currentWidth: number,
-    colCount: number
+    colCount: number,
   ) => {
     const restWidth = cols.reduce((acc, next) => {
-      if (next.id === colId) return acc
-      return acc + next.width
-    }, 0)
-    const diff = 100 - (currentWidth + restWidth)
-    const shouldAdd = diff / (colCount - 1)
+      if (next.id === colId) return acc;
+      return acc + next.width;
+    }, 0);
+    const diff = 100 - (currentWidth + restWidth);
+    const shouldAdd = diff / (colCount - 1);
     const colsWidth = cols.map((colm) => ({
       colId: colm.id,
-      width: colm.id === colId ? currentWidth : colm.width + shouldAdd
-    }))
-    return colsWidth
-  }
+      width:
+        colm.id === colId ? currentWidth : colm.width + shouldAdd,
+    }));
+    return colsWidth;
+  };
   const handleDragSectionStart = (
     e: DragEvent<HTMLDivElement>,
-    sectionId: string
+    sectionId: string,
   ) => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    e.dataTransfer.setData("sectionId", sectionId)
-    e.dataTransfer.setData("isSection", "section")
-    setIsSectionDragged(true)
-  }
+    e.dataTransfer.setData('sectionId', sectionId);
+    e.dataTransfer.setData('isSection', 'section');
+    setIsSectionDragged(true);
+  };
 
   return (
     <div className="max-w-[1080px] m-auto py-4">
@@ -256,9 +271,17 @@ export const LayoutContainer: FC<IDNDContainer> = ({
               dndTargetKey={sectionData.id}
               disableDrag={isDragging}
               onDropItem={(e, target) =>
-                handleDropItem(e, target, sectionData.id, "", undefined)
+                handleDropItem(
+                  e,
+                  target,
+                  sectionData.id,
+                  '',
+                  undefined,
+                )
               }
-              onDragStart={(e) => handleDragSectionStart(e, sectionData.id)}
+              onDragStart={(e) =>
+                handleDragSectionStart(e, sectionData.id)
+              }
             >
               <div className="row flex w-full">
                 {sectionData.columns.map((columnData) => {
@@ -277,38 +300,46 @@ export const LayoutContainer: FC<IDNDContainer> = ({
                               sectionData.columns,
                               initialSize?.colId as string,
                               currentColWidth || columnData.width,
-                              sectionData.columns.length
-                            ).find((co) => co.colId === columnData.id)?.width
+                              sectionData.columns.length,
+                            ).find((co) => co.colId === columnData.id)
+                              ?.width
                           : undefined
                       }
                       width={columnData.width}
-                      currentColumLength={sectionData.columns.length || 1}
+                      currentColumLength={
+                        sectionData.columns.length || 1
+                      }
                       onDropItem={(e, target) =>
                         handleDropItem(
                           e,
                           target,
                           sectionData.id,
                           columnData.id,
-                          undefined
+                          undefined,
                         )
                       }
                       onResizeStart={handleResizeStart}
                       onResize={(e, isInvert) => {
-                        setResizedSectionId(sectionData.id)
-                        handleResize(e, columnData.id, sectionData.id, isInvert)
+                        setResizedSectionId(sectionData.id);
+                        handleResize(
+                          e,
+                          columnData.id,
+                          sectionData.id,
+                          isInvert,
+                        );
                       }}
                       onResizeEnd={() =>
                         handleResizeEnd(
                           sectionData.columns,
                           columnData.id,
                           columnData.width,
-                          sectionData.columns.length || 1
+                          sectionData.columns.length || 1,
                         )
                       }
                     >
                       <div
                         key={columnData.id}
-                        className={`column-container flex flex-col w-full  ${""}`}
+                        className={`column-container flex flex-col w-full  ${''}`}
                       >
                         {columnData.items.map((items) => {
                           return (
@@ -317,14 +348,16 @@ export const LayoutContainer: FC<IDNDContainer> = ({
                               isSection={isSectionDragged}
                               key={items[stableKey]}
                               dndTargetKey={items[stableKey]}
-                              currentColumLength={columnData.items.length || 1}
+                              currentColumLength={
+                                columnData.items.length || 1
+                              }
                               onDropItem={(e, target) =>
                                 handleDropItem(
                                   e,
                                   target,
                                   sectionData.id,
                                   columnData.id,
-                                  items[stableKey]
+                                  items[stableKey],
                                 )
                               }
                             >
@@ -336,24 +369,24 @@ export const LayoutContainer: FC<IDNDContainer> = ({
                                     e,
                                     sectionData.id,
                                     columnData.id,
-                                    items[stableKey]
-                                  )
+                                    items[stableKey],
+                                  );
                                 }}
                               >
                                 {renderComponent(items)}
                               </DraggableItem>
                             </DroppableColumnItem>
-                          )
+                          );
                         })}
                       </div>
                     </DroppableColumnContainer>
-                  )
+                  );
                 })}
               </div>
             </DroppableSection>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
