@@ -141,6 +141,7 @@ const addToColmunElementToBottom = (
 
     return newCol
   }, [] as IColumn[])
+
   return newColumns
 }
 

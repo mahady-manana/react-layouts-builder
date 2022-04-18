@@ -17,15 +17,19 @@ export const createRenderableLayout = (
         className: layout.className,
         columns: layout.columns
           .map((cols) => {
+            const items = cols.childIds.map((item) => {
+              return data.find((dt) => dt[key] === item) || {}
+            })
             const renderedCol: IRenderableColumn = {
               id: cols.id,
               order: cols.order,
               className: cols.className,
-              items:
-                data.filter((item) => cols.childIds.includes(item[key])) || [],
+              items: items,
               styles: cols.styles,
               width: cols.width
             }
+            console.log(cols.childIds, renderedCol.items)
+
             return renderedCol
           })
           .filter((col) => col.items.length > 0)

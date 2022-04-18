@@ -1,19 +1,17 @@
-import { IColumn } from '../interface';
+import { IColumn } from "../interface"
 
 export const keepRowFullWidth = (columns: IColumn[]): IColumn[] => {
-  const diffWidth = columns.reduce(
-    (acc, next) => acc + next.width,
-    0,
-  );
+  const diffWidth = columns.reduce((acc, next) => acc + next.width, 0)
+  console.log("Check width", columns)
 
   if (diffWidth !== 100) {
-    const rest = 100 - diffWidth;
-    const shouldAdd = Math.round(rest / columns.length);
+    const rest = 100 - diffWidth
+    const shouldAdd = Math.round(rest / columns.length)
     return columns.map((col) => ({
       ...col,
-      width: col.width + shouldAdd,
-    }));
+      width: col.width + shouldAdd
+    }))
   }
 
-  return columns;
-};
+  return columns
+}
