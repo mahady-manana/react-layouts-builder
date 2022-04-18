@@ -2,7 +2,7 @@
 
 ## React Layouts dnd props
 
-```
+```js
 
 {
 
