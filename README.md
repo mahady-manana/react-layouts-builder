@@ -14,7 +14,7 @@ yarn add react-layouts-dnd
 
 ```
 
-## React Layouts dnd props
+## React Layouts dnd interface
 
 ```js
 
@@ -65,3 +65,12 @@ ILayoutColumn {
 
 
 ```
+
+## LayoutContainer Props
+
+The `LayoutContainer` is used to create the layouts using a drop and drop interface. It accepts the following props.
+
+| Property       | Type                                  | Required | Description                   |
+| -------------- | ------------------------------------- | :------: | ----------------------------- |
+| layouts        | ILayoutSection[]                      |  false   | Represents the current layout |
+| onLayoutChange | `(layouts:ILayoutSection[] ) => void` |  false   | layouts handler               |
