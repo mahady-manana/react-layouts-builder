@@ -1,17 +1,17 @@
-import { ISection } from "../interface"
+import { ILayoutSection } from '../interface';
 
-const removeEmptyColumn = (layouts: ISection[]) => {
+const removeEmptyColumn = (layouts: ILayoutSection[]) => {
   return layouts.map((section) => {
     const newColumns = section.columns.filter(
-      (col) => (col.childIds.length || 0) > 0
-    )
+      (col) => (col.childIds.length || 0) > 0,
+    );
     return {
       ...section,
-      columns: newColumns
-    }
-  })
-}
-export const removeEmptyLayout = (layouts: ISection[]) => {
-  const notEmptyCol = removeEmptyColumn(layouts)
-  return notEmptyCol.filter((section) => section.columns.length > 0)
-}
+      columns: newColumns,
+    };
+  });
+};
+export const removeEmptyLayout = (layouts: ILayoutSection[]) => {
+  const notEmptyCol = removeEmptyColumn(layouts);
+  return notEmptyCol.filter((section) => section.columns.length > 0);
+};

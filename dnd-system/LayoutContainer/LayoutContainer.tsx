@@ -15,7 +15,7 @@ import { changeColumnWidth } from '../helpers/changeColumnWidth';
 import { createLayout } from '../helpers/createLayout';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { reorderLayoutItem } from '../helpers/reorderLayout';
-import { IDNDContainer, ISection } from '../interface';
+import { ILayoutContainer, ILayoutSection } from '../interface';
 import {
   DestinationType,
   DropTargetPlaceEnum,
@@ -26,7 +26,7 @@ import {
   IRenderableLayout,
 } from '../interface/renderableInterface';
 
-export const LayoutContainer: FC<IDNDContainer> = ({
+export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
   renderComponent,
   onLayoutChange,
@@ -37,7 +37,9 @@ export const LayoutContainer: FC<IDNDContainer> = ({
   const containeRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [disableDrag, setDisableDrag] = useState<boolean>(false);
-  const [actualLayout, setActualLayout] = useState<ISection[]>([]);
+  const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
+    [],
+  );
   const [isSectionDragged, setIsSectionDragged] =
     useState<boolean>(false);
   const [renderableLayout, setRenderableLayout] = useState<
