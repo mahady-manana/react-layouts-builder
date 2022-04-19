@@ -1,21 +1,28 @@
 export enum DropTargetPlaceEnum {
-  LEFT = "LEFT",
-  RIGHT = "RIGHT",
-  TOP = "TOP",
-  BOTTOM = "BOTTOM",
-  SECTION_TOP = "SECTION_TOP",
-  SECTION_BOTTOM = "SECTION_BOTTOM"
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM',
+  SECTION_TOP = 'SECTION_TOP',
+  SECTION_BOTTOM = 'SECTION_BOTTOM',
 }
 
 export interface SourceType {
-  sectionId: string
-  columnId: string
-  itemKey: any
-  isSection?: boolean
+  sectionId: string;
+  columnId: string;
+  itemKey: any;
+  isSection?: boolean;
 }
 export interface DestinationType {
-  sectionId: string
-  columnId: string
-  itemKey: any
-  targetPlace: DropTargetPlaceEnum
+  sectionId: string;
+  columnId: string;
+  itemKey: any;
+  targetPlace: DropTargetPlaceEnum;
+}
+
+export interface Rgba {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
 }

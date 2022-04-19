@@ -97,64 +97,6 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null));
 };
 
-var DroppableSection = function DroppableSection(_a) {
-  var children = _a.children,
-      index = _a.index,
-      dndTargetKey = _a.dndTargetKey,
-      disableDrag = _a.disableDrag,
-      onDropItem = _a.onDropItem,
-      onDragStart = _a.onDragStart;
-
-  var _b = React.useState(),
-      droppableTarget = _b[0],
-      setDroppableTarget = _b[1];
-
-  var handleDragOver = function handleDragOver(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-section');
-
-    if (targetDom && !disableDrag) {
-      setDroppableTarget(targetDom);
-    }
-  };
-
-  var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'rlb-droppable-setion-hover' : 'rlb-droppable-setion';
-  };
-
-  var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget('');
-  };
-
-  return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "rlb-section",
-    draggable: true,
-    onDragStart: onDragStart
-  }, index === 0 ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
-    "target-droppable-section": "".concat(dndTargetKey, "-top"),
-    onDragOver: handleDragOver,
-    onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
-      setDroppableTarget('');
-    },
-    onDragLeave: handleDragOverLeave
-  }, droppableTarget === "".concat(dndTargetKey, "-top") ? "Drop here as a section..." : null) : null, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "section-content"
-  }, children), /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
-    "target-droppable-section": "".concat(dndTargetKey, "-bottom"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
-      setDroppableTarget('');
-    }
-  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Drop here as a section...' : null));
-};
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -181,10 +123,233 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+function on(obj) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    if (obj && obj.addEventListener) {
+        obj.addEventListener.apply(obj, args);
+    }
+}
+function off(obj) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    if (obj && obj.removeEventListener) {
+        obj.removeEventListener.apply(obj, args);
+    }
+}
+
+var defaultEvents = ['mousedown', 'touchstart'];
+var useClickAway = function (ref, onClickAway, events) {
+    if (events === void 0) { events = defaultEvents; }
+    var savedCallback = React.useRef(onClickAway);
+    React.useEffect(function () {
+        savedCallback.current = onClickAway;
+    }, [onClickAway]);
+    React.useEffect(function () {
+        var handler = function (event) {
+            var el = ref.current;
+            el && !el.contains(event.target) && savedCallback.current(event);
+        };
+        for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
+            var eventName = events_1[_i];
+            on(document, eventName, handler);
+        }
+        return function () {
+            for (var _i = 0, events_2 = events; _i < events_2.length; _i++) {
+                var eventName = events_2[_i];
+                off(document, eventName, handler);
+            }
+        };
+    }, [events, ref]);
+};
+var useClickAway$1 = useClickAway;
+
 function createCommonjsModule(fn) {
   var module = { exports: {} };
 	return fn(module, module.exports), module.exports;
 }
+
+var SettingIcon = function SettingIcon() {
+  return /*#__PURE__*/React__default["default"].createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "#444"
+  }, /*#__PURE__*/React__default["default"].createElement("path", {
+    d: "M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+  }));
+};
+
+var DroppableSection = function DroppableSection(_a) {
+  var children = _a.children,
+      index = _a.index,
+      dndTargetKey = _a.dndTargetKey,
+      disableDrag = _a.disableDrag,
+      sections = _a.sections,
+      onDropItem = _a.onDropItem,
+      onDragStart = _a.onDragStart,
+      onChangeSectionStyles = _a.onChangeSectionStyles;
+
+  var _b = React.useState(false),
+      openSetting = _b[0],
+      setOpenSetting = _b[1];
+
+  var _c = React.useState(),
+      droppableTarget = _c[0],
+      setDroppableTarget = _c[1];
+
+  var popoverRef = React.useRef(null);
+  useClickAway$1(popoverRef, function () {
+    setOpenSetting(false);
+  });
+
+  var handleDragOver = function handleDragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    var targetEl = e.currentTarget;
+    var targetDom = targetEl.getAttribute('target-droppable-section');
+
+    if (targetDom && !disableDrag) {
+      setDroppableTarget(targetDom);
+    }
+  };
+
+  var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
+    return conditions ? 'rlb-droppable-setion-hover' : 'rlb-droppable-setion';
+  };
+
+  var handleDragOverLeave = function handleDragOverLeave(e) {
+    setDroppableTarget('');
+  };
+
+  var handleClickSetting = function handleClickSetting(e) {
+    e.preventDefault();
+    setOpenSetting(!openSetting);
+  };
+
+  var handleSectionStyles = function handleSectionStyles(key, value) {
+    onChangeSectionStyles && onChangeSectionStyles(key, value);
+  };
+
+  return /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "relative"
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rlb-section",
+    draggable: true,
+    onDragStart: onDragStart,
+    style: {
+      background: sections.backgroundColor,
+      paddingBlock: (sections.spacing || 0) * 8
+    }
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rlb-section-settings",
+    onClick: handleClickSetting
+  }, /*#__PURE__*/React__default["default"].createElement("span", null, "Settings"), /*#__PURE__*/React__default["default"].createElement(SettingIcon, null)), index === 0 ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
+    "target-droppable-section": "".concat(dndTargetKey, "-top"),
+    onDragOver: handleDragOver,
+    onDrop: function onDrop(e) {
+      onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
+      setDroppableTarget('');
+    },
+    onDragLeave: handleDragOverLeave
+  }, droppableTarget === "".concat(dndTargetKey, "-top") ? "Drop here as a section..." : null) : null, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "section-content",
+    style: {
+      maxWidth: sections.width,
+      margin: 'auto'
+    }
+  }, children), /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
+    "target-droppable-section": "".concat(dndTargetKey, "-bottom"),
+    onDragOver: handleDragOver,
+    onDragLeave: handleDragOverLeave,
+    onDrop: function onDrop(e) {
+      onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
+      setDroppableTarget('');
+    }
+  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Drop here as a section...' : null)), openSetting ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rlb-section-setting-modal",
+    ref: popoverRef
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-2 bg-gray-200"
+  }, /*#__PURE__*/React__default["default"].createElement("h5", null, "Section settings")), /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-4",
+    style: {
+      padding: 20
+    }
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-2"
+  }, /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("h5", null, "Content width :"), /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-2 rlb-range-input"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    type: "range",
+    min: 0,
+    max: 100,
+    value: sections.contentWidth || 100,
+    onChange: function onChange(e) {
+      handleSectionStyles('contentWidth', parseFloat(e.target.value));
+    }
+  }), /*#__PURE__*/React__default["default"].createElement("span", {
+    className: "range-value"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    min: 0,
+    max: 100,
+    className: "rlb-range-input-nb",
+    type: "number",
+    value: sections.contentWidth || 100,
+    onChange: function onChange(e) {
+      handleSectionStyles('contentWidth', parseFloat(e.target.value));
+    }
+  }), "(%)"))), /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("h5", null, "Max. Content width : "), /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-2 rlb-range-input"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    type: "range",
+    min: 320,
+    max: 1920,
+    value: sections.width || 1080,
+    onChange: function onChange(e) {
+      handleSectionStyles('width', parseFloat(e.target.value));
+    }
+  }), /*#__PURE__*/React__default["default"].createElement("span", {
+    className: "range-value"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    min: 320,
+    max: 1920,
+    className: "rlb-range-input-nb",
+    type: "number",
+    value: sections.width || 1080,
+    onChange: function onChange(e) {
+      handleSectionStyles('width', parseFloat(e.target.value));
+    }
+  }), "(px)"))), /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("h5", null, "Section spacing : "), /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "p-2 rlb-range-input"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    type: "range",
+    min: 0,
+    max: 10,
+    value: sections.spacing,
+    onChange: function onChange(e) {
+      handleSectionStyles('spacing', parseFloat(e.target.value));
+    }
+  }), /*#__PURE__*/React__default["default"].createElement("span", {
+    className: "range-value"
+  }, /*#__PURE__*/React__default["default"].createElement("input", {
+    className: "rlb-range-input-nb",
+    type: "number",
+    min: 0,
+    max: 10,
+    value: sections.spacing,
+    onChange: function onChange(e) {
+      handleSectionStyles('spacing', parseFloat(e.target.value));
+    }
+  }))))))) : null);
+};
 
 /*!
   Copyright (c) 2018 Jed Watson.
@@ -522,7 +687,10 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
       className: '',
       id: "section-".concat(v4()),
       order: 0,
-      columns: columns
+      columns: columns,
+      contentWidth: 100,
+      width: 1080,
+      spacing: 0
     };
     return section;
   });
@@ -565,6 +733,10 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       id: layout.id,
       order: layout.order,
       className: layout.className,
+      backgroundColor: layout.backgroundColor,
+      contentWidth: layout.contentWidth,
+      spacing: layout.spacing,
+      width: layout.width,
       columns: layout.columns.map(function (cols) {
         var items = cols.childIds.map(function (item) {
           return data.find(function (dt) {
@@ -790,6 +962,19 @@ var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place)
   return removeEmptyLayout(finalLayouts);
 };
 
+var changeSectionStyles = function changeSectionStyles(section, sectionId, key, value) {
+  var newSection = section.map(function (sect) {
+    var _a;
+
+    if (sect.id === sectionId) {
+      return __assign(__assign({}, sect), (_a = {}, _a[key] = value, _a));
+    }
+
+    return sect;
+  });
+  return newSection;
+};
+
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
@@ -985,6 +1170,11 @@ var LayoutContainer = function LayoutContainer(_a) {
     setIsSectionDragged(true);
   };
 
+  var handleSectionStyles = function handleSectionStyles(id, key, value) {
+    var newLayouts = changeSectionStyles(actualLayout, id, key, value);
+    setActualLayout(newLayouts);
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "max-w-[1080px] m-auto py-4"
   }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -994,16 +1184,24 @@ var LayoutContainer = function LayoutContainer(_a) {
     return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
       index: index,
       key: sectionData.id,
+      sections: sectionData,
       dndTargetKey: sectionData.id,
       disableDrag: isDragging,
       onDropItem: function onDropItem(e, target) {
         return handleDropItem(e, target, sectionData.id, '', undefined);
       },
       onDragStart: function onDragStart(e) {
-        return handleDragSectionStart(e, sectionData.id);
+        handleDragSectionStart(e, sectionData.id);
+      },
+      onChangeSectionStyles: function onChangeSectionStyles(key, value) {
+        return handleSectionStyles(sectionData.id, key, value);
       }
     }, /*#__PURE__*/React__default["default"].createElement("div", {
-      className: "rlb-row"
+      className: "rlb-row",
+      style: {
+        width: "".concat(sectionData.contentWidth, "%"),
+        margin: 'auto'
+      }
     }, sectionData.columns.map(function (columnData) {
       var _a;
 

@@ -14,7 +14,10 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
       className: '',
       id: "section-".concat(v4()),
       order: 0,
-      columns: columns
+      columns: columns,
+      contentWidth: 100,
+      width: 1080,
+      spacing: 0
     };
     return section;
   });

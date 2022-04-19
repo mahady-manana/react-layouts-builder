@@ -25,18 +25,27 @@
 }
 .rlb-section:hover {
     border: 2px dashed #ccc;
+    margin-top: 20px;
 }
-.rlb-section:hover .rlb-setion-settings {
+.rlb-section:hover .rlb-section-settings {
     visibility: visible;
     height: unset;
     padding: 5px;
 }
-.rlb-setion-settings {
+.rlb-section-settings>span {
+    padding-right: 8px;
+}
+.rlb-section-settings {
+    /* visibility: hidden; */
     visibility: hidden;
-    height: 0px;
     background: #bbb;
     display: flex;
+    padding: 5px;
+    position: absolute;
+    right: -2px;
+    top: -35px;
     z-index: 500;
+    cursor: pointer;
 }
 .rlb-section-setting-title {
     color: white;
@@ -104,4 +113,27 @@
 }
 .white {
     color: white;
+}
+
+/* sections settings */
+.rlb-section-setting-modal {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    background: #fff;
+    box-shadow: 2px 2px 18px 0 #ccc;
+    z-index: 999;
+}
+.rlb-range-input {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.rlb-range-input>span {
+    padding-left: 10px;
+}
+.rlb-range-input-nb {
+    width: max-content;
 }

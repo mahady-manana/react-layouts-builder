@@ -15,6 +15,10 @@ export const createRenderableLayout = (
         id: layout.id,
         order: layout.order,
         className: layout.className,
+        backgroundColor: layout.backgroundColor,
+        contentWidth: layout.contentWidth,
+        spacing: layout.spacing,
+        width: layout.width,
         columns: layout.columns
           .map((cols) => {
             const items = cols.childIds.map((item) => {

@@ -4,6 +4,10 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       id: layout.id,
       order: layout.order,
       className: layout.className,
+      backgroundColor: layout.backgroundColor,
+      contentWidth: layout.contentWidth,
+      spacing: layout.spacing,
+      width: layout.width,
       columns: layout.columns.map(function (cols) {
         var items = cols.childIds.map(function (item) {
           return data.find(function (dt) {

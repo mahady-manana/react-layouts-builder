@@ -8,6 +8,7 @@ import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
 import { createLayout } from '../helpers/createLayout.js';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { reorderLayoutItem } from '../helpers/reorderLayout.js';
+import { changeSectionStyles } from '../helpers/changeSectionStyles.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -204,6 +205,11 @@ var LayoutContainer = function LayoutContainer(_a) {
     setIsSectionDragged(true);
   };
 
+  var handleSectionStyles = function handleSectionStyles(id, key, value) {
+    var newLayouts = changeSectionStyles(actualLayout, id, key, value);
+    setActualLayout(newLayouts);
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: "max-w-[1080px] m-auto py-4"
   }, /*#__PURE__*/React.createElement("div", {
@@ -213,16 +219,24 @@ var LayoutContainer = function LayoutContainer(_a) {
     return /*#__PURE__*/React.createElement(DroppableSection, {
       index: index,
       key: sectionData.id,
+      sections: sectionData,
       dndTargetKey: sectionData.id,
       disableDrag: isDragging,
       onDropItem: function onDropItem(e, target) {
         return handleDropItem(e, target, sectionData.id, '', undefined);
       },
       onDragStart: function onDragStart(e) {
-        return handleDragSectionStart(e, sectionData.id);
+        handleDragSectionStart(e, sectionData.id);
+      },
+      onChangeSectionStyles: function onChangeSectionStyles(key, value) {
+        return handleSectionStyles(sectionData.id, key, value);
       }
     }, /*#__PURE__*/React.createElement("div", {
-      className: "rlb-row"
+      className: "rlb-row",
+      style: {
+        width: "".concat(sectionData.contentWidth, "%"),
+        margin: 'auto'
+      }
     }, sectionData.columns.map(function (columnData) {
       var _a;
 

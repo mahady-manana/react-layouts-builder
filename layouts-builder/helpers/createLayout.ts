@@ -21,6 +21,9 @@ const createNewLayout = (
       id: `section-${uuidv4()}`,
       order: 0,
       columns: columns,
+      contentWidth: 100,
+      width: 1080,
+      spacing: 0,
     };
     return section;
   });

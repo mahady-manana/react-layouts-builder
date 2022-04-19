@@ -63,6 +63,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "postcss": "^8.4.12",
+    "react-colorful": "^5.5.1",
+    "react-use": "^17.3.2",
     "rollup": "^2.45.2",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -74,6 +76,7 @@
   },
   "peerDependencies": {
     "react": "^17.0.2",
+    "react-colorful": "^5.5.1",
     "react-dom": "^17.0.2"
   }
 }

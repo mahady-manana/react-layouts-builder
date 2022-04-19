@@ -4,4 +4,8 @@ export declare const removeEmptyLayout: (layouts: ILayoutSection[]) => {
     id: any;
     order: number;
     className: string;
+    width?: string | number | undefined;
+    contentWidth?: string | number | undefined;
+    backgroundColor?: string | undefined;
+    spacing?: number | undefined;
 }[];

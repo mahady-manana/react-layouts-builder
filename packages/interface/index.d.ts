@@ -12,6 +12,15 @@ export interface ILayoutSection {
     order: number;
     columns: ILayoutColumn[];
     className: string;
+    width?: string | number;
+    contentWidth?: string | number;
+    backgroundColor?: string;
+    spacing?: number;
+}
+export interface ILayoutLabels {
+    sectionPlaceholder?: string;
+    columnPlaceholder?: string;
+    itemsPlaceholder?: string;
 }
 export interface ILayoutContainer {
     data: any[];
@@ -20,4 +29,5 @@ export interface ILayoutContainer {
     onLayoutChange: (data: ILayoutSection[]) => void;
     layouts?: ILayoutSection[];
     loading?: boolean;
+    labels?: ILayoutLabels;
 }

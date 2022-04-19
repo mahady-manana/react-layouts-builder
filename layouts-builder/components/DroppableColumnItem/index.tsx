@@ -1,4 +1,11 @@
-import React, { FC, ReactNode, DragEvent, useState } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  DragEvent,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {

@@ -26,6 +26,7 @@ import {
   IRenderableLayout,
 } from '../interface/renderableInterface';
 import '../index.css';
+import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -98,6 +99,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     itemkey: any,
   ) => {
     e.stopPropagation();
+
     const itemKeyType = typeof itemkey;
     e.dataTransfer.setData('itemKey', itemkey);
     e.dataTransfer.setData('itemKeyType', itemKeyType);
@@ -256,10 +258,19 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     sectionId: string,
   ) => {
     e.stopPropagation();
-
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('isSection', 'section');
     setIsSectionDragged(true);
+  };
+
+  const handleSectionStyles = (id: any, key: string, value: any) => {
+    const newLayouts = changeSectionStyles(
+      actualLayout,
+      id,
+      key,
+      value,
+    );
+    setActualLayout(newLayouts);
   };
 
   return (
@@ -270,6 +281,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
             <DroppableSection
               index={index}
               key={sectionData.id}
+              sections={sectionData}
               dndTargetKey={sectionData.id}
               disableDrag={isDragging}
               onDropItem={(e, target) =>
@@ -281,11 +293,20 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                   undefined,
                 )
               }
-              onDragStart={(e) =>
-                handleDragSectionStart(e, sectionData.id)
+              onDragStart={(e) => {
+                handleDragSectionStart(e, sectionData.id);
+              }}
+              onChangeSectionStyles={(key, value) =>
+                handleSectionStyles(sectionData.id, key, value)
               }
             >
-              <div className="rlb-row">
+              <div
+                className="rlb-row"
+                style={{
+                  width: `${sectionData.contentWidth}%`,
+                  margin: 'auto',
+                }}
+              >
                 {sectionData.columns.map((columnData) => {
                   return (
                     <DroppableColumnContainer

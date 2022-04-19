@@ -6,6 +6,8 @@ import React, {
   useState,
   useRef,
   CSSProperties,
+  Dispatch,
+  SetStateAction,
 } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 
@@ -89,7 +91,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   const onDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (initialSize) return;
     const columnWidth = columnRef.current?.clientWidth || 1;
     const containerWidth = columnWidth * currentColumLength;
@@ -146,6 +147,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           ? 'Drop new column...'
           : null}
       </div>
+
       {!droppableTarget ? (
         <div
           className="rlb-resize-handler"
@@ -170,6 +172,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           // onDragStart={onDragStart}
         ></div>
       ) : null}
+
       <div
         className={`${isHoveredTargetClassNameSide(
           droppableTarget === `item-${dndTargetKey}-right`,
