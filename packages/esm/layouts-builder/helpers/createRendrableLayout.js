@@ -18,7 +18,6 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
           styles: cols.styles,
           width: cols.width
         };
-        console.log(cols.childIds, renderedCol.items);
         return renderedCol;
       }).filter(function (col) {
         return col.items.length > 0;

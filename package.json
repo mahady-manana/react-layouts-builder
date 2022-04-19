@@ -17,7 +17,9 @@
     "test-jest:watch": "jest --watch",
     "build": "rollup -c",
     "build:w": "rollup -cw",
-    "npm-publish": "npm version patch && npm publish && git push --tags"
+    "npm-publish": "npm version patch && npm publish && git push --tags",
+    "npm:alpha": "npm version premajor --preid alpha",
+    "npm:beta": "npm version prerelease --preid beta"
   },
   "keywords": [
     "React",
