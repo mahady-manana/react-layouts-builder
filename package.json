@@ -1,6 +1,6 @@
 {
   "name": "react-layouts-builder",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-alpha.1",
   "description": "Lightweight and powerfull react layouts drag and drop",
   "main": "packages/index.js",
   "types": "packages/index.d.ts",
@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "build:w": "rollup -cw",
     "npm-publish": "npm version patch && npm publish && git push --tags",
-    "npm:alpha": "npm version premajor --preid alpha",
+    "npm:alpha": "npm version prerelease --preid alpha",
     "npm:beta": "npm version prerelease --preid beta"
   },
   "keywords": [
