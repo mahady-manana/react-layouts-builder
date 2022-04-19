@@ -44,11 +44,6 @@ export const DroppableSection: FC<DraggableProps> = ({
 
   return (
     <div className="rlb-section" draggable onDragStart={onDragStart}>
-      <div className="rlb-setion-settings">
-        <div className="rlb-section-setting-title">
-          Section Settings
-        </div>
-      </div>
       {index === 0 ? (
         <div
           className={`${isHoveredTargetClassName(

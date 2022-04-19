@@ -28,7 +28,6 @@ export const createRenderableLayout = (
               styles: cols.styles,
               width: cols.width,
             };
-            console.log(cols.childIds, renderedCol.items);
 
             return renderedCol;
           })

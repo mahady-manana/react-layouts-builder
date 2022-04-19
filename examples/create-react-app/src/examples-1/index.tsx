@@ -4,6 +4,7 @@ import { mockData } from "../data/data"
 import { LayoutContainer, ILayoutSection } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
+import "react-layouts-builder/packages/index.css"
 
 export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
@@ -41,7 +42,7 @@ export const Layouts1 = () => {
   }
   useEffect(() => {
     setData(mockData)
-  }, [mockData])
+  }, [])
 
   return (
     <div>

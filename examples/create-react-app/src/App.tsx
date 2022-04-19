@@ -13,6 +13,11 @@ function App() {
         <h3 className="text-center p-2 text-2xl text-white	bg-gray-500">
           React Layouts DND - Section - Row - Column System
         </h3>
+        <div>
+          <p>Sections settings :</p>
+          <div>Content width :</div>
+          <div>Column dispositions :</div>
+        </div>
         <div className="bg-gray-200">
           <Layouts1 />
         </div>

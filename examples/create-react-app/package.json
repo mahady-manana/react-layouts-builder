@@ -13,7 +13,6 @@
     "classnames": "^2.3.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-layouts-builder": "^0.0.1-2",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "uuid": "^8.3.2",

@@ -36,11 +36,7 @@ var DroppableSection = function DroppableSection(_a) {
     className: "rlb-section",
     draggable: true,
     onDragStart: onDragStart
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "rlb-setion-settings"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "rlb-section-setting-title"
-  }, "Section Settings")), index === 0 ? /*#__PURE__*/React.createElement("div", {
+  }, index === 0 ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
     "target-droppable-section": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
