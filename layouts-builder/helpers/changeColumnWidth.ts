@@ -33,19 +33,20 @@ export const changeColumnWidth = (
   width: number,
   sibling: { colId: string; width: number }[],
 ) => {
-  const finalLayouts = layouts.map((section) => {
-    if (!section.columns.find((cl) => cl.id === columnId))
-      return section;
-    const sectionModified = {
-      ...section,
-      columns: addClassColmun(
-        section.columns,
-        columnId,
-        width,
-        sibling,
-      ),
-    };
-    return sectionModified;
-  });
-  return removeEmptyLayout(finalLayouts);
+  // const finalLayouts = layouts.map((section) => {
+  //   if (!section.columns.find((cl) => cl.id === columnId))
+  //     return section;
+  //   const sectionModified = {
+  //     ...section,
+  //     columns: addClassColmun(
+  //       section.columns,
+  //       columnId,
+  //       width,
+  //       sibling,
+  //     ),
+  //   };
+  //   return sectionModified;
+  // });
+  // return removeEmptyLayout(finalLayouts);
+  return layouts;
 };

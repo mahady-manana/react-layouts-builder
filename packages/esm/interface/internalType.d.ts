@@ -9,13 +9,15 @@ export declare enum DropTargetPlaceEnum {
 export interface SourceType {
     sectionId: string;
     columnId: string;
+    columnIndex: number;
     itemKey: any;
     isSection?: boolean;
 }
 export interface DestinationType {
     sectionId: string;
     columnId: string;
-    itemKey: any;
+    columnIndex: number;
+    itemKey?: any;
     targetPlace: DropTargetPlaceEnum;
 }
 export interface Rgba {

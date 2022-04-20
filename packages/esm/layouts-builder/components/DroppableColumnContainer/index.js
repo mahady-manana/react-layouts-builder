@@ -1,24 +1,22 @@
-import { __assign } from '../../../node_modules/tslib/tslib.es6.js';
 import classnames from '../../../node_modules/classnames/index.js';
 import React, { useState, useRef } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType.js';
 
 var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   var children = _a.children,
-      dndTargetKey = _a.dndTargetKey,
-      width = _a.width,
-      isSection = _a.isSection,
-      currentColumLength = _a.currentColumLength,
-      initialSize = _a.initialSize,
-      resizingWidth = _a.resizingWidth,
-      disableDrag = _a.disableDrag,
-      className = _a.className,
-      styles = _a.styles,
-      disableChange = _a.disableChange,
-      onDropItem = _a.onDropItem,
-      onResize = _a.onResize,
-      onResizeStart = _a.onResizeStart,
-      onResizeEnd = _a.onResizeEnd;
+      dndTargetKey = _a.dndTargetKey;
+      _a.width;
+      var isSection = _a.isSection;
+      _a.currentColumLength;
+      _a.initialSize;
+      _a.resizingWidth;
+      var disableDrag = _a.disableDrag,
+      className = _a.className;
+      _a.styles;
+      var disableChange = _a.disableChange,
+      onDropItem = _a.onDropItem;
+      _a.onResize;
+      _a.onResizeStart;
 
   var _b = useState(),
       droppableTarget = _b[0],
@@ -58,65 +56,17 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     setDroppableTarget('');
   };
 
-  var onDragStart = function onDragStart(e) {
-    var _a;
-
-    e.preventDefault();
-    e.stopPropagation();
-    if (initialSize) return;
-    var columnWidth = ((_a = columnRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth) || 1;
-    var containerWidth = columnWidth * currentColumLength;
-    var onePercentInPx = containerWidth / 100;
-    var onePixelInPercent = 1 / onePercentInPx;
-    onResizeStart(dndTargetKey, columnWidth, width, Math.round(onePixelInPercent * 100) / 100, e.clientX);
-  };
-
-  var handleResize = function handleResize(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onDragStart(e);
-    onResize(e);
-  };
-
-  var handleResizeLeft = function handleResizeLeft(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onDragStart(e);
-    onResize(e, true);
-  };
-
-  var handleDragEnd = function handleDragEnd() {
-    onResizeEnd();
-  };
-
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef,
-    style: __assign(__assign({}, styles), {
-      width: resizingWidth ? "".concat(resizingWidth, "%") : "".concat(width, "%")
-    })
+    ref: columnRef
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-left"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-left"),
     onDragOver: disableDrag ? undefined : handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
-  }, droppableTarget === "item-".concat(dndTargetKey, "-left") ? 'Drop new column...' : null) : null, !droppableTarget && !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "rlb-resize-handler",
-    draggable: true,
-    onDrag: handleResizeLeft,
-    onDragEnd: function onDragEnd() {
-      handleDragEnd();
-    }
-  }) : null, children, !droppableTarget && !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "rlb-resize-handler",
-    draggable: true,
-    onDrag: handleResize,
-    onDragEnd: function onDragEnd() {
-      handleDragEnd();
-    }
-  }) : null, !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }, droppableTarget === "item-".concat(dndTargetKey, "-left") ? 'Drop new column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-right"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,

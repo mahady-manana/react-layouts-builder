@@ -5,10 +5,10 @@ const createNewLayout = (
   data: any[],
   stableDataKey: string,
 ): ILayoutSection[] => {
-  return data.map((item: any, index: number) => {
+  return [uuidv4()].map((id: any, index: number) => {
     const columns: ILayoutColumn[] = [
       {
-        childIds: [item[stableDataKey]],
+        childIds: data.map((item) => item[stableDataKey]),
         id: `column-${uuidv4()}`,
         order: 0,
         className: 'w-full',
@@ -20,9 +20,9 @@ const createNewLayout = (
       className: '',
       id: `section-${uuidv4()}`,
       order: 0,
-      columns: columns,
-      contentWidth: 100,
-      width: 1080,
+      columns: [columns],
+      contentWidth: 1080,
+      width: '100%',
       spacing: 2,
     };
     return section;
@@ -48,16 +48,17 @@ export const createLayout = (
   if (!currentLayouts || currentLayouts?.length === 0) {
     return createNewLayout(data, stableDataKey);
   }
-  const getNewData = data.filter((dt) => {
-    const isExist = currentLayouts.find((section) => {
-      const sectionExist = section.columns.find((col) =>
-        col.childIds.includes(dt[stableDataKey]),
-      );
-      return sectionExist;
-    });
-    return !isExist;
-  });
+  // const getNewData = data.filter((dt) => {
+  //   const isExist = currentLayouts.find((section) => {
+  //     const sectionExist = section.columns.find((col) =>
+  //       col.childIds.includes(dt[stableDataKey]),
+  //     );
+  //     return sectionExist;
+  //   });
+  //   return !isExist;
+  // });
 
-  const newLayouts = createNewLayout(getNewData, stableDataKey);
-  return currentLayouts.concat(newLayouts);
+  // const newLayouts = createNewLayout(getNewData, stableDataKey);
+  // return currentLayouts.concat(newLayouts);
+  return [];
 };

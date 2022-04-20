@@ -34,11 +34,11 @@ interface DraggableProps {
     onePixel: number,
     initialPos: number,
   ) => void;
-  onResize: (
+  onResize?: (
     e: DragEvent<HTMLDivElement>,
     isInvert?: boolean,
   ) => void;
-  onResizeEnd: () => void;
+  // onResizeEnd: () => void;
 }
 export const DroppableColumnContainer: FC<DraggableProps> = ({
   children,
@@ -55,7 +55,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   onDropItem,
   onResize,
   onResizeStart,
-  onResizeEnd,
+  // onResizeEnd,
 }) => {
   const [droppableTarget, setDroppableTarget] = useState<string>();
   const columnRef = useRef<HTMLDivElement>(null);
@@ -111,16 +111,16 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
     e.preventDefault();
     e.stopPropagation();
     onDragStart(e);
-    onResize(e);
+    onResize && onResize(e);
   };
   const handleResizeLeft = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     onDragStart(e);
-    onResize(e, true);
+    onResize && onResize(e, true);
   };
   const handleDragEnd = () => {
-    onResizeEnd();
+    // onResizeEnd();
   };
 
   return (
@@ -131,10 +131,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         className,
       )}
       ref={columnRef}
-      style={{
-        ...styles,
-        width: resizingWidth ? `${resizingWidth}%` : `${width}%`,
-      }}
     >
       {!disableChange ? (
         <div
@@ -152,9 +148,9 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         </div>
       ) : null}
 
-      {!droppableTarget && !disableChange ? (
+      {/* {!droppableTarget && !disableChange ? (
         <div
-          className="rlb-resize-handler"
+          className="rlb-resize-handler left"
           draggable
           onDrag={handleResizeLeft}
           onDragEnd={() => {
@@ -162,12 +158,12 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           }}
           // onDragStart={onDragStart}
         ></div>
-      ) : null}
+      ) : null} */}
 
       {children}
-      {!droppableTarget && !disableChange ? (
+      {/* {!droppableTarget && !disableChange ? (
         <div
-          className="rlb-resize-handler"
+          className="rlb-resize-handler right"
           draggable
           onDrag={handleResize}
           onDragEnd={() => {
@@ -175,7 +171,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           }}
           // onDragStart={onDragStart}
         ></div>
-      ) : null}
+      ) : null} */}
 
       {!disableChange ? (
         <div

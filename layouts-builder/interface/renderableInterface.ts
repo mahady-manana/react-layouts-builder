@@ -4,7 +4,7 @@ export interface IRenderableLayout {
   id: any;
   className?: string;
   order: number;
-  columns: IRenderableColumn[];
+  columns: IRenderableColumn[][];
   width?: string | number;
   contentWidth?: string | number;
   backgroundColor?: string;

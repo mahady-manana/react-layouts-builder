@@ -8,22 +8,24 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       contentWidth: layout.contentWidth,
       spacing: layout.spacing,
       width: layout.width,
-      columns: layout.columns.map(function (cols) {
-        var items = cols.childIds.map(function (item) {
-          return data.find(function (dt) {
-            return dt[key] === item;
-          }) || {};
+      columns: layout.columns.map(function (colmns) {
+        return colmns.map(function (cols) {
+          var items = cols.childIds.map(function (item) {
+            return data.find(function (dt) {
+              return dt[key] === item;
+            }) || {};
+          });
+          var renderedCol = {
+            id: cols.id,
+            order: cols.order,
+            className: cols.className,
+            items: items,
+            width: cols.width
+          };
+          return renderedCol;
+        }).filter(function (col) {
+          return col.items.length > 0;
         });
-        var renderedCol = {
-          id: cols.id,
-          order: cols.order,
-          className: cols.className,
-          items: items,
-          width: cols.width
-        };
-        return renderedCol;
-      }).filter(function (col) {
-        return col.items.length > 0;
       })
     };
     return renderedLayout;

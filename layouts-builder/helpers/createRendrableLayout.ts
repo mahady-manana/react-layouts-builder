@@ -19,22 +19,24 @@ export const createRenderableLayout = (
         contentWidth: layout.contentWidth,
         spacing: layout.spacing,
         width: layout.width,
-        columns: layout.columns
-          .map((cols) => {
-            const items = cols.childIds.map((item) => {
-              return data.find((dt) => dt[key] === item) || {};
-            });
-            const renderedCol: IRenderableColumn = {
-              id: cols.id,
-              order: cols.order,
-              className: cols.className,
-              items: items,
-              width: cols.width,
-            };
+        columns: layout.columns.map((colmns) =>
+          colmns
+            .map((cols) => {
+              const items = cols.childIds.map((item) => {
+                return data.find((dt) => dt[key] === item) || {};
+              });
+              const renderedCol: IRenderableColumn = {
+                id: cols.id,
+                order: cols.order,
+                className: cols.className,
+                items: items,
+                width: cols.width,
+              };
 
-            return renderedCol;
-          })
-          .filter((col) => col.items.length > 0),
+              return renderedCol;
+            })
+            .filter((col) => col.items.length > 0),
+        ),
       };
       return renderedLayout;
     })

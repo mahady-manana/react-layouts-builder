@@ -10,11 +10,12 @@ export interface ILayoutColumn {
 export interface ILayoutSection {
   id: any;
   order: number;
-  columns: ILayoutColumn[];
+  columns: ILayoutColumn[][];
   className: string;
   width?: string | number;
   contentWidth?: string | number;
   backgroundColor?: string;
+  backgroundImage?: string;
   spacing?: number;
 }
 

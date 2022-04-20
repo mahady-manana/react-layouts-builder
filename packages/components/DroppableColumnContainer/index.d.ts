@@ -14,8 +14,7 @@ interface DraggableProps {
     resizingWidth?: number;
     onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;
     onResizeStart: (colId: string, widthPx: number, currentPercentWidth: number, onePixel: number, initialPos: number) => void;
-    onResize: (e: DragEvent<HTMLDivElement>, isInvert?: boolean) => void;
-    onResizeEnd: () => void;
+    onResize?: (e: DragEvent<HTMLDivElement>, isInvert?: boolean) => void;
 }
 export declare const DroppableColumnContainer: FC<DraggableProps>;
 export {};

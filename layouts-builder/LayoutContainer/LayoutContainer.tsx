@@ -27,6 +27,7 @@ import {
 } from '../interface/renderableInterface';
 import '../index.css';
 import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
+import { ResizableContainer } from 'layouts-builder/components/ResizableContainer/ResizableContainer';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -97,6 +98,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     e: DragEvent<HTMLDivElement>,
     sectionId: string,
     columnId: string,
+    columnIndex: number,
     itemkey: any,
   ) => {
     e.stopPropagation();
@@ -106,6 +108,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     e.dataTransfer.setData('itemKeyType', itemKeyType);
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
+    e.dataTransfer.setData('colmunIndex', columnIndex.toString());
     setIsSectionDragged(false);
   };
 
@@ -115,13 +118,17 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     target: DropTargetPlaceEnum,
     sectionId: string,
     columnId: string,
+    columnIndex: number,
     itemKey: any,
   ) => {
     const sourceItemKey = e.dataTransfer.getData('itemKey');
     const isSection = e.dataTransfer.getData('isSection');
     const sourceSectionId = e.dataTransfer.getData('sectionId');
     const sourceColumnKey = e.dataTransfer.getData('colmunId');
+    const sourceColmunIndex = e.dataTransfer.getData('colmunIndex');
     const itemKeyType = e.dataTransfer.getData('itemKeyType');
+    console.log('sourceColmunIndex', sourceColmunIndex);
+
     const source: SourceType = {
       columnId: sourceColumnKey,
       itemKey:
@@ -130,12 +137,14 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
           : sourceItemKey,
       sectionId: sourceSectionId,
       isSection: !!isSection,
+      columnIndex: parseFloat(sourceColmunIndex),
     };
     const destination: DestinationType = {
       columnId: columnId,
       itemKey: itemKey,
       sectionId: sectionId,
       targetPlace: target,
+      columnIndex,
     };
     const newLayout = reorderLayoutItem(
       actualLayout,
@@ -275,7 +284,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   };
 
   return (
-    <div className="max-w-[1080px] m-auto py-4">
+    <div className="m-auto py-4">
       <div className="min-h-[100px] " ref={containeRef}>
         {renderableLayout.map((sectionData, index) => {
           return (
@@ -292,6 +301,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                   target,
                   sectionData.id,
                   '',
+                  99999999,
                   undefined,
                 )
               }
@@ -302,110 +312,102 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 handleSectionStyles(sectionData.id, key, value)
               }
             >
-              <div
-                className="rlb-row"
-                style={{
-                  width: `${sectionData.contentWidth}%`,
-                  margin: 'auto',
-                }}
-              >
-                {sectionData.columns.map((columnData) => {
-                  return (
-                    <DroppableColumnContainer
-                      disableChange={disableChange}
-                      initialSize={initialSize}
-                      disableDrag={isDragging}
-                      key={columnData.id}
-                      isSection={isSectionDragged}
-                      styles={columnData.styles}
-                      className={columnData.className}
-                      dndTargetKey={columnData.id}
-                      resizingWidth={
-                        resizedSectionId === sectionData.id
-                          ? generateNewColumnWidth(
-                              sectionData.columns,
-                              initialSize?.colId as string,
-                              currentColWidth || columnData.width,
-                              sectionData.columns.length,
-                            ).find((co) => co.colId === columnData.id)
-                              ?.width
-                          : undefined
-                      }
-                      width={columnData.width}
-                      currentColumLength={
-                        sectionData.columns.length || 1
-                      }
-                      onDropItem={(e, target) =>
-                        handleDropItem(
-                          e,
-                          target,
-                          sectionData.id,
-                          columnData.id,
-                          undefined,
-                        )
-                      }
-                      onResizeStart={handleResizeStart}
-                      onResize={(e, isInvert) => {
-                        setResizedSectionId(sectionData.id);
-                        handleResize(
-                          e,
-                          columnData.id,
-                          sectionData.id,
-                          isInvert,
-                        );
-                      }}
-                      onResizeEnd={() =>
-                        handleResizeEnd(
-                          sectionData.columns,
-                          columnData.id,
-                          columnData.width,
-                          sectionData.columns.length || 1,
-                        )
-                      }
-                    >
-                      <div
-                        key={columnData.id}
-                        className={`rlb-col-inner  ${''}`}
-                      >
-                        {columnData.items.map((items) => {
-                          return (
-                            <DroppableColumnItem
-                              disableChange={disableChange}
-                              isSection={isSectionDragged}
-                              key={items[stableKey]}
-                              dndTargetKey={items[stableKey]}
-                              onDropItem={(e, target) =>
-                                handleDropItem(
-                                  e,
-                                  target,
-                                  sectionData.id,
-                                  columnData.id,
-                                  items[stableKey],
-                                )
-                              }
-                            >
-                              <DraggableItem
-                                disableChange={disableChange}
-                                dndTargetKey={items[stableKey]}
-                                onDragStart={(e) => {
-                                  handleDragStart(
-                                    e,
-                                    sectionData.id,
-                                    columnData.id,
-                                    items[stableKey],
-                                  );
-                                }}
-                              >
-                                {renderComponent(items)}
-                              </DraggableItem>
-                            </DroppableColumnItem>
-                          );
-                        })}
-                      </div>
-                    </DroppableColumnContainer>
-                  );
-                })}
-              </div>
+              {/* <ResizableContainer
+                resizable
+                styles={{ width: sectionData.contentWidth }}
+              > */}
+              {sectionData.columns.map((cols, colIndex) => {
+                return (
+                  <ResizableContainer
+                    isRow
+                    resizable
+                    key={colIndex}
+                    styles={{ width: 1080 }}
+                  >
+                    {cols.map((columnData) => {
+                      return (
+                        <DroppableColumnContainer
+                          key={columnData.id}
+                          disableChange={disableChange}
+                          initialSize={initialSize}
+                          disableDrag={isDragging}
+                          isSection={isSectionDragged}
+                          styles={columnData.styles}
+                          className={columnData.className}
+                          dndTargetKey={columnData.id}
+                          width={columnData.width}
+                          currentColumLength={
+                            sectionData.columns.length || 1
+                          }
+                          onDropItem={(e, target) =>
+                            handleDropItem(
+                              e,
+                              target,
+                              sectionData.id,
+                              columnData.id,
+                              colIndex,
+                              undefined,
+                            )
+                          }
+                          onResizeStart={handleResizeStart}
+                          onResize={(e, isInvert) => {
+                            setResizedSectionId(sectionData.id);
+                            handleResize(
+                              e,
+                              columnData.id,
+                              sectionData.id,
+                              isInvert,
+                            );
+                          }}
+                        >
+                          <div
+                            key={columnData.id}
+                            className={`rlb-col-inner  ${''}`}
+                          >
+                            {columnData.items.map((items) => {
+                              return (
+                                <DroppableColumnItem
+                                  disableChange={disableChange}
+                                  isSection={isSectionDragged}
+                                  key={items[stableKey]}
+                                  dndTargetKey={items[stableKey]}
+                                  onDropItem={(e, target) =>
+                                    handleDropItem(
+                                      e,
+                                      target,
+                                      sectionData.id,
+                                      columnData.id,
+                                      colIndex,
+                                      items[stableKey],
+                                    )
+                                  }
+                                >
+                                  <DraggableItem
+                                    disableChange={disableChange}
+                                    dndTargetKey={items[stableKey]}
+                                    onDragStart={(e) => {
+                                      handleDragStart(
+                                        e,
+                                        sectionData.id,
+                                        columnData.id,
+                                        colIndex,
+                                        items[stableKey],
+                                      );
+                                    }}
+                                  >
+                                    {renderComponent(items)}
+                                  </DraggableItem>
+                                </DroppableColumnItem>
+                              );
+                            })}
+                          </div>
+                        </DroppableColumnContainer>
+                      );
+                    })}
+                  </ResizableContainer>
+                );
+              })}
+              {/* </ResizableContainer> */}
             </DroppableSection>
           );
         })}

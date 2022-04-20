@@ -17,6 +17,7 @@ import {
 // import { hexToRGBA } from 'layouts-builder/helpers/colorHelper';
 import { IRenderableLayout } from 'layouts-builder/interface/renderableInterface';
 import classNames from 'classnames';
+import { ResizableContainer } from '../ResizableContainer/ResizableContainer';
 
 interface DraggableProps {
   sections: IRenderableLayout;
@@ -87,188 +88,60 @@ export const DroppableSection: FC<DraggableProps> = ({
 
   return (
     <div className="relative">
-      {index === 0 && !disableChange ? (
-        <div
-          className={`${isHoveredTargetClassName(
-            droppableTarget === `${dndTargetKey}-top`,
-          )}`}
-          target-droppable-section={`${dndTargetKey}-top`}
-          onDragOver={handleDragOver}
-          onDrop={(e) => {
-            onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
-            setDroppableTarget('');
-          }}
-          onDragLeave={handleDragOverLeave}
-        >
-          {droppableTarget === `${dndTargetKey}-top`
-            ? `Drop here as a section...`
-            : null}
-        </div>
-      ) : null}
-      <div
-        className={classNames(
-          'rlb-section',
-          !disableChange ? 'rlb-section-hover' : '',
-        )}
-        draggable={!disableChange}
-        onDragStart={onDragStart}
-        style={{
-          background: sections.backgroundColor,
-          paddingBlock: (sections.spacing || 0) * 8,
-        }}
-      >
-        {!disableChange ? (
+      <ResizableContainer resizable>
+        {index === 0 && !disableChange ? (
           <div
-            className="rlb-section-settings"
-            onClick={handleClickSetting}
+            className={`${isHoveredTargetClassName(
+              droppableTarget === `${dndTargetKey}-top`,
+            )}`}
+            target-droppable-section={`${dndTargetKey}-top`}
+            onDragOver={handleDragOver}
+            onDrop={(e) => {
+              onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
+              setDroppableTarget('');
+            }}
+            onDragLeave={handleDragOverLeave}
           >
-            <span>Settings</span>
-            <SettingIcon />
+            {droppableTarget === `${dndTargetKey}-top`
+              ? `Drop here as a section...`
+              : null}
           </div>
         ) : null}
-
         <div
-          className="section-content"
-          style={{ maxWidth: sections.width, margin: 'auto' }}
-        >
-          {children}
-        </div>
-      </div>
-      {!disableChange ? (
-        <div
-          className={`${isHoveredTargetClassName(
-            droppableTarget === `${dndTargetKey}-bottom`,
-          )}`}
-          target-droppable-section={`${dndTargetKey}-bottom`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragOverLeave}
-          onDrop={(e) => {
-            onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
-            setDroppableTarget('');
+          className={classNames('rlb-section')}
+          draggable={!disableChange}
+          onDragStart={onDragStart}
+          style={{
+            background: sections.backgroundColor,
+            paddingBlock: (sections.spacing || 0) * 8,
           }}
         >
-          {droppableTarget === `${dndTargetKey}-bottom`
-            ? 'Drop here as a section...'
-            : null}
-        </div>
-      ) : null}
-      {openSetting && !disableChange ? (
-        <div className="rlb-section-setting-modal" ref={popoverRef}>
-          <div className="p-2 bg-gray-200">
-            <h5>Section settings</h5>
-          </div>
-          <div className="p-4" style={{ padding: 20 }}>
-            {/* <div>
-              <div className="p-2">
-                <ColorPicker
-                  label="Background color "
-                  defaultColor={hexToRGBA('#fff') as Rgba}
-                />
-              </div>
-            </div> */}
-            <div className="p-2">
-              <div>
-                <h5>Content width :</h5>
-                <div className="p-2 rlb-range-input">
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={sections.contentWidth || 100}
-                    onChange={(e) => {
-                      handleSectionStyles(
-                        'contentWidth',
-                        parseFloat(e.target.value),
-                      );
-                    }}
-                  />
-                  <span className="range-value">
-                    <input
-                      min={0}
-                      max={100}
-                      className="rlb-range-input-nb"
-                      type="number"
-                      value={sections.contentWidth || 100}
-                      onChange={(e) => {
-                        handleSectionStyles(
-                          'contentWidth',
-                          parseFloat(e.target.value),
-                        );
-                      }}
-                    />
-                    (%)
-                  </span>
-                </div>
-              </div>
-              <div>
-                <h5>Max. Content width : </h5>
-                <div className="p-2 rlb-range-input">
-                  <input
-                    type="range"
-                    min={320}
-                    max={1920}
-                    value={sections.width || 1080}
-                    onChange={(e) => {
-                      handleSectionStyles(
-                        'width',
-                        parseFloat(e.target.value),
-                      );
-                    }}
-                  />
-                  <span className="range-value">
-                    <input
-                      min={320}
-                      max={1920}
-                      className="rlb-range-input-nb"
-                      type="number"
-                      value={sections.width || 1080}
-                      onChange={(e) => {
-                        handleSectionStyles(
-                          'width',
-                          parseFloat(e.target.value),
-                        );
-                      }}
-                    />
-                    (px)
-                  </span>
-                </div>
-              </div>
-              <div>
-                <h5>Section spacing : </h5>
-                <div className="p-2 rlb-range-input">
-                  <input
-                    type="range"
-                    min={0}
-                    max={10}
-                    value={sections.spacing}
-                    onChange={(e) => {
-                      handleSectionStyles(
-                        'spacing',
-                        parseFloat(e.target.value),
-                      );
-                    }}
-                  />
-                  <span className="range-value">
-                    <input
-                      className="rlb-range-input-nb"
-                      type="number"
-                      min={0}
-                      max={10}
-                      value={sections.spacing}
-                      onChange={(e) => {
-                        handleSectionStyles(
-                          'spacing',
-                          parseFloat(e.target.value),
-                        );
-                      }}
-                    />
-                  </span>
-                </div>
-              </div>
-            </div>
+          <div
+            className="section-content"
+            style={{ width: sections.width, margin: 'auto' }}
+          >
+            {children}
           </div>
         </div>
-      ) : null}
+        {!disableChange ? (
+          <div
+            className={`${isHoveredTargetClassName(
+              droppableTarget === `${dndTargetKey}-bottom`,
+            )}`}
+            target-droppable-section={`${dndTargetKey}-bottom`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragOverLeave}
+            onDrop={(e) => {
+              onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
+              setDroppableTarget('');
+            }}
+          >
+            {droppableTarget === `${dndTargetKey}-bottom`
+              ? 'Drop here as a section...'
+              : null}
+          </div>
+        ) : null}
+      </ResizableContainer>
     </div>
   );
 };

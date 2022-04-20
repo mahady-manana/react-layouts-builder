@@ -4,11 +4,11 @@ import { DraggableItem } from '../components/draggable/Draggable.js';
 import { DroppableColumnItem } from '../components/DroppableColumnItem/index.js';
 import { DroppableSection } from '../components/DroppableSection/index.js';
 import { DroppableColumnContainer } from '../components/DroppableColumnContainer/index.js';
-import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
 import { createLayout } from '../helpers/createLayout.js';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { reorderLayoutItem } from '../helpers/reorderLayout.js';
 import { changeSectionStyles } from '../helpers/changeSectionStyles.js';
+import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -44,13 +44,13 @@ var LayoutContainer = function LayoutContainer(_a) {
       initialSize = _g[0],
       setInitialSize = _g[1];
 
-  var _h = useState(),
-      currentColWidth = _h[0],
-      setCurentColWidth = _h[1];
+  var _h = useState();
+      _h[0];
+      var setCurentColWidth = _h[1];
 
-  var _j = useState(),
-      resizedSectionId = _j[0],
-      setResizedSectionId = _j[1];
+  var _j = useState();
+      _j[0];
+      var setResizedSectionId = _j[1];
 
   useEffect(function () {
     if (layouts) {
@@ -78,7 +78,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   }, [actualLayout, onLayoutChange]);
 
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, itemkey) {
+  var handleDragStart = function handleDragStart(e, sectionId, columnId, columnIndex, itemkey) {
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -87,27 +87,32 @@ var LayoutContainer = function LayoutContainer(_a) {
     e.dataTransfer.setData('itemKeyType', itemKeyType);
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
+    e.dataTransfer.setData('colmunIndex', columnIndex.toString());
     setIsSectionDragged(false);
   }; // Drop item to create new column or setion or add item to column
 
 
-  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, itemKey) {
+  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, columnIndex, itemKey) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
     var isSection = e.dataTransfer.getData('isSection');
     var sourceSectionId = e.dataTransfer.getData('sectionId');
     var sourceColumnKey = e.dataTransfer.getData('colmunId');
+    var sourceColmunIndex = e.dataTransfer.getData('colmunIndex');
     var itemKeyType = e.dataTransfer.getData('itemKeyType');
+    console.log('sourceColmunIndex', sourceColmunIndex);
     var source = {
       columnId: sourceColumnKey,
       itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
       sectionId: sourceSectionId,
-      isSection: !!isSection
+      isSection: !!isSection,
+      columnIndex: parseFloat(sourceColmunIndex)
     };
     var destination = {
       columnId: columnId,
       itemKey: itemKey,
       sectionId: sectionId,
-      targetPlace: target
+      targetPlace: target,
+      columnIndex: columnIndex
     };
     var newLayout = reorderLayoutItem(actualLayout, source, destination, target);
     setIsSectionDragged(false);
@@ -147,58 +152,6 @@ var LayoutContainer = function LayoutContainer(_a) {
     });
   };
 
-  var handleResizeEnd = function handleResizeEnd(cols, colId, initialWidth, colCount) {
-    setIsDragging(false);
-    var restWidth = cols.reduce(function (acc, next) {
-      if (next.id === colId) return acc;
-      return acc + next.width;
-    }, 0);
-    var diff = 100 - ((currentColWidth || 0) + restWidth);
-    var shouldAdd = diff / (colCount - 1);
-    var siblingsCols = cols.map(function (colm) {
-      return {
-        colId: colm.id,
-        width: colm.width + shouldAdd
-      };
-    }).filter(function (col) {
-      return col.colId !== colId;
-    });
-    var newsLayoutModified = changeColumnWidth(actualLayout, colId, currentColWidth || initialWidth, siblingsCols);
-    setActualLayout(newsLayoutModified); // const layouts = addClassnameToColumn(
-    //   actualLayout,
-    //   colId,
-    //   {
-    //     className: `w-[${currentColWidth}%]`,
-    //     styles: { width: `${currentColWidth}%` }
-    //   },
-    //   {
-    //     className: `w-[${Math.round(restCol)}%]`,
-    //     styles: { width: `${Math.round(restCol)}%` }
-    //   }
-    // )
-
-    setInitialSize(undefined); // setActualLayout(layouts)
-
-    setCurentColWidth(undefined);
-    setResizedSectionId('');
-  };
-
-  var generateNewColumnWidth = function generateNewColumnWidth(cols, colId, currentWidth, colCount) {
-    var restWidth = cols.reduce(function (acc, next) {
-      if (next.id === colId) return acc;
-      return acc + next.width;
-    }, 0);
-    var diff = 100 - (currentWidth + restWidth);
-    var shouldAdd = diff / (colCount - 1);
-    var colsWidth = cols.map(function (colm) {
-      return {
-        colId: colm.id,
-        width: colm.id === colId ? currentWidth : colm.width + shouldAdd
-      };
-    });
-    return colsWidth;
-  };
-
   var handleDragSectionStart = function handleDragSectionStart(e, sectionId) {
     e.stopPropagation();
     e.dataTransfer.setData('sectionId', sectionId);
@@ -212,7 +165,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   };
 
   return /*#__PURE__*/React.createElement("div", {
-    className: "max-w-[1080px] m-auto py-4"
+    className: "m-auto py-4"
   }, /*#__PURE__*/React.createElement("div", {
     className: "min-h-[100px] ",
     ref: containeRef
@@ -225,7 +178,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       dndTargetKey: sectionData.id,
       disableDrag: isDragging,
       onDropItem: function onDropItem(e, target) {
-        return handleDropItem(e, target, sectionData.id, '', undefined);
+        return handleDropItem(e, target, sectionData.id, '', 99999999, undefined);
       },
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, sectionData.id);
@@ -233,61 +186,56 @@ var LayoutContainer = function LayoutContainer(_a) {
       onChangeSectionStyles: function onChangeSectionStyles(key, value) {
         return handleSectionStyles(sectionData.id, key, value);
       }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "rlb-row",
-      style: {
-        width: "".concat(sectionData.contentWidth, "%"),
-        margin: 'auto'
-      }
-    }, sectionData.columns.map(function (columnData) {
-      var _a;
-
-      return /*#__PURE__*/React.createElement(DroppableColumnContainer, {
-        disableChange: disableChange,
-        initialSize: initialSize,
-        disableDrag: isDragging,
-        key: columnData.id,
-        isSection: isSectionDragged,
-        styles: columnData.styles,
-        className: columnData.className,
-        dndTargetKey: columnData.id,
-        resizingWidth: resizedSectionId === sectionData.id ? (_a = generateNewColumnWidth(sectionData.columns, initialSize === null || initialSize === void 0 ? void 0 : initialSize.colId, currentColWidth || columnData.width, sectionData.columns.length).find(function (co) {
-          return co.colId === columnData.id;
-        })) === null || _a === void 0 ? void 0 : _a.width : undefined,
-        width: columnData.width,
-        currentColumLength: sectionData.columns.length || 1,
-        onDropItem: function onDropItem(e, target) {
-          return handleDropItem(e, target, sectionData.id, columnData.id, undefined);
-        },
-        onResizeStart: handleResizeStart,
-        onResize: function onResize(e, isInvert) {
-          setResizedSectionId(sectionData.id);
-          handleResize(e, columnData.id, sectionData.id, isInvert);
-        },
-        onResizeEnd: function onResizeEnd() {
-          return handleResizeEnd(sectionData.columns, columnData.id, columnData.width, sectionData.columns.length || 1);
+    }, sectionData.columns.map(function (cols, colIndex) {
+      return /*#__PURE__*/React.createElement(ResizableContainer, {
+        isRow: true,
+        resizable: true,
+        key: colIndex,
+        styles: {
+          width: 1080
         }
-      }, /*#__PURE__*/React.createElement("div", {
-        key: columnData.id,
-        className: "rlb-col-inner  ".concat('')
-      }, columnData.items.map(function (items) {
-        return /*#__PURE__*/React.createElement(DroppableColumnItem, {
+      }, cols.map(function (columnData) {
+        return /*#__PURE__*/React.createElement(DroppableColumnContainer, {
+          key: columnData.id,
           disableChange: disableChange,
+          initialSize: initialSize,
+          disableDrag: isDragging,
           isSection: isSectionDragged,
-          key: items[stableKey],
-          dndTargetKey: items[stableKey],
+          styles: columnData.styles,
+          className: columnData.className,
+          dndTargetKey: columnData.id,
+          width: columnData.width,
+          currentColumLength: sectionData.columns.length || 1,
           onDropItem: function onDropItem(e, target) {
-            return handleDropItem(e, target, sectionData.id, columnData.id, items[stableKey]);
+            return handleDropItem(e, target, sectionData.id, columnData.id, colIndex, undefined);
+          },
+          onResizeStart: handleResizeStart,
+          onResize: function onResize(e, isInvert) {
+            setResizedSectionId(sectionData.id);
+            handleResize(e, columnData.id, sectionData.id, isInvert);
           }
-        }, /*#__PURE__*/React.createElement(DraggableItem, {
-          disableChange: disableChange,
-          dndTargetKey: items[stableKey],
-          onDragStart: function onDragStart(e) {
-            handleDragStart(e, sectionData.id, columnData.id, items[stableKey]);
-          }
-        }, renderComponent(items)));
-      })));
-    })));
+        }, /*#__PURE__*/React.createElement("div", {
+          key: columnData.id,
+          className: "rlb-col-inner  ".concat('')
+        }, columnData.items.map(function (items) {
+          return /*#__PURE__*/React.createElement(DroppableColumnItem, {
+            disableChange: disableChange,
+            isSection: isSectionDragged,
+            key: items[stableKey],
+            dndTargetKey: items[stableKey],
+            onDropItem: function onDropItem(e, target) {
+              return handleDropItem(e, target, sectionData.id, columnData.id, colIndex, items[stableKey]);
+            }
+          }, /*#__PURE__*/React.createElement(DraggableItem, {
+            disableChange: disableChange,
+            dndTargetKey: items[stableKey],
+            onDragStart: function onDragStart(e) {
+              handleDragStart(e, sectionData.id, columnData.id, colIndex, items[stableKey]);
+            }
+          }, renderComponent(items)));
+        })));
+      }));
+    }));
   })));
 };
 

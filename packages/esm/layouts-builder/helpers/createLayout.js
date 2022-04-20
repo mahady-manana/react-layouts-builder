@@ -1,9 +1,11 @@
 import v4 from '../../node_modules/uuid/dist/esm-browser/v4.js';
 
 var createNewLayout = function createNewLayout(data, stableDataKey) {
-  return data.map(function (item, index) {
+  return [v4()].map(function (id, index) {
     var columns = [{
-      childIds: [item[stableDataKey]],
+      childIds: data.map(function (item) {
+        return item[stableDataKey];
+      }),
       id: "column-".concat(v4()),
       order: 0,
       className: 'w-full',
@@ -13,9 +15,9 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
       className: '',
       id: "section-".concat(v4()),
       order: 0,
-      columns: columns,
-      contentWidth: 100,
-      width: 1080,
+      columns: [columns],
+      contentWidth: 1080,
+      width: '100%',
       spacing: 2
     };
     return section;
@@ -38,19 +40,20 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
 var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
     return createNewLayout(data, stableDataKey);
-  }
+  } // const getNewData = data.filter((dt) => {
+  //   const isExist = currentLayouts.find((section) => {
+  //     const sectionExist = section.columns.find((col) =>
+  //       col.childIds.includes(dt[stableDataKey]),
+  //     );
+  //     return sectionExist;
+  //   });
+  //   return !isExist;
+  // });
+  // const newLayouts = createNewLayout(getNewData, stableDataKey);
+  // return currentLayouts.concat(newLayouts);
 
-  var getNewData = data.filter(function (dt) {
-    var isExist = currentLayouts.find(function (section) {
-      var sectionExist = section.columns.find(function (col) {
-        return col.childIds.includes(dt[stableDataKey]);
-      });
-      return sectionExist;
-    });
-    return !isExist;
-  });
-  var newLayouts = createNewLayout(getNewData, stableDataKey);
-  return currentLayouts.concat(newLayouts);
+
+  return [];
 };
 
 export { createLayout };
