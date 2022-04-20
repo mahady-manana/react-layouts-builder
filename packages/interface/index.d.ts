@@ -1,10 +1,9 @@
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 export interface ILayoutColumn {
     id: any;
     order: number;
     childIds: (string | number)[];
     className?: string;
-    styles?: CSSProperties;
     width: number;
 }
 export interface ILayoutSection {
@@ -21,6 +20,11 @@ export interface ILayoutLabels {
     sectionPlaceholder?: string;
     columnPlaceholder?: string;
     itemsPlaceholder?: string;
+    settings?: string;
+    sectionSettings?: string;
+    sectionSpacing?: string;
+    contentWidth?: string;
+    maxContentWidth?: string;
 }
 export interface ILayoutContainer {
     data: any[];
@@ -30,4 +34,5 @@ export interface ILayoutContainer {
     layouts?: ILayoutSection[];
     loading?: boolean;
     labels?: ILayoutLabels;
+    disableChange?: boolean;
 }

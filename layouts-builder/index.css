@@ -23,7 +23,7 @@
     position: relative;
     width: 100%;
 }
-.rlb-section:hover {
+.rlb-section-hover:hover {
     border: 2px dashed #ccc;
     margin-top: 20px;
 }
@@ -71,7 +71,7 @@
     cursor: col-resize;
     width: 5px;
 }
-.rlb-droppable-setion {
+.rlb-droppable-section {
     height: 15px;
 }
 

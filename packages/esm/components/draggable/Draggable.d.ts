@@ -2,7 +2,7 @@ import { FC, ReactNode, DragEvent } from 'react';
 interface DraggableProps {
     children: ReactNode;
     dndTargetKey: string;
-    disableDrag: boolean;
+    disableChange?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
 }
 export declare const DraggableItem: FC<DraggableProps>;

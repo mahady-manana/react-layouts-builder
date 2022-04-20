@@ -3,10 +3,8 @@ import { DropTargetPlaceEnum } from '../../interface/internalType';
 interface DraggableProps {
     children: ReactNode;
     dndTargetKey?: string;
-    disableDrag: boolean;
     isSection?: boolean;
-    onDragStart?: (e: DragEvent<HTMLDivElement>) => void;
-    currentColumLength: number;
+    disableChange?: boolean;
     onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;
 }
 export declare const DroppableColumnItem: FC<DraggableProps>;

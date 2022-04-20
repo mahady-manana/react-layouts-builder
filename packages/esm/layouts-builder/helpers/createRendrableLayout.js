@@ -19,7 +19,6 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
           order: cols.order,
           className: cols.className,
           items: items,
-          styles: cols.styles,
           width: cols.width
         };
         return renderedCol;

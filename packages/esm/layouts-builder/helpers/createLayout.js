@@ -7,7 +7,6 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
       id: "column-".concat(v4()),
       order: 0,
       className: 'w-full',
-      styles: {},
       width: 100
     }];
     var section = {
@@ -17,7 +16,7 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
       columns: columns,
       contentWidth: 100,
       width: 1080,
-      spacing: 0
+      spacing: 2
     };
     return section;
   });

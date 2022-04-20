@@ -12,7 +12,7 @@ const createNewLayout = (
         id: `column-${uuidv4()}`,
         order: 0,
         className: 'w-full',
-        styles: {},
+
         width: 100,
       },
     ];
@@ -23,7 +23,7 @@ const createNewLayout = (
       columns: columns,
       contentWidth: 100,
       width: 1080,
-      spacing: 0,
+      spacing: 2,
     };
     return section;
   });

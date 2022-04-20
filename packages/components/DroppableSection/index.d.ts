@@ -7,6 +7,7 @@ interface DraggableProps {
     children: ReactNode;
     dndTargetKey?: string;
     disableDrag: boolean;
+    disableChange?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;
     onChangeSectionStyles?: (key: string, value: string | number) => void;

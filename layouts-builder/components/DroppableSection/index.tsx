@@ -7,8 +7,6 @@ import React, {
   DragEvent,
   useState,
   SyntheticEvent,
-  Dispatch,
-  SetStateAction,
   useRef,
 } from 'react';
 import {
@@ -18,6 +16,7 @@ import {
 // import ColorPicker from '../colorPicker';
 // import { hexToRGBA } from 'layouts-builder/helpers/colorHelper';
 import { IRenderableLayout } from 'layouts-builder/interface/renderableInterface';
+import classNames from 'classnames';
 
 interface DraggableProps {
   sections: IRenderableLayout;
@@ -25,6 +24,7 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey?: string;
   disableDrag: boolean;
+  disableChange?: boolean;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
@@ -41,6 +41,7 @@ export const DroppableSection: FC<DraggableProps> = ({
   dndTargetKey,
   disableDrag,
   sections,
+  disableChange,
   onDropItem,
   onDragStart,
   onChangeSectionStyles,
@@ -65,8 +66,8 @@ export const DroppableSection: FC<DraggableProps> = ({
   };
   const isHoveredTargetClassName = (conditions: boolean) => {
     return conditions
-      ? 'rlb-droppable-setion-hover'
-      : 'rlb-droppable-setion';
+      ? 'rlb-droppable-section-hover'
+      : 'rlb-droppable-section';
   };
   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
     setDroppableTarget('');
@@ -86,47 +87,54 @@ export const DroppableSection: FC<DraggableProps> = ({
 
   return (
     <div className="relative">
+      {index === 0 && !disableChange ? (
+        <div
+          className={`${isHoveredTargetClassName(
+            droppableTarget === `${dndTargetKey}-top`,
+          )}`}
+          target-droppable-section={`${dndTargetKey}-top`}
+          onDragOver={handleDragOver}
+          onDrop={(e) => {
+            onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
+            setDroppableTarget('');
+          }}
+          onDragLeave={handleDragOverLeave}
+        >
+          {droppableTarget === `${dndTargetKey}-top`
+            ? `Drop here as a section...`
+            : null}
+        </div>
+      ) : null}
       <div
-        className="rlb-section"
-        draggable
+        className={classNames(
+          'rlb-section',
+          !disableChange ? 'rlb-section-hover' : '',
+        )}
+        draggable={!disableChange}
         onDragStart={onDragStart}
         style={{
           background: sections.backgroundColor,
           paddingBlock: (sections.spacing || 0) * 8,
         }}
       >
-        <div
-          className="rlb-section-settings"
-          onClick={handleClickSetting}
-        >
-          <span>Settings</span>
-          <SettingIcon />
-        </div>
-        {index === 0 ? (
+        {!disableChange ? (
           <div
-            className={`${isHoveredTargetClassName(
-              droppableTarget === `${dndTargetKey}-top`,
-            )}`}
-            target-droppable-section={`${dndTargetKey}-top`}
-            onDragOver={handleDragOver}
-            onDrop={(e) => {
-              onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
-              setDroppableTarget('');
-            }}
-            onDragLeave={handleDragOverLeave}
+            className="rlb-section-settings"
+            onClick={handleClickSetting}
           >
-            {droppableTarget === `${dndTargetKey}-top`
-              ? `Drop here as a section...`
-              : null}
+            <span>Settings</span>
+            <SettingIcon />
           </div>
         ) : null}
+
         <div
           className="section-content"
           style={{ maxWidth: sections.width, margin: 'auto' }}
         >
           {children}
         </div>
-
+      </div>
+      {!disableChange ? (
         <div
           className={`${isHoveredTargetClassName(
             droppableTarget === `${dndTargetKey}-bottom`,
@@ -143,8 +151,8 @@ export const DroppableSection: FC<DraggableProps> = ({
             ? 'Drop here as a section...'
             : null}
         </div>
-      </div>
-      {openSetting ? (
+      ) : null}
+      {openSetting && !disableChange ? (
         <div className="rlb-section-setting-modal" ref={popoverRef}>
           <div className="p-2 bg-gray-200">
             <h5>Section settings</h5>

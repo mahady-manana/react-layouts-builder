@@ -11,6 +11,7 @@ export const Layouts1 = () => {
   const [data, setData] = useState<any[]>([])
   const [value, setValue] = useState("")
   const [loading, setLoading] = useState(true)
+  const [disableChange, setDisableChange] = useState<boolean>(false)
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
     storage.set(layouts)
     // setLayoutTest(layouts)
@@ -46,12 +47,16 @@ export const Layouts1 = () => {
 
   return (
     <div>
+      <button onClick={() => setDisableChange(!disableChange)}>
+        Toggle Disable change t
+      </button>
       <div>
         {loading ? (
           <div>loading...</div>
         ) : (
           <LayoutContainer
             data={data}
+            disableChange={disableChange}
             stableDataKey="id"
             layouts={layoutTest}
             onLayoutChange={handleLayoutChange}

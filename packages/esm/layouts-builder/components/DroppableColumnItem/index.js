@@ -5,6 +5,7 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       isSection = _a.isSection,
+      disableChange = _a.disableChange,
       onDropItem = _a.onDropItem;
 
   var _b = useState(),
@@ -42,19 +43,19 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     setDroppableTarget('');
   };
 
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-top"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null), children, /*#__PURE__*/React.createElement("div", {
+  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-bottom"))),
     "target-droppable-item": "item-".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null));
+  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
 export { DroppableColumnItem };

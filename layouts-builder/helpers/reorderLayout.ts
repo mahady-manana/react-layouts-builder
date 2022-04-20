@@ -218,7 +218,6 @@ export const addNewSectionFromDrag = (
           order: 0,
           width: 100,
           className: '',
-          styles: {},
         },
       ],
     };

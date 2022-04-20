@@ -29,7 +29,6 @@ export const createRenderableLayout = (
               order: cols.order,
               className: cols.className,
               items: items,
-              styles: cols.styles,
               width: cols.width,
             };
 

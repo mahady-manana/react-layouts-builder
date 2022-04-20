@@ -149,8 +149,7 @@ var addNewSectionFromDrag = function addNewSectionFromDrag(layouts, source, dest
         id: id.toString(),
         order: 0,
         width: 100,
-        className: '',
-        styles: {}
+        className: ''
       }]
     };
     return acc.concat(place === DropTargetPlaceEnum.SECTION_TOP ? [newSection, section] : [section, newSection]);

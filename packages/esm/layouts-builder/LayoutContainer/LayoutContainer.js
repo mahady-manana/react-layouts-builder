@@ -16,16 +16,17 @@ var LayoutContainer = function LayoutContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
-      loading = _a.loading;
+      loading = _a.loading,
+      disableChange = _a.disableChange;
   var containeRef = useRef(null);
 
   var _b = useState(false),
       isDragging = _b[0],
       setIsDragging = _b[1];
 
-  var _c = useState(false),
-      disableDrag = _c[0],
-      setDisableDrag = _c[1];
+  var _c = useState(false);
+      _c[0];
+      var setDisableDrag = _c[1];
 
   var _d = useState([]),
       actualLayout = _d[0],
@@ -217,6 +218,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef
   }, renderableLayout.map(function (sectionData, index) {
     return /*#__PURE__*/React.createElement(DroppableSection, {
+      disableChange: disableChange,
       index: index,
       key: sectionData.id,
       sections: sectionData,
@@ -241,6 +243,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       var _a;
 
       return /*#__PURE__*/React.createElement(DroppableColumnContainer, {
+        disableChange: disableChange,
         initialSize: initialSize,
         disableDrag: isDragging,
         key: columnData.id,
@@ -269,16 +272,15 @@ var LayoutContainer = function LayoutContainer(_a) {
         className: "rlb-col-inner  ".concat('')
       }, columnData.items.map(function (items) {
         return /*#__PURE__*/React.createElement(DroppableColumnItem, {
-          disableDrag: disableDrag,
+          disableChange: disableChange,
           isSection: isSectionDragged,
           key: items[stableKey],
           dndTargetKey: items[stableKey],
-          currentColumLength: columnData.items.length || 1,
           onDropItem: function onDropItem(e, target) {
             return handleDropItem(e, target, sectionData.id, columnData.id, items[stableKey]);
           }
         }, /*#__PURE__*/React.createElement(DraggableItem, {
-          disableDrag: disableDrag,
+          disableChange: disableChange,
           dndTargetKey: items[stableKey],
           onDragStart: function onDragStart(e) {
             handleDragStart(e, sectionData.id, columnData.id, items[stableKey]);

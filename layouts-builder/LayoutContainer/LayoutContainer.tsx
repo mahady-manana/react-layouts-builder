@@ -35,6 +35,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   stableDataKey: stableKey,
   layouts,
   loading,
+  disableChange,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -279,6 +280,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         {renderableLayout.map((sectionData, index) => {
           return (
             <DroppableSection
+              disableChange={disableChange}
               index={index}
               key={sectionData.id}
               sections={sectionData}
@@ -310,6 +312,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 {sectionData.columns.map((columnData) => {
                   return (
                     <DroppableColumnContainer
+                      disableChange={disableChange}
                       initialSize={initialSize}
                       disableDrag={isDragging}
                       key={columnData.id}
@@ -367,13 +370,10 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                         {columnData.items.map((items) => {
                           return (
                             <DroppableColumnItem
-                              disableDrag={disableDrag}
+                              disableChange={disableChange}
                               isSection={isSectionDragged}
                               key={items[stableKey]}
                               dndTargetKey={items[stableKey]}
-                              currentColumLength={
-                                columnData.items.length || 1
-                              }
                               onDropItem={(e, target) =>
                                 handleDropItem(
                                   e,
@@ -385,7 +385,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                               }
                             >
                               <DraggableItem
-                                disableDrag={disableDrag}
+                                disableChange={disableChange}
                                 dndTargetKey={items[stableKey]}
                                 onDragStart={(e) => {
                                   handleDragStart(

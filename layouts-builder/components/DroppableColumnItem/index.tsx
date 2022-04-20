@@ -11,10 +11,8 @@ import { DropTargetPlaceEnum } from '../../interface/internalType';
 interface DraggableProps {
   children: ReactNode;
   dndTargetKey?: string;
-  disableDrag: boolean;
   isSection?: boolean;
-  onDragStart?: (e: DragEvent<HTMLDivElement>) => void;
-  currentColumLength: number;
+  disableChange?: boolean;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
     target: DropTargetPlaceEnum,
@@ -24,6 +22,7 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   isSection,
+  disableChange,
   onDropItem,
 }) => {
   const [droppableTarget, setDroppableTarget] = useState<string>();
@@ -60,34 +59,38 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
   };
   return (
     <>
-      <div
-        className={`${isHoveredTargetClassName(
-          droppableTarget === `item-${dndTargetKey}-top`,
-        )}`}
-        target-droppable-item={`item-${dndTargetKey}-top`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragOverLeave}
-        onDrop={handleDropToTop}
-      >
-        {droppableTarget === `item-${dndTargetKey}-top`
-          ? 'Add item to column...'
-          : null}
-      </div>
+      {!disableChange ? (
+        <div
+          className={`${isHoveredTargetClassName(
+            droppableTarget === `item-${dndTargetKey}-top`,
+          )}`}
+          target-droppable-item={`item-${dndTargetKey}-top`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragOverLeave}
+          onDrop={handleDropToTop}
+        >
+          {droppableTarget === `item-${dndTargetKey}-top`
+            ? 'Add item to column...'
+            : null}
+        </div>
+      ) : null}
 
       {children}
-      <div
-        className={`${isHoveredTargetClassName(
-          droppableTarget === `item-${dndTargetKey}-bottom`,
-        )}`}
-        target-droppable-item={`item-${dndTargetKey}-bottom`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragOverLeave}
-        onDrop={handleDropToBottom}
-      >
-        {droppableTarget === `item-${dndTargetKey}-bottom`
-          ? 'Add item to column...'
-          : null}
-      </div>
+      {!disableChange ? (
+        <div
+          className={`${isHoveredTargetClassName(
+            droppableTarget === `item-${dndTargetKey}-bottom`,
+          )}`}
+          target-droppable-item={`item-${dndTargetKey}-bottom`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragOverLeave}
+          onDrop={handleDropToBottom}
+        >
+          {droppableTarget === `item-${dndTargetKey}-bottom`
+            ? 'Add item to column...'
+            : null}
+        </div>
+      ) : null}
     </>
   );
 };

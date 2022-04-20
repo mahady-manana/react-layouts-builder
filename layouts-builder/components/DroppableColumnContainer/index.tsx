@@ -18,6 +18,7 @@ interface DraggableProps {
   width: number;
   disableDrag: boolean;
   initialSize: any;
+  disableChange?: boolean;
   isSection?: boolean;
   className?: string;
   styles?: CSSProperties;
@@ -50,6 +51,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   disableDrag,
   className,
   styles,
+  disableChange,
   onDropItem,
   onResize,
   onResizeStart,
@@ -134,21 +136,23 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         width: resizingWidth ? `${resizingWidth}%` : `${width}%`,
       }}
     >
-      <div
-        className={`${isHoveredTargetClassNameSide(
-          droppableTarget === `item-${dndTargetKey}-left`,
-        )}`}
-        target-droppable-item={`item-${dndTargetKey}-left`}
-        onDragOver={disableDrag ? undefined : handleDragOver}
-        onDragLeave={handleDragOverLeave}
-        onDrop={handleDropToLeft}
-      >
-        {droppableTarget === `item-${dndTargetKey}-left`
-          ? 'Drop new column...'
-          : null}
-      </div>
+      {!disableChange ? (
+        <div
+          className={`${isHoveredTargetClassNameSide(
+            droppableTarget === `item-${dndTargetKey}-left`,
+          )}`}
+          target-droppable-item={`item-${dndTargetKey}-left`}
+          onDragOver={disableDrag ? undefined : handleDragOver}
+          onDragLeave={handleDragOverLeave}
+          onDrop={handleDropToLeft}
+        >
+          {droppableTarget === `item-${dndTargetKey}-left`
+            ? 'Drop new column...'
+            : null}
+        </div>
+      ) : null}
 
-      {!droppableTarget ? (
+      {!droppableTarget && !disableChange ? (
         <div
           className="rlb-resize-handler"
           draggable
@@ -161,7 +165,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
       ) : null}
 
       {children}
-      {!droppableTarget ? (
+      {!droppableTarget && !disableChange ? (
         <div
           className="rlb-resize-handler"
           draggable
@@ -173,19 +177,21 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         ></div>
       ) : null}
 
-      <div
-        className={`${isHoveredTargetClassNameSide(
-          droppableTarget === `item-${dndTargetKey}-right`,
-        )}`}
-        target-droppable-item={`item-${dndTargetKey}-right`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragOverLeave}
-        onDrop={handleDropToRigth}
-      >
-        {droppableTarget === `item-${dndTargetKey}-right`
-          ? 'Drop new column...'
-          : null}
-      </div>
+      {!disableChange ? (
+        <div
+          className={`${isHoveredTargetClassNameSide(
+            droppableTarget === `item-${dndTargetKey}-right`,
+          )}`}
+          target-droppable-item={`item-${dndTargetKey}-right`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragOverLeave}
+          onDrop={handleDropToRigth}
+        >
+          {droppableTarget === `item-${dndTargetKey}-right`
+            ? 'Drop new column...'
+            : null}
+        </div>
+      ) : null}
     </div>
   );
 };

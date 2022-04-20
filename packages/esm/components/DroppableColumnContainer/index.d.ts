@@ -7,6 +7,7 @@ interface DraggableProps {
     width: number;
     disableDrag: boolean;
     initialSize: any;
+    disableChange?: boolean;
     isSection?: boolean;
     className?: string;
     styles?: CSSProperties;
