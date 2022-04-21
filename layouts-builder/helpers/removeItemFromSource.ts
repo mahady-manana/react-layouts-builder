@@ -1,20 +1,49 @@
-import { ILayoutColumn } from 'layouts-builder/interface';
+import {
+  ILayoutColumn,
+  ILayoutRow,
+  ILayoutSection,
+} from 'layouts-builder/interface';
+import {
+  DestinationType,
+  DropTargetPlaceEnum,
+  SourceType,
+} from 'layouts-builder/interface/internalType';
+import { createNewRow } from './createNewRow';
 
 export const removeItemFromSource = (
-  columns: ILayoutColumn[],
-  columnId: any,
-  itemKey: any,
+  layouts: ILayoutSection[],
+  source: SourceType,
+  duplicate?: boolean,
 ) => {
-  return columns.map((col) => {
-    console.log('WILL FOUND', col, columnId, itemKey);
+  const finalLayouts: ILayoutSection[] = layouts.map((section) => {
+    if (section.id !== source.sectionId) {
+      return section;
+    }
 
-    if (col.id !== columnId) return col;
-    console.log('Found');
-
-    const items = col.childIds.filter((key) => key !== itemKey);
     return {
-      ...col,
-      childIds: items,
+      ...section,
+      rows: section.rows.map((row) => {
+        if (row.id !== source.rowId) return row;
+
+        return {
+          ...row,
+          columns: row.columns
+            .map((col) => {
+              if (col.id !== source.columnId) return col;
+              return {
+                ...col,
+                childIds: col.childIds.filter((id) => {
+                  if (!id) return true;
+                  if (duplicate) return id !== 'DUPLICATE';
+                  return id !== source.itemKey;
+                }),
+              };
+            })
+            .filter((col) => col.childIds.length > 0),
+        };
+      }),
     };
   });
+
+  return finalLayouts;
 };

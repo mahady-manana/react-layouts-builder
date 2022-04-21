@@ -1,28 +1,31 @@
-import v4 from '../../node_modules/uuid/dist/esm-browser/v4.js';
+import { createNewSection } from './createNewSection.js';
 
-var createNewLayout = function createNewLayout(data, stableDataKey) {
-  return [v4()].map(function (id, index) {
-    var columns = [{
-      childIds: data.map(function (item) {
-        return item[stableDataKey];
-      }),
-      id: "column-".concat(v4()),
-      order: 0,
-      className: 'w-full',
-      width: 100
-    }];
-    var section = {
-      className: '',
-      id: "section-".concat(v4()),
-      order: 0,
-      columns: [columns],
-      contentWidth: 1080,
-      width: '100%',
-      spacing: 2
-    };
-    return section;
-  });
-};
+//   data: any[],
+//   stableDataKey: string,
+// ): ILayoutSection[] => {
+//   return [uuidv4()].map((id: any, index: number) => {
+//     const columns: ILayoutColumn[] = [
+//       {
+//         childIds: data.map((item) => item[stableDataKey]),
+//         id: `column-${uuidv4()}`,
+//         order: 0,
+//         className: 'w-full',
+//         width: 100,
+//       },
+//     ];
+//     const section: ILayoutSection = {
+//       className: '',
+//       id: `section-${uuidv4()}`,
+//       order: 0,
+//       columns: [columns],
+//       contentWidth: 1080,
+//       width: '100%',
+//       spacing: 2,
+//     };
+//     return section;
+//   });
+// };
+
 /**
  *
  * @param data   data used in the layer, Type : any[]
@@ -36,10 +39,12 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
  * @returns
  */
 
-
 var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
-    return createNewLayout(data, stableDataKey);
+    var newSections = createNewSection(data.map(function (dt) {
+      return dt[stableDataKey];
+    }));
+    return [newSections];
   } // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {
   //     const sectionExist = section.columns.find((col) =>

@@ -4,19 +4,12 @@ import { DropTargetPlaceEnum } from '../../interface/internalType.js';
 
 var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   var children = _a.children,
-      dndTargetKey = _a.dndTargetKey;
-      _a.width;
-      var isSection = _a.isSection;
-      _a.currentColumLength;
-      _a.initialSize;
-      _a.resizingWidth;
-      var disableDrag = _a.disableDrag,
-      className = _a.className;
-      _a.styles;
-      var disableChange = _a.disableChange,
+      dndTargetKey = _a.dndTargetKey,
+      isSection = _a.isSection,
+      disableDrag = _a.disableDrag,
+      className = _a.className,
+      disableChange = _a.disableChange,
       onDropItem = _a.onDropItem;
-      _a.onResize;
-      _a.onResizeStart;
 
   var _b = useState(),
       droppableTarget = _b[0],
@@ -61,18 +54,18 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     className),
     ref: columnRef
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-left"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-left"),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
+    "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: disableDrag ? undefined : handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
-  }, droppableTarget === "item-".concat(dndTargetKey, "-left") ? 'Drop new column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-right"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-right"),
+  }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right"))),
+    "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToRigth
-  }, droppableTarget === "item-".concat(dndTargetKey, "-right") ? 'Drop new column...' : null) : null);
+  }) : null);
 };
 
 export { DroppableColumnContainer };

@@ -20,32 +20,27 @@ import classNames from 'classnames';
 import { ResizableContainer } from '../ResizableContainer/ResizableContainer';
 
 interface DraggableProps {
-  sections: IRenderableLayout;
+  section: IRenderableLayout;
   index: number;
   children: ReactNode;
   dndTargetKey?: string;
   disableDrag: boolean;
   disableChange?: boolean;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
-  onDropItem: (
-    e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum,
-  ) => void;
-  onChangeSectionStyles?: (
-    key: string,
-    value: string | number,
-  ) => void;
+  // onDropItem: (
+  //   e: DragEvent<HTMLDivElement>,
+  //   target: DropTargetPlaceEnum,
+  // ) => void;
 }
 export const DroppableSection: FC<DraggableProps> = ({
   children,
   index,
   dndTargetKey,
   disableDrag,
-  sections,
+  section,
   disableChange,
-  onDropItem,
+  // onDropItem,
   onDragStart,
-  onChangeSectionStyles,
 }) => {
   const [openSetting, setOpenSetting] = useState<boolean>(false);
   const [droppableTarget, setDroppableTarget] = useState<string>();
@@ -58,9 +53,7 @@ export const DroppableSection: FC<DraggableProps> = ({
     e.stopPropagation();
     e.preventDefault();
     const targetEl = e.currentTarget;
-    const targetDom = targetEl.getAttribute(
-      'target-droppable-section',
-    );
+    const targetDom = targetEl.getAttribute('target-droppable-row');
     if (targetDom && !disableDrag) {
       setDroppableTarget(targetDom);
     }
@@ -74,73 +67,59 @@ export const DroppableSection: FC<DraggableProps> = ({
     setDroppableTarget('');
   };
 
-  const handleClickSetting = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setOpenSetting(!openSetting);
-  };
-
-  const handleSectionStyles = (
-    key: string,
-    value: string | number,
-  ) => {
-    onChangeSectionStyles && onChangeSectionStyles(key, value);
-  };
-
   return (
     <div className="relative">
       <ResizableContainer resizable>
-        {index === 0 && !disableChange ? (
+        {/* {index === 0 && !disableChange ? (
           <div
             className={`${isHoveredTargetClassName(
               droppableTarget === `${dndTargetKey}-top`,
             )}`}
-            target-droppable-section={`${dndTargetKey}-top`}
+            target-droppable-row={`${dndTargetKey}-top`}
             onDragOver={handleDragOver}
             onDrop={(e) => {
-              onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
+              onDropItem(e, DropTargetPlaceEnum.ROW_TOP);
               setDroppableTarget('');
             }}
             onDragLeave={handleDragOverLeave}
           >
-            {droppableTarget === `${dndTargetKey}-top`
-              ? `Drop here as a section...`
-              : null}
+            {droppableTarget === `${dndTargetKey}-top` ? `...` : null}
           </div>
-        ) : null}
+        ) : null} */}
         <div
           className={classNames('rlb-section')}
-          draggable={!disableChange}
+          draggable={false}
           onDragStart={onDragStart}
           style={{
-            background: sections.backgroundColor,
-            paddingBlock: (sections.spacing || 0) * 8,
+            background: section.backgroundColor,
+            paddingBlock: (section.spacing || 0) * 8,
           }}
         >
           <div
             className="section-content"
-            style={{ width: sections.width, margin: 'auto' }}
+            style={{ width: section.width, margin: 'auto' }}
           >
             {children}
           </div>
         </div>
-        {!disableChange ? (
+        {/* {!disableChange ? (
           <div
             className={`${isHoveredTargetClassName(
               droppableTarget === `${dndTargetKey}-bottom`,
             )}`}
-            target-droppable-section={`${dndTargetKey}-bottom`}
+            target-droppable-row={`${dndTargetKey}-bottom`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragOverLeave}
             onDrop={(e) => {
-              onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
+              onDropItem(e, DropTargetPlaceEnum.ROW_BOTTOM);
               setDroppableTarget('');
             }}
           >
             {droppableTarget === `${dndTargetKey}-bottom`
-              ? 'Drop here as a section...'
+              ? '...'
               : null}
           </div>
-        ) : null}
+        ) : null} */}
       </ResizableContainer>
     </div>
   );

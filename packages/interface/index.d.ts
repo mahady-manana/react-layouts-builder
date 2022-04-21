@@ -6,10 +6,17 @@ export interface ILayoutColumn {
     className?: string;
     width: number;
 }
+export interface ILayoutRow {
+    id: any;
+    width: number | string;
+    order: number;
+    columns: ILayoutColumn[];
+    className?: string;
+}
 export interface ILayoutSection {
     id: any;
     order: number;
-    columns: ILayoutColumn[][];
+    rows: ILayoutRow[];
     className: string;
     width?: string | number;
     contentWidth?: string | number;

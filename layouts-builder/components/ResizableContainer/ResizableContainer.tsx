@@ -16,52 +16,28 @@ interface ResizableContainerProps {
   isRow?: boolean;
   resizable?: boolean;
   styles?: CSSProperties;
+  type?: any;
+  currentWidth?: number | string;
+  onResize?: (currentSize: number) => void;
+  onResizeEnd?: (currentSize: number) => void;
 }
 export const ResizableContainer: FC<ResizableContainerProps> = ({
   isRow,
+  type,
   resizable,
   styles,
   children,
+  currentWidth,
+  onResize,
 }) => {
   const [width, setWidth] = useState<number>();
   const [init, setInit] = useState({
     width: 0,
     clientX: 0,
   });
-  const [droppableTarget, setDroppableTarget] = useState<string>();
   const columnRef = useRef<HTMLDivElement>(null);
-  //   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-  //     e.stopPropagation();
-  //     e.preventDefault();
-  //     const targetEl = e.currentTarget;
-  //     const targetDom = targetEl.getAttribute('target-droppable-item');
 
-  //     if (targetDom && !isSection) {
-  //       setDroppableTarget(targetDom);
-  //     }
-  //   };
-
-  //   const isHoveredTargetClassNameSide = (conditions: boolean) => {
-  //     return conditions
-  //       ? 'rlb-droppable-side-hover'
-  //       : 'rlb-droppable-side';
-  //   };
-  //   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToLeft = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.LEFT);
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToRigth = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.RIGHT);
-  //     setDroppableTarget('');
-  //   };
-
-  const onDragStart = (e: DragEvent<HTMLDivElement>) => {
+  const onResizeStart = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (init.clientX && init.width) return;
@@ -77,23 +53,25 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    onDragStart(e);
+    onResizeStart(e);
 
     if (init.clientX && init.width) {
       const diff = init.clientX - e.clientX;
-      const add = diff * 2;
+      const add = isRow ? diff * 2 : diff;
       const addition = left ? add : -add;
-      setWidth(init.width + addition);
+      const currentWidth = init.width + addition;
+      setWidth(currentWidth);
+      onResize && onResize(currentWidth);
     }
   };
 
-  const handleDragEnd = (
+  const handleResizeEnd = (
     e: DragEvent<HTMLDivElement>,
     left: boolean,
   ) => {
     if (init.clientX && init.width) {
       const diff = init.clientX - e.clientX;
-      const add = diff * 2;
+      const add = isRow ? diff * 2 : diff;
       const addition = left ? add : -add;
 
       const finalWidth = init.width + addition;
@@ -102,8 +80,11 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
         width: prev.width,
         clientX: 0,
       }));
+      onResize && onResize(finalWidth);
     }
   };
+
+  console.log(type, currentWidth, resizable);
 
   return (
     <div
@@ -116,31 +97,17 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       style={{
         width: gridValue(50, width) || styles?.width,
       }}
+      data-width={currentWidth}
     >
-      {/* {!disableChange ? (
-          <div
-            className={`${isHoveredTargetClassNameSide(
-              droppableTarget === `item-${dndTargetKey}-left`,
-            )}`}
-            target-droppable-item={`item-${dndTargetKey}-left`}
-            onDragOver={disableDrag ? undefined : handleDragOver}
-            onDragLeave={handleDragOverLeave}
-            onDrop={handleDropToLeft}
-          >
-            {droppableTarget === `item-${dndTargetKey}-left`
-              ? 'Drop new column...'
-              : null}
-          </div>
-        ) : null} */}
-
       {resizable ? (
         <div
           className="rlb-resize-handler left"
           draggable
           onDrag={(e) => handleResize(e, true)}
           onDragEnd={(e) => {
-            handleDragEnd(e, true);
+            handleResizeEnd(e, true);
           }}
+          data-resizable-type={type}
           // onDragStart={onDragStart}
         ></div>
       ) : null}
@@ -152,27 +119,12 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
           draggable
           onDrag={(e) => handleResize(e, false)}
           onDragEnd={(e) => {
-            handleDragEnd(e, false);
+            handleResizeEnd(e, false);
           }}
           // onDragStart={onDragStart}
+          data-resizable-type={type}
         ></div>
       ) : null}
-
-      {/* {!disableChange ? (
-          <div
-            className={`${isHoveredTargetClassNameSide(
-              droppableTarget === `item-${dndTargetKey}-right`,
-            )}`}
-            target-droppable-item={`item-${dndTargetKey}-right`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragOverLeave}
-            onDrop={handleDropToRigth}
-          >
-            {droppableTarget === `item-${dndTargetKey}-right`
-              ? 'Drop new column...'
-              : null}
-          </div>
-        ) : null} */}
     </div>
   );
 };

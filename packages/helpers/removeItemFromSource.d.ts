@@ -1,2 +1,3 @@
-import { ILayoutColumn } from 'layouts-builder/interface';
-export declare const removeItemFromSource: (columns: ILayoutColumn[], columnId: any, itemKey: any) => ILayoutColumn[];
+import { ILayoutSection } from 'layouts-builder/interface';
+import { SourceType } from 'layouts-builder/interface/internalType';
+export declare const removeItemFromSource: (layouts: ILayoutSection[], source: SourceType, duplicate?: boolean | undefined) => ILayoutSection[];

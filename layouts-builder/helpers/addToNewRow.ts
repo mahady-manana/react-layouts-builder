@@ -1,5 +1,6 @@
 import {
   ILayoutColumn,
+  ILayoutRow,
   ILayoutSection,
 } from 'layouts-builder/interface';
 import {
@@ -7,6 +8,8 @@ import {
   DropTargetPlaceEnum,
   SourceType,
 } from 'layouts-builder/interface/internalType';
+import { createNewRow } from './createNewRow';
+import { removeItemFromSource } from './removeItemFromSource';
 
 export const addToNewRow = (
   layouts: ILayoutSection[],
@@ -14,35 +17,27 @@ export const addToNewRow = (
   dest: DestinationType,
   place: DropTargetPlaceEnum,
 ) => {
-  const finalLayouts = layouts.map((section) => {
+  const newLayouts = layouts.map((section) => {
     if (section.id !== dest.sectionId) {
       return section;
     }
 
-    const id = new Date().getTime();
+    const row = createNewRow([source.itemKey]);
 
-    const newCol: ILayoutColumn[] = [
-      {
-        childIds: [source.itemKey],
-        id: id.toString(),
-        order: 0,
-        width: 100,
-        className: '',
-      },
-    ];
-    const cols =
-      place === DropTargetPlaceEnum.SECTION_TOP
-        ? [newCol, ...(section.columns || [])]
-        : [...(section.columns || []), newCol];
-    const newSection: ILayoutSection = {
-      className: '',
-      id: id.toString(),
-      order: 0,
-      columns: cols,
+    return {
+      ...section,
+      rows: section.rows.reduce((acc, nextRow) => {
+        if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
+
+        if (place === DropTargetPlaceEnum.ROW_BOTTOM) {
+          return acc.concat([nextRow, row]);
+        }
+
+        return acc.concat([row, nextRow]);
+      }, [] as ILayoutRow[]),
     };
-
-    return newSection;
   }, [] as ILayoutSection[]);
 
-  return finalLayouts;
+  const clean = removeItemFromSource(newLayouts, source);
+  return clean;
 };

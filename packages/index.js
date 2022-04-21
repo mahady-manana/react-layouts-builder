@@ -38,9 +38,17 @@ var DropTargetPlaceEnum;
   DropTargetPlaceEnum["RIGHT"] = "RIGHT";
   DropTargetPlaceEnum["TOP"] = "TOP";
   DropTargetPlaceEnum["BOTTOM"] = "BOTTOM";
-  DropTargetPlaceEnum["SECTION_TOP"] = "SECTION_TOP";
-  DropTargetPlaceEnum["SECTION_BOTTOM"] = "SECTION_BOTTOM";
+  DropTargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
+  DropTargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
 })(DropTargetPlaceEnum || (DropTargetPlaceEnum = {}));
+
+var ILayoutTargetEnum;
+
+(function (ILayoutTargetEnum) {
+  ILayoutTargetEnum["ROW"] = "ROW";
+  ILayoutTargetEnum["COL"] = "COL";
+  ILayoutTargetEnum["ITEM"] = "ITEM";
+})(ILayoutTargetEnum || (ILayoutTargetEnum = {}));
 
 var DroppableColumnItem = function DroppableColumnItem(_a) {
   var children = _a.children,
@@ -124,16 +132,6 @@ var __assign = function() {
     };
     return __assign.apply(this, arguments);
 };
-
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-}
 
 function on(obj) {
     var args = [];
@@ -254,9 +252,12 @@ var gridValue = function gridValue(m, n) {
 
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
+      type = _a.type,
       resizable = _a.resizable,
       styles = _a.styles,
-      children = _a.children;
+      children = _a.children,
+      currentWidth = _a.currentWidth,
+      onResize = _a.onResize;
 
   var _b = React.useState(),
       width = _b[0],
@@ -269,40 +270,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       init = _c[0],
       setInit = _c[1];
 
-  var _d = React.useState();
-      _d[0];
-      _d[1];
+  var columnRef = React.useRef(null);
 
-  var columnRef = React.useRef(null); //   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-  //     e.stopPropagation();
-  //     e.preventDefault();
-  //     const targetEl = e.currentTarget;
-  //     const targetDom = targetEl.getAttribute('target-droppable-item');
-  //     if (targetDom && !isSection) {
-  //       setDroppableTarget(targetDom);
-  //     }
-  //   };
-  //   const isHoveredTargetClassNameSide = (conditions: boolean) => {
-  //     return conditions
-  //       ? 'rlb-droppable-side-hover'
-  //       : 'rlb-droppable-side';
-  //   };
-  //   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToLeft = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.LEFT);
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToRigth = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.RIGHT);
-  //     setDroppableTarget('');
-  //   };
-
-  var onDragStart = function onDragStart(e) {
+  var onResizeStart = function onResizeStart(e) {
     var _a;
 
     e.preventDefault();
@@ -319,20 +289,22 @@ var ResizableContainer = function ResizableContainer(_a) {
   var handleResize = function handleResize(e, left) {
     e.preventDefault();
     e.stopPropagation();
-    onDragStart(e);
+    onResizeStart(e);
 
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = diff * 2;
+      var add = isRow ? diff * 2 : diff;
       var addition = left ? add : -add;
-      setWidth(init.width + addition);
+      var currentWidth_1 = init.width + addition;
+      setWidth(currentWidth_1);
+      onResize && onResize(currentWidth_1);
     }
   };
 
-  var handleDragEnd = function handleDragEnd(e, left) {
+  var handleResizeEnd = function handleResizeEnd(e, left) {
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = diff * 2;
+      var add = isRow ? diff * 2 : diff;
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
@@ -342,15 +314,18 @@ var ResizableContainer = function ResizableContainer(_a) {
           clientX: 0
         };
       });
+      onResize && onResize(finalWidth);
     }
   };
 
+  console.log(type, currentWidth, resizable);
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
       width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width)
-    }
+    },
+    "data-width": currentWidth
   }, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -358,8 +333,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, true);
     },
     onDragEnd: function onDragEnd(e) {
-      handleDragEnd(e, true);
-    }
+      handleResizeEnd(e, true);
+    },
+    "data-resizable-type": type
   }) : null, children, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler right",
     draggable: true,
@@ -367,108 +343,64 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, false);
     },
     onDragEnd: function onDragEnd(e) {
-      handleDragEnd(e, false);
-    }
+      handleResizeEnd(e, false);
+    },
+    "data-resizable-type": type
   }) : null);
 };
 
 var DroppableSection = function DroppableSection(_a) {
-  var children = _a.children,
-      index = _a.index,
-      dndTargetKey = _a.dndTargetKey,
-      disableDrag = _a.disableDrag,
-      sections = _a.sections,
-      disableChange = _a.disableChange,
-      onDropItem = _a.onDropItem,
-      onDragStart = _a.onDragStart;
-      _a.onChangeSectionStyles;
+  var children = _a.children;
+      _a.index;
+      _a.dndTargetKey;
+      _a.disableDrag;
+      var section = _a.section;
+      _a.disableChange;
+      var // onDropItem,
+  onDragStart = _a.onDragStart;
 
   var _b = React.useState(false);
       _b[0];
       var setOpenSetting = _b[1];
 
-  var _c = React.useState(),
-      droppableTarget = _c[0],
-      setDroppableTarget = _c[1];
+  var _c = React.useState();
+      _c[0];
+      _c[1];
 
   var popoverRef = React.useRef(null);
   useClickAway$1(popoverRef, function () {
     setOpenSetting(false);
   });
 
-  var handleDragOver = function handleDragOver(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-section');
-
-    if (targetDom && !disableDrag) {
-      setDroppableTarget(targetDom);
-    }
-  };
-
-  var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'rlb-droppable-section-hover' : 'rlb-droppable-section';
-  };
-
-  var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget('');
-  };
-
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "relative"
   }, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
     resizable: true
-  }, index === 0 && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
-    "target-droppable-section": "".concat(dndTargetKey, "-top"),
-    onDragOver: handleDragOver,
-    onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.SECTION_TOP);
-      setDroppableTarget('');
-    },
-    onDragLeave: handleDragOverLeave
-  }, droppableTarget === "".concat(dndTargetKey, "-top") ? "Drop here as a section..." : null) : null, /*#__PURE__*/React__default["default"].createElement("div", {
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section'),
-    draggable: !disableChange,
+    draggable: false,
     onDragStart: onDragStart,
     style: {
-      background: sections.backgroundColor,
-      paddingBlock: (sections.spacing || 0) * 8
+      background: section.backgroundColor,
+      paddingBlock: (section.spacing || 0) * 8
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "section-content",
     style: {
-      width: sections.width,
+      width: section.width,
       margin: 'auto'
     }
-  }, children)), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
-    "target-droppable-section": "".concat(dndTargetKey, "-bottom"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.SECTION_BOTTOM);
-      setDroppableTarget('');
-    }
-  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Drop here as a section...' : null) : null));
+  }, children))));
 };
 
 var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   var children = _a.children,
-      dndTargetKey = _a.dndTargetKey;
-      _a.width;
-      var isSection = _a.isSection;
-      _a.currentColumLength;
-      _a.initialSize;
-      _a.resizingWidth;
-      var disableDrag = _a.disableDrag,
-      className = _a.className;
-      _a.styles;
-      var disableChange = _a.disableChange,
+      dndTargetKey = _a.dndTargetKey,
+      isSection = _a.isSection,
+      disableDrag = _a.disableDrag,
+      className = _a.className,
+      disableChange = _a.disableChange,
       onDropItem = _a.onDropItem;
-      _a.onResize;
-      _a.onResizeStart;
 
   var _b = React.useState(),
       droppableTarget = _b[0],
@@ -513,18 +445,145 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     className),
     ref: columnRef
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-left"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-left"),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
+    "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: disableDrag ? undefined : handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
-  }, droppableTarget === "item-".concat(dndTargetKey, "-left") ? 'Drop new column...' : null) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "item-".concat(dndTargetKey, "-right"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-right"),
+  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right"))),
+    "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToRigth
-  }, droppableTarget === "item-".concat(dndTargetKey, "-right") ? 'Drop new column...' : null) : null);
+  }) : null);
+};
+
+var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
+  var dataLayout = layouts.map(function (layout) {
+    var renderedLayout = {
+      id: layout.id,
+      order: layout.order,
+      className: layout.className,
+      backgroundColor: layout.backgroundColor,
+      contentWidth: layout.contentWidth,
+      spacing: layout.spacing,
+      width: layout.width,
+      rows: layout.rows.map(function (_a) {
+        var columns = _a.columns,
+            id = _a.id,
+            order = _a.order,
+            width = _a.width,
+            className = _a.className;
+        return {
+          id: id,
+          order: order,
+          width: width,
+          className: className,
+          columns: columns.map(function (_a) {
+            var childIds = _a.childIds,
+                id = _a.id,
+                order = _a.order,
+                width = _a.width,
+                className = _a.className;
+            return {
+              id: id,
+              className: className,
+              width: width,
+              order: order,
+              items: childIds.map(function (itemKey) {
+                return data.find(function (dt) {
+                  return dt[key] === itemKey;
+                });
+              })
+            };
+          })
+        };
+      })
+    };
+    return renderedLayout;
+  });
+  return dataLayout;
+};
+
+var DroppableRow = function DroppableRow(_a) {
+  var children = _a.children,
+      index = _a.index,
+      dndTargetKey = _a.dndTargetKey,
+      disableDrag = _a.disableDrag,
+      section = _a.section,
+      disableChange = _a.disableChange,
+      width = _a.width,
+      onResize = _a.onResize,
+      onDropItem = _a.onDropItem,
+      onDragStart = _a.onDragStart;
+
+  var _b = React.useState(),
+      droppableTarget = _b[0],
+      setDroppableTarget = _b[1];
+
+  var handleDragOver = function handleDragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    var targetEl = e.currentTarget;
+    var targetDom = targetEl.getAttribute('target-droppable-row');
+
+    if (targetDom && !disableDrag) {
+      setDroppableTarget(targetDom);
+    }
+  };
+
+  var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
+    return conditions ? 'rlb-droppable-section hover' : 'rlb-droppable-section';
+  };
+
+  var handleDragOverLeave = function handleDragOverLeave(e) {
+    setDroppableTarget('');
+  };
+
+  return /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "relative"
+  }, index === 0 && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
+    "target-droppable-row": "".concat(dndTargetKey, "-top"),
+    onDragOver: handleDragOver,
+    onDrop: function onDrop(e) {
+      onDropItem(e, DropTargetPlaceEnum.ROW_TOP);
+      setDroppableTarget('');
+    },
+    onDragLeave: handleDragOverLeave
+  }) : null, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
+    isRow: true,
+    resizable: true,
+    styles: {
+      width: width
+    },
+    onResize: onResize,
+    currentWidth: width
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: classnames('rlb-section'),
+    draggable: !disableChange,
+    onDragStart: onDragStart,
+    style: {
+      background: section.backgroundColor,
+      paddingBlock: (section.spacing || 0) * 8
+    }
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "section-content flex",
+    style: {
+      width: section.width,
+      margin: 'auto'
+    }
+  }, children))), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
+    "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
+    onDragOver: handleDragOver,
+    onDragLeave: handleDragOverLeave,
+    onDrop: function onDrop(e) {
+      onDropItem(e, DropTargetPlaceEnum.ROW_BOTTOM);
+      setDroppableTarget('');
+    }
+  }) : null);
 };
 
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
@@ -601,29 +660,603 @@ function v4(options, buf, offset) {
   return stringify(rnds);
 }
 
-var createNewLayout = function createNewLayout(data, stableDataKey) {
-  return [v4()].map(function (id, index) {
-    var columns = [{
-      childIds: data.map(function (item) {
-        return item[stableDataKey];
-      }),
-      id: "column-".concat(v4()),
-      order: 0,
-      className: 'w-full',
-      width: 100
-    }];
-    var section = {
-      className: '',
-      id: "section-".concat(v4()),
-      order: 0,
-      columns: [columns],
-      contentWidth: 1080,
-      width: '100%',
-      spacing: 2
-    };
-    return section;
+var createNewColumn = function createNewColumn(itemKey) {
+  return {
+    id: v4(),
+    order: 0,
+    width: 1080,
+    className: '',
+    childIds: itemKey || []
+  };
+};
+
+var removeItemFromSource = function removeItemFromSource(layouts, source, duplicate) {
+  var finalLayouts = layouts.map(function (section) {
+    if (section.id !== source.sectionId) {
+      return section;
+    }
+
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        if (row.id !== source.rowId) return row;
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            if (col.id !== source.columnId) return col;
+            return __assign(__assign({}, col), {
+              childIds: col.childIds.filter(function (id) {
+                if (!id) return true;
+                if (duplicate) return id !== 'DUPLICATE';
+                return id !== source.itemKey;
+              })
+            });
+          }).filter(function (col) {
+            return col.childIds.length > 0;
+          })
+        });
+      })
+    });
+  });
+  return finalLayouts;
+};
+
+var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
+  var newCols = targetColumn.reduce(function (acc, next) {
+    var virtualLength = targetColumn.length > 1 ? targetColumn.length : 1;
+    var newWidth = Math.round(100 / virtualLength);
+    var shouldRemoveFromRestWidth = Math.round(newWidth / (targetColumn.length + 1));
+
+    if (next.id !== targetColumnId) {
+      return acc.concat(__assign(__assign({}, next), {
+        width: next.width - shouldRemoveFromRestWidth
+      }));
+    }
+
+    var newCol = createNewColumn(sourceItemKey ? [sourceItemKey] : undefined);
+
+    var current = __assign(__assign({}, next), {
+      width: next.width - shouldRemoveFromRestWidth
+    });
+
+    var reorder = place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol];
+    return acc.concat(reorder);
+  }, []);
+  return newCols;
+};
+
+var addToColmunElement = function addToColmunElement(targetColumn, targetColumnId, sourceColumnId, sourceItemKey, targetItemKey, targetPlace) {
+  var newColumns = targetColumn.map(function (col) {
+    if (col.id !== targetColumnId) {
+      return col;
+    }
+
+    var newColItems = col.childIds.map(function (k) {
+      return sourceColumnId === targetColumnId && k === sourceItemKey ? 'DUPLICATE' : k;
+    }).reduce(function (acc, next) {
+      if (next === targetItemKey) {
+        switch (targetPlace) {
+          case DropTargetPlaceEnum.TOP:
+            return acc.concat([sourceItemKey, next]);
+
+          case DropTargetPlaceEnum.BOTTOM:
+            return acc.concat([next, sourceItemKey]);
+
+          default:
+            return acc.concat(next);
+        }
+      }
+
+      return acc.concat(next);
+    }, []);
+
+    var newCol = __assign(__assign({}, col), {
+      childIds: newColItems
+    });
+
+    return newCol;
+  }, []);
+  return newColumns;
+};
+
+var addItemToColumn = function addItemToColumn(column, source, dest, place) {
+  switch (place) {
+    case DropTargetPlaceEnum.LEFT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.LEFT);
+
+    case DropTargetPlaceEnum.RIGHT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.RIGHT);
+
+    case DropTargetPlaceEnum.TOP:
+      return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
+
+    case DropTargetPlaceEnum.BOTTOM:
+      return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
+  }
+};
+var addToColumn = function addToColumn(layouts, source, dest, place) {
+  var add = layouts.map(function (layout) {
+    if (layout.id !== dest.sectionId) return layout;
+    return __assign(__assign({}, layout), {
+      rows: layout.rows.map(function (row) {
+        if (row.id !== dest.rowId) return row;
+        return __assign(__assign({}, row), {
+          columns: addItemToColumn(row.columns, source, dest, place) || []
+        });
+      })
+    });
+  });
+  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === DropTargetPlaceEnum.BOTTOM || place === DropTargetPlaceEnum.TOP));
+  return clean;
+};
+
+var createNewRow = function createNewRow(itemkey) {
+  var newColumn = createNewColumn(itemkey);
+  return {
+    id: v4(),
+    width: 1080,
+    order: 0,
+    className: '',
+    columns: [newColumn]
+  };
+};
+
+var addToNewRow = function addToNewRow(layouts, source, dest, place) {
+  var newLayouts = layouts.map(function (section) {
+    if (section.id !== dest.sectionId) {
+      return section;
+    }
+
+    var row = createNewRow([source.itemKey]);
+    return __assign(__assign({}, section), {
+      rows: section.rows.reduce(function (acc, nextRow) {
+        if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
+
+        if (place === DropTargetPlaceEnum.ROW_BOTTOM) {
+          return acc.concat([nextRow, row]);
+        }
+
+        return acc.concat([row, nextRow]);
+      }, [])
+    });
+  }, []);
+  var clean = removeItemFromSource(newLayouts, source);
+  return clean;
+};
+
+var removeEmptyLayout = function removeEmptyLayout(layouts) {
+  var noEmptyChild = layouts.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            return __assign(__assign({}, col), {
+              childIds: col.childIds.filter(function (id) {
+                return id;
+              })
+            });
+          })
+        });
+      })
+    });
+  });
+  var noEmptyColumn = noEmptyChild.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        return __assign(__assign({}, row), {
+          columns: row.columns.filter(function (col) {
+            return col.childIds.length > 0;
+          })
+        });
+      })
+    });
+  });
+  var noEmptyRow = noEmptyColumn.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.filter(function (row) {
+        return row.columns.length > 0;
+      })
+    });
+  });
+  var noEmptySection = noEmptyRow.filter(function (section) {
+    return section.rows.length > 0;
+  });
+  return noEmptySection;
+};
+
+// import { ILayoutSection, ILayoutColumn } from '../interface';
+//   layouts: ILayoutSection[],
+//   source: SourceType,
+//   dest: DestinationType,
+//   place: DropTargetPlaceEnum,
+// ) => {
+//   if (
+//     source.isSection &&
+//     (place === DropTargetPlaceEnum.SECTION_BOTTOM ||
+//       place === DropTargetPlaceEnum.SECTION_TOP)
+//   ) {
+//     const finalLayouts = reorderRow(layouts, source, dest, place);
+//     const removeOldItem = finalLayouts.map((layout) => ({
+//       ...layout,
+//       columns: layout.columns.map((cols, index) => {
+//         if (index === source.columnIndex) {
+//           return removeItemFromSource(
+//             cols,
+//             source.columnId,
+//             source.itemKey,
+//           );
+//         }
+//         return cols;
+//       }),
+//     }));
+//     return removeEmptyLayout(removeOldItem);
+//   }
+//   if (
+//     place === DropTargetPlaceEnum.SECTION_BOTTOM ||
+//     place === DropTargetPlaceEnum.SECTION_TOP
+//   ) {
+//     const removeOldItem = layouts.map((layout) => {
+//       if (layout.id === source.sectionId) {
+//         return {
+//           ...layout,
+//           columns: layout.columns.map((cols, index) => {
+//             if (index === source.columnIndex) {
+//               return removeItemFromSource(
+//                 cols,
+//                 source.columnId,
+//                 source.itemKey,
+//               );
+//             }
+//             return cols;
+//           }),
+//         };
+//       }
+//       return layout;
+//     });
+//     const finalLayouts = addToNewRow(
+//       removeOldItem,
+//       source,
+//       dest,
+//       place,
+//     );
+//     return removeEmptyLayout(finalLayouts);
+//   }
+//   if (source.isSection) {
+//     return layouts;
+//   }
+//   const finalLayouts = layouts.map((section) => {
+//     if (section.id !== dest.sectionId) return section;
+//     const newCols = section.columns[dest.columnIndex];
+//     if (!newCols) return section;
+//     const sectionModified = {
+//       ...section,
+//       columns: section.columns.map((cols, index) => {
+//         if (index === dest.columnIndex) {
+//           const add = addItemToColumn(cols, source, dest, place);
+//           return removeItemFromSource(
+//             add,
+//             source.columnId,
+//             source.itemKey,
+//           );
+//         }
+//         return cols;
+//       }),
+//     };
+//     return sectionModified;
+//   });
+//   const removeOldItem = finalLayouts.map((layout) => {
+//     if (layout.id === source.sectionId) {
+//       return {
+//         ...layout,
+//         columns: layout.columns.map((cols, index) => {
+//           console.log(source);
+//           if (index === source.columnIndex) {
+//             return removeItemFromSource(
+//               cols,
+//               source.columnId,
+//               source.itemKey,
+//             );
+//           }
+//           return cols;
+//         }),
+//       };
+//     }
+//     return layout;
+//   });
+//   return removeEmptyLayout(removeOldItem);
+// };
+
+var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
+  switch (target) {
+    case ILayoutTargetEnum.ROW:
+      return addToNewRow(layouts, source, dest, place);
+
+    case ILayoutTargetEnum.COL:
+      return addToColumn(layouts, source, dest, place);
+
+    case ILayoutTargetEnum.ITEM:
+      return addToColumn(layouts, source, dest, place);
+  }
+};
+
+var reorderLayout = function reorderLayout(layouts, source, dest, place, target) {
+  var ordered = reorderLayoutItem(layouts, source, dest, place, target);
+
+  if (ordered) {
+    var removeEmpty = removeEmptyLayout(ordered);
+    return removeEmpty;
+  }
+
+  return layouts;
+};
+
+var changeRowWidth = function changeRowWidth(layouts, inputs) {
+  return layouts.map(function (section) {
+    if (section.id !== inputs.sectionId) return section;
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        if (row.id !== inputs.rowId) return row;
+        return __assign(__assign({}, row), {
+          width: inputs.width
+        });
+      })
+    });
   });
 };
+
+var LayoutContainer = function LayoutContainer(_a) {
+  var data = _a.data,
+      renderComponent = _a.renderComponent,
+      onLayoutChange = _a.onLayoutChange,
+      stableKey = _a.stableDataKey,
+      layouts = _a.layouts;
+      _a.loading;
+      var disableChange = _a.disableChange;
+  var containeRef = React.useRef(null);
+
+  var _b = React.useState(false),
+      isDragging = _b[0];
+      _b[1];
+
+  var _c = React.useState(false);
+      _c[0];
+      _c[1];
+
+  var _d = React.useState([]),
+      actualLayout = _d[0],
+      setActualLayout = _d[1];
+
+  var _e = React.useState(false),
+      isSectionDragged = _e[0],
+      setIsSectionDragged = _e[1];
+
+  var _f = React.useState([]),
+      renderableLayout = _f[0],
+      setRenderableLayout = _f[1];
+
+  var _g = React.useState(),
+      initialSize = _g[0];
+      _g[1];
+
+  var _h = React.useState();
+      _h[0];
+      _h[1];
+
+  var _j = React.useState();
+      _j[0];
+      _j[1];
+
+  React.useEffect(function () {
+    if (layouts && layouts.length > 0) {
+      setActualLayout(layouts);
+    }
+  }, [layouts]);
+  React.useEffect(function () {
+    if (actualLayout.length > 0) {
+      var renderable = createRenderableLayout(data, actualLayout, stableKey);
+      setRenderableLayout(renderable);
+    }
+  }, [actualLayout, data, stableKey]);
+  React.useEffect(function () {
+    if (actualLayout.length > 0) {
+      onLayoutChange(actualLayout);
+    }
+  }, [actualLayout, onLayoutChange]);
+
+  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
+    e.stopPropagation();
+
+    var itemKeyType = _typeof(itemkey);
+
+    e.dataTransfer.setData('itemKey', itemkey);
+    e.dataTransfer.setData('itemKeyType', itemKeyType);
+    e.dataTransfer.setData('sectionId', sectionId);
+    e.dataTransfer.setData('colmunId', columnId);
+    e.dataTransfer.setData('rowId', rowId);
+    setIsSectionDragged(false);
+  }; // Drop item to create new column or setion or add item to column
+
+
+  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
+    var sourceItemKey = e.dataTransfer.getData('itemKey');
+    var isSection = e.dataTransfer.getData('isSection');
+    var sourceSectionId = e.dataTransfer.getData('sectionId');
+    var sourceColumnKey = e.dataTransfer.getData('colmunId');
+    var sourceRowId = e.dataTransfer.getData('rowId');
+    var itemKeyType = e.dataTransfer.getData('itemKeyType');
+    var source = {
+      columnId: sourceColumnKey,
+      itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
+      sectionId: sourceSectionId,
+      isSection: !!isSection,
+      rowId: sourceRowId
+    };
+    var destination = {
+      columnId: columnId,
+      itemKey: itemKey,
+      sectionId: sectionId,
+      targetPlace: target,
+      rowId: rowId
+    };
+    var newLayout = reorderLayout(actualLayout, source, destination, target, layoutTarget);
+    setIsSectionDragged(false);
+
+    if (newLayout) {
+      setActualLayout(newLayout);
+    }
+  };
+
+  var handleDragSectionStart = function handleDragSectionStart(e, sectionId) {
+    e.stopPropagation();
+    e.dataTransfer.setData('sectionId', sectionId);
+    e.dataTransfer.setData('isSection', 'section');
+    setIsSectionDragged(true);
+  }; // Resize row
+
+
+  var handleResizeRow = function handleResizeRow(currentWidth, sectionId, rowId) {
+    var newLayouts = changeRowWidth(actualLayout, {
+      rowId: rowId,
+      sectionId: sectionId,
+      width: currentWidth
+    });
+    setActualLayout(newLayouts);
+  };
+
+  return /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "m-auto py-4"
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "min-h-[100px] ",
+    ref: containeRef
+  }, renderableLayout.map(function (section, index) {
+    return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
+      disableChange: disableChange,
+      index: index,
+      key: section.id,
+      section: section,
+      dndTargetKey: section.id,
+      disableDrag: isDragging,
+      // onDropItem={(e, target) =>
+      //   handleDropItem(
+      //     e,
+      //     target,
+      //     section.id,
+      //     '',
+      //     '',
+      //     undefined,
+      //     ILayoutTargetEnum.ROW,
+      //   )
+      // }
+      onDragStart: function onDragStart(e) {
+        handleDragSectionStart(e, section.id);
+      }
+    }, section.rows.map(function (row, rowIndex) {
+      return /*#__PURE__*/React__default["default"].createElement(DroppableRow, {
+        disableChange: disableChange,
+        index: rowIndex,
+        key: row.id,
+        section: section,
+        width: row.width,
+        dndTargetKey: row.id,
+        disableDrag: isDragging,
+        onDropItem: function onDropItem(e, target) {
+          return handleDropItem(e, target, section.id, '', row.id, undefined, ILayoutTargetEnum.ROW);
+        },
+        onDragStart: function onDragStart(e) {
+          handleDragSectionStart(e, section.id);
+        },
+        onResize: function onResize(width) {
+          return handleResizeRow(width, section.id, row.id);
+        }
+      }, row.columns.map(function (column) {
+        var _a;
+
+        console.log('colmun lenght', row.columns);
+        return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
+          key: column.id,
+          // resizable={row.columns.length > 1}
+          styles: {
+            width: (_a = column.width) !== null && _a !== void 0 ? _a : ''
+          },
+          type: "column",
+          currentWidth: column.width
+        }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
+          key: column.id,
+          disableChange: disableChange,
+          initialSize: initialSize,
+          disableDrag: isDragging,
+          isSection: isSectionDragged,
+          styles: column.styles,
+          className: column.className,
+          dndTargetKey: column.id,
+          width: column.width,
+          currentColumLength: 1,
+          onDropItem: function onDropItem(e, target) {
+            return handleDropItem(e, target, section.id, column.id, row.id, undefined, ILayoutTargetEnum.COL);
+          }
+        }, /*#__PURE__*/React__default["default"].createElement("div", {
+          key: column.id,
+          className: "rlb-col-inner  ".concat('')
+        }, column.items.map(function (items, index) {
+          if (!items) return null;
+          return /*#__PURE__*/React__default["default"].createElement(DroppableColumnItem, {
+            disableChange: disableChange,
+            isSection: isSectionDragged,
+            key: index,
+            dndTargetKey: items[stableKey],
+            onDropItem: function onDropItem(e, target) {
+              return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], ILayoutTargetEnum.ITEM);
+            }
+          }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
+            disableChange: disableChange,
+            dndTargetKey: items[stableKey],
+            onDragStart: function onDragStart(e) {
+              handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
+            }
+          }, renderComponent(items)));
+        }))));
+      }));
+    }));
+  })));
+};
+
+var createNewSection = function createNewSection(itemKey) {
+  var row = createNewRow(itemKey);
+  return {
+    id: v4(),
+    className: '',
+    order: 0,
+    backgroundColor: '',
+    backgroundImage: '',
+    width: '100%',
+    rows: [row]
+  };
+};
+
+//   data: any[],
+//   stableDataKey: string,
+// ): ILayoutSection[] => {
+//   return [uuidv4()].map((id: any, index: number) => {
+//     const columns: ILayoutColumn[] = [
+//       {
+//         childIds: data.map((item) => item[stableDataKey]),
+//         id: `column-${uuidv4()}`,
+//         order: 0,
+//         className: 'w-full',
+//         width: 100,
+//       },
+//     ];
+//     const section: ILayoutSection = {
+//       className: '',
+//       id: `section-${uuidv4()}`,
+//       order: 0,
+//       columns: [columns],
+//       contentWidth: 1080,
+//       width: '100%',
+//       spacing: 2,
+//     };
+//     return section;
+//   });
+// };
+
 /**
  *
  * @param data   data used in the layer, Type : any[]
@@ -637,10 +1270,12 @@ var createNewLayout = function createNewLayout(data, stableDataKey) {
  * @returns
  */
 
-
 var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
-    return createNewLayout(data, stableDataKey);
+    var newSections = createNewSection(data.map(function (dt) {
+      return dt[stableDataKey];
+    }));
+    return [newSections];
   } // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {
   //     const sectionExist = section.columns.find((col) =>
@@ -657,536 +1292,5 @@ var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   return [];
 };
 
-var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
-  var dataLayout = layouts.map(function (layout) {
-    var renderedLayout = {
-      id: layout.id,
-      order: layout.order,
-      className: layout.className,
-      backgroundColor: layout.backgroundColor,
-      contentWidth: layout.contentWidth,
-      spacing: layout.spacing,
-      width: layout.width,
-      columns: layout.columns.map(function (colmns) {
-        return colmns.map(function (cols) {
-          var items = cols.childIds.map(function (item) {
-            return data.find(function (dt) {
-              return dt[key] === item;
-            }) || {};
-          });
-          var renderedCol = {
-            id: cols.id,
-            order: cols.order,
-            className: cols.className,
-            items: items,
-            width: cols.width
-          };
-          return renderedCol;
-        }).filter(function (col) {
-          return col.items.length > 0;
-        });
-      })
-    };
-    return renderedLayout;
-  }).filter(function (section) {
-    return section.columns.length > 0;
-  });
-  return dataLayout;
-};
-
-var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
-  var newCols = targetColumn.reduce(function (acc, next) {
-    var virtualLength = targetColumn.length > 1 ? targetColumn.length : 1;
-    var newWidth = Math.round(100 / virtualLength);
-    var shouldRemoveFromRestWidth = Math.round(newWidth / (targetColumn.length + 1));
-
-    if (next.id !== targetColumnId) {
-      return acc.concat(__assign(__assign({}, next), {
-        width: next.width - shouldRemoveFromRestWidth
-      }));
-    }
-
-    var newCol = {
-      childIds: [sourceItemKey],
-      id: new Date().getTime().toString(),
-      order: 999,
-      className: 'w-full',
-      width: newWidth - shouldRemoveFromRestWidth
-    };
-
-    var current = __assign(__assign({}, next), {
-      width: next.width - shouldRemoveFromRestWidth
-    });
-
-    var reorder = place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol];
-    return acc.concat(reorder);
-  }, []);
-  return newCols;
-};
-
-var addToColmunElementToTop = function addToColmunElementToTop(targetColumn, targetColumnId, sourceItemKey, targetItemKey) {
-  var newColumns = targetColumn.map(function (col) {
-    if (col.id !== targetColumnId) {
-      return col;
-    }
-
-    var newColItems = col.childIds.reduce(function (acc, next) {
-      if (next !== targetItemKey) {
-        return acc.concat(next);
-      }
-
-      return acc.concat([sourceItemKey, next]);
-    }, []);
-
-    var newCol = __assign(__assign({}, col), {
-      childIds: newColItems
-    });
-
-    return newCol;
-  }, []);
-  return newColumns;
-};
-
-var addToColmunElementToBottom = function addToColmunElementToBottom(targetColumn, targetColumnId, sourceItemKey, targetItemKey) {
-  var newColumns = targetColumn.map(function (col) {
-    if (col.id !== targetColumnId) {
-      return col;
-    }
-
-    var newColItems = col.childIds.reduce(function (acc, next) {
-      if (next !== targetItemKey) {
-        return acc.concat(next);
-      }
-
-      return acc.concat([next, sourceItemKey]);
-    }, []);
-
-    var newCol = __assign(__assign({}, col), {
-      childIds: newColItems
-    });
-
-    return newCol;
-  }, []);
-  return newColumns;
-};
-
-var addItemToColumn = function addItemToColumn(column, source, dest, place) {
-  if (place === DropTargetPlaceEnum.LEFT) {
-    return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.LEFT);
-  }
-
-  if (place === DropTargetPlaceEnum.RIGHT) {
-    return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.RIGHT);
-  }
-
-  if (place === DropTargetPlaceEnum.TOP) {
-    return addToColmunElementToTop(column, dest.columnId, source.itemKey, dest.itemKey);
-  }
-
-  if (place === DropTargetPlaceEnum.BOTTOM) {
-    return addToColmunElementToBottom(column, dest.columnId, source.itemKey, dest.itemKey);
-  }
-
-  return column;
-};
-
-var addToNewRow = function addToNewRow(layouts, source, dest, place) {
-  var finalLayouts = layouts.map(function (section) {
-    if (section.id !== dest.sectionId) {
-      return section;
-    }
-
-    var id = new Date().getTime();
-    var newCol = [{
-      childIds: [source.itemKey],
-      id: id.toString(),
-      order: 0,
-      width: 100,
-      className: ''
-    }];
-    var cols = place === DropTargetPlaceEnum.SECTION_TOP ? __spreadArray([newCol], section.columns || [], true) : __spreadArray(__spreadArray([], section.columns || [], true), [newCol], false);
-    var newSection = {
-      className: '',
-      id: id.toString(),
-      order: 0,
-      columns: cols
-    };
-    return newSection;
-  }, []);
-  return finalLayouts;
-};
-
-var removeEmptyColumn = function removeEmptyColumn(layouts) {
-  // return layouts.map((section) => {
-  //   const newColumns = section.columns.filter(
-  //     (col) => (col.childIds.length || 0) > 0,
-  //   );
-  //   return {
-  //     ...section,
-  //     columns: newColumns,
-  //   };
-  // });
-  return layouts;
-};
-
-var removeEmptyLayout = function removeEmptyLayout(layouts) {
-  var notEmptyCol = removeEmptyColumn(layouts);
-  return notEmptyCol.filter(function (section) {
-    return section.columns.length > 0;
-  });
-};
-
-var removeItemFromSource = function removeItemFromSource(columns, columnId, itemKey) {
-  return columns.map(function (col) {
-    console.log('WILL FOUND', col, columnId, itemKey);
-    if (col.id !== columnId) return col;
-    console.log('Found');
-    var items = col.childIds.filter(function (key) {
-      return key !== itemKey;
-    });
-    return __assign(__assign({}, col), {
-      childIds: items
-    });
-  });
-};
-
-var reorderRow = function reorderRow(layouts, source, dest, place) {
-  if (!source.isSection) return layouts;
-  var findSection = layouts.find(function (section) {
-    return section.id === source.sectionId;
-  });
-  if (!findSection) return layouts;
-  var finalLayouts = layouts.filter(function (sect) {
-    return sect.id !== source.sectionId;
-  }).reduce(function (acc, section) {
-    if (section.id !== dest.sectionId) {
-      return acc.concat(section);
-    }
-
-    return acc.concat(place === DropTargetPlaceEnum.SECTION_TOP ? [findSection, section] : [section, findSection]);
-  }, []);
-  return removeEmptyLayout(finalLayouts);
-};
-
-var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place) {
-  if (source.isSection && (place === DropTargetPlaceEnum.SECTION_BOTTOM || place === DropTargetPlaceEnum.SECTION_TOP)) {
-    var finalLayouts_1 = reorderRow(layouts, source, dest, place);
-    var removeOldItem_1 = finalLayouts_1.map(function (layout) {
-      return __assign(__assign({}, layout), {
-        columns: layout.columns.map(function (cols, index) {
-          if (index === source.columnIndex) {
-            return removeItemFromSource(cols, source.columnId, source.itemKey);
-          }
-
-          return cols;
-        })
-      });
-    });
-    return removeEmptyLayout(removeOldItem_1);
-  }
-
-  if (place === DropTargetPlaceEnum.SECTION_BOTTOM || place === DropTargetPlaceEnum.SECTION_TOP) {
-    var removeOldItem_2 = layouts.map(function (layout) {
-      if (layout.id === source.sectionId) {
-        return __assign(__assign({}, layout), {
-          columns: layout.columns.map(function (cols, index) {
-            if (index === source.columnIndex) {
-              return removeItemFromSource(cols, source.columnId, source.itemKey);
-            }
-
-            return cols;
-          })
-        });
-      }
-
-      return layout;
-    });
-    var finalLayouts_2 = addToNewRow(removeOldItem_2, source, dest, place);
-    return removeEmptyLayout(finalLayouts_2);
-  }
-
-  if (source.isSection) {
-    return layouts;
-  }
-
-  var finalLayouts = layouts.map(function (section) {
-    if (section.id !== dest.sectionId) return section;
-    var newCols = section.columns[dest.columnIndex];
-    if (!newCols) return section;
-
-    var sectionModified = __assign(__assign({}, section), {
-      columns: section.columns.map(function (cols, index) {
-        if (index === dest.columnIndex) {
-          var add = addItemToColumn(cols, source, dest, place);
-          return removeItemFromSource(add, source.columnId, source.itemKey);
-        }
-
-        return cols;
-      })
-    });
-
-    return sectionModified;
-  });
-  var removeOldItem = finalLayouts.map(function (layout) {
-    if (layout.id === source.sectionId) {
-      return __assign(__assign({}, layout), {
-        columns: layout.columns.map(function (cols, index) {
-          console.log(source);
-
-          if (index === source.columnIndex) {
-            return removeItemFromSource(cols, source.columnId, source.itemKey);
-          }
-
-          return cols;
-        })
-      });
-    }
-
-    return layout;
-  });
-  return removeEmptyLayout(removeOldItem);
-};
-
-var changeSectionStyles = function changeSectionStyles(section, sectionId, key, value) {
-  var newSection = section.map(function (sect) {
-    var _a;
-
-    if (sect.id === sectionId) {
-      return __assign(__assign({}, sect), (_a = {}, _a[key] = value, _a));
-    }
-
-    return sect;
-  });
-  return newSection;
-};
-
-var LayoutContainer = function LayoutContainer(_a) {
-  var data = _a.data,
-      renderComponent = _a.renderComponent,
-      onLayoutChange = _a.onLayoutChange,
-      stableKey = _a.stableDataKey,
-      layouts = _a.layouts,
-      loading = _a.loading,
-      disableChange = _a.disableChange;
-  var containeRef = React.useRef(null);
-
-  var _b = React.useState(false),
-      isDragging = _b[0],
-      setIsDragging = _b[1];
-
-  var _c = React.useState(false);
-      _c[0];
-      var setDisableDrag = _c[1];
-
-  var _d = React.useState([]),
-      actualLayout = _d[0],
-      setActualLayout = _d[1];
-
-  var _e = React.useState(false),
-      isSectionDragged = _e[0],
-      setIsSectionDragged = _e[1];
-
-  var _f = React.useState([]),
-      renderableLayout = _f[0],
-      setRenderableLayout = _f[1];
-
-  var _g = React.useState(),
-      initialSize = _g[0],
-      setInitialSize = _g[1];
-
-  var _h = React.useState();
-      _h[0];
-      var setCurentColWidth = _h[1];
-
-  var _j = React.useState();
-      _j[0];
-      var setResizedSectionId = _j[1];
-
-  React.useEffect(function () {
-    if (layouts) {
-      setActualLayout(layouts);
-    }
-  }, [layouts]);
-  React.useEffect(function () {
-    if (layouts) {
-      setActualLayout(layouts);
-    }
-  }, [layouts, loading]);
-  React.useEffect(function () {
-    var renderable = createRenderableLayout(data, actualLayout, stableKey);
-    setRenderableLayout(renderable);
-  }, [actualLayout, data, stableKey]); // create new layout if new data is added
-  // Do not incldes 'stableKey and layouts and hooks-deps'
-
-  React.useEffect(function () {
-    var newLayouts = createLayout(data, stableKey, layouts);
-    setActualLayout(newLayouts); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-  React.useEffect(function () {
-    if (actualLayout.length > 0) {
-      onLayoutChange(actualLayout);
-    }
-  }, [actualLayout, onLayoutChange]);
-
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, columnIndex, itemkey) {
-    e.stopPropagation();
-
-    var itemKeyType = _typeof(itemkey);
-
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('colmunIndex', columnIndex.toString());
-    setIsSectionDragged(false);
-  }; // Drop item to create new column or setion or add item to column
-
-
-  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, columnIndex, itemKey) {
-    var sourceItemKey = e.dataTransfer.getData('itemKey');
-    var isSection = e.dataTransfer.getData('isSection');
-    var sourceSectionId = e.dataTransfer.getData('sectionId');
-    var sourceColumnKey = e.dataTransfer.getData('colmunId');
-    var sourceColmunIndex = e.dataTransfer.getData('colmunIndex');
-    var itemKeyType = e.dataTransfer.getData('itemKeyType');
-    console.log('sourceColmunIndex', sourceColmunIndex);
-    var source = {
-      columnId: sourceColumnKey,
-      itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
-      sectionId: sourceSectionId,
-      isSection: !!isSection,
-      columnIndex: parseFloat(sourceColmunIndex)
-    };
-    var destination = {
-      columnId: columnId,
-      itemKey: itemKey,
-      sectionId: sectionId,
-      targetPlace: target,
-      columnIndex: columnIndex
-    };
-    var newLayout = reorderLayoutItem(actualLayout, source, destination, target);
-    setIsSectionDragged(false);
-    setActualLayout(newLayout);
-  };
-
-  var handleResize = function handleResize(e, colmunId, sectionId, isInvert) {
-    var _a;
-
-    if (!initialSize) return;
-    setResizedSectionId(sectionId);
-    var containerWidth = ((_a = containeRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth) || 0;
-    var onPercentInPixel = containerWidth / 100;
-    var offset2 = e.clientX - initialSize.initialPosPx;
-    var offsetPercent = offset2 / onPercentInPixel;
-    var initialWidth = initialSize.currentPercentWidth;
-    var newWidth = isInvert ? initialWidth - offsetPercent : initialWidth + offsetPercent;
-    setIsDragging(true);
-
-    if (e.clientX === 0) {
-      setDisableDrag(false);
-      return;
-    }
-
-    setDisableDrag(true);
-    setCurentColWidth(Math.round(newWidth));
-  };
-
-  var handleResizeStart = function handleResizeStart(colId, widthPx, currentPercentWidth, onePixel, initialPosPx) {
-    setIsDragging(true);
-    setInitialSize({
-      widthPx: widthPx,
-      currentPercentWidth: currentPercentWidth,
-      onePixel: onePixel,
-      initialPosPx: initialPosPx,
-      colId: colId
-    });
-  };
-
-  var handleDragSectionStart = function handleDragSectionStart(e, sectionId) {
-    e.stopPropagation();
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('isSection', 'section');
-    setIsSectionDragged(true);
-  };
-
-  var handleSectionStyles = function handleSectionStyles(id, key, value) {
-    var newLayouts = changeSectionStyles(actualLayout, id, key, value);
-    setActualLayout(newLayouts);
-  };
-
-  return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "m-auto py-4"
-  }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "min-h-[100px] ",
-    ref: containeRef
-  }, renderableLayout.map(function (sectionData, index) {
-    return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
-      disableChange: disableChange,
-      index: index,
-      key: sectionData.id,
-      sections: sectionData,
-      dndTargetKey: sectionData.id,
-      disableDrag: isDragging,
-      onDropItem: function onDropItem(e, target) {
-        return handleDropItem(e, target, sectionData.id, '', 99999999, undefined);
-      },
-      onDragStart: function onDragStart(e) {
-        handleDragSectionStart(e, sectionData.id);
-      },
-      onChangeSectionStyles: function onChangeSectionStyles(key, value) {
-        return handleSectionStyles(sectionData.id, key, value);
-      }
-    }, sectionData.columns.map(function (cols, colIndex) {
-      return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-        isRow: true,
-        resizable: true,
-        key: colIndex,
-        styles: {
-          width: 1080
-        }
-      }, cols.map(function (columnData) {
-        return /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
-          key: columnData.id,
-          disableChange: disableChange,
-          initialSize: initialSize,
-          disableDrag: isDragging,
-          isSection: isSectionDragged,
-          styles: columnData.styles,
-          className: columnData.className,
-          dndTargetKey: columnData.id,
-          width: columnData.width,
-          currentColumLength: sectionData.columns.length || 1,
-          onDropItem: function onDropItem(e, target) {
-            return handleDropItem(e, target, sectionData.id, columnData.id, colIndex, undefined);
-          },
-          onResizeStart: handleResizeStart,
-          onResize: function onResize(e, isInvert) {
-            setResizedSectionId(sectionData.id);
-            handleResize(e, columnData.id, sectionData.id, isInvert);
-          }
-        }, /*#__PURE__*/React__default["default"].createElement("div", {
-          key: columnData.id,
-          className: "rlb-col-inner  ".concat('')
-        }, columnData.items.map(function (items) {
-          return /*#__PURE__*/React__default["default"].createElement(DroppableColumnItem, {
-            disableChange: disableChange,
-            isSection: isSectionDragged,
-            key: items[stableKey],
-            dndTargetKey: items[stableKey],
-            onDropItem: function onDropItem(e, target) {
-              return handleDropItem(e, target, sectionData.id, columnData.id, colIndex, items[stableKey]);
-            }
-          }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
-            disableChange: disableChange,
-            dndTargetKey: items[stableKey],
-            onDragStart: function onDragStart(e) {
-              handleDragStart(e, sectionData.id, columnData.id, colIndex, items[stableKey]);
-            }
-          }, renderComponent(items)));
-        })));
-      }));
-    }));
-  })));
-};
-
 exports.LayoutContainer = LayoutContainer;
+exports.createLayout = createLayout;

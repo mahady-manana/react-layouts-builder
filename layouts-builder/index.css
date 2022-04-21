@@ -79,11 +79,13 @@
     right: -10px;
 }
 .rlb-droppable-section {
-    height: 15px;
+    padding: 10px;
+    width: 95%;
+    margin: auto;
 }
 
-.rlb-droppable-section-hover {
-    padding: 20px;
+.rlb-droppable-section.hover {
+    padding: 25px;
     border: 2px dashed #ccc;
     border-radius: 15px;
     text-align: center;
@@ -92,7 +94,7 @@
 }
 
 .rlb-droppable-side {
-    width: 10px;
+    padding: 10px;
 }
 /* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
 .rlb-droppable-side-hover {
@@ -149,7 +151,7 @@
 
 .rlb-resizable-container {
     position: relative;
-    margin: auto;
+    margin-inline: auto;
     width: 100%;
     padding: 10;
 }
@@ -159,6 +161,9 @@
 }
 .rlb-resizable-container.resizable:hover {
     border: 1px dashed #444;
+}
+.rlb-resizable-container.resizable {
+    padding: 15px;
 }
  
 .rlb-resize-handler {

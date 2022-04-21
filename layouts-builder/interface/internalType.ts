@@ -3,21 +3,27 @@ export enum DropTargetPlaceEnum {
   RIGHT = 'RIGHT',
   TOP = 'TOP',
   BOTTOM = 'BOTTOM',
-  SECTION_TOP = 'SECTION_TOP',
-  SECTION_BOTTOM = 'SECTION_BOTTOM',
+  ROW_TOP = 'ROW_TOP',
+  ROW_BOTTOM = 'ROW_BOTTOM',
+}
+
+export enum ILayoutTargetEnum {
+  ROW = 'ROW',
+  COL = 'COL',
+  ITEM = 'ITEM',
 }
 
 export interface SourceType {
   sectionId: string;
   columnId: string;
-  columnIndex: number;
+  rowId: any;
   itemKey: any;
   isSection?: boolean;
 }
 export interface DestinationType {
   sectionId: string;
   columnId: string;
-  columnIndex: number;
+  rowId: any;
   itemKey?: any;
   targetPlace: DropTargetPlaceEnum;
 }

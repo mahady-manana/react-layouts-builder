@@ -1,7 +1,11 @@
 import { FormEvent, useEffect, useState } from "react"
 
 import { mockData } from "../data/data"
-import { LayoutContainer, ILayoutSection } from "react-layouts-builder"
+import {
+  LayoutContainer,
+  ILayoutSection,
+  createLayout
+} from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
 import "react-layouts-builder/packages/index.css"
@@ -18,7 +22,12 @@ export const Layouts1 = () => {
   }
   useEffect(() => {
     const l = storage.get()
-    console.log(l)
+    console.log("ta", l)
+
+    if (!l && !l?.length && data.length > 0) {
+      const c = createLayout(data, "id")
+      setLayoutTest(c)
+    }
 
     setTimeout(() => {
       setLoading(false)
@@ -27,7 +36,7 @@ export const Layouts1 = () => {
     if (l?.length > 0) {
       setLayoutTest(l)
     }
-  }, [])
+  }, [data])
 
   const handleSabmit = (e: FormEvent) => {
     e.preventDefault()

@@ -1,33 +1,34 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ILayoutColumn, ILayoutSection } from '../interface';
+import { createNewSection } from './createNewSection';
 
-const createNewLayout = (
-  data: any[],
-  stableDataKey: string,
-): ILayoutSection[] => {
-  return [uuidv4()].map((id: any, index: number) => {
-    const columns: ILayoutColumn[] = [
-      {
-        childIds: data.map((item) => item[stableDataKey]),
-        id: `column-${uuidv4()}`,
-        order: 0,
-        className: 'w-full',
+// const createNewLayout = (
+//   data: any[],
+//   stableDataKey: string,
+// ): ILayoutSection[] => {
+//   return [uuidv4()].map((id: any, index: number) => {
+//     const columns: ILayoutColumn[] = [
+//       {
+//         childIds: data.map((item) => item[stableDataKey]),
+//         id: `column-${uuidv4()}`,
+//         order: 0,
+//         className: 'w-full',
 
-        width: 100,
-      },
-    ];
-    const section: ILayoutSection = {
-      className: '',
-      id: `section-${uuidv4()}`,
-      order: 0,
-      columns: [columns],
-      contentWidth: 1080,
-      width: '100%',
-      spacing: 2,
-    };
-    return section;
-  });
-};
+//         width: 100,
+//       },
+//     ];
+//     const section: ILayoutSection = {
+//       className: '',
+//       id: `section-${uuidv4()}`,
+//       order: 0,
+//       columns: [columns],
+//       contentWidth: 1080,
+//       width: '100%',
+//       spacing: 2,
+//     };
+//     return section;
+//   });
+// };
 /**
  *
  * @param data   data used in the layer, Type : any[]
@@ -46,7 +47,10 @@ export const createLayout = (
   currentLayouts?: ILayoutSection[],
 ): ILayoutSection[] => {
   if (!currentLayouts || currentLayouts?.length === 0) {
-    return createNewLayout(data, stableDataKey);
+    const newSections = createNewSection(
+      data.map((dt) => dt[stableDataKey]),
+    );
+    return [newSections];
   }
   // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {

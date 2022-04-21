@@ -4,9 +4,12 @@ import React, { useState, useRef } from 'react';
 
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
+      type = _a.type,
       resizable = _a.resizable,
       styles = _a.styles,
-      children = _a.children;
+      children = _a.children,
+      currentWidth = _a.currentWidth,
+      onResize = _a.onResize;
 
   var _b = useState(),
       width = _b[0],
@@ -19,40 +22,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       init = _c[0],
       setInit = _c[1];
 
-  var _d = useState();
-      _d[0];
-      _d[1];
+  var columnRef = useRef(null);
 
-  var columnRef = useRef(null); //   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-  //     e.stopPropagation();
-  //     e.preventDefault();
-  //     const targetEl = e.currentTarget;
-  //     const targetDom = targetEl.getAttribute('target-droppable-item');
-  //     if (targetDom && !isSection) {
-  //       setDroppableTarget(targetDom);
-  //     }
-  //   };
-  //   const isHoveredTargetClassNameSide = (conditions: boolean) => {
-  //     return conditions
-  //       ? 'rlb-droppable-side-hover'
-  //       : 'rlb-droppable-side';
-  //   };
-  //   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToLeft = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.LEFT);
-  //     setDroppableTarget('');
-  //   };
-  //   const handleDropToRigth = (e: DragEvent<HTMLDivElement>) => {
-  //     e.preventDefault();
-  //     onDropItem(e, DropTargetPlaceEnum.RIGHT);
-  //     setDroppableTarget('');
-  //   };
-
-  var onDragStart = function onDragStart(e) {
+  var onResizeStart = function onResizeStart(e) {
     var _a;
 
     e.preventDefault();
@@ -69,20 +41,22 @@ var ResizableContainer = function ResizableContainer(_a) {
   var handleResize = function handleResize(e, left) {
     e.preventDefault();
     e.stopPropagation();
-    onDragStart(e);
+    onResizeStart(e);
 
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = diff * 2;
+      var add = isRow ? diff * 2 : diff;
       var addition = left ? add : -add;
-      setWidth(init.width + addition);
+      var currentWidth_1 = init.width + addition;
+      setWidth(currentWidth_1);
+      onResize && onResize(currentWidth_1);
     }
   };
 
-  var handleDragEnd = function handleDragEnd(e, left) {
+  var handleResizeEnd = function handleResizeEnd(e, left) {
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = diff * 2;
+      var add = isRow ? diff * 2 : diff;
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
@@ -92,15 +66,18 @@ var ResizableContainer = function ResizableContainer(_a) {
           clientX: 0
         };
       });
+      onResize && onResize(finalWidth);
     }
   };
 
+  console.log(type, currentWidth, resizable);
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
       width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width)
-    }
+    },
+    "data-width": currentWidth
   }, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -108,8 +85,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, true);
     },
     onDragEnd: function onDragEnd(e) {
-      handleDragEnd(e, true);
-    }
+      handleResizeEnd(e, true);
+    },
+    "data-resizable-type": type
   }) : null, children, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler right",
     draggable: true,
@@ -117,8 +95,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, false);
     },
     onDragEnd: function onDragEnd(e) {
-      handleDragEnd(e, false);
-    }
+      handleResizeEnd(e, false);
+    },
+    "data-resizable-type": type
   }) : null);
 };
 

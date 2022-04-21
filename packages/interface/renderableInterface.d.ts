@@ -3,11 +3,18 @@ export interface IRenderableLayout {
     id: any;
     className?: string;
     order: number;
-    columns: IRenderableColumn[][];
+    rows: IRenderableRow[];
     width?: string | number;
     contentWidth?: string | number;
     backgroundColor?: string;
     spacing?: number;
+}
+export interface IRenderableRow {
+    id: any;
+    className?: string;
+    order: number;
+    columns: IRenderableColumn[];
+    width: number | string;
 }
 export interface IRenderableColumn {
     id: any;
@@ -15,7 +22,7 @@ export interface IRenderableColumn {
     order: number;
     items: any[];
     styles?: CSSProperties;
-    width: number;
+    width: number | string;
 }
 export interface IRenderableColmumnItem {
     id: any;
