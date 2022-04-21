@@ -343,7 +343,6 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       isSection = _a.isSection,
-      disableDrag = _a.disableDrag,
       className = _a.className,
       disableChange = _a.disableChange,
       onDropItem = _a.onDropItem;
@@ -393,7 +392,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
-    onDragOver: disableDrag ? undefined : handleDragOver,
+    onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
@@ -439,6 +438,10 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
               width: width,
               order: order,
               items: childIds.map(function (itemKey) {
+                // if (itemKey === 'EMPTY_SECTION')
+                //   return {
+                //     id: 'EMPTY_SECTION',
+                //   };
                 return data.find(function (dt) {
                   return dt[key] === itemKey;
                 });
@@ -457,7 +460,6 @@ var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
       dndTargetKey = _a.dndTargetKey,
-      disableDrag = _a.disableDrag,
       section = _a.section,
       disableChange = _a.disableChange,
       width = _a.width,
@@ -476,7 +478,7 @@ var DroppableRow = function DroppableRow(_a) {
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-row');
 
-    if (targetDom && !disableDrag) {
+    if (targetDom && !disableChange) {
       setDroppableTarget(targetDom);
     }
   };
@@ -988,43 +990,22 @@ var LayoutContainer = function LayoutContainer(_a) {
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
-      layouts = _a.layouts;
-      _a.loading;
-      var disableChange = _a.disableChange,
+      layouts = _a.layouts,
+      disableChange = _a.disableChange,
       _onClickSection = _a.onClickSection;
   var containeRef = React.useRef(null);
 
-  var _b = React.useState(false),
-      isDragging = _b[0];
-      _b[1];
+  var _b = React.useState([]),
+      actualLayout = _b[0],
+      setActualLayout = _b[1];
 
-  var _c = React.useState(false);
-      _c[0];
-      _c[1];
+  var _c = React.useState(false),
+      isSectionDragged = _c[0],
+      setIsSectionDragged = _c[1];
 
   var _d = React.useState([]),
-      actualLayout = _d[0],
-      setActualLayout = _d[1];
-
-  var _e = React.useState(false),
-      isSectionDragged = _e[0],
-      setIsSectionDragged = _e[1];
-
-  var _f = React.useState([]),
-      renderableLayout = _f[0],
-      setRenderableLayout = _f[1];
-
-  var _g = React.useState(),
-      initialSize = _g[0];
-      _g[1];
-
-  var _h = React.useState();
-      _h[0];
-      _h[1];
-
-  var _j = React.useState();
-      _j[0];
-      _j[1];
+      renderableLayout = _d[0],
+      setRenderableLayout = _d[1];
 
   React.useEffect(function () {
     if (layouts && layouts.length > 0) {
@@ -1145,7 +1126,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         maxWidth: section.width,
         width: row.width,
         dndTargetKey: row.id,
-        disableDrag: isDragging,
         onDropItem: function onDropItem(e, target) {
           return handleDropItem(e, target, section.id, '', row.id, undefined, ILayoutTargetEnum.ROW);
         },
@@ -1168,8 +1148,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,
-          initialSize: initialSize,
-          disableDrag: isDragging,
           isSection: isSectionDragged,
           styles: column.styles,
           className: column.className,

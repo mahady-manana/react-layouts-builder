@@ -6,7 +6,6 @@ interface DraggableProps {
     index: number;
     children: ReactNode;
     dndTargetKey?: string;
-    disableDrag: boolean;
     disableChange?: boolean;
     width?: number | string;
     maxWidth: number;

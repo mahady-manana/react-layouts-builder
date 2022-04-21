@@ -7,7 +7,6 @@ var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
       dndTargetKey = _a.dndTargetKey,
-      disableDrag = _a.disableDrag,
       section = _a.section,
       disableChange = _a.disableChange,
       width = _a.width,
@@ -26,7 +25,7 @@ var DroppableRow = function DroppableRow(_a) {
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-row');
 
-    if (targetDom && !disableDrag) {
+    if (targetDom && !disableChange) {
       setDroppableTarget(targetDom);
     }
   };

@@ -9,7 +9,6 @@ interface DraggableProps {
   index: number;
   children: ReactNode;
   dndTargetKey?: string;
-  disableDrag: boolean;
   disableChange?: boolean;
   width?: number | string;
   maxWidth: number;
@@ -24,7 +23,6 @@ export const DroppableRow: FC<DraggableProps> = ({
   children,
   index,
   dndTargetKey,
-  disableDrag,
   section,
   disableChange,
   width,
@@ -40,7 +38,7 @@ export const DroppableRow: FC<DraggableProps> = ({
     e.preventDefault();
     const targetEl = e.currentTarget;
     const targetDom = targetEl.getAttribute('target-droppable-row');
-    if (targetDom && !disableDrag) {
+    if (targetDom && !disableChange) {
       setDroppableTarget(targetDom);
     }
   };

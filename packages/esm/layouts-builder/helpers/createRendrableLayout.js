@@ -32,6 +32,10 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
               width: width,
               order: order,
               items: childIds.map(function (itemKey) {
+                // if (itemKey === 'EMPTY_SECTION')
+                //   return {
+                //     id: 'EMPTY_SECTION',
+                //   };
                 return data.find(function (dt) {
                   return dt[key] === itemKey;
                 });

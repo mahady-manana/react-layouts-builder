@@ -31,9 +31,13 @@ export const createRenderableLayout = (
               className,
               width,
               order,
-              items: childIds.map((itemKey) =>
-                data.find((dt) => dt[key] === itemKey),
-              ),
+              items: childIds.map((itemKey) => {
+                // if (itemKey === 'EMPTY_SECTION')
+                //   return {
+                //     id: 'EMPTY_SECTION',
+                //   };
+                return data.find((dt) => dt[key] === itemKey);
+              }),
             }),
           ),
         }),

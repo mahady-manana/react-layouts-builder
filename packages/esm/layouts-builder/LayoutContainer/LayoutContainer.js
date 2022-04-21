@@ -17,43 +17,22 @@ var LayoutContainer = function LayoutContainer(_a) {
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
-      layouts = _a.layouts;
-      _a.loading;
-      var disableChange = _a.disableChange,
+      layouts = _a.layouts,
+      disableChange = _a.disableChange,
       _onClickSection = _a.onClickSection;
   var containeRef = useRef(null);
 
-  var _b = useState(false),
-      isDragging = _b[0];
-      _b[1];
+  var _b = useState([]),
+      actualLayout = _b[0],
+      setActualLayout = _b[1];
 
-  var _c = useState(false);
-      _c[0];
-      _c[1];
+  var _c = useState(false),
+      isSectionDragged = _c[0],
+      setIsSectionDragged = _c[1];
 
   var _d = useState([]),
-      actualLayout = _d[0],
-      setActualLayout = _d[1];
-
-  var _e = useState(false),
-      isSectionDragged = _e[0],
-      setIsSectionDragged = _e[1];
-
-  var _f = useState([]),
-      renderableLayout = _f[0],
-      setRenderableLayout = _f[1];
-
-  var _g = useState(),
-      initialSize = _g[0];
-      _g[1];
-
-  var _h = useState();
-      _h[0];
-      _h[1];
-
-  var _j = useState();
-      _j[0];
-      _j[1];
+      renderableLayout = _d[0],
+      setRenderableLayout = _d[1];
 
   useEffect(function () {
     if (layouts && layouts.length > 0) {
@@ -174,7 +153,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         maxWidth: section.width,
         width: row.width,
         dndTargetKey: row.id,
-        disableDrag: isDragging,
         onDropItem: function onDropItem(e, target) {
           return handleDropItem(e, target, section.id, '', row.id, undefined, ILayoutTargetEnum.ROW);
         },
@@ -197,8 +175,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,
-          initialSize: initialSize,
-          disableDrag: isDragging,
           isSection: isSectionDragged,
           styles: column.styles,
           className: column.className,

@@ -6,7 +6,6 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       isSection = _a.isSection,
-      disableDrag = _a.disableDrag,
       className = _a.className,
       disableChange = _a.disableChange,
       onDropItem = _a.onDropItem;
@@ -56,7 +55,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
-    onDragOver: disableDrag ? undefined : handleDragOver,
+    onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {

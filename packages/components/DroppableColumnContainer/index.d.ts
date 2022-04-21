@@ -5,8 +5,6 @@ interface DraggableProps {
     dndTargetKey: string;
     currentColumLength: number;
     width: number | string;
-    disableDrag: boolean;
-    initialSize: any;
     disableChange?: boolean;
     isSection?: boolean;
     className?: string;

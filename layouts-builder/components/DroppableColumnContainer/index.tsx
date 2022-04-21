@@ -14,8 +14,6 @@ interface DraggableProps {
   dndTargetKey: string;
   currentColumLength: number;
   width: number | string;
-  disableDrag: boolean;
-  initialSize: any;
   disableChange?: boolean;
   isSection?: boolean;
   className?: string;
@@ -30,7 +28,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   isSection,
-  disableDrag,
   className,
   disableChange,
   onDropItem,
@@ -83,7 +80,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
             droppableTarget === `${dndTargetKey}-left`,
           )}`}
           target-droppable-item={`${dndTargetKey}-left`}
-          onDragOver={disableDrag ? undefined : handleDragOver}
+          onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToLeft}
         ></div>

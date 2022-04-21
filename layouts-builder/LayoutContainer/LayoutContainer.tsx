@@ -41,13 +41,10 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   onLayoutChange,
   stableDataKey: stableKey,
   layouts,
-  loading,
   disableChange,
   onClickSection,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [disableDrag, setDisableDrag] = useState<boolean>(false);
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
     [],
   );
@@ -56,15 +53,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
-  const [initialSize, setInitialSize] = useState<{
-    widthPx: number;
-    currentPercentWidth: number;
-    onePixel: number;
-    initialPosPx: number;
-    colId: string;
-  }>();
-  const [currentColWidth, setCurentColWidth] = useState<number>();
-  const [resizedSectionId, setResizedSectionId] = useState<string>();
 
   useEffect(() => {
     if (layouts && layouts.length > 0) {
@@ -157,48 +145,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     }
   };
 
-  const handleResize = (
-    e: DragEvent<HTMLDivElement>,
-    colmunId: string,
-    sectionId: string,
-    isInvert?: boolean,
-  ) => {
-    if (!initialSize) return;
-    setResizedSectionId(sectionId);
-    const containerWidth = containeRef.current?.offsetWidth || 0;
-    const onPercentInPixel = containerWidth / 100;
-
-    const offset2 = e.clientX - initialSize.initialPosPx;
-    const offsetPercent = offset2 / onPercentInPixel;
-    const initialWidth = initialSize.currentPercentWidth;
-    const newWidth = isInvert
-      ? initialWidth - offsetPercent
-      : initialWidth + offsetPercent;
-    setIsDragging(true);
-    if (e.clientX === 0) {
-      setDisableDrag(false);
-      return;
-    }
-
-    setDisableDrag(true);
-    setCurentColWidth(Math.round(newWidth));
-  };
-  const handleResizeStart = (
-    colId: string,
-    widthPx: number,
-    currentPercentWidth: number,
-    onePixel: number,
-    initialPosPx: number,
-  ) => {
-    setIsDragging(true);
-    setInitialSize({
-      widthPx,
-      currentPercentWidth,
-      onePixel,
-      initialPosPx,
-      colId,
-    });
-  };
   const handleDragSectionStart = (
     e: DragEvent<HTMLDivElement>,
     sectionId: string,
@@ -272,7 +218,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     maxWidth={section.width as any}
                     width={row.width}
                     dndTargetKey={row.id}
-                    disableDrag={isDragging}
                     onDropItem={(e, target) =>
                       handleDropItem(
                         e,
@@ -305,8 +250,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                           <DroppableColumnContainer
                             key={column.id}
                             disableChange={disableChange}
-                            initialSize={initialSize}
-                            disableDrag={isDragging}
                             isSection={isSectionDragged}
                             styles={column.styles}
                             className={column.className}
