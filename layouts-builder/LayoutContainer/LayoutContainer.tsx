@@ -11,10 +11,7 @@ import {
   DroppableSection,
   DroppableColumnContainer,
 } from '../components';
-// import { changeColumnWidth } from '../helpers/changeColumnWidth';
-import { createLayout } from '../helpers/createLayout';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
-// import { reorderLayoutItem } from '../helpers/reorderLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import {
   DestinationType,
@@ -22,17 +19,12 @@ import {
   ILayoutTargetEnum,
   SourceType,
 } from '../interface/internalType';
-import {
-  IRenderableColumn,
-  IRenderableLayout,
-} from '../interface/renderableInterface';
+import { IRenderableLayout } from '../interface/renderableInterface';
 import '../index.css';
-// import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 import { ResizableContainer } from 'layouts-builder/components/ResizableContainer/ResizableContainer';
 import { DroppableRow } from 'layouts-builder/components/DroppableRow';
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
-import { gridValue } from 'layouts-builder/helpers/gridValue';
 import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
@@ -70,13 +62,13 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
       setRenderableLayout(renderable);
     }
-  }, [actualLayout, data, stableKey]);
+  }, [actualLayout, data]);
 
   useEffect(() => {
     if (actualLayout.length > 0) {
       onLayoutChange(actualLayout);
     }
-  }, [actualLayout, onLayoutChange]);
+  }, [actualLayout]);
 
   const handleDragStart = (
     e: DragEvent<HTMLDivElement>,
@@ -196,7 +188,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 const layout = actualLayout.find(
                   (layout) => layout.id === section.id,
                 );
-                if (layout && onClickSection) {
+                if (layout && onClickSection && !disableChange) {
                   onClickSection(layout);
                 }
               }}
@@ -297,7 +289,11 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                                     }
                                   >
                                     <DraggableItem
-                                      disableChange={disableChange}
+                                      disableChange={
+                                        disableChange ||
+                                        items['id'] ===
+                                          'EMPTY_SECTION'
+                                      }
                                       dndTargetKey={items[stableKey]}
                                       onDragStart={(e) => {
                                         handleDragStart(
@@ -309,7 +305,18 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                                         );
                                       }}
                                     >
-                                      {renderComponent(items)}
+                                      {items['id'] ===
+                                        'EMPTY_SECTION' &&
+                                      !disableChange ? (
+                                        <div>
+                                          <p>
+                                            Drop or add block here...
+                                          </p>
+                                        </div>
+                                      ) : null}
+                                      {items['id'] !== 'EMPTY_SECTION'
+                                        ? renderComponent(items)
+                                        : null}
                                     </DraggableItem>
                                   </DroppableColumnItem>
                                 );

@@ -9,7 +9,6 @@ var DroppableSection = function DroppableSection(_a) {
       onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
-  console.log(section.backgroundImage);
   return /*#__PURE__*/React.createElement(ResizableContainer, {
     resizable: resizable,
     noPadding: true,

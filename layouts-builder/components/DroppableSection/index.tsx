@@ -36,8 +36,6 @@ export const DroppableSection: FC<DraggableProps> = ({
   onClickSection,
   onResize,
 }) => {
-  console.log(section.backgroundImage);
-
   return (
     <ResizableContainer
       resizable={resizable}

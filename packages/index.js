@@ -265,8 +265,6 @@ var ResizableContainer = function ResizableContainer(_a) {
     }
   };
 
-  console.log(type, currentWidth, resizable);
-
   var handleClick = function handleClick(e) {
     e.preventDefault();
 
@@ -314,7 +312,6 @@ var DroppableSection = function DroppableSection(_a) {
       onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
-  console.log(section.backgroundImage);
   return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
     resizable: resizable,
     noPadding: true,
@@ -438,10 +435,9 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
               width: width,
               order: order,
               items: childIds.map(function (itemKey) {
-                // if (itemKey === 'EMPTY_SECTION')
-                //   return {
-                //     id: 'EMPTY_SECTION',
-                //   };
+                if (itemKey === 'EMPTY_SECTION' && childIds.length <= 1) return {
+                  id: 'EMPTY_SECTION'
+                };
                 return data.find(function (dt) {
                   return dt[key] === itemKey;
                 });
@@ -642,7 +638,7 @@ var createNewColumn = function createNewColumn(itemKey) {
     order: 0,
     width: 1080,
     className: '',
-    childIds: itemKey || []
+    childIds: itemKey || ['EMPTY_SECTION']
   };
 };
 
@@ -1017,12 +1013,12 @@ var LayoutContainer = function LayoutContainer(_a) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
       setRenderableLayout(renderable);
     }
-  }, [actualLayout, data, stableKey]);
+  }, [actualLayout, data]);
   React.useEffect(function () {
     if (actualLayout.length > 0) {
       onLayoutChange(actualLayout);
     }
-  }, [actualLayout, onLayoutChange]);
+  }, [actualLayout]);
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -1110,7 +1106,7 @@ var LayoutContainer = function LayoutContainer(_a) {
           return layout.id === section.id;
         });
 
-        if (layout && _onClickSection) {
+        if (layout && _onClickSection && !disableChange) {
           _onClickSection(layout);
         }
       },
@@ -1171,12 +1167,12 @@ var LayoutContainer = function LayoutContainer(_a) {
               return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], ILayoutTargetEnum.ITEM);
             }
           }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
-            disableChange: disableChange,
+            disableChange: disableChange || items['id'] === 'EMPTY_SECTION',
             dndTargetKey: items[stableKey],
             onDragStart: function onDragStart(e) {
               handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
             }
-          }, renderComponent(items)));
+          }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items) : null));
         }))));
       }));
     }));
@@ -1260,3 +1256,4 @@ var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
 exports.LayoutContainer = LayoutContainer;
 exports.changeSectionStyles = changeSectionStyles;
 exports.createLayout = createLayout;
+exports.createNewSection = createNewSection;

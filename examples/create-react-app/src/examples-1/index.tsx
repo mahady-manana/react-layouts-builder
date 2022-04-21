@@ -5,6 +5,7 @@ import {
   LayoutContainer,
   ILayoutSection,
   createLayout,
+  createNewSection,
   changeSectionStyles
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
@@ -16,7 +17,8 @@ export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
   const [data, setData] = useState<any[]>([])
   const [value, setValue] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [nodata, setnodata] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [disableChange, setDisableChange] = useState<boolean>(false)
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
@@ -25,32 +27,29 @@ export const Layouts1 = () => {
   }
   useEffect(() => {
     const l = storage.get()
-    console.log("ta", l)
 
-    if (!l && !l?.length && data.length > 0) {
+    setTimeout(() => {
+      if (l?.length > 0) {
+        setLayoutTest(l)
+      } else {
+        setnodata(true)
+      }
+      setLoading(false)
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
+    if (!loading && nodata && data) {
       const c = createLayout(data, "id")
       setLayoutTest(c)
     }
-
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000)
-
-    if (l?.length > 0) {
-      setLayoutTest(l)
-    }
-  }, [data])
+  }, [loading, data])
 
   const handleSabmit = (e: FormEvent) => {
     e.preventDefault()
-    const newData = {
-      id: uuidv4(),
-      text: value,
-      group: "",
-      bg: "#0002"
-    }
-    setData((prev) => prev.concat(newData))
 
+    const newSection = createNewSection(["EMPTY_SECTION"])
+    setLayoutTest((prev) => prev.concat(newSection))
     setValue("")
   }
   useEffect(() => {
@@ -59,7 +58,8 @@ export const Layouts1 = () => {
 
   const changeBg = (color: string) => {
     if (clickSection) {
-      const change = changeSectionStyles(layoutTest, clickSection.id, {
+      const l = storage.get()
+      const change = changeSectionStyles(l, clickSection.id, {
         backgroundColor: color
       })
 
@@ -73,7 +73,8 @@ export const Layouts1 = () => {
       if (clickSection) {
         console.log(ev.target?.result)
 
-        const change = changeSectionStyles(layoutTest, clickSection.id, {
+        const l = storage.get()
+        const change = changeSectionStyles(l, clickSection.id, {
           backgroundImage: ev.target?.result
         })
 
@@ -84,10 +85,12 @@ export const Layouts1 = () => {
       reader.readAsDataURL(file)
     }
   }
+  console.log(layoutTest)
+
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
-        Toggle Disable change t
+        Toggle Disable change t 000
       </button>
       <div>
         {loading ? (

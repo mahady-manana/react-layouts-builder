@@ -7,6 +7,6 @@ export const createNewColumn = (itemKey?: any[]): ILayoutColumn => {
     order: 0,
     width: 1080,
     className: '',
-    childIds: itemKey || [],
+    childIds: itemKey || ['EMPTY_SECTION'],
   };
 };

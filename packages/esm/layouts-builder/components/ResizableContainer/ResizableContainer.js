@@ -73,8 +73,6 @@ var ResizableContainer = function ResizableContainer(_a) {
     }
   };
 
-  console.log(type, currentWidth, resizable);
-
   var handleClick = function handleClick(e) {
     e.preventDefault();
 

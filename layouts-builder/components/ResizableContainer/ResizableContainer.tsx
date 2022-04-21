@@ -91,7 +91,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     }
   };
 
-  console.log(type, currentWidth, resizable);
   const handleClick = (e: SyntheticEvent) => {
     e.preventDefault();
     if (onClick) {

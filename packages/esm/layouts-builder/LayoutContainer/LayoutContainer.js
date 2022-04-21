@@ -44,12 +44,12 @@ var LayoutContainer = function LayoutContainer(_a) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
       setRenderableLayout(renderable);
     }
-  }, [actualLayout, data, stableKey]);
+  }, [actualLayout, data]);
   useEffect(function () {
     if (actualLayout.length > 0) {
       onLayoutChange(actualLayout);
     }
-  }, [actualLayout, onLayoutChange]);
+  }, [actualLayout]);
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -137,7 +137,7 @@ var LayoutContainer = function LayoutContainer(_a) {
           return layout.id === section.id;
         });
 
-        if (layout && _onClickSection) {
+        if (layout && _onClickSection && !disableChange) {
           _onClickSection(layout);
         }
       },
@@ -198,12 +198,12 @@ var LayoutContainer = function LayoutContainer(_a) {
               return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], ILayoutTargetEnum.ITEM);
             }
           }, /*#__PURE__*/React.createElement(DraggableItem, {
-            disableChange: disableChange,
+            disableChange: disableChange || items['id'] === 'EMPTY_SECTION',
             dndTargetKey: items[stableKey],
             onDragStart: function onDragStart(e) {
               handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
             }
-          }, renderComponent(items)));
+          }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items) : null));
         }))));
       }));
     }));
