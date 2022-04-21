@@ -10,6 +10,7 @@ import {
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
 import "react-layouts-builder/packages/index.css"
+import { ChangeEvent } from "react"
 
 export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
@@ -65,7 +66,24 @@ export const Layouts1 = () => {
       setLayoutTest(change)
     }
   }
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      if (clickSection) {
+        console.log(ev.target?.result)
 
+        const change = changeSectionStyles(layoutTest, clickSection.id, {
+          backgroundImage: ev.target?.result
+        })
+
+        setLayoutTest(change)
+      }
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -86,10 +104,12 @@ export const Layouts1 = () => {
               return (
                 <div
                   key={data.id}
-                  className="min-h-[50px] h-full p-2 border-2 border-gray-800"
-                  style={{
-                    background: data.bg
-                  }}
+                  className="min-h-[50px] h-full p-2"
+                  style={
+                    {
+                      // background: data.bg
+                    }
+                  }
                 >
                   <p>Data : {data.text}</p>
                 </div>
@@ -104,6 +124,7 @@ export const Layouts1 = () => {
           Click section :<p>{clickSection?.id}</p>
           <p>{clickSection?.rows.length}</p>
           <input type="color" onChange={(e) => changeBg(e.target.value)} />
+          <input type="file" onChange={handleFile} />
         </div>
         <div className="flex-grow text-center">Add new item</div>
         <div className="bg-gray-200 p-2 text-center">

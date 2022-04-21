@@ -23,6 +23,9 @@
     position: relative;
     width: 100%;
 }
+.rlb-section-container {
+    background-size: cover !important;
+}
 .rlb-section-hover:hover {
     border: 2px dashed #ccc;
     margin-top: 20px;
@@ -82,6 +85,9 @@
     padding: 10px;
     width: 95%;
     margin: auto;
+}
+.rlb-section-content {
+    padding: 26px;
 }
 
 .rlb-droppable-section.hover {
@@ -162,9 +168,14 @@
 .rlb-resizable-container.resizable:hover {
     border: 1px dashed #444;
 }
+.rlb-resizable-container.resizable.no-padding {
+    padding: 0px;
+}
 .rlb-resizable-container.resizable {
     padding: 15px;
+    border: 1px solid transparent
 }
+
  
 .rlb-resize-handler {
     cursor: col-resize;
@@ -176,4 +187,30 @@
     background: #000;
     border-radius: 20px;
     visibility: hidden;
+}
+
+/* draggable container*/
+.rlb-draggable-container {
+    position: relative;
+    
+}
+.rlb-draggable-container.draggable {
+    border-width: 1px;
+    border-color: transparent;
+}
+.rlb-draggable-container.draggable:hover {
+    border: 1px dashed #ccc
+}
+.rlb-draggable-container.draggable:hover .rlb-drag-icon {
+    visibility: visible;
+}
+.rlb-drag-icon {
+    visibility: hidden;
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: rotate(90deg) translateY(7px);
+    background: #c3c3c3;
+    border-radius: 5px;
+    padding-block: 5px;
 }

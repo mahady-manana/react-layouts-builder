@@ -52,7 +52,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragLeave: handleDragOverLeave
   }) : null, /*#__PURE__*/React.createElement(ResizableContainer, {
     isRow: true,
-    resizable: true,
+    resizable: !disableChange,
     styles: {
       width: width
     },
@@ -64,13 +64,12 @@ var DroppableRow = function DroppableRow(_a) {
     draggable: !disableChange,
     onDragStart: onDragStart,
     style: {
-      background: section.backgroundColor,
       paddingBlock: (section.spacing || 0) * 8
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "section-content flex",
     style: {
-      width: section.width,
+      width: '100%',
       margin: 'auto'
     }
   }, children))), !disableChange ? /*#__PURE__*/React.createElement("div", {

@@ -4,6 +4,7 @@ interface DraggableProps {
     section: IRenderableLayout;
     index: number;
     children: ReactNode;
+    resizable?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onClickSection: () => void;
     onResize?: (currentSize: number) => void;

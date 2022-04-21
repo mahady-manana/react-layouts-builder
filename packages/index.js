@@ -18,6 +18,79 @@ function _typeof(obj) {
   }, _typeof(obj);
 }
 
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
+}
+
+/*!
+  Copyright (c) 2018 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+
+var classnames = createCommonjsModule(function (module) {
+/* global define */
+
+(function () {
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames() {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				if (arg.length) {
+					var inner = classNames.apply(null, arg);
+					if (inner) {
+						classes.push(inner);
+					}
+				}
+			} else if (argType === 'object') {
+				if (arg.toString === Object.prototype.toString) {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				} else {
+					classes.push(arg.toString());
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else {
+		window.classNames = classNames;
+	}
+}());
+});
+
+var DefaultDragIcon = function DefaultDragIcon() {
+  return /*#__PURE__*/React__default["default"].createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "#444"
+  }, /*#__PURE__*/React__default["default"].createElement("path", {
+    d: "M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+  }));
+};
+
 var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
@@ -26,9 +99,12 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: !disableChange,
     onDragStart: onDragStart,
-    className: "flex-grow",
+    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : ''),
+    "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey)
-  }, children);
+  }, /*#__PURE__*/React__default["default"].createElement("span", {
+    className: "rlb-drag-icon"
+  }, /*#__PURE__*/React__default["default"].createElement(DefaultDragIcon, null)), children);
 };
 
 var DropTargetPlaceEnum;
@@ -106,67 +182,6 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     onDrop: handleDropToBottom
   }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
-
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
-
-/*!
-  Copyright (c) 2018 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-
-var classnames = createCommonjsModule(function (module) {
-/* global define */
-
-(function () {
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames() {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				if (arg.length) {
-					var inner = classNames.apply(null, arg);
-					if (inner) {
-						classes.push(inner);
-					}
-				}
-			} else if (argType === 'object') {
-				if (arg.toString === Object.prototype.toString) {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				} else {
-					classes.push(arg.toString());
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if (module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else {
-		window.classNames = classNames;
-	}
-}());
-});
 
 var gridValue = function gridValue(m, n) {
   if (n === 0 || !n) {
@@ -261,7 +276,7 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('rlb-resizable-container', resizable && !noPadding ? 'resizable' : '', isRow ? 'flex' : ''),
+    className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', noPadding ? 'no-padding' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
       width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),
@@ -295,34 +310,33 @@ var ResizableContainer = function ResizableContainer(_a) {
 var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
       section = _a.section,
+      resizable = _a.resizable,
       onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
-  React.useRef(null);
-  return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "relative"
-  }, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    resizable: true,
+  console.log(section.backgroundImage);
+  return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
+    resizable: resizable,
     noPadding: true,
     onClick: onClickSection,
     type: "container",
     onResize: onResize
   }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('rlb-section'),
+    className: classnames('rlb-section rlb-section-container '),
     draggable: false,
     onDragStart: onDragStart,
     style: {
       background: section.backgroundImage ? "url(".concat(section.backgroundImage, ") no-repeat center") : section.backgroundColor,
-      paddingBlock: (section.spacing || 0) * 8,
-      backgroundSize: 'cover'
+      backgroundSize: 'cover',
+      paddingBlock: (section.spacing || 0) * 8
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "section-content",
+    className: "rlb-section-content",
     style: {
       width: section.width,
       margin: 'auto'
     }
-  }, children))));
+  }, children)));
 };
 
 var DroppableColumnContainer = function DroppableColumnContainer(_a) {
@@ -488,7 +502,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragLeave: handleDragOverLeave
   }) : null, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
     isRow: true,
-    resizable: true,
+    resizable: !disableChange,
     styles: {
       width: width
     },
@@ -500,13 +514,12 @@ var DroppableRow = function DroppableRow(_a) {
     draggable: !disableChange,
     onDragStart: onDragStart,
     style: {
-      background: section.backgroundColor,
       paddingBlock: (section.spacing || 0) * 8
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "section-content flex",
     style: {
-      width: section.width,
+      width: '100%',
       margin: 'auto'
     }
   }, children))), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1107,6 +1120,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       index: index,
       key: section.id,
       section: section,
+      resizable: !disableChange,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
       },
@@ -1142,17 +1156,15 @@ var LayoutContainer = function LayoutContainer(_a) {
           return handleResizeRow(width, section.id, row.id);
         }
       }, row.columns.map(function (column) {
-        var _a;
-
-        console.log('colmun lenght', row.columns);
+        var width = 100 / row.columns.length;
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
           key: column.id,
           // resizable={row.columns.length > 1}
           styles: {
-            width: (_a = column.width) !== null && _a !== void 0 ? _a : ''
+            width: "".concat(Math.round(width), "%")
           },
           type: "column",
-          currentWidth: column.width
+          currentWidth: Math.round(width)
         }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,

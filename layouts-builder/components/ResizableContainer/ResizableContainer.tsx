@@ -102,7 +102,8 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     <div
       className={classNames(
         'rlb-resizable-container',
-        resizable && !noPadding ? 'resizable' : '',
+        resizable ? 'resizable' : '',
+        noPadding ? 'no-padding' : '',
         isRow ? 'flex' : '',
       )}
       ref={columnRef}

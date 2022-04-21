@@ -84,7 +84,7 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   return /*#__PURE__*/React.createElement("div", {
-    className: classnames('rlb-resizable-container', resizable && !noPadding ? 'resizable' : '', isRow ? 'flex' : ''),
+    className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', noPadding ? 'no-padding' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
       width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),

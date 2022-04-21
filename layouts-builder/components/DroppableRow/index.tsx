@@ -71,7 +71,7 @@ export const DroppableRow: FC<DraggableProps> = ({
       ) : null}
       <ResizableContainer
         isRow
-        resizable
+        resizable={!disableChange}
         styles={{ width: width }}
         onResize={onResize}
         currentWidth={width}
@@ -82,13 +82,12 @@ export const DroppableRow: FC<DraggableProps> = ({
           draggable={!disableChange}
           onDragStart={onDragStart}
           style={{
-            background: section.backgroundColor,
             paddingBlock: (section.spacing || 0) * 8,
           }}
         >
           <div
             className="section-content flex"
-            style={{ width: section.width, margin: 'auto' }}
+            style={{ width: '100%', margin: 'auto' }}
           >
             {children}
           </div>

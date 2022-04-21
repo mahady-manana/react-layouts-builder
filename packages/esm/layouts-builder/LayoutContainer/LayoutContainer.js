@@ -149,6 +149,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       index: index,
       key: section.id,
       section: section,
+      resizable: !disableChange,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
       },
@@ -184,17 +185,15 @@ var LayoutContainer = function LayoutContainer(_a) {
           return handleResizeRow(width, section.id, row.id);
         }
       }, row.columns.map(function (column) {
-        var _a;
-
-        console.log('colmun lenght', row.columns);
+        var width = 100 / row.columns.length;
         return /*#__PURE__*/React.createElement(ResizableContainer, {
           key: column.id,
           // resizable={row.columns.length > 1}
           styles: {
-            width: (_a = column.width) !== null && _a !== void 0 ? _a : ''
+            width: "".concat(Math.round(width), "%")
           },
           type: "column",
-          currentWidth: column.width
+          currentWidth: Math.round(width)
         }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,

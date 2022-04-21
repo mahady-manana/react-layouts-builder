@@ -1,6 +1,6 @@
 import { useClickAway } from 'react-use';
 // import { RgbaColorPicker } from 'react-colorful';
-import { SettingIcon } from 'layouts-builder/icons';
+import { DefaultDragIcon } from 'layouts-builder/icons';
 import React, {
   FC,
   ReactNode,
@@ -23,6 +23,7 @@ interface DraggableProps {
   section: IRenderableLayout;
   index: number;
   children: ReactNode;
+  resizable?: boolean;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onClickSection: () => void;
   onResize?: (currentSize: number) => void;
@@ -30,41 +31,40 @@ interface DraggableProps {
 export const DroppableSection: FC<DraggableProps> = ({
   children,
   section,
+  resizable,
   onDragStart,
   onClickSection,
   onResize,
 }) => {
-  const popoverRef = useRef<HTMLDivElement>(null);
+  console.log(section.backgroundImage);
 
   return (
-    <div className="relative">
-      <ResizableContainer
-        resizable
-        noPadding
-        onClick={onClickSection}
-        type="container"
-        onResize={onResize}
+    <ResizableContainer
+      resizable={resizable}
+      noPadding
+      onClick={onClickSection}
+      type="container"
+      onResize={onResize}
+    >
+      <div
+        className={classNames('rlb-section rlb-section-container ')}
+        draggable={false}
+        onDragStart={onDragStart}
+        style={{
+          background: section.backgroundImage
+            ? `url(${section.backgroundImage}) no-repeat center`
+            : section.backgroundColor,
+          backgroundSize: 'cover',
+          paddingBlock: (section.spacing || 0) * 8,
+        }}
       >
         <div
-          className={classNames('rlb-section')}
-          draggable={false}
-          onDragStart={onDragStart}
-          style={{
-            background: section.backgroundImage
-              ? `url(${section.backgroundImage}) no-repeat center`
-              : section.backgroundColor,
-            paddingBlock: (section.spacing || 0) * 8,
-            backgroundSize: 'cover',
-          }}
+          className="rlb-section-content"
+          style={{ width: section.width, margin: 'auto' }}
         >
-          <div
-            className="section-content"
-            style={{ width: section.width, margin: 'auto' }}
-          >
-            {children}
-          </div>
+          {children}
         </div>
-      </ResizableContainer>
-    </div>
+      </div>
+    </ResizableContainer>
   );
 };

@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import { DefaultDragIcon } from 'layouts-builder/icons';
 import React, { FC, ReactNode, DragEvent } from 'react';
 
 interface DraggableProps {
@@ -17,9 +19,16 @@ export const DraggableItem: FC<DraggableProps> = ({
     <div
       draggable={!disableChange}
       onDragStart={onDragStart}
-      className="flex-grow"
+      className={classNames(
+        'rlb-draggable-container flex-grow',
+        !disableChange ? 'draggable' : '',
+      )}
+      data-draggable={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}
     >
+      <span className="rlb-drag-icon">
+        <DefaultDragIcon />
+      </span>
       {children}
     </div>
   );
