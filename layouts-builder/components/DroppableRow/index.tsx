@@ -12,6 +12,7 @@ interface DraggableProps {
   disableDrag: boolean;
   disableChange?: boolean;
   width?: number | string;
+  maxWidth: number;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
@@ -27,6 +28,7 @@ export const DroppableRow: FC<DraggableProps> = ({
   section,
   disableChange,
   width,
+  maxWidth,
   onResize,
   onDropItem,
   onDragStart,
@@ -73,6 +75,7 @@ export const DroppableRow: FC<DraggableProps> = ({
         styles={{ width: width }}
         onResize={onResize}
         currentWidth={width}
+        maxWidth={maxWidth}
       >
         <div
           className={classNames('rlb-section')}

@@ -10,6 +10,7 @@ import { ResizableContainer } from '../components/ResizableContainer/ResizableCo
 import { DroppableRow } from '../components/DroppableRow/index.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeRowWidth } from '../helpers/changeRowWidth.js';
+import { changeSectionStyles } from '../helpers/changeSectionStyles.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -18,7 +19,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts;
       _a.loading;
-      var disableChange = _a.disableChange;
+      var disableChange = _a.disableChange,
+      _onClickSection = _a.onClickSection;
   var containeRef = useRef(null);
 
   var _b = useState(false),
@@ -130,6 +132,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     setActualLayout(newLayouts);
   };
 
+  var handleResizeSection = function handleResizeSection(currentWidth, sectionId) {
+    var newLayouts = changeSectionStyles(actualLayout, sectionId, {
+      width: currentWidth
+    });
+    setActualLayout(newLayouts);
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: "m-auto py-4"
   }, /*#__PURE__*/React.createElement("div", {
@@ -137,25 +146,23 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef
   }, renderableLayout.map(function (section, index) {
     return /*#__PURE__*/React.createElement(DroppableSection, {
-      disableChange: disableChange,
       index: index,
       key: section.id,
       section: section,
-      dndTargetKey: section.id,
-      disableDrag: isDragging,
-      // onDropItem={(e, target) =>
-      //   handleDropItem(
-      //     e,
-      //     target,
-      //     section.id,
-      //     '',
-      //     '',
-      //     undefined,
-      //     ILayoutTargetEnum.ROW,
-      //   )
-      // }
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
+      },
+      onClickSection: function onClickSection() {
+        var layout = actualLayout.find(function (layout) {
+          return layout.id === section.id;
+        });
+
+        if (layout && _onClickSection) {
+          _onClickSection(layout);
+        }
+      },
+      onResize: function onResize(width) {
+        return handleResizeSection(width, section.id);
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React.createElement(DroppableRow, {
@@ -163,6 +170,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         index: rowIndex,
         key: row.id,
         section: section,
+        maxWidth: section.width,
         width: row.width,
         dndTargetKey: row.id,
         disableDrag: isDragging,

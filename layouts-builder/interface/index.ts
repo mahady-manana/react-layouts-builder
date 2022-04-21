@@ -1,5 +1,11 @@
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
+export type ISectionStylesProps = {
+  className?: string;
+  width?: string | number;
+  backgroundColor?: string;
+  backgroundImage?: string;
+};
 export interface ILayoutColumn {
   id: any;
   order: number;
@@ -18,7 +24,7 @@ export interface ILayoutSection {
   id: any;
   order: number;
   rows: ILayoutRow[];
-  className: string;
+  className?: string;
   width?: string | number;
   contentWidth?: string | number;
   backgroundColor?: string;
@@ -46,4 +52,5 @@ export interface ILayoutContainer {
   loading?: boolean;
   labels?: ILayoutLabels;
   disableChange?: boolean;
+  onClickSection?: (section: ILayoutSection) => void;
 }

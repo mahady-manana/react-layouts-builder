@@ -9,7 +9,10 @@ var ResizableContainer = function ResizableContainer(_a) {
       styles = _a.styles,
       children = _a.children,
       currentWidth = _a.currentWidth,
-      onResize = _a.onResize;
+      noPadding = _a.noPadding,
+      maxWidth = _a.maxWidth,
+      onResize = _a.onResize,
+      onClick = _a.onClick;
 
   var _b = useState(),
       width = _b[0],
@@ -45,7 +48,7 @@ var ResizableContainer = function ResizableContainer(_a) {
 
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = isRow ? diff * 2 : diff;
+      var add = diff * 2;
       var addition = left ? add : -add;
       var currentWidth_1 = init.width + addition;
       setWidth(currentWidth_1);
@@ -56,7 +59,7 @@ var ResizableContainer = function ResizableContainer(_a) {
   var handleResizeEnd = function handleResizeEnd(e, left) {
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = isRow ? diff * 2 : diff;
+      var add = diff * 2;
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
@@ -71,13 +74,24 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   console.log(type, currentWidth, resizable);
+
+  var handleClick = function handleClick(e) {
+    e.preventDefault();
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return /*#__PURE__*/React.createElement("div", {
-    className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', isRow ? 'flex' : ''),
+    className: classnames('rlb-resizable-container', resizable && !noPadding ? 'resizable' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
-      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width)
+      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),
+      maxWidth: maxWidth
     },
-    "data-width": currentWidth
+    "data-width": currentWidth,
+    onClick: handleClick
   }, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,

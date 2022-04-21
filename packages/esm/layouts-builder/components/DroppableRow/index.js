@@ -11,6 +11,7 @@ var DroppableRow = function DroppableRow(_a) {
       section = _a.section,
       disableChange = _a.disableChange,
       width = _a.width,
+      maxWidth = _a.maxWidth,
       onResize = _a.onResize,
       onDropItem = _a.onDropItem,
       onDragStart = _a.onDragStart;
@@ -56,7 +57,8 @@ var DroppableRow = function DroppableRow(_a) {
       width: width
     },
     onResize: onResize,
-    currentWidth: width
+    currentWidth: width,
+    maxWidth: maxWidth
   }, /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-section'),
     draggable: !disableChange,

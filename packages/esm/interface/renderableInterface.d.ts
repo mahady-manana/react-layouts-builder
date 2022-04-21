@@ -7,6 +7,7 @@ export interface IRenderableLayout {
     width?: string | number;
     contentWidth?: string | number;
     backgroundColor?: string;
+    backgroundImage?: string;
     spacing?: number;
 }
 export interface IRenderableRow {

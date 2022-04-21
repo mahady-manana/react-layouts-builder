@@ -33,6 +33,7 @@ import { DroppableRow } from 'layouts-builder/components/DroppableRow';
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
 import { gridValue } from 'layouts-builder/helpers/gridValue';
+import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -42,6 +43,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   loading,
   disableChange,
+  onClickSection,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -222,32 +224,38 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     setActualLayout(newLayouts);
   };
 
+  const handleResizeSection = (
+    currentWidth: number,
+    sectionId: any,
+  ) => {
+    const newLayouts = changeSectionStyles(actualLayout, sectionId, {
+      width: currentWidth,
+    });
+    setActualLayout(newLayouts);
+  };
   return (
     <div className="m-auto py-4">
       <div className="min-h-[100px] " ref={containeRef}>
         {renderableLayout.map((section, index) => {
           return (
             <DroppableSection
-              disableChange={disableChange}
               index={index}
               key={section.id}
               section={section}
-              dndTargetKey={section.id}
-              disableDrag={isDragging}
-              // onDropItem={(e, target) =>
-              //   handleDropItem(
-              //     e,
-              //     target,
-              //     section.id,
-              //     '',
-              //     '',
-              //     undefined,
-              //     ILayoutTargetEnum.ROW,
-              //   )
-              // }
               onDragStart={(e) => {
                 handleDragSectionStart(e, section.id);
               }}
+              onClickSection={() => {
+                const layout = actualLayout.find(
+                  (layout) => layout.id === section.id,
+                );
+                if (layout && onClickSection) {
+                  onClickSection(layout);
+                }
+              }}
+              onResize={(width) =>
+                handleResizeSection(width, section.id)
+              }
             >
               {/* <ResizableContainer
                 resizable
@@ -260,6 +268,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     index={rowIndex}
                     key={row.id}
                     section={section}
+                    maxWidth={section.width as any}
                     width={row.width}
                     dndTargetKey={row.id}
                     disableDrag={isDragging}

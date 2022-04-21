@@ -4,7 +4,8 @@ import { mockData } from "../data/data"
 import {
   LayoutContainer,
   ILayoutSection,
-  createLayout
+  createLayout,
+  changeSectionStyles
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
@@ -15,6 +16,7 @@ export const Layouts1 = () => {
   const [data, setData] = useState<any[]>([])
   const [value, setValue] = useState("")
   const [loading, setLoading] = useState(true)
+  const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [disableChange, setDisableChange] = useState<boolean>(false)
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
     storage.set(layouts)
@@ -54,6 +56,16 @@ export const Layouts1 = () => {
     setData(mockData)
   }, [])
 
+  const changeBg = (color: string) => {
+    if (clickSection) {
+      const change = changeSectionStyles(layoutTest, clickSection.id, {
+        backgroundColor: color
+      })
+
+      setLayoutTest(change)
+    }
+  }
+
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -69,6 +81,7 @@ export const Layouts1 = () => {
             stableDataKey="id"
             layouts={layoutTest}
             onLayoutChange={handleLayoutChange}
+            onClickSection={(section) => setclickSection(section)}
             renderComponent={(data) => {
               return (
                 <div
@@ -87,6 +100,11 @@ export const Layouts1 = () => {
       </div>
       <div>
         <div className="bg-gray-200 w-4"></div>
+        <div>
+          Click section :<p>{clickSection?.id}</p>
+          <p>{clickSection?.rows.length}</p>
+          <input type="color" onChange={(e) => changeBg(e.target.value)} />
+        </div>
         <div className="flex-grow text-center">Add new item</div>
         <div className="bg-gray-200 p-2 text-center">
           <form onSubmit={handleSabmit}>

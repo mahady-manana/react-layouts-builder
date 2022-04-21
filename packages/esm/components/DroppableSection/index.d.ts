@@ -4,10 +4,9 @@ interface DraggableProps {
     section: IRenderableLayout;
     index: number;
     children: ReactNode;
-    dndTargetKey?: string;
-    disableDrag: boolean;
-    disableChange?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+    onClickSection: () => void;
+    onResize?: (currentSize: number) => void;
 }
 export declare const DroppableSection: FC<DraggableProps>;
 export {};

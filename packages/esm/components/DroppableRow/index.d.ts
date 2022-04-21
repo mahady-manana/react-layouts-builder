@@ -9,6 +9,7 @@ interface DraggableProps {
     disableDrag: boolean;
     disableChange?: boolean;
     width?: number | string;
+    maxWidth: number;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;
     onResize?: (width: number) => void;

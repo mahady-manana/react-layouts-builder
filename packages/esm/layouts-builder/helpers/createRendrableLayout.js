@@ -5,6 +5,7 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       order: layout.order,
       className: layout.className,
       backgroundColor: layout.backgroundColor,
+      backgroundImage: layout.backgroundImage,
       contentWidth: layout.contentWidth,
       spacing: layout.spacing,
       width: layout.width,

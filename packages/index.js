@@ -107,77 +107,6 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-function on(obj) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-    if (obj && obj.addEventListener) {
-        obj.addEventListener.apply(obj, args);
-    }
-}
-function off(obj) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-    if (obj && obj.removeEventListener) {
-        obj.removeEventListener.apply(obj, args);
-    }
-}
-
-var defaultEvents = ['mousedown', 'touchstart'];
-var useClickAway = function (ref, onClickAway, events) {
-    if (events === void 0) { events = defaultEvents; }
-    var savedCallback = React.useRef(onClickAway);
-    React.useEffect(function () {
-        savedCallback.current = onClickAway;
-    }, [onClickAway]);
-    React.useEffect(function () {
-        var handler = function (event) {
-            var el = ref.current;
-            el && !el.contains(event.target) && savedCallback.current(event);
-        };
-        for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
-            var eventName = events_1[_i];
-            on(document, eventName, handler);
-        }
-        return function () {
-            for (var _i = 0, events_2 = events; _i < events_2.length; _i++) {
-                var eventName = events_2[_i];
-                off(document, eventName, handler);
-            }
-        };
-    }, [events, ref]);
-};
-var useClickAway$1 = useClickAway;
-
 function createCommonjsModule(fn) {
   var module = { exports: {} };
 	return fn(module, module.exports), module.exports;
@@ -257,7 +186,10 @@ var ResizableContainer = function ResizableContainer(_a) {
       styles = _a.styles,
       children = _a.children,
       currentWidth = _a.currentWidth,
-      onResize = _a.onResize;
+      noPadding = _a.noPadding,
+      maxWidth = _a.maxWidth,
+      onResize = _a.onResize,
+      onClick = _a.onClick;
 
   var _b = React.useState(),
       width = _b[0],
@@ -293,7 +225,7 @@ var ResizableContainer = function ResizableContainer(_a) {
 
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = isRow ? diff * 2 : diff;
+      var add = diff * 2;
       var addition = left ? add : -add;
       var currentWidth_1 = init.width + addition;
       setWidth(currentWidth_1);
@@ -304,7 +236,7 @@ var ResizableContainer = function ResizableContainer(_a) {
   var handleResizeEnd = function handleResizeEnd(e, left) {
     if (init.clientX && init.width) {
       var diff = init.clientX - e.clientX;
-      var add = isRow ? diff * 2 : diff;
+      var add = diff * 2;
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
@@ -319,13 +251,24 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   console.log(type, currentWidth, resizable);
+
+  var handleClick = function handleClick(e) {
+    e.preventDefault();
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', isRow ? 'flex' : ''),
+    className: classnames('rlb-resizable-container', resizable && !noPadding ? 'resizable' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
-      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width)
+      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),
+      maxWidth: maxWidth
     },
-    "data-width": currentWidth
+    "data-width": currentWidth,
+    onClick: handleClick
   }, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -350,39 +293,28 @@ var ResizableContainer = function ResizableContainer(_a) {
 };
 
 var DroppableSection = function DroppableSection(_a) {
-  var children = _a.children;
-      _a.index;
-      _a.dndTargetKey;
-      _a.disableDrag;
-      var section = _a.section;
-      _a.disableChange;
-      var // onDropItem,
-  onDragStart = _a.onDragStart;
-
-  var _b = React.useState(false);
-      _b[0];
-      var setOpenSetting = _b[1];
-
-  var _c = React.useState();
-      _c[0];
-      _c[1];
-
-  var popoverRef = React.useRef(null);
-  useClickAway$1(popoverRef, function () {
-    setOpenSetting(false);
-  });
-
+  var children = _a.children,
+      section = _a.section,
+      onDragStart = _a.onDragStart,
+      onClickSection = _a.onClickSection,
+      onResize = _a.onResize;
+  React.useRef(null);
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "relative"
   }, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    resizable: true
+    resizable: true,
+    noPadding: true,
+    onClick: onClickSection,
+    type: "container",
+    onResize: onResize
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section'),
     draggable: false,
     onDragStart: onDragStart,
     style: {
-      background: section.backgroundColor,
-      paddingBlock: (section.spacing || 0) * 8
+      background: section.backgroundImage ? "url(".concat(section.backgroundImage, ") no-repeat center") : section.backgroundColor,
+      paddingBlock: (section.spacing || 0) * 8,
+      backgroundSize: 'cover'
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "section-content",
@@ -466,6 +398,7 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       order: layout.order,
       className: layout.className,
       backgroundColor: layout.backgroundColor,
+      backgroundImage: layout.backgroundImage,
       contentWidth: layout.contentWidth,
       spacing: layout.spacing,
       width: layout.width,
@@ -514,6 +447,7 @@ var DroppableRow = function DroppableRow(_a) {
       section = _a.section,
       disableChange = _a.disableChange,
       width = _a.width,
+      maxWidth = _a.maxWidth,
       onResize = _a.onResize,
       onDropItem = _a.onDropItem,
       onDragStart = _a.onDragStart;
@@ -559,7 +493,8 @@ var DroppableRow = function DroppableRow(_a) {
       width: width
     },
     onResize: onResize,
-    currentWidth: width
+    currentWidth: width,
+    maxWidth: maxWidth
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section'),
     draggable: !disableChange,
@@ -584,6 +519,32 @@ var DroppableRow = function DroppableRow(_a) {
       setDroppableTarget('');
     }
   }) : null);
+};
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
@@ -1002,6 +963,13 @@ var changeRowWidth = function changeRowWidth(layouts, inputs) {
   });
 };
 
+var changeSectionStyles = function changeSectionStyles(currentLayouts, sectionId, styles) {
+  return currentLayouts.map(function (section) {
+    if (section.id !== sectionId) return section;
+    return __assign(__assign({}, section), styles);
+  });
+};
+
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
@@ -1009,7 +977,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts;
       _a.loading;
-      var disableChange = _a.disableChange;
+      var disableChange = _a.disableChange,
+      _onClickSection = _a.onClickSection;
   var containeRef = React.useRef(null);
 
   var _b = React.useState(false),
@@ -1121,6 +1090,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     setActualLayout(newLayouts);
   };
 
+  var handleResizeSection = function handleResizeSection(currentWidth, sectionId) {
+    var newLayouts = changeSectionStyles(actualLayout, sectionId, {
+      width: currentWidth
+    });
+    setActualLayout(newLayouts);
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "m-auto py-4"
   }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1128,25 +1104,23 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef
   }, renderableLayout.map(function (section, index) {
     return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
-      disableChange: disableChange,
       index: index,
       key: section.id,
       section: section,
-      dndTargetKey: section.id,
-      disableDrag: isDragging,
-      // onDropItem={(e, target) =>
-      //   handleDropItem(
-      //     e,
-      //     target,
-      //     section.id,
-      //     '',
-      //     '',
-      //     undefined,
-      //     ILayoutTargetEnum.ROW,
-      //   )
-      // }
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
+      },
+      onClickSection: function onClickSection() {
+        var layout = actualLayout.find(function (layout) {
+          return layout.id === section.id;
+        });
+
+        if (layout && _onClickSection) {
+          _onClickSection(layout);
+        }
+      },
+      onResize: function onResize(width) {
+        return handleResizeSection(width, section.id);
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React__default["default"].createElement(DroppableRow, {
@@ -1154,6 +1128,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         index: rowIndex,
         key: row.id,
         section: section,
+        maxWidth: section.width,
         width: row.width,
         dndTargetKey: row.id,
         disableDrag: isDragging,
@@ -1293,4 +1268,5 @@ var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
 };
 
 exports.LayoutContainer = LayoutContainer;
+exports.changeSectionStyles = changeSectionStyles;
 exports.createLayout = createLayout;

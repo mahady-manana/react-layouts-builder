@@ -9,6 +9,7 @@ import React, {
   CSSProperties,
   Dispatch,
   SetStateAction,
+  SyntheticEvent,
 } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
 
@@ -17,9 +18,12 @@ interface ResizableContainerProps {
   resizable?: boolean;
   styles?: CSSProperties;
   type?: any;
+  noPadding?: boolean;
   currentWidth?: number | string;
+  maxWidth?: number;
   onResize?: (currentSize: number) => void;
   onResizeEnd?: (currentSize: number) => void;
+  onClick?: () => void;
 }
 export const ResizableContainer: FC<ResizableContainerProps> = ({
   isRow,
@@ -28,7 +32,10 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   styles,
   children,
   currentWidth,
+  noPadding,
+  maxWidth,
   onResize,
+  onClick,
 }) => {
   const [width, setWidth] = useState<number>();
   const [init, setInit] = useState({
@@ -57,7 +64,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
 
     if (init.clientX && init.width) {
       const diff = init.clientX - e.clientX;
-      const add = isRow ? diff * 2 : diff;
+      const add = diff * 2;
       const addition = left ? add : -add;
       const currentWidth = init.width + addition;
       setWidth(currentWidth);
@@ -71,7 +78,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   ) => {
     if (init.clientX && init.width) {
       const diff = init.clientX - e.clientX;
-      const add = isRow ? diff * 2 : diff;
+      const add = diff * 2;
       const addition = left ? add : -add;
 
       const finalWidth = init.width + addition;
@@ -85,19 +92,26 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   };
 
   console.log(type, currentWidth, resizable);
-
+  const handleClick = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (onClick) {
+      onClick();
+    }
+  };
   return (
     <div
       className={classNames(
         'rlb-resizable-container',
-        resizable ? 'resizable' : '',
+        resizable && !noPadding ? 'resizable' : '',
         isRow ? 'flex' : '',
       )}
       ref={columnRef}
       style={{
         width: gridValue(50, width) || styles?.width,
+        maxWidth: maxWidth,
       }}
       data-width={currentWidth}
+      onClick={handleClick}
     >
       {resizable ? (
         <div
