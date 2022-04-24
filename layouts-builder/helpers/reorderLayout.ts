@@ -151,6 +151,9 @@ export const reorderLayout = (
   place: DropTargetPlaceEnum,
   target: ILayoutTargetEnum,
 ) => {
+  // Do not run reorder if place doesnt change
+  if (source.itemKey === dest.itemKey) return layouts;
+
   const ordered = reorderLayoutItem(
     layouts,
     source,
