@@ -6,7 +6,8 @@ import {
   ILayoutSection,
   createLayout,
   createNewSection,
-  changeSectionStyles
+  changeSectionStyles,
+  addToRow
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
@@ -85,7 +86,18 @@ export const Layouts1 = () => {
       reader.readAsDataURL(file)
     }
   }
-  console.log(layoutTest)
+
+  const addToRowItem = () => {
+    const l = storage.get()
+    const newitems = {
+      id: "dklfmqljfhmlgjq",
+      text: "lorem text ipsum"
+    }
+
+    const newLayouts = addToRow(l, clickSection?.id, "dklfmqljfhmlgjq")
+    setLayoutTest(newLayouts)
+    setData((prev) => prev.concat(newitems))
+  }
 
   return (
     <div>
@@ -150,6 +162,7 @@ export const Layouts1 = () => {
               </button>
             </div>
           </form>
+          <button onClick={() => addToRowItem()}>Ad items</button>
         </div>
       </div>
     </div>
