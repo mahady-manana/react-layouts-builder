@@ -205,11 +205,12 @@
     visibility: visible;
 }
 .rlb-drag-icon {
-    background: #c3c3c3;
+    background: #f2f3f4;
     border-radius: 5px;
     left: -13px;
     padding-block: 5px;
     position: absolute;
     top: 5px;
     visibility: hidden;
+    z-index: 999;
 }

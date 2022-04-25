@@ -122,6 +122,10 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       targetPlace: target,
       rowId,
     };
+    if (!itemKey && !sourceItemKey) {
+      // this is used to prevent drag resize to create new item
+      return;
+    }
 
     const newLayout = reorderLayout(
       actualLayout,
