@@ -176,7 +176,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     setActualLayout(newLayouts);
   };
   return (
-    <div className="m-auto py-4">
+    <div className="m-auto">
       <div className="min-h-[100px] " ref={containeRef}>
         {renderableLayout.map((section, index) => {
           return (

@@ -125,7 +125,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   };
 
   return /*#__PURE__*/React.createElement("div", {
-    className: "m-auto py-4"
+    className: "m-auto"
   }, /*#__PURE__*/React.createElement("div", {
     className: "min-h-[100px] ",
     ref: containeRef
