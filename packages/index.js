@@ -1057,6 +1057,12 @@ var LayoutContainer = function LayoutContainer(_a) {
       targetPlace: target,
       rowId: rowId
     };
+
+    if (!itemKey && !sourceItemKey) {
+      // this is used to prevent drag resize to create new item
+      return;
+    }
+
     var newLayout = reorderLayout(actualLayout, source, destination, target, layoutTarget);
     setIsSectionDragged(false);
 
