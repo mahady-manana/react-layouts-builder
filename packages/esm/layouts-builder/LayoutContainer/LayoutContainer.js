@@ -152,7 +152,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React.createElement(DroppableRow, {
-        disableChange: disableChange,
+        disableChange: row.isContainer || disableChange,
         index: rowIndex,
         key: row.id,
         section: section,

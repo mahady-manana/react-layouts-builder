@@ -307,13 +307,13 @@ var ResizableContainer = function ResizableContainer(_a) {
 
 var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
-      section = _a.section,
-      resizable = _a.resizable,
-      onDragStart = _a.onDragStart,
+      section = _a.section;
+      _a.resizable;
+      var onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    resizable: resizable,
+    resizable: false,
     noPadding: true,
     onClick: onClickSection,
     type: "container",
@@ -410,19 +410,21 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       backgroundColor: layout.backgroundColor,
       backgroundImage: layout.backgroundImage,
       contentWidth: layout.contentWidth,
-      spacing: layout.spacing,
       width: layout.width,
+      container: layout.container,
       rows: layout.rows.map(function (_a) {
         var columns = _a.columns,
             id = _a.id,
             order = _a.order,
             width = _a.width,
-            className = _a.className;
+            className = _a.className,
+            isContainer = _a.isContainer;
         return {
           id: id,
           order: order,
           width: width,
           className: className,
+          isContainer: !!isContainer,
           columns: columns.map(function (_a) {
             var childIds = _a.childIds,
                 id = _a.id,
@@ -636,7 +638,7 @@ var createNewColumn = function createNewColumn(itemKey) {
   return {
     id: v4(),
     order: 0,
-    width: 1080,
+    width: 'auto',
     className: '',
     childIds: itemKey || ['EMPTY_SECTION']
   };
@@ -760,14 +762,15 @@ var addToColumn = function addToColumn(layouts, source, dest, place) {
   return clean;
 };
 
-var createNewRow = function createNewRow(itemkey) {
+var createNewRow = function createNewRow(itemkey, iscontianer) {
   var newColumn = createNewColumn(itemkey);
   return {
     id: v4(),
-    width: 1080,
+    width: 'auto',
     order: 0,
     className: '',
-    columns: [newColumn]
+    columns: [newColumn],
+    isContainer: iscontianer
   };
 };
 
@@ -1123,7 +1126,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React__default["default"].createElement(DroppableRow, {
-        disableChange: disableChange,
+        disableChange: row.isContainer || disableChange,
         index: rowIndex,
         key: row.id,
         section: section,
@@ -1187,7 +1190,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   })));
 };
 
-var createNewSection = function createNewSection(itemKey) {
+var createNewSection = function createNewSection(itemKey, isContainer) {
   var row = createNewRow(itemKey);
   return {
     id: v4(),
@@ -1196,7 +1199,8 @@ var createNewSection = function createNewSection(itemKey) {
     backgroundColor: '',
     backgroundImage: '',
     width: '100%',
-    rows: [row]
+    rows: [row],
+    container: isContainer
   };
 };
 
@@ -1241,10 +1245,13 @@ var createNewSection = function createNewSection(itemKey) {
 
 var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
-    var newSections = createNewSection(data.map(function (dt) {
-      return dt[stableDataKey];
-    }));
-    return [newSections];
+    var layouts = data.map(function (dataItem) {
+      return createNewSection([dataItem[stableDataKey]]);
+    });
+    return layouts; // const newSections = createNewSection(
+    //   data.map((dt) => dt[stableDataKey]),
+    // );
+    // return [newSections];
   } // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {
   //     const sectionExist = section.columns.find((col) =>

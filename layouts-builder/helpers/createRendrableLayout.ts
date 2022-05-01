@@ -17,14 +17,15 @@ export const createRenderableLayout = (
       backgroundColor: layout.backgroundColor,
       backgroundImage: layout.backgroundImage,
       contentWidth: layout.contentWidth,
-      spacing: layout.spacing,
       width: layout.width,
+      container: layout.container,
       rows: layout.rows.map(
-        ({ columns, id, order, width, className }) => ({
+        ({ columns, id, order, width, className, isContainer }) => ({
           id,
           order,
           width,
           className,
+          isContainer: !!isContainer,
           columns: columns.map(
             ({ childIds, id, order, width, className }) => ({
               id,

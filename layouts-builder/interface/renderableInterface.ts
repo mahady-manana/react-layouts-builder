@@ -10,6 +10,7 @@ export interface IRenderableLayout {
   backgroundColor?: string;
   backgroundImage?: string;
   spacing?: number;
+  container?: boolean;
 }
 export interface IRenderableRow {
   id: any;
@@ -17,6 +18,7 @@ export interface IRenderableRow {
   order: number;
   columns: IRenderableColumn[];
   width: number | string;
+  isContainer?: boolean;
 }
 export interface IRenderableColumn {
   id: any;

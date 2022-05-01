@@ -47,10 +47,16 @@ export const createLayout = (
   currentLayouts?: ILayoutSection[],
 ): ILayoutSection[] => {
   if (!currentLayouts || currentLayouts?.length === 0) {
-    const newSections = createNewSection(
-      data.map((dt) => dt[stableDataKey]),
+    const layouts = data.map((dataItem) =>
+      createNewSection([dataItem[stableDataKey]]),
     );
-    return [newSections];
+
+    return layouts;
+
+    // const newSections = createNewSection(
+    //   data.map((dt) => dt[stableDataKey]),
+    // );
+    // return [newSections];
   }
   // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {

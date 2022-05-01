@@ -1,7 +1,7 @@
 import { createNewRow } from './createNewRow.js';
 import v4 from '../../node_modules/uuid/dist/esm-browser/v4.js';
 
-var createNewSection = function createNewSection(itemKey) {
+var createNewSection = function createNewSection(itemKey, isContainer) {
   var row = createNewRow(itemKey);
   return {
     id: v4(),
@@ -10,7 +10,8 @@ var createNewSection = function createNewSection(itemKey) {
     backgroundColor: '',
     backgroundImage: '',
     width: '100%',
-    rows: [row]
+    rows: [row],
+    container: isContainer
   };
 };
 

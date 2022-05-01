@@ -27,7 +27,6 @@
     background-size: cover !important;
 }
 .rlb-section-hover:hover {
-    border: 2px dashed #ccc;
     margin-top: 20px;
 }
 .rlb-section:hover .rlb-section-settings {
@@ -165,9 +164,9 @@
 .rlb-resizable-container:hover>.rlb-resize-handler {
     visibility: visible;
 }
-.rlb-resizable-container.resizable:hover {
-    border: 1px dashed #444;
-}
+/* .rlb-resizable-container.resizable:hover {
+    
+} */
 .rlb-resizable-container.resizable.no-padding {
     padding: 0px;
 }
@@ -178,15 +177,15 @@
 
  
 .rlb-resize-handler {
+    background: #fff0;
+    border-right: 2px solid #7c7c7c;
     cursor: col-resize;
-    width: 20px;
-    height: 20px;
+    height: 100%;
     position: absolute;
-    z-index: 99;
-    top: 50%;
-    background: #000;
-    border-radius: 20px;
+    top: 0;
     visibility: hidden;
+    width: 13px;
+    z-index: 99;
 }
 
 /* draggable container*/

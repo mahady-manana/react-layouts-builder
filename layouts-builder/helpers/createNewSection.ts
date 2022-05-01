@@ -2,7 +2,10 @@ import { ILayoutSection } from 'layouts-builder/interface';
 import { v4 as uuidv4 } from 'uuid';
 import { createNewRow } from './createNewRow';
 
-export const createNewSection = (itemKey?: any[]): ILayoutSection => {
+export const createNewSection = (
+  itemKey?: any[],
+  isContainer?: boolean,
+): ILayoutSection => {
   const row = createNewRow(itemKey);
   return {
     id: uuidv4(),
@@ -12,5 +15,6 @@ export const createNewSection = (itemKey?: any[]): ILayoutSection => {
     backgroundImage: '',
     width: '100%',
     rows: [row],
+    container: isContainer,
   };
 };

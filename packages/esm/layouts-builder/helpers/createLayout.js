@@ -41,10 +41,13 @@ import { createNewSection } from './createNewSection.js';
 
 var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
-    var newSections = createNewSection(data.map(function (dt) {
-      return dt[stableDataKey];
-    }));
-    return [newSections];
+    var layouts = data.map(function (dataItem) {
+      return createNewSection([dataItem[stableDataKey]]);
+    });
+    return layouts; // const newSections = createNewSection(
+    //   data.map((dt) => dt[stableDataKey]),
+    // );
+    // return [newSections];
   } // const getNewData = data.filter((dt) => {
   //   const isExist = currentLayouts.find((section) => {
   //     const sectionExist = section.columns.find((col) =>

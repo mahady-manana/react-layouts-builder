@@ -4,13 +4,13 @@ import { ResizableContainer } from '../ResizableContainer/ResizableContainer.js'
 
 var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
-      section = _a.section,
-      resizable = _a.resizable,
-      onDragStart = _a.onDragStart,
+      section = _a.section;
+      _a.resizable;
+      var onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React.createElement(ResizableContainer, {
-    resizable: resizable,
+    resizable: false,
     noPadding: true,
     onClick: onClickSection,
     type: "container",

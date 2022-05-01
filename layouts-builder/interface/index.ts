@@ -19,6 +19,7 @@ export interface ILayoutRow {
   order: number;
   columns: ILayoutColumn[];
   className?: string;
+  isContainer?: boolean;
 }
 export interface ILayoutSection {
   id: any;
@@ -29,7 +30,7 @@ export interface ILayoutSection {
   contentWidth?: string | number;
   backgroundColor?: string;
   backgroundImage?: string;
-  spacing?: number;
+  container?: boolean;
 }
 
 export interface ILayoutLabels {

@@ -207,7 +207,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
               {section.rows.map((row, rowIndex) => {
                 return (
                   <DroppableRow
-                    disableChange={disableChange}
+                    disableChange={row.isContainer || disableChange}
                     index={rowIndex}
                     key={row.id}
                     section={section}
