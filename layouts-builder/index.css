@@ -86,7 +86,8 @@
     margin: auto;
 }
 .rlb-section-content {
-    padding: 26px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .rlb-droppable-section.hover {
