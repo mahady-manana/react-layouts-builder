@@ -194,7 +194,6 @@
  
 .rlb-resize-handler {
     background: #fff0;
-    border-right: 2px solid #7c7c7c;
     cursor: col-resize;
     height: 100%;
     position: absolute;
@@ -202,6 +201,12 @@
     visibility: hidden;
     width: 13px;
     z-index: 99;
+}
+.rlb-resize-handler.left {
+    border-right: 2px solid #7c7c7c;
+}
+.rlb-resize-handler.right {
+    border-left: 2px solid #7c7c7c;
 }
 
 /* draggable container*/

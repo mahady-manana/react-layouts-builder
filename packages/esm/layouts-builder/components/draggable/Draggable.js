@@ -1,4 +1,5 @@
 import classnames from '../../../node_modules/classnames/index.js';
+import { DefaultDragIcon } from '../../icons/index.js';
 import React from 'react';
 
 var DraggableItem = function DraggableItem(_a) {
@@ -12,7 +13,9 @@ var DraggableItem = function DraggableItem(_a) {
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey)
-  }, children);
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "rlb-drag-icon"
+  }, /*#__PURE__*/React.createElement(DefaultDragIcon, null)), children);
 };
 
 export { DraggableItem };
