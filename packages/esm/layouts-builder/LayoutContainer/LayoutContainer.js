@@ -134,6 +134,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       index: index,
       key: section.id,
       section: section,
+      width: section.width,
       resizable: !disableChange,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
@@ -172,7 +173,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         var width = 100 / row.columns.length;
         return /*#__PURE__*/React.createElement(ResizableContainer, {
           key: column.id,
-          // resizable={row.columns.length > 1}
+          resizable: row.columns.length > 1,
           styles: {
             width: "".concat(Math.round(width), "%")
           },

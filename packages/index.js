@@ -79,18 +79,6 @@ var classnames = createCommonjsModule(function (module) {
 }());
 });
 
-var DefaultDragIcon = function DefaultDragIcon() {
-  return /*#__PURE__*/React__default["default"].createElement("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    width: "24",
-    height: "24",
-    viewBox: "0 0 24 24",
-    fill: "#444"
-  }, /*#__PURE__*/React__default["default"].createElement("path", {
-    d: "M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-  }));
-};
-
 var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
@@ -102,9 +90,7 @@ var DraggableItem = function DraggableItem(_a) {
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey)
-  }, /*#__PURE__*/React__default["default"].createElement("span", {
-    className: "rlb-drag-icon"
-  }, /*#__PURE__*/React__default["default"].createElement(DefaultDragIcon, null)), children);
+  }, children);
 };
 
 var DropTargetPlaceEnum;
@@ -169,18 +155,18 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   };
 
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-top"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-top"),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top")), " top"),
+    "target-droppable-item": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-bottom"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-bottom"),
+  }, droppableTarget === "".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
+    "target-droppable-item": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
+  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
 var gridValue = function gridValue(m, n) {
@@ -309,15 +295,19 @@ var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
       section = _a.section;
       _a.resizable;
-      var onDragStart = _a.onDragStart,
+      var width = _a.width,
+      onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    resizable: false,
+    resizable: true,
     noPadding: true,
     onClick: onClickSection,
     type: "container",
-    onResize: onResize
+    onResize: onResize,
+    styles: {
+      width: width
+    }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section rlb-section-container '),
     draggable: false,
@@ -387,13 +377,13 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     className),
     ref: columnRef
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left")), " left"),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right"))),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right")), " right"),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
@@ -492,7 +482,7 @@ var DroppableRow = function DroppableRow(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "relative"
   }, index === 0 && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top")), " top"),
     "target-droppable-row": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
@@ -502,7 +492,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragLeave: handleDragOverLeave
   }) : null, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
     isRow: true,
-    resizable: !disableChange,
+    resizable: false,
     styles: {
       width: width
     },
@@ -523,7 +513,7 @@ var DroppableRow = function DroppableRow(_a) {
       margin: 'auto'
     }
   }, children))), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
@@ -1108,6 +1098,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       index: index,
       key: section.id,
       section: section,
+      width: section.width,
       resizable: !disableChange,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
@@ -1146,7 +1137,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         var width = 100 / row.columns.length;
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
           key: column.id,
-          // resizable={row.columns.length > 1}
+          resizable: row.columns.length > 1,
           styles: {
             width: "".concat(Math.round(width), "%")
           },
@@ -1190,7 +1181,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   })));
 };
 
-var createNewSection = function createNewSection(itemKey, isContainer) {
+var createNewSection = function createNewSection(itemKey, isContainer, defaultWidth) {
   var row = createNewRow(itemKey);
   return {
     id: v4(),
@@ -1198,7 +1189,7 @@ var createNewSection = function createNewSection(itemKey, isContainer) {
     order: 0,
     backgroundColor: '',
     backgroundImage: '',
-    width: '100%',
+    width: defaultWidth || '100%',
     rows: [row],
     container: isContainer
   };
@@ -1243,10 +1234,10 @@ var createNewSection = function createNewSection(itemKey, isContainer) {
  * @returns
  */
 
-var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
+var createLayout = function createLayout(data, stableDataKey, currentLayouts, options) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
     var layouts = data.map(function (dataItem) {
-      return createNewSection([dataItem[stableDataKey]]);
+      return createNewSection([dataItem[stableDataKey]], options === null || options === void 0 ? void 0 : options.isContainer, options === null || options === void 0 ? void 0 : options.width);
     });
     return layouts; // const newSections = createNewSection(
     //   data.map((dt) => dt[stableDataKey]),

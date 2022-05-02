@@ -57,7 +57,7 @@ export const DroppableRow: FC<DraggableProps> = ({
         <div
           className={`${isHoveredTargetClassName(
             droppableTarget === `${dndTargetKey}-top`,
-          )}`}
+          )} top`}
           target-droppable-row={`${dndTargetKey}-top`}
           onDragOver={handleDragOver}
           onDrop={(e) => {
@@ -69,7 +69,7 @@ export const DroppableRow: FC<DraggableProps> = ({
       ) : null}
       <ResizableContainer
         isRow
-        resizable={!disableChange}
+        resizable={false}
         styles={{ width: width }}
         onResize={onResize}
         currentWidth={width}
@@ -95,7 +95,7 @@ export const DroppableRow: FC<DraggableProps> = ({
         <div
           className={`${isHoveredTargetClassName(
             droppableTarget === `${dndTargetKey}-bottom`,
-          )}`}
+          )} bottom`}
           target-droppable-row={`${dndTargetKey}-bottom`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}

@@ -53,13 +53,13 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     className),
     ref: columnRef
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left"))),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left")), " left"),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right"))),
+    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right")), " right"),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,

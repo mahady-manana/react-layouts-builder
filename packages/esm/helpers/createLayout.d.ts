@@ -11,4 +11,7 @@ import { ILayoutSection } from '../interface';
  *
  * @returns
  */
-export declare const createLayout: (data: any[], stableDataKey: string, currentLayouts?: ILayoutSection[] | undefined) => ILayoutSection[];
+export declare const createLayout: (data: any[], stableDataKey: string, currentLayouts?: ILayoutSection[] | undefined, options?: {
+    width?: number | undefined;
+    isContainer?: boolean | undefined;
+} | undefined) => ILayoutSection[];

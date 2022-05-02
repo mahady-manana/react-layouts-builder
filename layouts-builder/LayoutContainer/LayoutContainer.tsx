@@ -184,6 +184,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
               index={index}
               key={section.id}
               section={section}
+              width={section.width as number}
               resizable={!disableChange}
               onDragStart={(e) => {
                 handleDragSectionStart(e, section.id);
@@ -238,7 +239,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       return (
                         <ResizableContainer
                           key={column.id}
-                          // resizable={row.columns.length > 1}
+                          resizable={row.columns.length > 1}
                           styles={{ width: `${Math.round(width)}%` }}
                           type="column"
                           currentWidth={Math.round(width)}

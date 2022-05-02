@@ -5,6 +5,7 @@ import { createNewRow } from './createNewRow';
 export const createNewSection = (
   itemKey?: any[],
   isContainer?: boolean,
+  defaultWidth?: number,
 ): ILayoutSection => {
   const row = createNewRow(itemKey);
   return {
@@ -13,7 +14,7 @@ export const createNewSection = (
     order: 0,
     backgroundColor: '',
     backgroundImage: '',
-    width: '100%',
+    width: defaultWidth || '100%',
     rows: [row],
     container: isContainer,
   };

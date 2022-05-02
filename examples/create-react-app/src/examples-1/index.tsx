@@ -41,10 +41,10 @@ export const Layouts1 = () => {
 
   useEffect(() => {
     if (!loading && nodata && data) {
-      const c = createLayout(data, "id")
+      const c = createLayout(data, "id", undefined, { width: 480 })
       setLayoutTest(c)
     }
-  }, [loading, data])
+  }, [loading, data, nodata])
 
   const handleSabmit = (e: FormEvent) => {
     e.preventDefault()

@@ -45,10 +45,18 @@ export const createLayout = (
   data: any[],
   stableDataKey: string,
   currentLayouts?: ILayoutSection[],
+  options?: {
+    width?: number;
+    isContainer?: boolean;
+  },
 ): ILayoutSection[] => {
   if (!currentLayouts || currentLayouts?.length === 0) {
     const layouts = data.map((dataItem) =>
-      createNewSection([dataItem[stableDataKey]]),
+      createNewSection(
+        [dataItem[stableDataKey]],
+        options?.isContainer,
+        options?.width,
+      ),
     );
 
     return layouts;

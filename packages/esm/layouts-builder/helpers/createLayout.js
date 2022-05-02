@@ -39,10 +39,10 @@ import { createNewSection } from './createNewSection.js';
  * @returns
  */
 
-var createLayout = function createLayout(data, stableDataKey, currentLayouts) {
+var createLayout = function createLayout(data, stableDataKey, currentLayouts, options) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
     var layouts = data.map(function (dataItem) {
-      return createNewSection([dataItem[stableDataKey]]);
+      return createNewSection([dataItem[stableDataKey]], options === null || options === void 0 ? void 0 : options.isContainer, options === null || options === void 0 ? void 0 : options.width);
     });
     return layouts; // const newSections = createNewSection(
     //   data.map((dt) => dt[stableDataKey]),

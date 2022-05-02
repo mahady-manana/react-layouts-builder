@@ -44,18 +44,18 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   };
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-top"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-top"),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top")), " top"),
+    "target-droppable-item": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "item-".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "item-".concat(dndTargetKey, "-bottom"))),
-    "target-droppable-item": "item-".concat(dndTargetKey, "-bottom"),
+  }, droppableTarget === "".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
+    "target-droppable-item": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "item-".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
+  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
 export { DroppableColumnItem };

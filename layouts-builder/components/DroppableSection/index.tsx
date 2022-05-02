@@ -24,6 +24,7 @@ interface DraggableProps {
   index: number;
   children: ReactNode;
   resizable?: boolean;
+  width?: number;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onClickSection: () => void;
   onResize?: (currentSize: number) => void;
@@ -32,17 +33,19 @@ export const DroppableSection: FC<DraggableProps> = ({
   children,
   section,
   resizable,
+  width,
   onDragStart,
   onClickSection,
   onResize,
 }) => {
   return (
     <ResizableContainer
-      resizable={false}
+      resizable={true}
       noPadding
       onClick={onClickSection}
       type="container"
       onResize={onResize}
+      styles={{ width }}
     >
       <div
         className={classNames('rlb-section rlb-section-container ')}

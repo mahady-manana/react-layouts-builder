@@ -41,7 +41,7 @@ var DroppableRow = function DroppableRow(_a) {
   return /*#__PURE__*/React.createElement("div", {
     className: "relative"
   }, index === 0 && !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top"))),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top")), " top"),
     "target-droppable-row": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
@@ -51,7 +51,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragLeave: handleDragOverLeave
   }) : null, /*#__PURE__*/React.createElement(ResizableContainer, {
     isRow: true,
-    resizable: !disableChange,
+    resizable: false,
     styles: {
       width: width
     },
@@ -72,7 +72,7 @@ var DroppableRow = function DroppableRow(_a) {
       margin: 'auto'
     }
   }, children))), !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom"))),
+    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,

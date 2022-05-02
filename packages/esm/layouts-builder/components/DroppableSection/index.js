@@ -6,15 +6,19 @@ var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
       section = _a.section;
       _a.resizable;
-      var onDragStart = _a.onDragStart,
+      var width = _a.width,
+      onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React.createElement(ResizableContainer, {
-    resizable: false,
+    resizable: true,
     noPadding: true,
     onClick: onClickSection,
     type: "container",
-    onResize: onResize
+    onResize: onResize,
+    styles: {
+      width: width
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-section rlb-section-container '),
     draggable: false,

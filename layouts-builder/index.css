@@ -91,8 +91,8 @@
 
 .rlb-droppable-section.hover {
     padding: 25px;
-    border: 2px dashed #ccc;
-    border-radius: 15px;
+    background: #f1f1f1;
+    border-color: #9d9d9d;
     text-align: center;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -104,8 +104,8 @@
 /* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
 .rlb-droppable-side-hover {
     padding: 15px;
-    border: 2px dashed #ccc;
-    border-radius: 15px;
+    background: #f1f1f1;
+    border-color: #9d9d9d;
     justify-content: center;
     align-items: center;
     margin-left: 8px;
@@ -113,17 +113,32 @@
     display: flex;
 }
 
+
+
 .rlb-droppable-item {
     height: 10px;
 }
 
 .rlb-droppable-item-hover {
     padding: 15px;
-    border: 2px dashed #ccc;
-    border-radius: 15px;
     text-align: center;
     margin-top: 8px;
     margin-bottom: 8px;
+    background: #f1f1f1;
+    border-color: #9d9d9d;
+}
+
+.rlb-droppable-section.hover.top, .rlb-droppable-item-hover.top {
+    border-bottom: 1px solid;
+}
+.rlb-droppable-section.hover.bottom, .rlb-droppable-item-hover.bottom {
+    border-top: 1px solid;
+}
+.rlb-droppable-side-hover.left {
+    border-right: 1px solid;
+}
+.rlb-droppable-side-hover.right {
+    border-left: 1px solid;
 }
 .white {
     color: white;
@@ -197,9 +212,7 @@
     border-width: 1px;
     border-color: transparent;
 }
-.rlb-draggable-container.draggable:hover {
-    border: 1px dashed #ccc
-}
+
 .rlb-draggable-container.draggable:hover .rlb-drag-icon {
     visibility: visible;
 }

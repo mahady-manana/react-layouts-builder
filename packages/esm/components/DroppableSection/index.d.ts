@@ -5,6 +5,7 @@ interface DraggableProps {
     index: number;
     children: ReactNode;
     resizable?: boolean;
+    width?: number;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onClickSection: () => void;
     onResize?: (currentSize: number) => void;

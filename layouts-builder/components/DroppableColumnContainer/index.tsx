@@ -78,7 +78,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         <div
           className={`${isHoveredTargetClassNameSide(
             droppableTarget === `${dndTargetKey}-left`,
-          )}`}
+          )} left`}
           target-droppable-item={`${dndTargetKey}-left`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
@@ -92,7 +92,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         <div
           className={`${isHoveredTargetClassNameSide(
             droppableTarget === `${dndTargetKey}-right`,
-          )}`}
+          )} right`}
           target-droppable-item={`${dndTargetKey}-right`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}

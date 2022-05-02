@@ -62,14 +62,14 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
       {!disableChange ? (
         <div
           className={`${isHoveredTargetClassName(
-            droppableTarget === `item-${dndTargetKey}-top`,
-          )}`}
-          target-droppable-item={`item-${dndTargetKey}-top`}
+            droppableTarget === `${dndTargetKey}-top`,
+          )} top`}
+          target-droppable-item={`${dndTargetKey}-top`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToTop}
         >
-          {droppableTarget === `item-${dndTargetKey}-top`
+          {droppableTarget === `${dndTargetKey}-top`
             ? 'Add item to column...'
             : null}
         </div>
@@ -79,14 +79,14 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
       {!disableChange ? (
         <div
           className={`${isHoveredTargetClassName(
-            droppableTarget === `item-${dndTargetKey}-bottom`,
-          )}`}
-          target-droppable-item={`item-${dndTargetKey}-bottom`}
+            droppableTarget === `${dndTargetKey}-bottom`,
+          )} bottom`}
+          target-droppable-item={`${dndTargetKey}-bottom`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToBottom}
         >
-          {droppableTarget === `item-${dndTargetKey}-bottom`
+          {droppableTarget === `${dndTargetKey}-bottom`
             ? 'Add item to column...'
             : null}
         </div>
