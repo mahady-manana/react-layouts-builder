@@ -28,9 +28,6 @@ export const DraggableItem: FC<DraggableProps> = ({
       target-dnd-droppable={`${dndTargetKey}`}
       onClick={() => onClick && onClick()}
     >
-      <span className="rlb-drag-icon">
-        <DefaultDragIcon />
-      </span>
       {children}
     </div>
   );

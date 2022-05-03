@@ -1,5 +1,4 @@
 import classnames from '../../../node_modules/classnames/index.js';
-import { DefaultDragIcon } from '../../icons/index.js';
 import React from 'react';
 
 var DraggableItem = function DraggableItem(_a) {
@@ -17,9 +16,7 @@ var DraggableItem = function DraggableItem(_a) {
     onClick: function onClick() {
       return _onClick && _onClick();
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "rlb-drag-icon"
-  }, /*#__PURE__*/React.createElement(DefaultDragIcon, null)), children);
+  }, children);
 };
 
 export { DraggableItem };
