@@ -28,7 +28,7 @@ export interface ILayoutSection {
   rows: ILayoutRow[];
   className?: string;
   width?: string | number;
-  contentWidth?: string | number;
+  contentWidth?: number;
   backgroundColor?: string;
   backgroundImage?: string;
   container?: boolean;

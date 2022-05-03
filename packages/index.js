@@ -208,6 +208,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       noPadding = _a.noPadding,
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
+      onResizeColEnd = _a.onResizeColEnd,
       onClick = _a.onClick;
 
   var _b = React.useState(),
@@ -246,9 +247,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       var diff = init.clientX - e.clientX;
       var add = diff * 2;
       var addition = left ? add : -add;
-      var currentWidth_1 = init.width + addition;
-      setWidth(currentWidth_1);
-      onResize && onResize(currentWidth_1);
+      var cWidth = init.width + addition;
+      setWidth(cWidth);
+      onResize && onResize(cWidth);
     }
   };
 
@@ -259,13 +260,15 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResize && onResize(finalWidth);
       setInit(function (prev) {
         return {
           width: prev.width,
           clientX: 0
         };
       });
-      onResize && onResize(finalWidth);
+      setWidth(0);
     }
   };
 
@@ -643,7 +646,7 @@ var createNewColumn = function createNewColumn(itemKey) {
   return {
     id: v4(),
     order: 0,
-    width: 'auto',
+    width: 100,
     className: '',
     childIds: itemKey || ['EMPTY_SECTION']
   };
@@ -680,23 +683,25 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
 
 var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
   var newCols = targetColumn.reduce(function (acc, next) {
-    var virtualLength = targetColumn.length > 1 ? targetColumn.length : 1;
-    var newWidth = Math.round(100 / virtualLength);
-    var shouldRemoveFromRestWidth = Math.round(newWidth / (targetColumn.length + 1));
+    var width = 100 / (targetColumn.length + 1);
 
     if (next.id !== targetColumnId) {
       return acc.concat(__assign(__assign({}, next), {
-        width: next.width - shouldRemoveFromRestWidth
+        width: width
       }));
     }
 
     var newCol = createNewColumn(sourceItemKey ? [sourceItemKey] : undefined);
 
-    var current = __assign(__assign({}, next), {
-      width: next.width - shouldRemoveFromRestWidth
+    var newColAdjustWidth = __assign(__assign({}, newCol), {
+      width: width
     });
 
-    var reorder = place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol];
+    var current = __assign(__assign({}, next), {
+      width: width
+    });
+
+    var reorder = place === DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
   return newCols;
@@ -889,6 +894,46 @@ var changeSectionStyles = function changeSectionStyles(currentLayouts, sectionId
   });
 };
 
+var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
+  return layouts.map(function (section) {
+    if (section.id !== container.sectionId) return section;
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        if (row.id !== container.rowId) return row;
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            if (col.id === cols.colId) {
+              return __assign(__assign({}, col), {
+                width: cols.width
+              });
+            }
+
+            var rest = (100 - cols.width) / (row.columns.length - 1);
+            console.log('rest', rest);
+            return __assign(__assign({}, col), {
+              width: Math.round(rest)
+            });
+          })
+        });
+      })
+    });
+  });
+};
+
+var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth) {
+  var w = currentWidth * initWidthPrc / initWidthPx;
+
+  if (w < 15) {
+    return 15;
+  }
+
+  if (w > 85) {
+    return 85;
+  }
+
+  return w;
+};
+
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
@@ -1048,15 +1093,26 @@ var LayoutContainer = function LayoutContainer(_a) {
           return handleResizeRow(width, section.id, row.id);
         }
       }, row.columns.map(function (column) {
-        var width = 100 / row.columns.length;
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
           key: column.id,
           resizable: row.columns.length > 1,
           styles: {
-            width: "".concat(Math.round(width), "%")
+            width: "".concat(Math.round(column.width), "%")
           },
           type: "column",
-          currentWidth: Math.round(width)
+          currentWidth: Math.round(column.width),
+          onResizeColEnd: function onResizeColEnd(init, _final) {
+            console.log(init, _final, column.width);
+            var w = findWidthPercentByPx(init, column.width, _final);
+            var newLayouts = changeColumnWidth(actualLayout, {
+              sectionId: section.id,
+              rowId: row.id
+            }, {
+              width: w,
+              colId: column.id
+            });
+            setActualLayout(newLayouts);
+          }
         }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,

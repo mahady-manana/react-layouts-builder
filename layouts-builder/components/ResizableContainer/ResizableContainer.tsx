@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import { gridValue } from 'layouts-builder/helpers/gridValue';
 import React, {
   FC,
@@ -19,10 +20,11 @@ interface ResizableContainerProps {
   styles?: CSSProperties;
   type?: any;
   noPadding?: boolean;
-  currentWidth?: number | string;
+  currentWidth?: number;
   maxWidth?: number;
   onResize?: (currentSize: number) => void;
   onResizeEnd?: (currentSize: number) => void;
+  onResizeColEnd?: (initSize: number, finalWidth: number) => void;
   onClick?: () => void;
 }
 export const ResizableContainer: FC<ResizableContainerProps> = ({
@@ -35,6 +37,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   noPadding,
   maxWidth,
   onResize,
+  onResizeColEnd,
   onClick,
 }) => {
   const [width, setWidth] = useState<number>();
@@ -66,9 +69,11 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       const diff = init.clientX - e.clientX;
       const add = diff * 2;
       const addition = left ? add : -add;
-      const currentWidth = init.width + addition;
-      setWidth(currentWidth);
-      onResize && onResize(currentWidth);
+      const cWidth = init.width + addition;
+
+      setWidth(cWidth);
+
+      onResize && onResize(cWidth);
     }
   };
 
@@ -83,11 +88,14 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
 
       const finalWidth = init.width + addition;
       setWidth(finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResize && onResize(finalWidth);
       setInit((prev) => ({
         width: prev.width,
         clientX: 0,
       }));
-      onResize && onResize(finalWidth);
+
+      setWidth(0);
     }
   };
 

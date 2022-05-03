@@ -25,7 +25,7 @@ export interface IRenderableColumn {
     order: number;
     items: any[];
     styles?: CSSProperties;
-    width: number | string;
+    width: number;
 }
 export interface IRenderableColmumnItem {
     id: any;

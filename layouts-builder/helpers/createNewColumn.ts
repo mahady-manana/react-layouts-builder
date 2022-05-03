@@ -5,7 +5,7 @@ export const createNewColumn = (itemKey?: any[]): ILayoutColumn => {
   return {
     id: uuidv4(),
     order: 0,
-    width: 'auto' as any,
+    width: 100,
     className: '',
     childIds: itemKey || ['EMPTY_SECTION'],
   };

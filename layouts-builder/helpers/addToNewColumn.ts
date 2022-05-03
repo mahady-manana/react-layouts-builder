@@ -17,29 +17,28 @@ const addToNewColumn = (
   place: DropTargetPlaceEnum,
 ) => {
   const newCols = targetColumn.reduce((acc, next) => {
-    const virtualLength =
-      targetColumn.length > 1 ? targetColumn.length : 1;
-    const newWidth = Math.round(100 / virtualLength);
-    const shouldRemoveFromRestWidth = Math.round(
-      newWidth / (targetColumn.length + 1),
-    );
+    const width = 100 / (targetColumn.length + 1);
     if (next.id !== targetColumnId) {
       return acc.concat({
         ...next,
-        width: next.width - shouldRemoveFromRestWidth,
+        width: width,
       });
     }
     const newCol: ILayoutColumn = createNewColumn(
       sourceItemKey ? [sourceItemKey] : undefined,
     );
+    const newColAdjustWidth = {
+      ...newCol,
+      width: width,
+    };
     const current = {
       ...next,
-      width: next.width - shouldRemoveFromRestWidth,
+      width: width,
     };
     const reorder =
       place === DropTargetPlaceEnum.LEFT
-        ? [newCol, current]
-        : [current, newCol];
+        ? [newColAdjustWidth, current]
+        : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, [] as ILayoutColumn[]);
   return newCols;

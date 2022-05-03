@@ -4,7 +4,7 @@ var createNewColumn = function createNewColumn(itemKey) {
   return {
     id: v4(),
     order: 0,
-    width: 'auto',
+    width: 100,
     className: '',
     childIds: itemKey || ['EMPTY_SECTION']
   };

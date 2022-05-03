@@ -7,9 +7,9 @@ export const changeColumnWidth = (
     sectionId: any;
   },
   cols: {
-    width: any;
+    width: number;
     colId: any;
-  }[],
+  },
 ) => {
   return layouts.map((section) => {
     if (section.id !== container.sectionId) return section;
@@ -20,12 +20,17 @@ export const changeColumnWidth = (
         return {
           ...row,
           columns: row.columns.map((col) => {
-            return {
-              ...col,
-              width:
-                cols.find((cl) => cl.colId === col.id)?.width ||
-                col.width,
-            };
+            if (col.id === cols.colId) {
+              return {
+                ...col,
+                width: cols.width,
+              };
+            }
+            const rest =
+              (100 - cols.width) / (row.columns.length - 1);
+            console.log('rest', rest);
+
+            return { ...col, width: Math.round(rest) };
           }),
         };
       }),

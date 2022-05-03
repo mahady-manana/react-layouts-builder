@@ -7,7 +7,7 @@ interface DraggableProps {
     children: ReactNode;
     dndTargetKey?: string;
     disableChange?: boolean;
-    width?: number | string;
+    width?: number;
     maxWidth: number;
     onDragStart: (e: DragEvent<HTMLDivElement>) => void;
     onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;

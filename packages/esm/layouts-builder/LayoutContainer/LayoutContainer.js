@@ -11,6 +11,8 @@ import { DroppableRow } from '../components/DroppableRow/index.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeRowWidth } from '../helpers/changeRowWidth.js';
 import { changeSectionStyles } from '../helpers/changeSectionStyles.js';
+import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
+import { findWidthPercentByPx } from '../helpers/findWidth.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -171,15 +173,26 @@ var LayoutContainer = function LayoutContainer(_a) {
           return handleResizeRow(width, section.id, row.id);
         }
       }, row.columns.map(function (column) {
-        var width = 100 / row.columns.length;
         return /*#__PURE__*/React.createElement(ResizableContainer, {
           key: column.id,
           resizable: row.columns.length > 1,
           styles: {
-            width: "".concat(Math.round(width), "%")
+            width: "".concat(Math.round(column.width), "%")
           },
           type: "column",
-          currentWidth: Math.round(width)
+          currentWidth: Math.round(column.width),
+          onResizeColEnd: function onResizeColEnd(init, _final) {
+            console.log(init, _final, column.width);
+            var w = findWidthPercentByPx(init, column.width, _final);
+            var newLayouts = changeColumnWidth(actualLayout, {
+              sectionId: section.id,
+              rowId: row.id
+            }, {
+              width: w,
+              colId: column.id
+            });
+            setActualLayout(newLayouts);
+          }
         }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
           key: column.id,
           disableChange: disableChange,

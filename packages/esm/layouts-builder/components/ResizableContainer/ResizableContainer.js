@@ -12,6 +12,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       noPadding = _a.noPadding,
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
+      onResizeColEnd = _a.onResizeColEnd,
       onClick = _a.onClick;
 
   var _b = useState(),
@@ -50,9 +51,9 @@ var ResizableContainer = function ResizableContainer(_a) {
       var diff = init.clientX - e.clientX;
       var add = diff * 2;
       var addition = left ? add : -add;
-      var currentWidth_1 = init.width + addition;
-      setWidth(currentWidth_1);
-      onResize && onResize(currentWidth_1);
+      var cWidth = init.width + addition;
+      setWidth(cWidth);
+      onResize && onResize(cWidth);
     }
   };
 
@@ -63,13 +64,15 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResize && onResize(finalWidth);
       setInit(function (prev) {
         return {
           width: prev.width,
           clientX: 0
         };
       });
-      onResize && onResize(finalWidth);
+      setWidth(0);
     }
   };
 

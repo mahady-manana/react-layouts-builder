@@ -5,23 +5,25 @@ import { removeItemFromSource } from './removeItemFromSource.js';
 
 var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
   var newCols = targetColumn.reduce(function (acc, next) {
-    var virtualLength = targetColumn.length > 1 ? targetColumn.length : 1;
-    var newWidth = Math.round(100 / virtualLength);
-    var shouldRemoveFromRestWidth = Math.round(newWidth / (targetColumn.length + 1));
+    var width = 100 / (targetColumn.length + 1);
 
     if (next.id !== targetColumnId) {
       return acc.concat(__assign(__assign({}, next), {
-        width: next.width - shouldRemoveFromRestWidth
+        width: width
       }));
     }
 
     var newCol = createNewColumn(sourceItemKey ? [sourceItemKey] : undefined);
 
-    var current = __assign(__assign({}, next), {
-      width: next.width - shouldRemoveFromRestWidth
+    var newColAdjustWidth = __assign(__assign({}, newCol), {
+      width: width
     });
 
-    var reorder = place === DropTargetPlaceEnum.LEFT ? [newCol, current] : [current, newCol];
+    var current = __assign(__assign({}, next), {
+      width: width
+    });
+
+    var reorder = place === DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
   return newCols;

@@ -26,6 +26,8 @@ import { DroppableRow } from 'layouts-builder/components/DroppableRow';
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
 import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
+import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
+import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -226,7 +228,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     key={row.id}
                     section={section}
                     maxWidth={section.width as any}
-                    width={row.width}
+                    width={row.width as any}
                     dndTargetKey={row.id}
                     onDropItem={(e, target) =>
                       handleDropItem(
@@ -247,15 +249,32 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     }
                   >
                     {row.columns.map((column) => {
-                      const width = 100 / row.columns.length;
-
                       return (
                         <ResizableContainer
                           key={column.id}
                           resizable={row.columns.length > 1}
-                          styles={{ width: `${Math.round(width)}%` }}
+                          styles={{
+                            width: `${Math.round(column.width)}%`,
+                          }}
                           type="column"
-                          currentWidth={Math.round(width)}
+                          currentWidth={Math.round(column.width)}
+                          onResizeColEnd={(init, final) => {
+                            console.log(init, final, column.width);
+                            const w = findWidthPercentByPx(
+                              init,
+                              column.width,
+                              final,
+                            );
+                            const newLayouts = changeColumnWidth(
+                              actualLayout,
+                              {
+                                sectionId: section.id,
+                                rowId: row.id,
+                              },
+                              { width: w, colId: column.id },
+                            );
+                            setActualLayout(newLayouts);
+                          }}
                         >
                           <DroppableColumnContainer
                             key={column.id}
