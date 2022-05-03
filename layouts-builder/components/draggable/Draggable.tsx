@@ -7,12 +7,13 @@ interface DraggableProps {
   dndTargetKey: string;
   disableChange?: boolean;
   onDragStart: (e: DragEvent<HTMLDivElement>) => void;
-  // onResize: ()
+  onClick?: () => void;
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   disableChange,
+  onClick,
   onDragStart,
 }) => {
   return (
@@ -25,6 +26,7 @@ export const DraggableItem: FC<DraggableProps> = ({
       )}
       data-draggable={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}
+      onClick={() => onClick && onClick()}
     >
       <span className="rlb-drag-icon">
         <DefaultDragIcon />

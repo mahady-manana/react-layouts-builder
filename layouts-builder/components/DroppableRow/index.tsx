@@ -78,10 +78,6 @@ export const DroppableRow: FC<DraggableProps> = ({
         <div
           className={classNames('rlb-section')}
           draggable={!disableChange}
-          onDragStart={onDragStart}
-          style={{
-            paddingBlock: (section.spacing || 0) * 8,
-          }}
         >
           <div
             className="section-content flex"

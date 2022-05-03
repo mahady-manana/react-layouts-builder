@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { SourceType } from './internalType';
 export declare type ISectionStylesProps = {
     className?: string;
     width?: string | number;
@@ -51,4 +52,5 @@ export interface ILayoutContainer {
     labels?: ILayoutLabels;
     disableChange?: boolean;
     onClickSection?: (section: ILayoutSection) => void;
+    onFocusItem?: (section: SourceType) => void;
 }

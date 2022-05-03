@@ -6,14 +6,14 @@ import { ResizableContainer } from '../ResizableContainer/ResizableContainer.js'
 var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
-      dndTargetKey = _a.dndTargetKey,
-      section = _a.section,
-      disableChange = _a.disableChange,
+      dndTargetKey = _a.dndTargetKey;
+      _a.section;
+      var disableChange = _a.disableChange,
       width = _a.width,
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
-      onDropItem = _a.onDropItem,
-      onDragStart = _a.onDragStart;
+      onDropItem = _a.onDropItem;
+      _a.onDragStart;
 
   var _b = useState(),
       droppableTarget = _b[0],
@@ -60,11 +60,7 @@ var DroppableRow = function DroppableRow(_a) {
     maxWidth: maxWidth
   }, /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-section'),
-    draggable: !disableChange,
-    onDragStart: onDragStart,
-    style: {
-      paddingBlock: (section.spacing || 0) * 8
-    }
+    draggable: !disableChange
   }, /*#__PURE__*/React.createElement("div", {
     className: "section-content flex",
     style: {

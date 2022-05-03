@@ -95,13 +95,17 @@ var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       disableChange = _a.disableChange,
+      _onClick = _a.onClick,
       onDragStart = _a.onDragStart;
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: !disableChange,
     onDragStart: onDragStart,
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : ''),
     "data-draggable": dndTargetKey,
-    "target-dnd-droppable": "".concat(dndTargetKey)
+    "target-dnd-droppable": "".concat(dndTargetKey),
+    onClick: function onClick() {
+      return _onClick && _onClick();
+    }
   }, /*#__PURE__*/React__default["default"].createElement("span", {
     className: "rlb-drag-icon"
   }, /*#__PURE__*/React__default["default"].createElement(DefaultDragIcon, null)), children);
@@ -327,9 +331,10 @@ var DroppableSection = function DroppableSection(_a) {
     draggable: false,
     onDragStart: onDragStart,
     style: {
-      background: section.backgroundImage ? "url(".concat(section.backgroundImage, ") no-repeat center") : section.backgroundColor,
-      backgroundSize: 'cover',
-      paddingBlock: (section.spacing || 0) * 8
+      background: section.backgroundImage ? "url(".concat(section.backgroundImage, ")") : section.backgroundColor,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover'
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-section-content",
@@ -461,14 +466,14 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
 var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
-      dndTargetKey = _a.dndTargetKey,
-      section = _a.section,
-      disableChange = _a.disableChange,
+      dndTargetKey = _a.dndTargetKey;
+      _a.section;
+      var disableChange = _a.disableChange,
       width = _a.width,
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
-      onDropItem = _a.onDropItem,
-      onDragStart = _a.onDragStart;
+      onDropItem = _a.onDropItem;
+      _a.onDragStart;
 
   var _b = React.useState(),
       droppableTarget = _b[0],
@@ -515,11 +520,7 @@ var DroppableRow = function DroppableRow(_a) {
     maxWidth: maxWidth
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section'),
-    draggable: !disableChange,
-    onDragStart: onDragStart,
-    style: {
-      paddingBlock: (section.spacing || 0) * 8
-    }
+    draggable: !disableChange
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "section-content flex",
     style: {
@@ -841,108 +842,6 @@ var removeEmptyLayout = function removeEmptyLayout(layouts) {
   return noEmptySection;
 };
 
-// import { ILayoutSection, ILayoutColumn } from '../interface';
-//   layouts: ILayoutSection[],
-//   source: SourceType,
-//   dest: DestinationType,
-//   place: DropTargetPlaceEnum,
-// ) => {
-//   if (
-//     source.isSection &&
-//     (place === DropTargetPlaceEnum.SECTION_BOTTOM ||
-//       place === DropTargetPlaceEnum.SECTION_TOP)
-//   ) {
-//     const finalLayouts = reorderRow(layouts, source, dest, place);
-//     const removeOldItem = finalLayouts.map((layout) => ({
-//       ...layout,
-//       columns: layout.columns.map((cols, index) => {
-//         if (index === source.columnIndex) {
-//           return removeItemFromSource(
-//             cols,
-//             source.columnId,
-//             source.itemKey,
-//           );
-//         }
-//         return cols;
-//       }),
-//     }));
-//     return removeEmptyLayout(removeOldItem);
-//   }
-//   if (
-//     place === DropTargetPlaceEnum.SECTION_BOTTOM ||
-//     place === DropTargetPlaceEnum.SECTION_TOP
-//   ) {
-//     const removeOldItem = layouts.map((layout) => {
-//       if (layout.id === source.sectionId) {
-//         return {
-//           ...layout,
-//           columns: layout.columns.map((cols, index) => {
-//             if (index === source.columnIndex) {
-//               return removeItemFromSource(
-//                 cols,
-//                 source.columnId,
-//                 source.itemKey,
-//               );
-//             }
-//             return cols;
-//           }),
-//         };
-//       }
-//       return layout;
-//     });
-//     const finalLayouts = addToNewRow(
-//       removeOldItem,
-//       source,
-//       dest,
-//       place,
-//     );
-//     return removeEmptyLayout(finalLayouts);
-//   }
-//   if (source.isSection) {
-//     return layouts;
-//   }
-//   const finalLayouts = layouts.map((section) => {
-//     if (section.id !== dest.sectionId) return section;
-//     const newCols = section.columns[dest.columnIndex];
-//     if (!newCols) return section;
-//     const sectionModified = {
-//       ...section,
-//       columns: section.columns.map((cols, index) => {
-//         if (index === dest.columnIndex) {
-//           const add = addItemToColumn(cols, source, dest, place);
-//           return removeItemFromSource(
-//             add,
-//             source.columnId,
-//             source.itemKey,
-//           );
-//         }
-//         return cols;
-//       }),
-//     };
-//     return sectionModified;
-//   });
-//   const removeOldItem = finalLayouts.map((layout) => {
-//     if (layout.id === source.sectionId) {
-//       return {
-//         ...layout,
-//         columns: layout.columns.map((cols, index) => {
-//           console.log(source);
-//           if (index === source.columnIndex) {
-//             return removeItemFromSource(
-//               cols,
-//               source.columnId,
-//               source.itemKey,
-//             );
-//           }
-//           return cols;
-//         }),
-//       };
-//     }
-//     return layout;
-//   });
-//   return removeEmptyLayout(removeOldItem);
-// };
-
 var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
   switch (target) {
     case ILayoutTargetEnum.ROW:
@@ -997,7 +896,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      _onClickSection = _a.onClickSection;
+      _onClickSection = _a.onClickSection,
+      onFocusItem = _a.onFocusItem;
   var containeRef = React.useRef(null);
 
   var _b = React.useState([]),
@@ -1187,6 +1087,15 @@ var LayoutContainer = function LayoutContainer(_a) {
             dndTargetKey: items[stableKey],
             onDragStart: function onDragStart(e) {
               handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
+            },
+            onClick: function onClick() {
+              onFocusItem && onFocusItem({
+                sectionId: section.id,
+                columnId: column.id,
+                itemKey: items[stableKey],
+                rowId: row.id,
+                isSection: false
+              });
             }
           }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items) : null));
         }))));
@@ -1287,7 +1196,38 @@ var addToRow = function addToRow(layouts, sectionId, itemId) {
   return newLayouts;
 };
 
+var addToItem = function addToItem(layouts, itemKey, dest, bottom) {
+  var add = layouts.map(function (layout) {
+    if (layout.id !== dest.sectionId) return layout;
+    return __assign(__assign({}, layout), {
+      rows: layout.rows.map(function (row) {
+        if (row.id !== dest.rowId) return row;
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            if (col.id !== dest.columnId) {
+              return col;
+            }
+
+            return __assign(__assign({}, col), {
+              childIds: col.childIds.reduce(function (acc, next) {
+                if (next === dest.itemKey) {
+                  if (bottom) return acc.concat(next, itemKey);
+                  return acc.concat(itemKey, next);
+                }
+
+                return acc.concat(next);
+              }, [])
+            });
+          })
+        });
+      })
+    });
+  });
+  return add;
+};
+
 exports.LayoutContainer = LayoutContainer;
+exports.addToItem = addToItem;
 exports.addToRow = addToRow;
 exports.changeSectionStyles = changeSectionStyles;
 exports.createLayout = createLayout;

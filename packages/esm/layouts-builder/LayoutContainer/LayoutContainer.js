@@ -19,7 +19,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      _onClickSection = _a.onClickSection;
+      _onClickSection = _a.onClickSection,
+      onFocusItem = _a.onFocusItem;
   var containeRef = useRef(null);
 
   var _b = useState([]),
@@ -209,6 +210,15 @@ var LayoutContainer = function LayoutContainer(_a) {
             dndTargetKey: items[stableKey],
             onDragStart: function onDragStart(e) {
               handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
+            },
+            onClick: function onClick() {
+              onFocusItem && onFocusItem({
+                sectionId: section.id,
+                columnId: column.id,
+                itemKey: items[stableKey],
+                rowId: row.id,
+                isSection: false
+              });
             }
           }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items) : null));
         }))));

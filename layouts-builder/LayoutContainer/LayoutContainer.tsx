@@ -35,6 +35,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   disableChange,
   onClickSection,
+  onFocusItem,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
@@ -175,6 +176,18 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     });
     setActualLayout(newLayouts);
   };
+  const handleResizeColumn = (
+    currentWidth: number,
+    sectionId: any,
+    rowId: any,
+  ) => {
+    const newLayouts = changeRowWidth(actualLayout, {
+      rowId,
+      sectionId,
+      width: currentWidth,
+    });
+    setActualLayout(newLayouts);
+  };
   return (
     <div className="m-auto">
       <div className="min-h-[100px] " ref={containeRef}>
@@ -308,6 +321,16 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                                           row.id,
                                           items[stableKey],
                                         );
+                                      }}
+                                      onClick={() => {
+                                        onFocusItem &&
+                                          onFocusItem({
+                                            sectionId: section.id,
+                                            columnId: column.id,
+                                            itemKey: items[stableKey],
+                                            rowId: row.id,
+                                            isSection: false,
+                                          });
                                       }}
                                     >
                                       {items['id'] ===

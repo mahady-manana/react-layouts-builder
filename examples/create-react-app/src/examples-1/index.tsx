@@ -7,7 +7,8 @@ import {
   createLayout,
   createNewSection,
   changeSectionStyles,
-  addToRow
+  addToRow,
+  addToItem
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import { v4 as uuidv4 } from "uuid"
@@ -22,6 +23,7 @@ export const Layouts1 = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [disableChange, setDisableChange] = useState<boolean>(false)
+  const [focusItem, setFocusItem] = useState<any>()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
     storage.set(layouts)
     // setLayoutTest(layouts)
@@ -98,6 +100,26 @@ export const Layouts1 = () => {
     setLayoutTest(newLayouts)
     setData((prev) => prev.concat(newitems))
   }
+  const onFocus = (items: any) => {
+    setFocusItem(items)
+  }
+
+  const addToItemss = () => {
+    const newitems = {
+      id: "dklfmqlj46346fhmlgjq",
+      text: "lorem text ipsum"
+    }
+    const add = addToItem(layoutTest, newitems.id, {
+      sectionId: focusItem.sectionId,
+      columnId: focusItem.columnId,
+      itemKey: focusItem.itemKey,
+      rowId: focusItem.rowId
+    })
+    console.log(add)
+
+    setLayoutTest(add)
+    setData((prev) => prev.concat(newitems))
+  }
 
   return (
     <div>
@@ -115,6 +137,7 @@ export const Layouts1 = () => {
             layouts={layoutTest}
             onLayoutChange={handleLayoutChange}
             onClickSection={(section) => setclickSection(section)}
+            onFocusItem={onFocus}
             renderComponent={(data) => {
               return (
                 <div
@@ -141,6 +164,8 @@ export const Layouts1 = () => {
           <input type="color" onChange={(e) => changeBg(e.target.value)} />
           <input type="file" onChange={handleFile} />
         </div>
+        <div></div>
+        <button onClick={() => addToItemss()}>Add item</button>
         <div className="flex-grow text-center">Add new item</div>
         <div className="bg-gray-200 p-2 text-center">
           <form onSubmit={handleSabmit}>

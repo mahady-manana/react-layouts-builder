@@ -53,10 +53,11 @@ export const DroppableSection: FC<DraggableProps> = ({
         onDragStart={onDragStart}
         style={{
           background: section.backgroundImage
-            ? `url(${section.backgroundImage}) no-repeat center`
+            ? `url(${section.backgroundImage})`
             : section.backgroundColor,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
           backgroundSize: 'cover',
-          paddingBlock: (section.spacing || 0) * 8,
         }}
       >
         <div

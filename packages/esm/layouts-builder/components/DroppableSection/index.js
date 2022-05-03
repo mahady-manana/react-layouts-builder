@@ -24,9 +24,10 @@ var DroppableSection = function DroppableSection(_a) {
     draggable: false,
     onDragStart: onDragStart,
     style: {
-      background: section.backgroundImage ? "url(".concat(section.backgroundImage, ") no-repeat center") : section.backgroundColor,
-      backgroundSize: 'cover',
-      paddingBlock: (section.spacing || 0) * 8
+      background: section.backgroundImage ? "url(".concat(section.backgroundImage, ")") : section.backgroundColor,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover'
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "rlb-section-content",
