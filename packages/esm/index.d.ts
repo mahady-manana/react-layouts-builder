@@ -1,5 +1,6 @@
 export * from './LayoutContainer';
 export * from './interface';
+export * from './interface/internalType';
 export * from './helpers/createLayout';
 export * from './helpers/changeSectionStyles';
 export * from './helpers/createNewSection';

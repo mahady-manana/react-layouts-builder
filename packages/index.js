@@ -97,7 +97,7 @@ var DraggableItem = function DraggableItem(_a) {
   }, children);
 };
 
-var DropTargetPlaceEnum;
+exports.DropTargetPlaceEnum = void 0;
 
 (function (DropTargetPlaceEnum) {
   DropTargetPlaceEnum["LEFT"] = "LEFT";
@@ -106,15 +106,15 @@ var DropTargetPlaceEnum;
   DropTargetPlaceEnum["BOTTOM"] = "BOTTOM";
   DropTargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
   DropTargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
-})(DropTargetPlaceEnum || (DropTargetPlaceEnum = {}));
+})(exports.DropTargetPlaceEnum || (exports.DropTargetPlaceEnum = {}));
 
-var ILayoutTargetEnum;
+exports.ILayoutTargetEnum = void 0;
 
 (function (ILayoutTargetEnum) {
   ILayoutTargetEnum["ROW"] = "ROW";
   ILayoutTargetEnum["COL"] = "COL";
   ILayoutTargetEnum["ITEM"] = "ITEM";
-})(ILayoutTargetEnum || (ILayoutTargetEnum = {}));
+})(exports.ILayoutTargetEnum || (exports.ILayoutTargetEnum = {}));
 
 var DroppableColumnItem = function DroppableColumnItem(_a) {
   var children = _a.children,
@@ -148,13 +148,13 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
 
   var handleDropToTop = function handleDropToTop(e) {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.TOP);
+    onDropItem(e, exports.DropTargetPlaceEnum.TOP);
     setDroppableTarget('');
   };
 
   var handleDropToBottom = function handleDropToBottom(e) {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.BOTTOM);
+    onDropItem(e, exports.DropTargetPlaceEnum.BOTTOM);
     setDroppableTarget('');
   };
 
@@ -371,13 +371,13 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
 
   var handleDropToLeft = function handleDropToLeft(e) {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.LEFT);
+    onDropItem(e, exports.DropTargetPlaceEnum.LEFT);
     setDroppableTarget('');
   };
 
   var handleDropToRigth = function handleDropToRigth(e) {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.RIGHT);
+    onDropItem(e, exports.DropTargetPlaceEnum.RIGHT);
     setDroppableTarget('');
   };
 
@@ -495,7 +495,7 @@ var DroppableRow = function DroppableRow(_a) {
     "target-droppable-row": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.ROW_TOP);
+      onDropItem(e, exports.DropTargetPlaceEnum.ROW_TOP);
       setDroppableTarget('');
     },
     onDragLeave: handleDragOverLeave
@@ -523,7 +523,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.ROW_BOTTOM);
+      onDropItem(e, exports.DropTargetPlaceEnum.ROW_BOTTOM);
       setDroppableTarget('');
     }
   }) : null);
@@ -729,7 +729,7 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
       width: width
     });
 
-    var reorder = place === DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
+    var reorder = place === exports.DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
   return newCols;
@@ -746,10 +746,10 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
     }).reduce(function (acc, next) {
       if (next === targetItemKey) {
         switch (targetPlace) {
-          case DropTargetPlaceEnum.TOP:
+          case exports.DropTargetPlaceEnum.TOP:
             return acc.concat([sourceItemKey, next]);
 
-          case DropTargetPlaceEnum.BOTTOM:
+          case exports.DropTargetPlaceEnum.BOTTOM:
             return acc.concat([next, sourceItemKey]);
 
           default:
@@ -771,16 +771,16 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {
   switch (place) {
-    case DropTargetPlaceEnum.LEFT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.LEFT);
+    case exports.DropTargetPlaceEnum.LEFT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, exports.DropTargetPlaceEnum.LEFT);
 
-    case DropTargetPlaceEnum.RIGHT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.RIGHT);
+    case exports.DropTargetPlaceEnum.RIGHT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, exports.DropTargetPlaceEnum.RIGHT);
 
-    case DropTargetPlaceEnum.TOP:
+    case exports.DropTargetPlaceEnum.TOP:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
 
-    case DropTargetPlaceEnum.BOTTOM:
+    case exports.DropTargetPlaceEnum.BOTTOM:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
   }
 };
@@ -796,7 +796,7 @@ var addToColumn = function addToColumn(layouts, source, dest, place) {
       })
     });
   });
-  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === DropTargetPlaceEnum.BOTTOM || place === DropTargetPlaceEnum.TOP));
+  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === exports.DropTargetPlaceEnum.BOTTOM || place === exports.DropTargetPlaceEnum.TOP));
   return clean;
 };
 
@@ -823,7 +823,7 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
       rows: section.rows.reduce(function (acc, nextRow) {
         if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
 
-        if (place === DropTargetPlaceEnum.ROW_BOTTOM) {
+        if (place === exports.DropTargetPlaceEnum.ROW_BOTTOM) {
           return acc.concat([nextRow, row]);
         }
 
@@ -837,13 +837,13 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
 
 var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
   switch (target) {
-    case ILayoutTargetEnum.ROW:
+    case exports.ILayoutTargetEnum.ROW:
       return addToNewRow(layouts, source, dest, place);
 
-    case ILayoutTargetEnum.COL:
+    case exports.ILayoutTargetEnum.COL:
       return addToColumn(layouts, source, dest, place);
 
-    case ILayoutTargetEnum.ITEM:
+    case exports.ILayoutTargetEnum.ITEM:
       return addToColumn(layouts, source, dest, place);
   }
 };
@@ -1072,7 +1072,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         width: row.width,
         dndTargetKey: row.id,
         onDropItem: function onDropItem(e, target) {
-          return handleDropItem(e, target, section.id, '', row.id, undefined, ILayoutTargetEnum.ROW);
+          return handleDropItem(e, target, section.id, '', row.id, undefined, exports.ILayoutTargetEnum.ROW);
         },
         onDragStart: function onDragStart(e) {
           handleDragSectionStart(e, section.id);
@@ -1111,7 +1111,7 @@ var LayoutContainer = function LayoutContainer(_a) {
           width: column.width,
           currentColumLength: 1,
           onDropItem: function onDropItem(e, target) {
-            return handleDropItem(e, target, section.id, column.id, row.id, undefined, ILayoutTargetEnum.COL);
+            return handleDropItem(e, target, section.id, column.id, row.id, undefined, exports.ILayoutTargetEnum.COL);
           }
         }, /*#__PURE__*/React__default["default"].createElement("div", {
           key: column.id,
@@ -1124,7 +1124,7 @@ var LayoutContainer = function LayoutContainer(_a) {
             key: index,
             dndTargetKey: items[stableKey],
             onDropItem: function onDropItem(e, target) {
-              return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], ILayoutTargetEnum.ITEM);
+              return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], exports.ILayoutTargetEnum.ITEM);
             }
           }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
             disableChange: disableChange || items['id'] === 'EMPTY_SECTION',
