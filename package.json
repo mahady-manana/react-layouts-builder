@@ -1,6 +1,6 @@
 {
   "name": "react-layouts-builder",
-  "version": "1.0.0-alpha.13",
+  "version": "1.0.0-alpha.14",
   "description": "Lightweight and powerfull react layouts drag and drop",
   "main": "packages/index.js",
   "types": "packages/index.d.ts",
