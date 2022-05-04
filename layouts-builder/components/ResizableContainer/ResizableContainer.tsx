@@ -1,18 +1,13 @@
 import classNames from 'classnames';
-import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import { gridValue } from 'layouts-builder/helpers/gridValue';
 import React, {
   FC,
-  ReactNode,
   DragEvent,
   useState,
   useRef,
   CSSProperties,
-  Dispatch,
-  SetStateAction,
   SyntheticEvent,
 } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType';
 
 interface ResizableContainerProps {
   isRow?: boolean;
@@ -38,6 +33,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   maxWidth,
   onResize,
   onResizeColEnd,
+  onResizeEnd,
   onClick,
 }) => {
   const [width, setWidth] = useState<number>();
@@ -90,6 +86,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       setWidth(finalWidth);
       onResizeColEnd && onResizeColEnd(init.width, finalWidth);
       onResize && onResize(finalWidth);
+      onResizeEnd && onResizeEnd(finalWidth);
       setInit((prev) => ({
         width: prev.width,
         clientX: 0,

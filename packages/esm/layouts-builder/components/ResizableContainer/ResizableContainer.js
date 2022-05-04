@@ -13,6 +13,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
       onResizeColEnd = _a.onResizeColEnd,
+      onResizeEnd = _a.onResizeEnd,
       onClick = _a.onClick;
 
   var _b = useState(),
@@ -66,6 +67,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       setWidth(finalWidth);
       onResizeColEnd && onResizeColEnd(init.width, finalWidth);
       onResize && onResize(finalWidth);
+      onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {
         return {
           width: prev.width,

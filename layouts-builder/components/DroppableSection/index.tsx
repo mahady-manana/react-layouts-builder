@@ -32,7 +32,6 @@ interface DraggableProps {
 export const DroppableSection: FC<DraggableProps> = ({
   children,
   section,
-  resizable,
   width,
   onDragStart,
   onClickSection,
@@ -44,7 +43,7 @@ export const DroppableSection: FC<DraggableProps> = ({
       noPadding
       onClick={onClickSection}
       type="container"
-      onResize={onResize}
+      onResizeEnd={onResize}
       styles={{ width }}
     >
       <div

@@ -195,6 +195,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       maxWidth = _a.maxWidth,
       onResize = _a.onResize,
       onResizeColEnd = _a.onResizeColEnd,
+      onResizeEnd = _a.onResizeEnd,
       onClick = _a.onClick;
 
   var _b = React.useState(),
@@ -248,6 +249,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       setWidth(finalWidth);
       onResizeColEnd && onResizeColEnd(init.width, finalWidth);
       onResize && onResize(finalWidth);
+      onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {
         return {
           width: prev.width,
@@ -300,9 +302,8 @@ var ResizableContainer = function ResizableContainer(_a) {
 
 var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
-      section = _a.section;
-      _a.resizable;
-      var width = _a.width,
+      section = _a.section,
+      width = _a.width,
       onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
@@ -311,7 +312,7 @@ var DroppableSection = function DroppableSection(_a) {
     noPadding: true,
     onClick: onClickSection,
     type: "container",
-    onResize: onResize,
+    onResizeEnd: onResize,
     styles: {
       width: width
     }
