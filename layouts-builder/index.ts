@@ -5,3 +5,4 @@ export * from './helpers/changeSectionStyles';
 export * from './helpers/createNewSection';
 export * from './helpers/addToRow';
 export * from './helpers/addToNewItem';
+export { removeItemFromSource as removeItemFromLayout } from './helpers/removeItemFromSource';

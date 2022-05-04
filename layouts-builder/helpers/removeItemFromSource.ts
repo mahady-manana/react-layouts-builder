@@ -1,14 +1,6 @@
-import {
-  ILayoutColumn,
-  ILayoutRow,
-  ILayoutSection,
-} from 'layouts-builder/interface';
-import {
-  DestinationType,
-  DropTargetPlaceEnum,
-  SourceType,
-} from 'layouts-builder/interface/internalType';
-import { createNewRow } from './createNewRow';
+import { ILayoutSection } from 'layouts-builder/interface';
+import { SourceType } from 'layouts-builder/interface/internalType';
+import { removeEmptyLayout } from './removeEmptylayout';
 
 export const removeItemFromSource = (
   layouts: ILayoutSection[],
@@ -45,5 +37,6 @@ export const removeItemFromSource = (
     };
   });
 
-  return finalLayouts;
+  const noEmpty = removeEmptyLayout(finalLayouts);
+  return noEmpty;
 };

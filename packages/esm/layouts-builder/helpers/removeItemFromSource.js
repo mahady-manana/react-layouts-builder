@@ -1,4 +1,5 @@
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
+import { removeEmptyLayout } from './removeEmptylayout.js';
 
 var removeItemFromSource = function removeItemFromSource(layouts, source, duplicate) {
   var finalLayouts = layouts.map(function (section) {
@@ -26,7 +27,8 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
       })
     });
   });
-  return finalLayouts;
+  var noEmpty = removeEmptyLayout(finalLayouts);
+  return noEmpty;
 };
 
 export { removeItemFromSource };

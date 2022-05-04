@@ -4,3 +4,4 @@ export { changeSectionStyles } from './helpers/changeSectionStyles.js';
 export { createNewSection } from './helpers/createNewSection.js';
 export { addToRow } from './helpers/addToRow.js';
 export { addToItem } from './helpers/addToNewItem.js';
+export { removeItemFromSource as removeItemFromLayout } from './helpers/removeItemFromSource.js';

@@ -639,6 +639,46 @@ var createNewColumn = function createNewColumn(itemKey) {
   };
 };
 
+var removeEmptyLayout = function removeEmptyLayout(layouts) {
+  var noEmptyChild = layouts.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            return __assign(__assign({}, col), {
+              childIds: col.childIds.filter(function (id) {
+                return id;
+              })
+            });
+          })
+        });
+      })
+    });
+  });
+  var noEmptyColumn = noEmptyChild.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        return __assign(__assign({}, row), {
+          columns: row.columns.filter(function (col) {
+            return col.childIds.length > 0;
+          })
+        });
+      })
+    });
+  });
+  var noEmptyRow = noEmptyColumn.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.filter(function (row) {
+        return row.columns.length > 0;
+      })
+    });
+  });
+  var noEmptySection = noEmptyRow.filter(function (section) {
+    return section.rows.length > 0;
+  });
+  return noEmptySection;
+};
+
 var removeItemFromSource = function removeItemFromSource(layouts, source, duplicate) {
   var finalLayouts = layouts.map(function (section) {
     if (section.id !== source.sectionId) {
@@ -665,7 +705,8 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
       })
     });
   });
-  return finalLayouts;
+  var noEmpty = removeEmptyLayout(finalLayouts);
+  return noEmpty;
 };
 
 var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
@@ -792,46 +833,6 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
   }, []);
   var clean = removeItemFromSource(newLayouts, source);
   return clean;
-};
-
-var removeEmptyLayout = function removeEmptyLayout(layouts) {
-  var noEmptyChild = layouts.map(function (section) {
-    return __assign(__assign({}, section), {
-      rows: section.rows.map(function (row) {
-        return __assign(__assign({}, row), {
-          columns: row.columns.map(function (col) {
-            return __assign(__assign({}, col), {
-              childIds: col.childIds.filter(function (id) {
-                return id;
-              })
-            });
-          })
-        });
-      })
-    });
-  });
-  var noEmptyColumn = noEmptyChild.map(function (section) {
-    return __assign(__assign({}, section), {
-      rows: section.rows.map(function (row) {
-        return __assign(__assign({}, row), {
-          columns: row.columns.filter(function (col) {
-            return col.childIds.length > 0;
-          })
-        });
-      })
-    });
-  });
-  var noEmptyRow = noEmptyColumn.map(function (section) {
-    return __assign(__assign({}, section), {
-      rows: section.rows.filter(function (row) {
-        return row.columns.length > 0;
-      })
-    });
-  });
-  var noEmptySection = noEmptyRow.filter(function (section) {
-    return section.rows.length > 0;
-  });
-  return noEmptySection;
 };
 
 var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
@@ -1275,3 +1276,4 @@ exports.addToRow = addToRow;
 exports.changeSectionStyles = changeSectionStyles;
 exports.createLayout = createLayout;
 exports.createNewSection = createNewSection;
+exports.removeItemFromLayout = removeItemFromSource;
