@@ -1141,7 +1141,12 @@ var LayoutContainer = function LayoutContainer(_a) {
                 isSection: false
               });
             }
-          }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items) : null));
+          }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
+            columnId: column.id,
+            itemKey: items[stableKey],
+            rowId: row.id,
+            sectionId: section.id
+          }) : null));
         }))));
       }));
     }));

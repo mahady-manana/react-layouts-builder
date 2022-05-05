@@ -362,7 +362,12 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                                         </div>
                                       ) : null}
                                       {items['id'] !== 'EMPTY_SECTION'
-                                        ? renderComponent(items)
+                                        ? renderComponent(items, {
+                                            columnId: column.id,
+                                            itemKey: items[stableKey],
+                                            rowId: row.id,
+                                            sectionId: section.id,
+                                          })
                                         : null}
                                     </DraggableItem>
                                   </DroppableColumnItem>

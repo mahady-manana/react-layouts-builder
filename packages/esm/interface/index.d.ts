@@ -45,7 +45,7 @@ export interface ILayoutLabels {
 export interface ILayoutContainer {
     data: any[];
     stableDataKey: string;
-    renderComponent: (data: any) => ReactNode | any;
+    renderComponent: (data: any, layout: SourceType) => ReactNode | any;
     onLayoutChange: (data: ILayoutSection[]) => void;
     layouts?: ILayoutSection[];
     loading?: boolean;
