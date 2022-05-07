@@ -78,6 +78,14 @@
     padding: 10px;
     width: 95%;
     margin: auto;
+    position: absolute;
+    z-index: 500;
+}
+.rlb-droppable-section.top {
+    top: -5px;
+}
+.rlb-droppable-section.bottom {
+    bottom: -5px;
 }
 .rlb-section-content {
     padding-left: 20px;
@@ -86,11 +94,18 @@
 
 .rlb-droppable-section.hover {
     padding: 25px;
-    background: #f1f1f1;
-    border-color: #9d9d9d;
     text-align: center;
     margin-top: 8px;
     margin-bottom: 8px;
+}
+.rlb-droppable-section.top.hover {
+    box-shadow: 0px -2px 0px 0 #fff;
+    border-top: 2px solid #fc0454;
+}
+
+.rlb-droppable-section.bottom.hover {
+    box-shadow: 0px 2px 0px 0 #fff;
+    border-bottom: 2px solid #fc0454;
 }
 
 .rlb-col:hover .rlb-droppable-side {
@@ -118,7 +133,6 @@
 /* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
 .rlb-droppable-side-hover {
     background: transparent;
-    border-color: #9d9d9d;  
     justify-content: center;
     align-items: center;
     /* margin-left: 8px;
@@ -137,16 +151,10 @@
     text-align: center;
     /* margin-top: 8px;
     margin-bottom: 8px; */
-    background: #f1f1f1;
-    border-color: #9d9d9d;
+    box-shadow: 0px 2px 0px 0 #fff;
+    border-bottom: 2px solid #fc0454;
 }
 
-.rlb-droppable-section.hover.top, .rlb-droppable-item-hover.top {
-    border-bottom: 1px solid;
-}
-.rlb-droppable-section.hover.bottom, .rlb-droppable-item-hover.bottom {
-    border-top: 1px solid;
-}
 .rlb-droppable-side-hover.ds-left {
     box-shadow: -2px 0px 0px 0 #fff;
     border-left: 2px solid #fc0454;
@@ -188,7 +196,6 @@
     position: relative;
     margin-inline: auto;
     width: 100%;
-    padding: 10;
     transition-duration: .2s;
     transform-style: preserve-3d;
 }
@@ -201,7 +208,7 @@
     padding: 0px;
 }
 .rlb-resizable-container.resizable {
-    padding: 0;
+    padding-inline: 10px;
     border: 1px solid transparent
 }
 
