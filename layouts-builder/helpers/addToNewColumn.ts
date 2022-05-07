@@ -8,6 +8,7 @@ import {
   DropTargetPlaceEnum,
 } from 'layouts-builder/interface/internalType';
 import { createNewColumn } from './createNewColumn';
+import { keepRowFullWidth } from './keepRowFullWidth';
 import { removeItemFromSource } from './removeItemFromSource';
 
 const addToNewColumn = (
@@ -41,7 +42,8 @@ const addToNewColumn = (
         : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, [] as ILayoutColumn[]);
-  return newCols;
+  const keepFullWidth = keepRowFullWidth(newCols);
+  return keepFullWidth;
 };
 
 const addToColmunElement = (
@@ -86,8 +88,8 @@ const addToColmunElement = (
 
     return newCol;
   }, [] as ILayoutColumn[]);
-
-  return newColumns;
+  const keepFullWidth = keepRowFullWidth(newColumns);
+  return keepFullWidth;
 };
 
 export const addItemToColumn = (

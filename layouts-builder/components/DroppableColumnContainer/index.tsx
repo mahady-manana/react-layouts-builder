@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import classNames from 'classnames';
 import React, {
   FC,
@@ -45,11 +46,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
     }
   };
 
-  const isHoveredTargetClassNameSide = (conditions: boolean) => {
-    return conditions
-      ? 'rlb-droppable-side-hover'
-      : 'rlb-droppable-side';
-  };
   const handleDragOverLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDroppableTarget('');
@@ -73,12 +69,17 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         className,
       )}
       ref={columnRef}
+      onMouseEnter={() => console.log('Mouse enter')}
+      onMouseLeave={() => console.log('Mouse leave')}
     >
       {!disableChange ? (
         <div
-          className={`${isHoveredTargetClassNameSide(
-            droppableTarget === `${dndTargetKey}-left`,
-          )} left`}
+          className={classnames(
+            droppableTarget === `${dndTargetKey}-left`
+              ? 'rlb-droppable-side-hover'
+              : '',
+            'ds-left rlb-droppable-side',
+          )}
           target-droppable-item={`${dndTargetKey}-left`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
@@ -90,9 +91,12 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
 
       {!disableChange ? (
         <div
-          className={`${isHoveredTargetClassNameSide(
-            droppableTarget === `${dndTargetKey}-right`,
-          )} right`}
+          className={classnames(
+            droppableTarget === `${dndTargetKey}-right`
+              ? 'rlb-droppable-side-hover'
+              : '',
+            'ds-right rlb-droppable-side',
+          )}
           target-droppable-item={`${dndTargetKey}-right`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}

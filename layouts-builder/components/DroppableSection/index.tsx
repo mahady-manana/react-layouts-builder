@@ -33,13 +33,14 @@ export const DroppableSection: FC<DraggableProps> = ({
   children,
   section,
   width,
+  resizable,
   onDragStart,
   onClickSection,
   onResize,
 }) => {
   return (
     <ResizableContainer
-      resizable={true}
+      resizable={resizable}
       noPadding
       onClick={onClickSection}
       type="container"

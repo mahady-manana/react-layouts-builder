@@ -1,5 +1,6 @@
 import { ILayoutSection } from 'layouts-builder/interface';
 import { SourceType } from 'layouts-builder/interface/internalType';
+import { keepRowFullWidth } from './keepRowFullWidth';
 import { removeEmptyLayout } from './removeEmptylayout';
 
 export const removeItemFromSource = (
@@ -16,22 +17,23 @@ export const removeItemFromSource = (
       ...section,
       rows: section.rows.map((row) => {
         if (row.id !== source.rowId) return row;
-
+        const newColmuns = row.columns
+          .map((col) => {
+            if (col.id !== source.columnId) return col;
+            return {
+              ...col,
+              childIds: col.childIds.filter((id) => {
+                if (!id) return true;
+                if (duplicate) return id !== 'DUPLICATE';
+                return id !== source.itemKey;
+              }),
+            };
+          })
+          .filter((col) => col.childIds.length > 0);
+        const keepFullWidth = keepRowFullWidth(newColmuns);
         return {
           ...row,
-          columns: row.columns
-            .map((col) => {
-              if (col.id !== source.columnId) return col;
-              return {
-                ...col,
-                childIds: col.childIds.filter((id) => {
-                  if (!id) return true;
-                  if (duplicate) return id !== 'DUPLICATE';
-                  return id !== source.itemKey;
-                }),
-              };
-            })
-            .filter((col) => col.childIds.length > 0),
+          columns: keepFullWidth,
         };
       }),
     };

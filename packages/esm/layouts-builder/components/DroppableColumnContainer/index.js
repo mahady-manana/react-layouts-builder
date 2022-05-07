@@ -27,10 +27,6 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     }
   };
 
-  var isHoveredTargetClassNameSide = function isHoveredTargetClassNameSide(conditions) {
-    return conditions ? 'rlb-droppable-side-hover' : 'rlb-droppable-side';
-  };
-
   var handleDragOverLeave = function handleDragOverLeave(e) {
     e.preventDefault();
     setDroppableTarget('');
@@ -51,15 +47,21 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef
+    ref: columnRef,
+    onMouseEnter: function onMouseEnter() {
+      return console.log('Mouse enter');
+    },
+    onMouseLeave: function onMouseLeave() {
+      return console.log('Mouse leave');
+    }
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left")), " left"),
+    className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right")), " right"),
+    className: classnames(droppableTarget === "".concat(dndTargetKey, "-right") ? 'rlb-droppable-side-hover' : '', 'ds-right rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,

@@ -194,13 +194,14 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     <div className="m-auto">
       <div className="min-h-[100px] " ref={containeRef}>
         {renderableLayout.map((section, index) => {
+          const isPublic = disableChange ? false : section.container;
           return (
             <DroppableSection
               index={index}
               key={section.id}
               section={section}
               width={section.width as number}
-              resizable={!disableChange}
+              resizable={isPublic}
               onDragStart={(e) => {
                 handleDragSectionStart(e, section.id);
               }}
@@ -252,7 +253,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       return (
                         <ResizableContainer
                           key={column.id}
-                          resizable={row.columns.length > 1}
+                          resizable={true}
                           styles={{
                             width: `${Math.round(column.width)}%`,
                           }}

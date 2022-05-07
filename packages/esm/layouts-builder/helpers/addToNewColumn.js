@@ -1,6 +1,7 @@
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
 import { DropTargetPlaceEnum } from '../interface/internalType.js';
 import { createNewColumn } from './createNewColumn.js';
+import { keepRowFullWidth } from './keepRowFullWidth.js';
 import { removeItemFromSource } from './removeItemFromSource.js';
 
 var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourceItemKey, place) {
@@ -26,7 +27,8 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
     var reorder = place === DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
-  return newCols;
+  var keepFullWidth = keepRowFullWidth(newCols);
+  return keepFullWidth;
 };
 
 var addToColmunElement = function addToColmunElement(targetColumn, targetColumnId, sourceColumnId, sourceItemKey, targetItemKey, targetPlace) {
@@ -60,7 +62,8 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
 
     return newCol;
   }, []);
-  return newColumns;
+  var keepFullWidth = keepRowFullWidth(newColumns);
+  return keepFullWidth;
 };
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {

@@ -173,15 +173,18 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
-var gridValue = function gridValue(m, n) {
-  if (n === 0 || !n) {
-    return undefined;
+var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth) {
+  var w = currentWidth * initWidthPrc / initWidthPx;
+
+  if (w < 15) {
+    return 15;
   }
 
-  var q = n % m;
-  var r = 20 - q;
-  var f = r <= m / 2 ? n + r : n - q;
-  return f;
+  if (w > 85) {
+    return 85;
+  }
+
+  return w;
 };
 
 var ResizableContainer = function ResizableContainer(_a) {
@@ -226,6 +229,8 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   var handleResize = function handleResize(e, left) {
+    var _a, _b;
+
     e.preventDefault();
     e.stopPropagation();
     onResizeStart(e);
@@ -235,7 +240,10 @@ var ResizableContainer = function ResizableContainer(_a) {
       var add = diff * 2;
       var addition = left ? add : -add;
       var cWidth = init.width + addition;
-      setWidth(cWidth);
+      var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
+      var w = findWidthPercentByPx(init.width, widthNow, cWidth);
+      console.log('w', init.width, styles === null || styles === void 0 ? void 0 : styles.width, cWidth, w);
+      setWidth(w);
       onResize && onResize(cWidth);
     }
   };
@@ -272,7 +280,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', noPadding ? 'no-padding' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
-      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),
+      width: width ? "".concat(Math.round(width), "%") : styles === null || styles === void 0 ? void 0 : styles.width,
       maxWidth: maxWidth
     },
     "data-width": currentWidth,
@@ -304,11 +312,12 @@ var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
       section = _a.section,
       width = _a.width,
+      resizable = _a.resizable,
       onDragStart = _a.onDragStart,
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    resizable: true,
+    resizable: resizable,
     noPadding: true,
     onClick: onClickSection,
     type: "container",
@@ -360,10 +369,6 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     }
   };
 
-  var isHoveredTargetClassNameSide = function isHoveredTargetClassNameSide(conditions) {
-    return conditions ? 'rlb-droppable-side-hover' : 'rlb-droppable-side';
-  };
-
   var handleDragOverLeave = function handleDragOverLeave(e) {
     e.preventDefault();
     setDroppableTarget('');
@@ -384,15 +389,21 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef
+    ref: columnRef,
+    onMouseEnter: function onMouseEnter() {
+      return console.log('Mouse enter');
+    },
+    onMouseLeave: function onMouseLeave() {
+      return console.log('Mouse leave');
+    }
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-left")), " left"),
+    className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassNameSide(droppableTarget === "".concat(dndTargetKey, "-right")), " right"),
+    className: classnames(droppableTarget === "".concat(dndTargetKey, "-right") ? 'rlb-droppable-side-hover' : '', 'ds-right rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
@@ -639,6 +650,24 @@ var createNewColumn = function createNewColumn(itemKey) {
   };
 };
 
+var keepRowFullWidth = function keepRowFullWidth(columns) {
+  var diffWidth = columns.reduce(function (acc, next) {
+    return acc + next.width;
+  }, 0);
+
+  if (diffWidth < 98 || diffWidth > 101) {
+    var rest = 100 - diffWidth;
+    var shouldAdd_1 = Math.round(rest / columns.length);
+    return columns.map(function (col) {
+      return __assign(__assign({}, col), {
+        width: col.width + shouldAdd_1
+      });
+    });
+  }
+
+  return columns;
+};
+
 var removeEmptyLayout = function removeEmptyLayout(layouts) {
   var noEmptyChild = layouts.map(function (section) {
     return __assign(__assign({}, section), {
@@ -688,19 +717,21 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
     return __assign(__assign({}, section), {
       rows: section.rows.map(function (row) {
         if (row.id !== source.rowId) return row;
+        var newColmuns = row.columns.map(function (col) {
+          if (col.id !== source.columnId) return col;
+          return __assign(__assign({}, col), {
+            childIds: col.childIds.filter(function (id) {
+              if (!id) return true;
+              if (duplicate) return id !== 'DUPLICATE';
+              return id !== source.itemKey;
+            })
+          });
+        }).filter(function (col) {
+          return col.childIds.length > 0;
+        });
+        var keepFullWidth = keepRowFullWidth(newColmuns);
         return __assign(__assign({}, row), {
-          columns: row.columns.map(function (col) {
-            if (col.id !== source.columnId) return col;
-            return __assign(__assign({}, col), {
-              childIds: col.childIds.filter(function (id) {
-                if (!id) return true;
-                if (duplicate) return id !== 'DUPLICATE';
-                return id !== source.itemKey;
-              })
-            });
-          }).filter(function (col) {
-            return col.childIds.length > 0;
-          })
+          columns: keepFullWidth
         });
       })
     });
@@ -732,7 +763,8 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
     var reorder = place === exports.DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
-  return newCols;
+  var keepFullWidth = keepRowFullWidth(newCols);
+  return keepFullWidth;
 };
 
 var addToColmunElement = function addToColmunElement(targetColumn, targetColumnId, sourceColumnId, sourceItemKey, targetItemKey, targetPlace) {
@@ -766,7 +798,8 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
 
     return newCol;
   }, []);
-  return newColumns;
+  var keepFullWidth = keepRowFullWidth(newColumns);
+  return keepFullWidth;
 };
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {
@@ -908,20 +941,6 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
   });
 };
 
-var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth) {
-  var w = currentWidth * initWidthPrc / initWidthPx;
-
-  if (w < 15) {
-    return 15;
-  }
-
-  if (w > 85) {
-    return 85;
-  }
-
-  return w;
-};
-
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
@@ -1041,12 +1060,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     className: "min-h-[100px] ",
     ref: containeRef
   }, renderableLayout.map(function (section, index) {
+    var isPublic = disableChange ? false : section.container;
     return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
       index: index,
       key: section.id,
       section: section,
       width: section.width,
-      resizable: !disableChange,
+      resizable: isPublic,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
       },
@@ -1083,7 +1103,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }, row.columns.map(function (column) {
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
           key: column.id,
-          resizable: row.columns.length > 1,
+          resizable: true,
           styles: {
             width: "".concat(Math.round(column.width), "%")
           },

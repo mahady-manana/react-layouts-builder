@@ -43,7 +43,7 @@ export const Layouts1 = () => {
 
   useEffect(() => {
     if (!loading && nodata && data) {
-      const c = createLayout(data, "id", undefined, { width: 480 })
+      const c = createLayout(data, "id", undefined, { width: 1024 })
       setLayoutTest(c)
     }
   }, [loading, data, nodata])
@@ -148,8 +148,10 @@ export const Layouts1 = () => {
                       // background: data.bg
                     }
                   }
-                >
-                  <p>Data : {data.text}</p>
+                >{
+                  data.img ? <img src={data.img} alt='' width="400" style={{width: "100%"}}/>
+                 : <p>Data : {data.text}</p>
+                }
                 </div>
               )
             }}

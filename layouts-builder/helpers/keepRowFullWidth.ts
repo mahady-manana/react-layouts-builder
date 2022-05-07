@@ -8,7 +8,7 @@ export const keepRowFullWidth = (
     0,
   );
 
-  if (diffWidth !== 100) {
+  if (diffWidth < 98 || diffWidth > 101) {
     const rest = 100 - diffWidth;
     const shouldAdd = Math.round(rest / columns.length);
     return columns.map((col) => ({

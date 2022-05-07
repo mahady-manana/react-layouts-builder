@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import { gridValue } from 'layouts-builder/helpers/gridValue';
 import React, {
   FC,
@@ -66,8 +67,17 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       const add = diff * 2;
       const addition = left ? add : -add;
       const cWidth = init.width + addition;
+      const widthNow = (styles?.width as string)?.includes('%')
+        ? parseFloat((styles?.width as string)?.replace('%', ''))
+        : styles?.width;
+      const w = findWidthPercentByPx(
+        init.width,
+        widthNow as number,
+        cWidth,
+      );
+      console.log('w', init.width, styles?.width, cWidth, w);
 
-      setWidth(cWidth);
+      setWidth(w);
 
       onResize && onResize(cWidth);
     }
@@ -112,7 +122,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       )}
       ref={columnRef}
       style={{
-        width: gridValue(50, width) || styles?.width,
+        width: width ? `${Math.round(width)}%` : styles?.width,
         maxWidth: maxWidth,
       }}
       data-width={currentWidth}

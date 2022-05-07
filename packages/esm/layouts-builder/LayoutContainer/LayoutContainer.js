@@ -133,12 +133,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     className: "min-h-[100px] ",
     ref: containeRef
   }, renderableLayout.map(function (section, index) {
+    var isPublic = disableChange ? false : section.container;
     return /*#__PURE__*/React.createElement(DroppableSection, {
       index: index,
       key: section.id,
       section: section,
       width: section.width,
-      resizable: !disableChange,
+      resizable: isPublic,
       onDragStart: function onDragStart(e) {
         handleDragSectionStart(e, section.id);
       },
@@ -175,7 +176,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }, row.columns.map(function (column) {
         return /*#__PURE__*/React.createElement(ResizableContainer, {
           key: column.id,
-          resizable: row.columns.length > 1,
+          resizable: true,
           styles: {
             width: "".concat(Math.round(column.width), "%")
           },

@@ -1,5 +1,5 @@
 import classnames from '../../../node_modules/classnames/index.js';
-import { gridValue } from '../../helpers/gridValue.js';
+import { findWidthPercentByPx } from '../../helpers/findWidth.js';
 import React, { useState, useRef } from 'react';
 
 var ResizableContainer = function ResizableContainer(_a) {
@@ -44,6 +44,8 @@ var ResizableContainer = function ResizableContainer(_a) {
   };
 
   var handleResize = function handleResize(e, left) {
+    var _a, _b;
+
     e.preventDefault();
     e.stopPropagation();
     onResizeStart(e);
@@ -53,7 +55,10 @@ var ResizableContainer = function ResizableContainer(_a) {
       var add = diff * 2;
       var addition = left ? add : -add;
       var cWidth = init.width + addition;
-      setWidth(cWidth);
+      var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
+      var w = findWidthPercentByPx(init.width, widthNow, cWidth);
+      console.log('w', init.width, styles === null || styles === void 0 ? void 0 : styles.width, cWidth, w);
+      setWidth(w);
       onResize && onResize(cWidth);
     }
   };
@@ -90,7 +95,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     className: classnames('rlb-resizable-container', resizable ? 'resizable' : '', noPadding ? 'no-padding' : '', isRow ? 'flex' : ''),
     ref: columnRef,
     style: {
-      width: gridValue(50, width) || (styles === null || styles === void 0 ? void 0 : styles.width),
+      width: width ? "".concat(Math.round(width), "%") : styles === null || styles === void 0 ? void 0 : styles.width,
       maxWidth: maxWidth
     },
     "data-width": currentWidth,
