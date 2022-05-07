@@ -177,6 +177,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         return /*#__PURE__*/React.createElement(ResizableContainer, {
           key: column.id,
           resizable: true,
+          colNumber: row.columns.length,
           styles: {
             width: "".concat(Math.round(column.width), "%")
           },

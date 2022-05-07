@@ -254,6 +254,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                         <ResizableContainer
                           key={column.id}
                           resizable={true}
+                          colNumber={row.columns.length}
                           styles={{
                             width: `${Math.round(column.width)}%`,
                           }}

@@ -207,6 +207,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       currentWidth = _a.currentWidth,
       noPadding = _a.noPadding,
       maxWidth = _a.maxWidth,
+      colNumber = _a.colNumber,
       onResize = _a.onResize,
       onResizeColEnd = _a.onResizeColEnd,
       onResizeEnd = _a.onResizeEnd,
@@ -265,7 +266,8 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
-      onResizeColEnd && onResizeColEnd(init.width, gridValue(10, finalWidth));
+      var grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
+      onResizeColEnd && onResizeColEnd(init.width, gridValue(grid, finalWidth));
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {
@@ -927,7 +929,7 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
         if (row.id !== container.rowId) return row;
         return __assign(__assign({}, row), {
           columns: row.columns.map(function (col) {
-            var makeItGrid = gridValue(10, cols.width);
+            var makeItGrid = row.columns.length % 2 === 0 ? gridValue(10, cols.width) : cols.width;
             if (!makeItGrid) return col;
 
             if (col.id === cols.colId) {
@@ -1111,6 +1113,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
           key: column.id,
           resizable: true,
+          colNumber: row.columns.length,
           styles: {
             width: "".concat(Math.round(column.width), "%")
           },

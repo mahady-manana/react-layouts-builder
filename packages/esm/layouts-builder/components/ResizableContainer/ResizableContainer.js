@@ -12,6 +12,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       currentWidth = _a.currentWidth,
       noPadding = _a.noPadding,
       maxWidth = _a.maxWidth,
+      colNumber = _a.colNumber,
       onResize = _a.onResize,
       onResizeColEnd = _a.onResizeColEnd,
       onResizeEnd = _a.onResizeEnd,
@@ -70,7 +71,8 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
-      onResizeColEnd && onResizeColEnd(init.width, gridValue(10, finalWidth));
+      var grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
+      onResizeColEnd && onResizeColEnd(init.width, gridValue(grid, finalWidth));
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {

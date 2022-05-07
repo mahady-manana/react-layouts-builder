@@ -9,7 +9,7 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
         if (row.id !== container.rowId) return row;
         return __assign(__assign({}, row), {
           columns: row.columns.map(function (col) {
-            var makeItGrid = gridValue(10, cols.width);
+            var makeItGrid = row.columns.length % 2 === 0 ? gridValue(10, cols.width) : cols.width;
             if (!makeItGrid) return col;
 
             if (col.id === cols.colId) {

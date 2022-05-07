@@ -14,6 +14,7 @@ interface ResizableContainerProps {
   isRow?: boolean;
   resizable?: boolean;
   styles?: CSSProperties;
+  colNumber?: number;
   type?: any;
   noPadding?: boolean;
   currentWidth?: number;
@@ -32,6 +33,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   currentWidth,
   noPadding,
   maxWidth,
+  colNumber,
   onResize,
   onResizeColEnd,
   onResizeEnd,
@@ -93,10 +95,11 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
 
       const finalWidth = init.width + addition;
       setWidth(finalWidth);
+      const grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
       onResizeColEnd &&
         onResizeColEnd(
           init.width,
-          gridValue(10, finalWidth) as number,
+          gridValue(grid, finalWidth) as number,
         );
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
