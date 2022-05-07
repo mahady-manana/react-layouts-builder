@@ -101,18 +101,23 @@
     padding: 0;
     transition-duration: .2s;
     transform-style: preserve-3d;
-    width: 30px;
+    width: 40px;
     position: absolute;
     height: 100%;
     z-index: 900;
 }
 .rlb-droppable-side.ds-right {
-    right: 0;
+    right: -20px;
 }
 .rlb-droppable-side.ds-left {
-    left: 0;
+    left: -20px;
 }
 
+
+.rlb-resizable-inner:hover .rlb-droppable-side {
+    visibility: hidden;
+    z-index: 0;
+}
 
 /* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
 .rlb-droppable-side-hover {
@@ -235,9 +240,10 @@
     left: 5px;
     border-right: 3px solid #fff;
 }
-rlb-resizable-inner {
+.rlb-resizable-inner {
     width: max-content;
     margin-inline: auto;
+    position: relative;
 }
 .rlb-resize-handler:hover ~ .rlb-col .rlb-droppable-side {
     visibility: hidden;
