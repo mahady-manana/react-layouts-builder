@@ -1,11 +1,11 @@
-var gridValue = function gridValue(m, n) {
+var gridValue = function gridValue(coef, n) {
   if (n === 0 || !n) {
     return undefined;
   }
 
-  var q = n % m;
-  var r = 20 - q;
-  var f = r <= m / 2 ? n + r : n - q;
+  var q = n % coef;
+  var r = coef - q;
+  var f = r <= coef / 2 ? n + r : n - q;
   return f;
 };
 

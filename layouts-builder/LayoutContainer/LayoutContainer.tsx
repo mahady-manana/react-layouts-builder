@@ -260,7 +260,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                           type="column"
                           currentWidth={Math.round(column.width)}
                           onResizeColEnd={(init, final) => {
-                            console.log(init, final, column.width);
                             const w = findWidthPercentByPx(
                               init,
                               column.width,

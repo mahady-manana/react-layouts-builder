@@ -183,7 +183,6 @@ var LayoutContainer = function LayoutContainer(_a) {
           type: "column",
           currentWidth: Math.round(column.width),
           onResizeColEnd: function onResizeColEnd(init, _final) {
-            console.log(init, _final, column.width);
             var w = findWidthPercentByPx(init, column.width, _final);
             var newLayouts = changeColumnWidth(actualLayout, {
               sectionId: section.id,

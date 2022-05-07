@@ -1,5 +1,6 @@
 import classnames from '../../../node_modules/classnames/index.js';
 import { findWidthPercentByPx } from '../../helpers/findWidth.js';
+import { gridValue } from '../../helpers/gridValue.js';
 import React, { useState, useRef } from 'react';
 
 var ResizableContainer = function ResizableContainer(_a) {
@@ -57,7 +58,6 @@ var ResizableContainer = function ResizableContainer(_a) {
       var cWidth = init.width + addition;
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
       var w = findWidthPercentByPx(init.width, widthNow, cWidth);
-      console.log('w', init.width, styles === null || styles === void 0 ? void 0 : styles.width, cWidth, w);
       setWidth(w);
       onResize && onResize(cWidth);
     }
@@ -70,7 +70,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
-      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, gridValue(10, finalWidth));
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {

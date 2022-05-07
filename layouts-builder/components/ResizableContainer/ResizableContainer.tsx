@@ -75,7 +75,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
         widthNow as number,
         cWidth,
       );
-      console.log('w', init.width, styles?.width, cWidth, w);
 
       setWidth(w);
 
@@ -94,7 +93,11 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
 
       const finalWidth = init.width + addition;
       setWidth(finalWidth);
-      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResizeColEnd &&
+        onResizeColEnd(
+          init.width,
+          gridValue(10, finalWidth) as number,
+        );
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit((prev) => ({

@@ -69,8 +69,6 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         className,
       )}
       ref={columnRef}
-      onMouseEnter={() => console.log('Mouse enter')}
-      onMouseLeave={() => console.log('Mouse leave')}
     >
       {!disableChange ? (
         <div

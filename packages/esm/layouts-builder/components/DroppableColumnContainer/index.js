@@ -47,13 +47,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef,
-    onMouseEnter: function onMouseEnter() {
-      return console.log('Mouse enter');
-    },
-    onMouseLeave: function onMouseLeave() {
-      return console.log('Mouse leave');
-    }
+    ref: columnRef
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),

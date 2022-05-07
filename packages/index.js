@@ -187,6 +187,17 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
   return w;
 };
 
+var gridValue = function gridValue(coef, n) {
+  if (n === 0 || !n) {
+    return undefined;
+  }
+
+  var q = n % coef;
+  var r = coef - q;
+  var f = r <= coef / 2 ? n + r : n - q;
+  return f;
+};
+
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
       type = _a.type,
@@ -242,7 +253,6 @@ var ResizableContainer = function ResizableContainer(_a) {
       var cWidth = init.width + addition;
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
       var w = findWidthPercentByPx(init.width, widthNow, cWidth);
-      console.log('w', init.width, styles === null || styles === void 0 ? void 0 : styles.width, cWidth, w);
       setWidth(w);
       onResize && onResize(cWidth);
     }
@@ -255,7 +265,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       var addition = left ? add : -add;
       var finalWidth = init.width + addition;
       setWidth(finalWidth);
-      onResizeColEnd && onResizeColEnd(init.width, finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, gridValue(10, finalWidth));
       onResize && onResize(finalWidth);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {
@@ -389,13 +399,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef,
-    onMouseEnter: function onMouseEnter() {
-      return console.log('Mouse enter');
-    },
-    onMouseLeave: function onMouseLeave() {
-      return console.log('Mouse leave');
-    }
+    ref: columnRef
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
@@ -923,13 +927,16 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
         if (row.id !== container.rowId) return row;
         return __assign(__assign({}, row), {
           columns: row.columns.map(function (col) {
+            var makeItGrid = gridValue(10, cols.width);
+            if (!makeItGrid) return col;
+
             if (col.id === cols.colId) {
               return __assign(__assign({}, col), {
-                width: cols.width
+                width: makeItGrid
               });
             }
 
-            var rest = (100 - cols.width) / (row.columns.length - 1);
+            var rest = (100 - makeItGrid) / (row.columns.length - 1);
             console.log('rest', rest);
             return __assign(__assign({}, col), {
               width: Math.round(rest)
@@ -1110,7 +1117,6 @@ var LayoutContainer = function LayoutContainer(_a) {
           type: "column",
           currentWidth: Math.round(column.width),
           onResizeColEnd: function onResizeColEnd(init, _final) {
-            console.log(init, _final, column.width);
             var w = findWidthPercentByPx(init, column.width, _final);
             var newLayouts = changeColumnWidth(actualLayout, {
               sectionId: section.id,
