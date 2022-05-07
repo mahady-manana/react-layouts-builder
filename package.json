@@ -19,7 +19,8 @@
     "build:w": "rollup -cw",
     "npm-publish": "npm version patch && npm publish && git push --tags",
     "npm:alpha": "npm version prerelease --preid alpha",
-    "npm:beta": "npm version prerelease --preid beta"
+    "npm:beta": "npm version prerelease --preid beta",
+    "publish:alpha": "yarn npm:alpha && npm publish"
   },
   "keywords": [
     "React",
