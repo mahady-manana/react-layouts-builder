@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType.js';
 import classnames from '../../../node_modules/classnames/index.js';
-import { ResizableContainer } from '../ResizableContainer/ResizableContainer.js';
 
 var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
       dndTargetKey = _a.dndTargetKey;
       _a.section;
-      var disableChange = _a.disableChange,
-      width = _a.width,
-      maxWidth = _a.maxWidth,
-      onResize = _a.onResize,
-      onDropItem = _a.onDropItem;
+      var disableChange = _a.disableChange;
+      _a.width;
+      _a.maxWidth;
+      _a.onResize;
+      var onDropItem = _a.onDropItem;
       _a.onDragStart;
 
   var _b = useState(),
@@ -49,16 +48,7 @@ var DroppableRow = function DroppableRow(_a) {
       setDroppableTarget('');
     },
     onDragLeave: handleDragOverLeave
-  }) : null, /*#__PURE__*/React.createElement(ResizableContainer, {
-    isRow: true,
-    resizable: false,
-    styles: {
-      width: width
-    },
-    onResize: onResize,
-    currentWidth: width,
-    maxWidth: maxWidth
-  }, /*#__PURE__*/React.createElement("div", {
+  }) : null, /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-section'),
     draggable: !disableChange
   }, /*#__PURE__*/React.createElement("div", {
@@ -67,7 +57,7 @@ var DroppableRow = function DroppableRow(_a) {
       width: '100%',
       margin: 'auto'
     }
-  }, children))), !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }, children)), !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,

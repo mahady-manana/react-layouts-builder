@@ -13,6 +13,7 @@ import React, {
 interface ResizableContainerProps {
   isRow?: boolean;
   isCol?: boolean;
+  isSection?: boolean;
   resizable?: boolean;
   styles?: CSSProperties;
   colNumber?: number;
@@ -29,6 +30,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   isRow,
   type,
   isCol,
+  isSection,
   resizable,
   styles,
   children,
@@ -136,7 +138,10 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       data-width={currentWidth}
       onClick={handleClick}
     >
-      <div className={isCol ? 'rlb-resizable-inner' : ''}>
+      <div
+        className="rlb-resizable-inner"
+        style={{ maxWidth: isSection ? styles?.width : '100%' }}
+      >
         {resizable ? (
           <div
             className="rlb-resize-handler left"

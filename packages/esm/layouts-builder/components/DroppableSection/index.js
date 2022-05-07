@@ -11,6 +11,7 @@ var DroppableSection = function DroppableSection(_a) {
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React.createElement(ResizableContainer, {
+    isSection: true,
     resizable: resizable,
     noPadding: true,
     onClick: onClickSection,

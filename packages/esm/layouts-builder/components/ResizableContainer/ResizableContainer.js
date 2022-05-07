@@ -5,8 +5,9 @@ import React, { useState, useRef } from 'react';
 
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
-      type = _a.type,
-      isCol = _a.isCol,
+      type = _a.type;
+      _a.isCol;
+      var isSection = _a.isSection,
       resizable = _a.resizable,
       styles = _a.styles,
       children = _a.children,
@@ -104,7 +105,10 @@ var ResizableContainer = function ResizableContainer(_a) {
     "data-width": currentWidth,
     onClick: handleClick
   }, /*#__PURE__*/React.createElement("div", {
-    className: isCol ? 'rlb-resizable-inner' : ''
+    className: "rlb-resizable-inner",
+    style: {
+      maxWidth: isSection ? styles === null || styles === void 0 ? void 0 : styles.width : '100%'
+    }
   }, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,

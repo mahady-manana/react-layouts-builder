@@ -67,26 +67,19 @@ export const DroppableRow: FC<DraggableProps> = ({
           onDragLeave={handleDragOverLeave}
         ></div>
       ) : null}
-      <ResizableContainer
-        isRow
-        resizable={false}
-        styles={{ width: width }}
-        onResize={onResize}
-        currentWidth={width}
-        maxWidth={maxWidth}
+
+      <div
+        className={classNames('rlb-section')}
+        draggable={!disableChange}
       >
         <div
-          className={classNames('rlb-section')}
-          draggable={!disableChange}
+          className="section-content flex"
+          style={{ width: '100%', margin: 'auto' }}
         >
-          <div
-            className="section-content flex"
-            style={{ width: '100%', margin: 'auto' }}
-          >
-            {children}
-          </div>
+          {children}
         </div>
-      </ResizableContainer>
+      </div>
+
       {!disableChange ? (
         <div
           className={`${isHoveredTargetClassName(

@@ -197,8 +197,9 @@ var gridValue = function gridValue(coef, n) {
 
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
-      type = _a.type,
-      isCol = _a.isCol,
+      type = _a.type;
+      _a.isCol;
+      var isSection = _a.isSection,
       resizable = _a.resizable,
       styles = _a.styles,
       children = _a.children,
@@ -296,7 +297,10 @@ var ResizableContainer = function ResizableContainer(_a) {
     "data-width": currentWidth,
     onClick: handleClick
   }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: isCol ? 'rlb-resizable-inner' : ''
+    className: "rlb-resizable-inner",
+    style: {
+      maxWidth: isSection ? styles === null || styles === void 0 ? void 0 : styles.width : '100%'
+    }
   }, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -329,6 +333,7 @@ var DroppableSection = function DroppableSection(_a) {
       onClickSection = _a.onClickSection,
       onResize = _a.onResize;
   return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
+    isSection: true,
     resizable: resizable,
     noPadding: true,
     onClick: onClickSection,
@@ -475,11 +480,11 @@ var DroppableRow = function DroppableRow(_a) {
       index = _a.index,
       dndTargetKey = _a.dndTargetKey;
       _a.section;
-      var disableChange = _a.disableChange,
-      width = _a.width,
-      maxWidth = _a.maxWidth,
-      onResize = _a.onResize,
-      onDropItem = _a.onDropItem;
+      var disableChange = _a.disableChange;
+      _a.width;
+      _a.maxWidth;
+      _a.onResize;
+      var onDropItem = _a.onDropItem;
       _a.onDragStart;
 
   var _b = React.useState(),
@@ -516,16 +521,7 @@ var DroppableRow = function DroppableRow(_a) {
       setDroppableTarget('');
     },
     onDragLeave: handleDragOverLeave
-  }) : null, /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-    isRow: true,
-    resizable: false,
-    styles: {
-      width: width
-    },
-    onResize: onResize,
-    currentWidth: width,
-    maxWidth: maxWidth
-  }, /*#__PURE__*/React__default["default"].createElement("div", {
+  }) : null, /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-section'),
     draggable: !disableChange
   }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -534,7 +530,7 @@ var DroppableRow = function DroppableRow(_a) {
       width: '100%',
       margin: 'auto'
     }
-  }, children))), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+  }, children)), !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,

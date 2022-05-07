@@ -114,10 +114,6 @@
 }
 
 
-.rlb-resizable-inner:hover .rlb-droppable-side {
-    visibility: hidden;
-    z-index: 0;
-}
 
 /* border-2 rounded-sm border-dashed flex items-center justify-center border-gray-500 w-[50%] mx-2 */
 .rlb-droppable-side-hover {
@@ -222,6 +218,9 @@
 }
 .rlb-resize-handler:hover {
     opacity: 1;
+    z-index: 1000;
+}
+.rlb-resizable-inner:hover .rlb-resize-handler, .rlb-resize-handler:hover {
     z-index: 1000;
 }
 .rlb-resize-handler.left {
