@@ -175,6 +175,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         }
       }, row.columns.map(function (column) {
         return /*#__PURE__*/React.createElement(ResizableContainer, {
+          isCol: true,
           key: column.id,
           resizable: true,
           colNumber: row.columns.length,

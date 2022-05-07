@@ -1,6 +1,7 @@
 import { FC, CSSProperties } from 'react';
 interface ResizableContainerProps {
     isRow?: boolean;
+    isCol?: boolean;
     resizable?: boolean;
     styles?: CSSProperties;
     colNumber?: number;

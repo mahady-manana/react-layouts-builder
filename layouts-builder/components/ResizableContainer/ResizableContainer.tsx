@@ -12,6 +12,7 @@ import React, {
 
 interface ResizableContainerProps {
   isRow?: boolean;
+  isCol?: boolean;
   resizable?: boolean;
   styles?: CSSProperties;
   colNumber?: number;
@@ -27,6 +28,7 @@ interface ResizableContainerProps {
 export const ResizableContainer: FC<ResizableContainerProps> = ({
   isRow,
   type,
+  isCol,
   resizable,
   styles,
   children,
@@ -134,7 +136,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       data-width={currentWidth}
       onClick={handleClick}
     >
-      <div className="rlb-resizable-inner">
+      <div className={isCol ? 'rlb-resizable-inner' : ''}>
         {resizable ? (
           <div
             className="rlb-resize-handler left"

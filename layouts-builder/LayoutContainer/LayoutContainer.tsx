@@ -252,6 +252,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     {row.columns.map((column) => {
                       return (
                         <ResizableContainer
+                          isCol
                           key={column.id}
                           resizable={true}
                           colNumber={row.columns.length}

@@ -6,6 +6,7 @@ import React, { useState, useRef } from 'react';
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
       type = _a.type,
+      isCol = _a.isCol,
       resizable = _a.resizable,
       styles = _a.styles,
       children = _a.children,
@@ -103,7 +104,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     "data-width": currentWidth,
     onClick: handleClick
   }, /*#__PURE__*/React.createElement("div", {
-    className: "rlb-resizable-inner"
+    className: isCol ? 'rlb-resizable-inner' : ''
   }, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,

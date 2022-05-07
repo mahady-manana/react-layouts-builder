@@ -198,6 +198,7 @@ var gridValue = function gridValue(coef, n) {
 var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
       type = _a.type,
+      isCol = _a.isCol,
       resizable = _a.resizable,
       styles = _a.styles,
       children = _a.children,
@@ -295,7 +296,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     "data-width": currentWidth,
     onClick: handleClick
   }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "rlb-resizable-inner"
+    className: isCol ? 'rlb-resizable-inner' : ''
   }, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -1110,6 +1111,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         }
       }, row.columns.map(function (column) {
         return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
+          isCol: true,
           key: column.id,
           resizable: true,
           colNumber: row.columns.length,
