@@ -115,7 +115,6 @@
 .rlb-droppable-side {
     padding: 0;
     transition-duration: .2s;
-    transform-style: preserve-3d;
     width: 40px;
     position: absolute;
     height: 100%;
@@ -197,7 +196,6 @@
     margin-inline: auto;
     width: 100%;
     transition-duration: .2s;
-    transform-style: preserve-3d;
 }
 
 
