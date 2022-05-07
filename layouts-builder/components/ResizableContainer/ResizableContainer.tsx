@@ -134,32 +134,34 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       data-width={currentWidth}
       onClick={handleClick}
     >
-      {resizable ? (
-        <div
-          className="rlb-resize-handler left"
-          draggable
-          onDrag={(e) => handleResize(e, true)}
-          onDragEnd={(e) => {
-            handleResizeEnd(e, true);
-          }}
-          data-resizable-type={type}
-          // onDragStart={onDragStart}
-        ></div>
-      ) : null}
+      <div className="rlb-resizable-inner">
+        {resizable ? (
+          <div
+            className="rlb-resize-handler left"
+            draggable
+            onDrag={(e) => handleResize(e, true)}
+            onDragEnd={(e) => {
+              handleResizeEnd(e, true);
+            }}
+            data-resizable-type={type}
+            // onDragStart={onDragStart}
+          ></div>
+        ) : null}
 
-      {children}
-      {resizable ? (
-        <div
-          className="rlb-resize-handler right"
-          draggable
-          onDrag={(e) => handleResize(e, false)}
-          onDragEnd={(e) => {
-            handleResizeEnd(e, false);
-          }}
-          // onDragStart={onDragStart}
-          data-resizable-type={type}
-        ></div>
-      ) : null}
+        {children}
+        {resizable ? (
+          <div
+            className="rlb-resize-handler right"
+            draggable
+            onDrag={(e) => handleResize(e, false)}
+            onDragEnd={(e) => {
+              handleResizeEnd(e, false);
+            }}
+            // onDragStart={onDragStart}
+            data-resizable-type={type}
+          ></div>
+        ) : null}
+      </div>
     </div>
   );
 };

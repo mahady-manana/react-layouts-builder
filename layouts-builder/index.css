@@ -235,6 +235,10 @@
     left: 5px;
     border-right: 3px solid #fff;
 }
+rlb-resizable-inner {
+    width: max-content;
+    margin-inline: auto;
+}
 .rlb-resize-handler:hover ~ .rlb-col .rlb-droppable-side {
     visibility: hidden;
 }

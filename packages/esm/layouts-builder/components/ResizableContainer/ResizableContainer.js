@@ -102,6 +102,8 @@ var ResizableContainer = function ResizableContainer(_a) {
     },
     "data-width": currentWidth,
     onClick: handleClick
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rlb-resizable-inner"
   }, resizable ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler left",
     draggable: true,
@@ -122,7 +124,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       handleResizeEnd(e, false);
     },
     "data-resizable-type": type
-  }) : null);
+  }) : null));
 };
 
 export { ResizableContainer };
