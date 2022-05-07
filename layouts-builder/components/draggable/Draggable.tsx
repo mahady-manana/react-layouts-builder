@@ -26,7 +26,6 @@ export const DraggableItem: FC<DraggableProps> = ({
       )}
       data-draggable={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}
-      onClick={() => onClick && onClick()}
     >
       {children}
     </div>
