@@ -51,13 +51,7 @@ var DroppableRow = function DroppableRow(_a) {
   }) : null, /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-section'),
     draggable: !disableChange
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "section-content flex",
-    style: {
-      width: '100%',
-      margin: 'auto'
-    }
-  }, children)), !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }, children), !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-row": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,

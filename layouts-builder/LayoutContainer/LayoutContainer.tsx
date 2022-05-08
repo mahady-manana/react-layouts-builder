@@ -28,6 +28,7 @@ import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
 import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
 import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
+import { LayoutRowContainer } from './LayoutRowContainer';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -249,7 +250,17 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       handleResizeRow(width, section.id, row.id)
                     }
                   >
-                    {row.columns.map((column) => {
+                    <LayoutRowContainer
+                      stableKey={stableKey}
+                      layouts={actualLayout}
+                      columns={row.columns}
+                      sectionId={section.id}
+                      rowId={row.id}
+                      disabled={disableChange}
+                      renderComponent={renderComponent}
+                      setActualLayout={setActualLayout}
+                    />
+                    {/* {row.columns.map((column) => {
                       return (
                         <ResizableContainer
                           isCol
@@ -379,7 +390,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                           </DroppableColumnContainer>
                         </ResizableContainer>
                       );
-                    })}
+                    })} */}
                   </DroppableRow>
                 );
               })}

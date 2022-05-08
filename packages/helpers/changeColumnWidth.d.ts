@@ -5,4 +5,5 @@ export declare const changeColumnWidth: (layouts: ILayoutSection[], container: {
 }, cols: {
     width: number;
     colId: any;
+    init: number;
 }) => ILayoutSection[];

@@ -1,18 +1,13 @@
-import { typeof as _typeof } from '../../_virtual/_rollupPluginBabelHelpers.js';
 import React, { useRef, useState, useEffect } from 'react';
-import { DraggableItem } from '../components/draggable/Draggable.js';
-import { DroppableColumnItem } from '../components/DroppableColumnItem/index.js';
-import { DroppableSection } from '../components/DroppableSection/index.js';
-import { DroppableColumnContainer } from '../components/DroppableColumnContainer/index.js';
-import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
+import '../../node_modules/classnames/index.js';
 import { ILayoutTargetEnum } from '../interface/internalType.js';
-import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
+import { DroppableSection } from '../components/DroppableSection/index.js';
+import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { DroppableRow } from '../components/DroppableRow/index.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeRowWidth } from '../helpers/changeRowWidth.js';
 import { changeSectionStyles } from '../helpers/changeSectionStyles.js';
-import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
-import { findWidthPercentByPx } from '../helpers/findWidth.js';
+import { LayoutRowContainer } from './LayoutRowContainer.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -21,17 +16,17 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      _onClickSection = _a.onClickSection,
-      onFocusItem = _a.onFocusItem;
+      _onClickSection = _a.onClickSection;
+      _a.onFocusItem;
   var containeRef = useRef(null);
 
   var _b = useState([]),
       actualLayout = _b[0],
       setActualLayout = _b[1];
 
-  var _c = useState(false),
-      isSectionDragged = _c[0],
-      setIsSectionDragged = _c[1];
+  var _c = useState(false);
+      _c[0];
+      var setIsSectionDragged = _c[1];
 
   var _d = useState([]),
       renderableLayout = _d[0],
@@ -53,19 +48,6 @@ var LayoutContainer = function LayoutContainer(_a) {
       onLayoutChange(actualLayout);
     }
   }, [actualLayout]);
-
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
-    e.stopPropagation();
-
-    var itemKeyType = _typeof(itemkey);
-
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
-    setIsSectionDragged(false);
-  }; // Drop item to create new column or setion or add item to column
 
 
   var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
@@ -173,75 +155,15 @@ var LayoutContainer = function LayoutContainer(_a) {
         onResize: function onResize(width) {
           return handleResizeRow(width, section.id, row.id);
         }
-      }, row.columns.map(function (column) {
-        return /*#__PURE__*/React.createElement(ResizableContainer, {
-          isCol: true,
-          key: column.id,
-          resizable: true,
-          colNumber: row.columns.length,
-          styles: {
-            width: "".concat(Math.round(column.width), "%")
-          },
-          type: "column",
-          currentWidth: Math.round(column.width),
-          onResizeColEnd: function onResizeColEnd(init, _final) {
-            var w = findWidthPercentByPx(init, column.width, _final);
-            var newLayouts = changeColumnWidth(actualLayout, {
-              sectionId: section.id,
-              rowId: row.id
-            }, {
-              width: w,
-              colId: column.id
-            });
-            setActualLayout(newLayouts);
-          }
-        }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
-          key: column.id,
-          disableChange: disableChange,
-          isSection: isSectionDragged,
-          styles: column.styles,
-          className: column.className,
-          dndTargetKey: column.id,
-          width: column.width,
-          currentColumLength: 1,
-          onDropItem: function onDropItem(e, target) {
-            return handleDropItem(e, target, section.id, column.id, row.id, undefined, ILayoutTargetEnum.COL);
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          key: column.id,
-          className: "rlb-col-inner  ".concat('')
-        }, column.items.map(function (items, index) {
-          if (!items) return null;
-          return /*#__PURE__*/React.createElement(DroppableColumnItem, {
-            disableChange: disableChange,
-            isSection: isSectionDragged,
-            key: index,
-            dndTargetKey: items[stableKey],
-            onDropItem: function onDropItem(e, target) {
-              return handleDropItem(e, target, section.id, column.id, row.id, items[stableKey], ILayoutTargetEnum.ITEM);
-            }
-          }, /*#__PURE__*/React.createElement(DraggableItem, {
-            disableChange: disableChange || items['id'] === 'EMPTY_SECTION',
-            dndTargetKey: items[stableKey],
-            onDragStart: function onDragStart(e) {
-              handleDragStart(e, section.id, column.id, row.id, items[stableKey]);
-            },
-            onClick: function onClick() {
-              onFocusItem && onFocusItem({
-                sectionId: section.id,
-                columnId: column.id,
-                itemKey: items[stableKey],
-                rowId: row.id,
-                isSection: false
-              });
-            }
-          }, items['id'] === 'EMPTY_SECTION' && !disableChange ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
-            columnId: column.id,
-            itemKey: items[stableKey],
-            rowId: row.id,
-            sectionId: section.id
-          }) : null));
-        }))));
+      }, /*#__PURE__*/React.createElement(LayoutRowContainer, {
+        stableKey: stableKey,
+        layouts: actualLayout,
+        columns: row.columns,
+        sectionId: section.id,
+        rowId: row.id,
+        disabled: disableChange,
+        renderComponent: renderComponent,
+        setActualLayout: setActualLayout
       }));
     }));
   })));

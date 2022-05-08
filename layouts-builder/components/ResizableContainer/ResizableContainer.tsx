@@ -21,7 +21,11 @@ interface ResizableContainerProps {
   noPadding?: boolean;
   currentWidth?: number;
   maxWidth?: number;
-  onResize?: (currentSize: number) => void;
+  onResize?: (
+    currentSize: number,
+    init: number,
+    end?: boolean,
+  ) => void;
   onResizeEnd?: (currentSize: number) => void;
   onResizeColEnd?: (initSize: number, finalWidth: number) => void;
   onClick?: () => void;
@@ -84,7 +88,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
 
       setWidth(w);
 
-      onResize && onResize(cWidth);
+      onResize && onResize(cWidth, init.width);
     }
   };
 
@@ -105,7 +109,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
           init.width,
           gridValue(grid, finalWidth) as number,
         );
-      onResize && onResize(finalWidth);
+      onResize && onResize(finalWidth, init.width, true);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit((prev) => ({
         width: prev.width,

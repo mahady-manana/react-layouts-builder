@@ -72,12 +72,7 @@ export const DroppableRow: FC<DraggableProps> = ({
         className={classNames('rlb-section')}
         draggable={!disableChange}
       >
-        <div
-          className="section-content flex"
-          style={{ width: '100%', margin: 'auto' }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
 
       {!disableChange ? (

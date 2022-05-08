@@ -1,5 +1,6 @@
 import { ILayoutSection } from 'layouts-builder/interface';
 import { gridValue } from './gridValue';
+import { keepRowFullWidth } from './keepRowFullWidth';
 
 export const changeColumnWidth = (
   layouts: ILayoutSection[],
@@ -10,6 +11,7 @@ export const changeColumnWidth = (
   cols: {
     width: number;
     colId: any;
+    init: number;
   },
 ) => {
   return layouts.map((section) => {
@@ -18,26 +20,31 @@ export const changeColumnWidth = (
       ...section,
       rows: section.rows.map((row) => {
         if (row.id !== container.rowId) return row;
+        const newCols = row.columns.map((col) => {
+          const makeItGrid =
+            row.columns.length % 2 === 0
+              ? gridValue(10, cols.width)
+              : cols.width;
+          if (!makeItGrid) return col;
+          if (col.id === cols.colId) {
+            return {
+              ...col,
+              width: makeItGrid,
+            };
+          }
+          const rest = cols.init - makeItGrid;
+          const add = rest / (row.columns.length - 1);
+
+          return { ...col, width: Math.round(col.width + add) };
+        });
+
+        const full =
+          row.columns.length > 1
+            ? keepRowFullWidth(newCols)
+            : newCols;
         return {
           ...row,
-          columns: row.columns.map((col) => {
-            const makeItGrid =
-              row.columns.length % 2 === 0
-                ? gridValue(10, cols.width)
-                : cols.width;
-            if (!makeItGrid) return col;
-            if (col.id === cols.colId) {
-              return {
-                ...col,
-                width: makeItGrid,
-              };
-            }
-            const rest =
-              (100 - makeItGrid) / (row.columns.length - 1);
-            console.log('rest', rest);
-
-            return { ...col, width: Math.round(rest) };
-          }),
+          columns: full,
         };
       }),
     };

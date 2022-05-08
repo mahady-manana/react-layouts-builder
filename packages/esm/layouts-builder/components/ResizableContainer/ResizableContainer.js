@@ -62,7 +62,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
       var w = findWidthPercentByPx(init.width, widthNow, cWidth);
       setWidth(w);
-      onResize && onResize(cWidth);
+      onResize && onResize(cWidth, init.width);
     }
   };
 
@@ -75,7 +75,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       setWidth(finalWidth);
       var grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
       onResizeColEnd && onResizeColEnd(init.width, gridValue(grid, finalWidth));
-      onResize && onResize(finalWidth);
+      onResize && onResize(finalWidth, init.width, true);
       onResizeEnd && onResizeEnd(finalWidth);
       setInit(function (prev) {
         return {
