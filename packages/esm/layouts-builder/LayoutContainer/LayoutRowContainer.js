@@ -18,7 +18,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       sectionId = _a.sectionId,
       rowId = _a.rowId,
       setActualLayout = _a.setActualLayout,
-      renderComponent = _a.renderComponent;
+      renderComponent = _a.renderComponent,
+      onFocusItem = _a.onFocusItem;
   var containerRef = useRef(null);
 
   var _b = useState(),
@@ -27,37 +28,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _c = useState(0),
       addToWidth = _c[0],
-      setAddToWidth = _c[1]; //   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
-  //     [],
-  //   );
+      setAddToWidth = _c[1];
 
-
-  var _d = useState(false);
-      _d[0];
-      var setIsSectionDragged = _d[1]; //   const [renderableLayout, setRenderableLayout] = useState<
-  //     IRenderableLayout[]
-  //   >([]);
-  //   useEffect(() => {
-  //     if (layouts && layouts.length > 0) {
-  //       setActualLayout(layouts);
-  //     }
-  //   }, [layouts]);
-  //   useEffect(() => {
-  //     if (actualLayout.length > 0) {
-  //       const renderable = createRenderableLayout(
-  //         data,
-  //         actualLayout,
-  //         stableKey,
-  //       );
-  //       setRenderableLayout(renderable);
-  //     }
-  //   }, [actualLayout, data]);
-  //   useEffect(() => {
-  //     if (actualLayout.length > 0) {
-  //       onLayoutChange(actualLayout);
-  //     }
-  //   }, [actualLayout]);
-
+  var _d = useState(false),
+      isSectionDragged = _d[0],
+      setIsSectionDragged = _d[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -106,50 +81,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     if (newLayout) {
       setActualLayout(newLayout);
     }
-  }; //   const handleDragSectionStart = (
-  //     e: DragEvent<HTMLDivElement>,
-  //     sectionId: string,
-  //   ) => {
-  //     e.stopPropagation();
-  //     e.dataTransfer.setData('sectionId', sectionId);
-  //     e.dataTransfer.setData('isSection', 'section');
-  //     setIsSectionDragged(true);
-  //   };
-  //   // Resize row
-  //   const handleResizeRow = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //     rowId: any,
-  //   ) => {
-  //     const newLayouts = changeRowWidth(actualLayout, {
-  //       rowId,
-  //       sectionId,
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
-  //   const handleResizeSection = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //   ) => {
-  //     const newLayouts = changeSectionStyles(actualLayout, sectionId, {
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
-  //   const handleResizeColumn = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //     rowId: any,
-  //   ) => {
-  //     const newLayouts = changeRowWidth(actualLayout, {
-  //       rowId,
-  //       sectionId,
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
-
+  };
 
   var _onResize = function onResize(w) {
     var _a;
@@ -221,7 +153,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       if (!items) return null;
       return /*#__PURE__*/React.createElement(DroppableColumnItem, {
         disableChange: disabled,
-        //   isSection={isSectionDragged}
+        isSection: isSectionDragged,
         key: index,
         dndTargetKey: items[stableKey],
         onDropItem: function onDropItem(e, target) {
@@ -233,14 +165,14 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         onDragStart: function onDragStart(e) {
           handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
         },
-        onClick: function onClick() {//   onFocusItem &&
-          //     onFocusItem({
-          //       sectionId: sectionId,
-          //       columnId: column.id,
-          //       itemKey: items[stableKey],
-          //       rowId: rowId,
-          //       isSection: false,
-          //     });
+        onClick: function onClick() {
+          onFocusItem && onFocusItem({
+            sectionId: sectionId,
+            columnId: column.id,
+            itemKey: items[stableKey],
+            rowId: rowId,
+            isSection: false
+          });
         }
       }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
         columnId: column.id,

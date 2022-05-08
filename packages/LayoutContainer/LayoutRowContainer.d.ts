@@ -12,6 +12,7 @@ interface LayoutRowContainerProps {
     rowId: string;
     setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
     renderComponent: (item: any, source: SourceType) => ReactNode;
+    onFocusItem?: (source: SourceType) => void;
 }
 export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
 export {};

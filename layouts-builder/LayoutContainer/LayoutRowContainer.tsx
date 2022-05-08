@@ -22,16 +22,10 @@ import {
   ILayoutTargetEnum,
   SourceType,
 } from '../interface/internalType';
-import {
-  IRenderableColumn,
-  IRenderableLayout,
-} from '../interface/renderableInterface';
+import { IRenderableColumn } from '../interface/renderableInterface';
 import '../index.css';
 import { ResizableContainer } from 'layouts-builder/components/ResizableContainer/ResizableContainer';
-import { DroppableRow } from 'layouts-builder/components/DroppableRow';
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
-import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
-import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
 import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 
@@ -44,6 +38,7 @@ interface LayoutRowContainerProps {
   rowId: string;
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
+  onFocusItem?: (source: SourceType) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -55,42 +50,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   rowId,
   setActualLayout,
   renderComponent,
+  onFocusItem,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [addToWidth, setAddToWidth] = useState<number>(0);
-  //   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
-  //     [],
-  //   );
+
   const [isSectionDragged, setIsSectionDragged] =
     useState<boolean>(false);
-  //   const [renderableLayout, setRenderableLayout] = useState<
-  //     IRenderableLayout[]
-  //   >([]);
-
-  //   useEffect(() => {
-  //     if (layouts && layouts.length > 0) {
-  //       setActualLayout(layouts);
-  //     }
-  //   }, [layouts]);
-
-  //   useEffect(() => {
-  //     if (actualLayout.length > 0) {
-  //       const renderable = createRenderableLayout(
-  //         data,
-  //         actualLayout,
-  //         stableKey,
-  //       );
-
-  //       setRenderableLayout(renderable);
-  //     }
-  //   }, [actualLayout, data]);
-
-  //   useEffect(() => {
-  //     if (actualLayout.length > 0) {
-  //       onLayoutChange(actualLayout);
-  //     }
-  //   }, [actualLayout]);
 
   const handleDragStart = (
     e: DragEvent<HTMLDivElement>,
@@ -163,81 +130,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   };
 
-  //   const handleDragSectionStart = (
-  //     e: DragEvent<HTMLDivElement>,
-  //     sectionId: string,
-  //   ) => {
-  //     e.stopPropagation();
-  //     e.dataTransfer.setData('sectionId', sectionId);
-  //     e.dataTransfer.setData('isSection', 'section');
-  //     setIsSectionDragged(true);
-  //   };
-
-  //   // Resize row
-
-  //   const handleResizeRow = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //     rowId: any,
-  //   ) => {
-  //     const newLayouts = changeRowWidth(actualLayout, {
-  //       rowId,
-  //       sectionId,
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
-
-  //   const handleResizeSection = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //   ) => {
-  //     const newLayouts = changeSectionStyles(actualLayout, sectionId, {
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
-  //   const handleResizeColumn = (
-  //     currentWidth: number,
-  //     sectionId: any,
-  //     rowId: any,
-  //   ) => {
-  //     const newLayouts = changeRowWidth(actualLayout, {
-  //       rowId,
-  //       sectionId,
-  //       width: currentWidth,
-  //     });
-  //     setActualLayout(newLayouts);
-  //   };
   const onResize = (w: number) => {
     const containerWidth = containerRef.current?.clientWidth;
     console.log('Width', w, containerWidth);
   };
-  const handleFinishResize = (w: number, add: number, id: any) => {
-    const newLayouts = layouts.map((section) => {
-      if (section.id !== sectionId) {
-        return section;
-      }
-      return {
-        ...section,
-        rows: section.rows.map((row) => {
-          if (row.id !== rowId) row;
-          return {
-            ...row,
-            columns: row.columns.map((col) => {
-              const width = col.id === id ? w : col.width + add;
-              return {
-                ...col,
-                width: width,
-              };
-            }),
-          };
-        }),
-      };
-    });
-    setActualLayout(newLayouts);
-    setCurrentColumn(undefined);
-  };
+
   return (
     <div
       className="section-content flex"
@@ -325,7 +222,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   return (
                     <DroppableColumnItem
                       disableChange={disabled}
-                      //   isSection={isSectionDragged}
+                      isSection={isSectionDragged}
                       key={index}
                       dndTargetKey={items[stableKey]}
                       onDropItem={(e, target) =>
@@ -355,14 +252,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           );
                         }}
                         onClick={() => {
-                          //   onFocusItem &&
-                          //     onFocusItem({
-                          //       sectionId: sectionId,
-                          //       columnId: column.id,
-                          //       itemKey: items[stableKey],
-                          //       rowId: rowId,
-                          //       isSection: false,
-                          //     });
+                          onFocusItem &&
+                            onFocusItem({
+                              sectionId: sectionId,
+                              columnId: column.id,
+                              itemKey: items[stableKey],
+                              rowId: rowId,
+                              isSection: false,
+                            });
                         }}
                       >
                         {items['id'] === 'EMPTY_SECTION' &&

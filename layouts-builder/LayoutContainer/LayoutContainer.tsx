@@ -5,12 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  DraggableItem,
-  DroppableColumnItem,
-  DroppableSection,
-  DroppableColumnContainer,
-} from '../components';
+import { DroppableSection } from '../components';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import {
@@ -21,13 +16,10 @@ import {
 } from '../interface/internalType';
 import { IRenderableLayout } from '../interface/renderableInterface';
 import '../index.css';
-import { ResizableContainer } from 'layouts-builder/components/ResizableContainer/ResizableContainer';
 import { DroppableRow } from 'layouts-builder/components/DroppableRow';
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeRowWidth } from 'layouts-builder/helpers/changeRowWidth';
 import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
-import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
-import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import { LayoutRowContainer } from './LayoutRowContainer';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
@@ -73,24 +65,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       onLayoutChange(actualLayout);
     }
   }, [actualLayout]);
-
-  const handleDragStart = (
-    e: DragEvent<HTMLDivElement>,
-    sectionId: string,
-    columnId: string,
-    rowId: any,
-    itemkey: any,
-  ) => {
-    e.stopPropagation();
-
-    const itemKeyType = typeof itemkey;
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
-    setIsSectionDragged(false);
-  };
 
   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
@@ -179,18 +153,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     });
     setActualLayout(newLayouts);
   };
-  const handleResizeColumn = (
-    currentWidth: number,
-    sectionId: any,
-    rowId: any,
-  ) => {
-    const newLayouts = changeRowWidth(actualLayout, {
-      rowId,
-      sectionId,
-      width: currentWidth,
-    });
-    setActualLayout(newLayouts);
-  };
+
   return (
     <div className="m-auto">
       <div className="min-h-[100px] " ref={containeRef}>
@@ -218,10 +181,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 handleResizeSection(width, section.id)
               }
             >
-              {/* <ResizableContainer
-                resizable
-                styles={{ width: sectionData.contentWidth }}
-              > */}
               {section.rows.map((row, rowIndex) => {
                 return (
                   <DroppableRow
@@ -260,141 +219,9 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       renderComponent={renderComponent}
                       setActualLayout={setActualLayout}
                     />
-                    {/* {row.columns.map((column) => {
-                      return (
-                        <ResizableContainer
-                          isCol
-                          key={column.id}
-                          resizable={true}
-                          colNumber={row.columns.length}
-                          styles={{
-                            width: `${Math.round(column.width)}%`,
-                          }}
-                          type="column"
-                          currentWidth={Math.round(column.width)}
-                          onResizeColEnd={(init, final) => {
-                            const w = findWidthPercentByPx(
-                              init,
-                              column.width,
-                              final,
-                            );
-                            const newLayouts = changeColumnWidth(
-                              actualLayout,
-                              {
-                                sectionId: section.id,
-                                rowId: row.id,
-                              },
-                              { width: w, colId: column.id },
-                            );
-                            setActualLayout(newLayouts);
-                          }}
-                        >
-                          <DroppableColumnContainer
-                            key={column.id}
-                            disableChange={disableChange}
-                            isSection={isSectionDragged}
-                            styles={column.styles}
-                            className={column.className}
-                            dndTargetKey={column.id}
-                            width={column.width}
-                            currentColumLength={
-                              1
-                              // sectionData.columns.length || 1
-                            }
-                            onDropItem={(e, target) =>
-                              handleDropItem(
-                                e,
-                                target,
-                                section.id,
-                                column.id,
-                                row.id,
-                                undefined,
-                                ILayoutTargetEnum.COL,
-                              )
-                            }
-                          >
-                            <div
-                              key={column.id}
-                              className={`rlb-col-inner  ${''}`}
-                            >
-                              {column.items.map((items, index) => {
-                                if (!items) return null;
-
-                                return (
-                                  <DroppableColumnItem
-                                    disableChange={disableChange}
-                                    isSection={isSectionDragged}
-                                    key={index}
-                                    dndTargetKey={items[stableKey]}
-                                    onDropItem={(e, target) =>
-                                      handleDropItem(
-                                        e,
-                                        target,
-                                        section.id,
-                                        column.id,
-                                        row.id,
-                                        items[stableKey],
-                                        ILayoutTargetEnum.ITEM,
-                                      )
-                                    }
-                                  >
-                                    <DraggableItem
-                                      disableChange={
-                                        disableChange ||
-                                        items['id'] ===
-                                          'EMPTY_SECTION'
-                                      }
-                                      dndTargetKey={items[stableKey]}
-                                      onDragStart={(e) => {
-                                        handleDragStart(
-                                          e,
-                                          section.id,
-                                          column.id,
-                                          row.id,
-                                          items[stableKey],
-                                        );
-                                      }}
-                                      onClick={() => {
-                                        onFocusItem &&
-                                          onFocusItem({
-                                            sectionId: section.id,
-                                            columnId: column.id,
-                                            itemKey: items[stableKey],
-                                            rowId: row.id,
-                                            isSection: false,
-                                          });
-                                      }}
-                                    >
-                                      {items['id'] ===
-                                        'EMPTY_SECTION' &&
-                                      !disableChange ? (
-                                        <div>
-                                          <p>
-                                            Drop or add block here...
-                                          </p>
-                                        </div>
-                                      ) : null}
-                                      {items['id'] !== 'EMPTY_SECTION'
-                                        ? renderComponent(items, {
-                                            columnId: column.id,
-                                            itemKey: items[stableKey],
-                                            rowId: row.id,
-                                            sectionId: section.id,
-                                          })
-                                        : null}
-                                    </DraggableItem>
-                                  </DroppableColumnItem>
-                                );
-                              })}
-                            </div>
-                          </DroppableColumnContainer>
-                        </ResizableContainer>
-                      );
-                    })} */}
                   </DroppableRow>
                 );
               })}
-              {/* </ResizableContainer> */}
             </DroppableSection>
           );
         })}

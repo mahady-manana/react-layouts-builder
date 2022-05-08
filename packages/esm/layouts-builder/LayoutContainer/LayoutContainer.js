@@ -47,8 +47,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     if (actualLayout.length > 0) {
       onLayoutChange(actualLayout);
     }
-  }, [actualLayout]);
-
+  }, [actualLayout]); // Drop item to create new column or setion or add item to column
 
   var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
