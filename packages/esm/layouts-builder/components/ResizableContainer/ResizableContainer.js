@@ -55,12 +55,13 @@ var ResizableContainer = function ResizableContainer(_a) {
     onResizeStart(e);
 
     if (init.clientX && init.width) {
+      if (e.clientX === 0) return;
       var diff = init.clientX - e.clientX;
       var add = diff * 2;
       var addition = left ? add : -add;
       var cWidth = init.width + addition;
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
-      var w = findWidthPercentByPx(init.width, widthNow, cWidth);
+      var w = findWidthPercentByPx(init.width, widthNow, cWidth, (colNumber || 0) > 1);
       setWidth(w);
       onResize && onResize(cWidth, init.width);
     }

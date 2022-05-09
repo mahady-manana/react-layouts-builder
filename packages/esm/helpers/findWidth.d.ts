@@ -1,1 +1,1 @@
-export declare const findWidthPercentByPx: (initWidthPx: number, initWidthPrc: number, currentWidth: number) => number;
+export declare const findWidthPercentByPx: (initWidthPx: number, initWidthPrc: number, currentWidth: number, multi?: boolean | undefined) => number;

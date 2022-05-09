@@ -86,8 +86,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   var _onResize = function onResize(w) {
     var _a;
 
-    var containerWidth = (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
-    console.log('Width', w, containerWidth);
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
   };
 
   return /*#__PURE__*/React.createElement("div", {
@@ -111,7 +110,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onResize: function onResize(w, init) {
         setCurrentColumn(column.id);
 
-        _onResize(w);
+        _onResize();
 
         var width = findWidthPercentByPx(init, column.width, w);
         var rest = column.width - width;

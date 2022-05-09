@@ -132,7 +132,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
   const onResize = (w: number) => {
     const containerWidth = containerRef.current?.clientWidth;
-    console.log('Width', w, containerWidth);
   };
 
   return (

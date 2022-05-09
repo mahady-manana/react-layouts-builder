@@ -160,17 +160,19 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
 };
 
-var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth) {
+var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth, multi) {
   var w = currentWidth * initWidthPrc / initWidthPx;
 
-  if (w < 15) {
+  if (multi && w < 15) {
     return 15;
   }
 
-  if (w > 85) {
+  if (multi && w > 85) {
     return 85;
   }
 
+  if (w > 100) return 100;
+  if (w < 15) return 10;
   return w;
 };
 
@@ -237,12 +239,13 @@ var ResizableContainer = function ResizableContainer(_a) {
     onResizeStart(e);
 
     if (init.clientX && init.width) {
+      if (e.clientX === 0) return;
       var diff = init.clientX - e.clientX;
       var add = diff * 2;
       var addition = left ? add : -add;
       var cWidth = init.width + addition;
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
-      var w = findWidthPercentByPx(init.width, widthNow, cWidth);
+      var w = findWidthPercentByPx(init.width, widthNow, cWidth, (colNumber || 0) > 1);
       setWidth(w);
       onResize && onResize(cWidth, init.width);
     }
@@ -1018,8 +1021,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   var _onResize = function onResize(w) {
     var _a;
 
-    var containerWidth = (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
-    console.log('Width', w, containerWidth);
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
   };
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1043,7 +1045,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onResize: function onResize(w, init) {
         setCurrentColumn(column.id);
 
-        _onResize(w);
+        _onResize();
 
         var width = findWidthPercentByPx(init, column.width, w);
         var rest = column.width - width;

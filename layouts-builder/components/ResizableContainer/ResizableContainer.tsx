@@ -73,6 +73,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     onResizeStart(e);
 
     if (init.clientX && init.width) {
+      if (e.clientX === 0) return;
       const diff = init.clientX - e.clientX;
       const add = diff * 2;
       const addition = left ? add : -add;
@@ -84,10 +85,10 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
         init.width,
         widthNow as number,
         cWidth,
+        (colNumber || 0) > 1,
       );
 
       setWidth(w);
-
       onResize && onResize(cWidth, init.width);
     }
   };
@@ -100,7 +101,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       const diff = init.clientX - e.clientX;
       const add = diff * 2;
       const addition = left ? add : -add;
-
       const finalWidth = init.width + addition;
       setWidth(finalWidth);
       const grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
