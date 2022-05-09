@@ -373,6 +373,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     e.preventDefault();
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-item');
+    console.log('targetDom', targetDom);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
@@ -957,17 +958,21 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onFocusItem = _a.onFocusItem;
   var containerRef = React.useRef(null);
 
-  var _b = React.useState(),
-      currentColumn = _b[0],
-      setCurrentColumn = _b[1];
+  var _b = React.useState(false);
+      _b[0];
+      var setDragStart = _b[1];
 
-  var _c = React.useState(0),
-      addToWidth = _c[0],
-      setAddToWidth = _c[1];
+  var _c = React.useState(),
+      currentColumn = _c[0],
+      setCurrentColumn = _c[1];
 
-  var _d = React.useState(false),
-      isSectionDragged = _d[0],
-      setIsSectionDragged = _d[1];
+  var _d = React.useState(0),
+      addToWidth = _d[0],
+      setAddToWidth = _d[1];
+
+  var _e = React.useState(false),
+      isSectionDragged = _e[0],
+      setIsSectionDragged = _e[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -980,6 +985,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
     setIsSectionDragged(false);
+    setDragStart(true);
   }; //   // Drop item to create new column or setion or add item to column
 
 
@@ -1010,6 +1016,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       return;
     }
 
+    setDragStart(false);
     var newLayout = reorderLayout(layouts, source, destination, target, layoutTarget);
     setIsSectionDragged(false);
 

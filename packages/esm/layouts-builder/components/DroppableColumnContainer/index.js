@@ -21,6 +21,7 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     e.preventDefault();
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-item');
+    console.log('targetDom', targetDom);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);

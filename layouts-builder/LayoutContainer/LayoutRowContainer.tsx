@@ -53,6 +53,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   onFocusItem,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [dragStart, setDragStart] = useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [addToWidth, setAddToWidth] = useState<number>(0);
 
@@ -75,6 +76,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
     setIsSectionDragged(false);
+    setDragStart(true);
   };
 
   //   // Drop item to create new column or setion or add item to column
@@ -115,6 +117,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       // this is used to prevent drag resize to create new item
       return;
     }
+    setDragStart(false);
 
     const newLayout = reorderLayout(
       layouts,

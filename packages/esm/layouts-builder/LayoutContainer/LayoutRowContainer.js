@@ -22,17 +22,21 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onFocusItem = _a.onFocusItem;
   var containerRef = useRef(null);
 
-  var _b = useState(),
-      currentColumn = _b[0],
-      setCurrentColumn = _b[1];
+  var _b = useState(false);
+      _b[0];
+      var setDragStart = _b[1];
 
-  var _c = useState(0),
-      addToWidth = _c[0],
-      setAddToWidth = _c[1];
+  var _c = useState(),
+      currentColumn = _c[0],
+      setCurrentColumn = _c[1];
 
-  var _d = useState(false),
-      isSectionDragged = _d[0],
-      setIsSectionDragged = _d[1];
+  var _d = useState(0),
+      addToWidth = _d[0],
+      setAddToWidth = _d[1];
+
+  var _e = useState(false),
+      isSectionDragged = _e[0],
+      setIsSectionDragged = _e[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -45,6 +49,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
     setIsSectionDragged(false);
+    setDragStart(true);
   }; //   // Drop item to create new column or setion or add item to column
 
 
@@ -75,6 +80,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       return;
     }
 
+    setDragStart(false);
     var newLayout = reorderLayout(layouts, source, destination, target, layoutTarget);
     setIsSectionDragged(false);
 

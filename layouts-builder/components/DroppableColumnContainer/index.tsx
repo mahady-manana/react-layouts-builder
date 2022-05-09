@@ -40,6 +40,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
     e.preventDefault();
     const targetEl = e.currentTarget;
     const targetDom = targetEl.getAttribute('target-droppable-item');
+    console.log('targetDom', targetDom);
 
     if (targetDom && !isSection) {
       setDroppableTarget(targetDom);
