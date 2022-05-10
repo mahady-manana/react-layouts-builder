@@ -85,8 +85,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
           colIndex !== 0 &&
           colIndex !== colNumber - 1);
 
-      console.log('needX2', needX2);
-
       const add = needX2 ? diff * 2 : diff * 1;
       const addition = left ? add : -add;
       const cWidth = init.width + addition;
