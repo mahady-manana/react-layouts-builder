@@ -102,9 +102,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       margin: 'auto'
     },
     ref: containerRef
-  }, columns.map(function (column) {
+  }, columns.map(function (column, index) {
     return /*#__PURE__*/React.createElement(ResizableContainer, {
       isCol: true,
+      colIndex: index,
       key: column.id,
       resizable: true,
       colNumber: columns.length,
@@ -118,21 +119,20 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
         _onResize();
 
-        var width = findWidthPercentByPx(init, column.width, w);
-        var rest = column.width - width;
+        findWidthPercentByPx(init, column.width, w);
+        var rest = column.width - w;
         var add = rest / (columns.length - 1);
         setAddToWidth(function (prev) {
           return Math.abs((prev || 0) - add) > 5 ? prev : add;
         });
       },
-      onResizeColEnd: function onResizeColEnd(init, _final) {
+      onResizeColEnd: function onResizeColEnd(_init, _final) {
         setCurrentColumn(undefined);
-        var w = findWidthPercentByPx(init, column.width, _final);
         var newLayouts = changeColumnWidth(layouts, {
           sectionId: sectionId,
           rowId: rowId
         }, {
-          width: w,
+          width: _final,
           colId: column.id,
           init: column.width
         });

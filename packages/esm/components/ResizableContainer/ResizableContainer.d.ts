@@ -6,6 +6,7 @@ interface ResizableContainerProps {
     resizable?: boolean;
     styles?: CSSProperties;
     colNumber?: number;
+    colIndex?: number;
     type?: any;
     noPadding?: boolean;
     currentWidth?: number;

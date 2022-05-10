@@ -191,7 +191,8 @@ var ResizableContainer = function ResizableContainer(_a) {
   var isRow = _a.isRow,
       type = _a.type;
       _a.isCol;
-      var isSection = _a.isSection,
+      var colIndex = _a.colIndex,
+      isSection = _a.isSection,
       resizable = _a.resizable,
       styles = _a.styles,
       children = _a.children,
@@ -204,7 +205,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       onResizeEnd = _a.onResizeEnd,
       onClick = _a.onClick;
 
-  var _b = React.useState(),
+  var _b = React.useState(0),
       width = _b[0],
       setWidth = _b[1];
 
@@ -223,7 +224,8 @@ var ResizableContainer = function ResizableContainer(_a) {
     e.preventDefault();
     e.stopPropagation();
     if (init.clientX && init.width) return;
-    var columnWidth = (_a = columnRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
+    var columnWidth = (_a = columnRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth;
+    if (!columnWidth) return;
     setWidth(columnWidth);
     setInit({
       width: width || columnWidth || 0,
@@ -241,27 +243,24 @@ var ResizableContainer = function ResizableContainer(_a) {
     if (init.clientX && init.width) {
       if (e.clientX === 0) return;
       var diff = init.clientX - e.clientX;
-      var add = diff * 2;
+      var needX2 = colNumber === 1 || colNumber && colNumber > 2 && colIndex !== 0 && colIndex !== colNumber - 1;
+      console.log('needX2', needX2);
+      var add = needX2 ? diff * 2 : diff * 1;
       var addition = left ? add : -add;
       var cWidth = init.width + addition;
       var widthNow = ((_a = styles === null || styles === void 0 ? void 0 : styles.width) === null || _a === void 0 ? void 0 : _a.includes('%')) ? parseFloat((_b = styles === null || styles === void 0 ? void 0 : styles.width) === null || _b === void 0 ? void 0 : _b.replace('%', '')) : styles === null || styles === void 0 ? void 0 : styles.width;
       var w = findWidthPercentByPx(init.width, widthNow, cWidth, (colNumber || 0) > 1);
       setWidth(w);
-      onResize && onResize(cWidth, init.width);
+      onResize && onResize(w, init.width);
     }
   };
 
   var handleResizeEnd = function handleResizeEnd(e, left) {
     if (init.clientX && init.width) {
-      var diff = init.clientX - e.clientX;
-      var add = diff * 2;
-      var addition = left ? add : -add;
-      var finalWidth = init.width + addition;
-      setWidth(finalWidth);
       var grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
-      onResizeColEnd && onResizeColEnd(init.width, gridValue(grid, finalWidth));
-      onResize && onResize(finalWidth, init.width, true);
-      onResizeEnd && onResizeEnd(finalWidth);
+      onResizeColEnd && onResizeColEnd(init.width, gridValue(grid, width));
+      onResize && onResize(width, init.width, true);
+      onResizeEnd && onResizeEnd(width);
       setInit(function (prev) {
         return {
           width: prev.width,
@@ -301,7 +300,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, true);
     },
     onDragEnd: function onDragEnd(e) {
-      handleResizeEnd(e, true);
+      handleResizeEnd();
     },
     "data-resizable-type": type
   }) : null, children, resizable ? /*#__PURE__*/React__default["default"].createElement("div", {
@@ -311,7 +310,7 @@ var ResizableContainer = function ResizableContainer(_a) {
       return handleResize(e, false);
     },
     onDragEnd: function onDragEnd(e) {
-      handleResizeEnd(e, false);
+      handleResizeEnd();
     },
     "data-resizable-type": type
   }) : null));
@@ -1038,9 +1037,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       margin: 'auto'
     },
     ref: containerRef
-  }, columns.map(function (column) {
+  }, columns.map(function (column, index) {
     return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
       isCol: true,
+      colIndex: index,
       key: column.id,
       resizable: true,
       colNumber: columns.length,
@@ -1054,21 +1054,20 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
         _onResize();
 
-        var width = findWidthPercentByPx(init, column.width, w);
-        var rest = column.width - width;
+        findWidthPercentByPx(init, column.width, w);
+        var rest = column.width - w;
         var add = rest / (columns.length - 1);
         setAddToWidth(function (prev) {
           return Math.abs((prev || 0) - add) > 5 ? prev : add;
         });
       },
-      onResizeColEnd: function onResizeColEnd(init, _final) {
+      onResizeColEnd: function onResizeColEnd(_init, _final) {
         setCurrentColumn(undefined);
-        var w = findWidthPercentByPx(init, column.width, _final);
         var newLayouts = changeColumnWidth(layouts, {
           sectionId: sectionId,
           rowId: rowId
         }, {
-          width: w,
+          width: _final,
           colId: column.id,
           init: column.width
         });

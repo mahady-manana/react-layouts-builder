@@ -17,6 +17,7 @@ interface ResizableContainerProps {
   resizable?: boolean;
   styles?: CSSProperties;
   colNumber?: number;
+  colIndex?: number;
   type?: any;
   noPadding?: boolean;
   currentWidth?: number;
@@ -34,6 +35,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   isRow,
   type,
   isCol,
+  colIndex,
   isSection,
   resizable,
   styles,
@@ -47,7 +49,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   onResizeEnd,
   onClick,
 }) => {
-  const [width, setWidth] = useState<number>();
+  const [width, setWidth] = useState<number>(0);
   const [init, setInit] = useState({
     width: 0,
     clientX: 0,
@@ -58,8 +60,8 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     e.preventDefault();
     e.stopPropagation();
     if (init.clientX && init.width) return;
-    const columnWidth = columnRef.current?.clientWidth;
-
+    const columnWidth = columnRef.current?.offsetWidth;
+    if (!columnWidth) return;
     setWidth(columnWidth);
     setInit({ width: width || columnWidth || 0, clientX: e.clientX });
   };
@@ -75,12 +77,23 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     if (init.clientX && init.width) {
       if (e.clientX === 0) return;
       const diff = init.clientX - e.clientX;
-      const add = diff * 2;
+
+      const needX2 =
+        colNumber === 1 ||
+        (colNumber &&
+          colNumber > 2 &&
+          colIndex !== 0 &&
+          colIndex !== colNumber - 1);
+
+      console.log('needX2', needX2);
+
+      const add = needX2 ? diff * 2 : diff * 1;
       const addition = left ? add : -add;
       const cWidth = init.width + addition;
       const widthNow = (styles?.width as string)?.includes('%')
         ? parseFloat((styles?.width as string)?.replace('%', ''))
         : styles?.width;
+
       const w = findWidthPercentByPx(
         init.width,
         widthNow as number,
@@ -89,7 +102,7 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
       );
 
       setWidth(w);
-      onResize && onResize(cWidth, init.width);
+      onResize && onResize(w, init.width);
     }
   };
 
@@ -98,19 +111,11 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     left: boolean,
   ) => {
     if (init.clientX && init.width) {
-      const diff = init.clientX - e.clientX;
-      const add = diff * 2;
-      const addition = left ? add : -add;
-      const finalWidth = init.width + addition;
-      setWidth(finalWidth);
       const grid = colNumber && colNumber % 2 !== 0 ? 3 : 10;
       onResizeColEnd &&
-        onResizeColEnd(
-          init.width,
-          gridValue(grid, finalWidth) as number,
-        );
-      onResize && onResize(finalWidth, init.width, true);
-      onResizeEnd && onResizeEnd(finalWidth);
+        onResizeColEnd(init.width, gridValue(grid, width) as number);
+      onResize && onResize(width, init.width, true);
+      onResizeEnd && onResizeEnd(width);
       setInit((prev) => ({
         width: prev.width,
         clientX: 0,

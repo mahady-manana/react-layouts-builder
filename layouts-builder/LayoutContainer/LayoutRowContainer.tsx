@@ -143,10 +143,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       style={{ width: '100%', margin: 'auto' }}
       ref={containerRef}
     >
-      {columns.map((column) => {
+      {columns.map((column, index) => {
         return (
           <ResizableContainer
             isCol
+            colIndex={index}
             key={column.id}
             resizable={true}
             colNumber={columns.length}
@@ -166,27 +167,27 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                 column.width,
                 w,
               );
-              const rest = column.width - width;
+              const rest = column.width - w;
               const add = rest / (columns.length - 1);
 
               setAddToWidth((prev) =>
                 Math.abs((prev || 0) - add) > 5 ? prev : add,
               );
             }}
-            onResizeColEnd={(init, final) => {
+            onResizeColEnd={(_init, final) => {
               setCurrentColumn(undefined);
-              const w = findWidthPercentByPx(
-                init,
-                column.width,
-                final,
-              );
+
               const newLayouts = changeColumnWidth(
                 layouts,
                 {
                   sectionId: sectionId,
                   rowId: rowId,
                 },
-                { width: w, colId: column.id, init: column.width },
+                {
+                  width: final,
+                  colId: column.id,
+                  init: column.width,
+                },
               );
               setAddToWidth(0);
               setActualLayout(newLayouts);

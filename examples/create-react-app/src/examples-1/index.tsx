@@ -126,6 +126,29 @@ export const Layouts1 = () => {
       <button onClick={() => setDisableChange(!disableChange)}>
         Toggle Disable change t 000
       </button>
+      <div
+        style={{
+          display: "flex",
+          position: "relative",
+          left: 334,
+          width: "max-content"
+        }}
+      >
+        {Array.from(Array(10).keys()).map((index) => {
+          return (
+            <div
+              key={index}
+              style={{
+                width: 100,
+                background: `#000${index}`,
+                borderLeft: "1px solid"
+              }}
+            >
+              <span>{index}0 %</span>
+            </div>
+          )
+        })}
+      </div>
       <div>
         {loading ? (
           <div>loading...</div>
@@ -148,10 +171,17 @@ export const Layouts1 = () => {
                       // background: data.bg
                     }
                   }
-                >{
-                  data.img ? <img src={data.img} alt='' width="400" style={{width: "100%"}}/>
-                 : <p>Data : {data.text}</p>
-                }
+                >
+                  {data.img ? (
+                    <img
+                      src={data.img}
+                      alt=""
+                      width="400"
+                      style={{ width: "100%" }}
+                    />
+                  ) : (
+                    <p>Data : {data.text}</p>
+                  )}
                 </div>
               )
             }}
