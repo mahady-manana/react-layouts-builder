@@ -79,7 +79,7 @@
     width: 95%;
     margin: auto;
     position: absolute;
-    z-index: 500;
+    
 }
 .rlb-droppable-section.top {
     top: -5px;
@@ -97,6 +97,7 @@
     text-align: center;
     margin-top: 8px;
     margin-bottom: 8px;
+    z-index: 500;
 }
 .rlb-droppable-section.top.hover {
     box-shadow: 0px -2px 0px 0 #fff;

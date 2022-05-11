@@ -1,35 +1,23 @@
 import React, { FC, ReactNode, DragEvent, useState } from 'react';
 import { DropTargetPlaceEnum } from '../../interface/internalType';
-import { IRenderableLayout } from 'layouts-builder/interface/renderableInterface';
 import classNames from 'classnames';
-import { ResizableContainer } from '../ResizableContainer/ResizableContainer';
 
 interface DraggableProps {
-  section: IRenderableLayout;
   index: number;
   children: ReactNode;
   dndTargetKey?: string;
   disableChange?: boolean;
-  width?: number;
-  maxWidth: number;
-  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
     target: DropTargetPlaceEnum,
   ) => void;
-  onResize?: (width: number) => void;
 }
 export const DroppableRow: FC<DraggableProps> = ({
   children,
   index,
   dndTargetKey,
-  section,
   disableChange,
-  width,
-  maxWidth,
-  onResize,
   onDropItem,
-  onDragStart,
 }) => {
   const [droppableTarget, setDroppableTarget] = useState<string>();
 

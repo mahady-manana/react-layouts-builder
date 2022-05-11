@@ -4,18 +4,15 @@ import React, {
   FC,
   ReactNode,
   SetStateAction,
-  useEffect,
   useRef,
   useState,
 } from 'react';
 import {
   DraggableItem,
   DroppableColumnItem,
-  DroppableSection,
   DroppableColumnContainer,
 } from '../components';
-import { createRenderableLayout } from '../helpers/createRendrableLayout';
-import { ILayoutContainer, ILayoutSection } from '../interface';
+import { ILayoutSection } from '../interface';
 import {
   DestinationType,
   DropTargetPlaceEnum,

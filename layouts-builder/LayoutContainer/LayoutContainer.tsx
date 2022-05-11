@@ -161,7 +161,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
           const isPublic = disableChange ? false : section.container;
           return (
             <DroppableSection
-              index={index}
               key={section.id}
               section={section}
               width={section.width as number}
@@ -187,9 +186,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                     disableChange={row.isContainer || disableChange}
                     index={rowIndex}
                     key={row.id}
-                    section={section}
-                    maxWidth={section.width as any}
-                    width={row.width as any}
                     dndTargetKey={row.id}
                     onDropItem={(e, target) =>
                       handleDropItem(
@@ -201,12 +197,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                         undefined,
                         ILayoutTargetEnum.ROW,
                       )
-                    }
-                    onDragStart={(e) => {
-                      handleDragSectionStart(e, section.id);
-                    }}
-                    onResize={(width) =>
-                      handleResizeRow(width, section.id, row.id)
                     }
                   >
                     <LayoutRowContainer

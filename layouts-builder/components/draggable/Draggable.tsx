@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { DefaultDragIcon } from 'layouts-builder/icons';
 import React, { FC, ReactNode, DragEvent } from 'react';
 
 interface DraggableProps {

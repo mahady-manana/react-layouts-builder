@@ -1,27 +1,10 @@
-import { useClickAway } from 'react-use';
-// import { RgbaColorPicker } from 'react-colorful';
-import { DefaultDragIcon } from 'layouts-builder/icons';
-import React, {
-  FC,
-  ReactNode,
-  DragEvent,
-  useState,
-  SyntheticEvent,
-  useRef,
-} from 'react';
-import {
-  DropTargetPlaceEnum,
-  // Rgba,
-} from '../../interface/internalType';
-// import ColorPicker from '../colorPicker';
-// import { hexToRGBA } from 'layouts-builder/helpers/colorHelper';
+import React, { FC, ReactNode, DragEvent } from 'react';
 import { IRenderableLayout } from 'layouts-builder/interface/renderableInterface';
 import classNames from 'classnames';
 import { ResizableContainer } from '../ResizableContainer/ResizableContainer';
 
 interface DraggableProps {
   section: IRenderableLayout;
-  index: number;
   children: ReactNode;
   resizable?: boolean;
   width?: number;
