@@ -13,6 +13,7 @@ interface LayoutRowContainerProps {
     setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
     renderComponent: (item: any, source: SourceType) => ReactNode;
     onFocusItem?: (source: SourceType) => void;
+    onLayoutChange: (layouts: ILayoutSection[]) => void;
 }
 export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
 export {};

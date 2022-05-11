@@ -8,7 +8,6 @@ import { DroppableColumnContainer } from '../components/DroppableColumnContainer
 import { ILayoutTargetEnum } from '../interface/internalType.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
-import { findWidthPercentByPx } from '../helpers/findWidth.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
@@ -19,7 +18,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       setActualLayout = _a.setActualLayout,
       renderComponent = _a.renderComponent,
-      onFocusItem = _a.onFocusItem;
+      onFocusItem = _a.onFocusItem,
+      onLayoutChange = _a.onLayoutChange;
   var containerRef = useRef(null);
 
   var _b = useState(false);
@@ -86,13 +86,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
-  };
-
-  var _onResize = function onResize(w) {
-    var _a;
-
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
   };
 
   return /*#__PURE__*/React.createElement("div", {
@@ -116,10 +111,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       currentWidth: Math.round(column.width),
       onResize: function onResize(w, init) {
         setCurrentColumn(column.id);
-
-        _onResize();
-
-        findWidthPercentByPx(init, column.width, w);
         var rest = column.width - w;
         var add = rest / (columns.length - 1);
         setAddToWidth(function (prev) {
@@ -137,7 +128,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           init: column.width
         });
         setAddToWidth(0);
-        setActualLayout(newLayouts); // handleFinishResize(w, column.id);
+        setActualLayout(newLayouts);
+        onLayoutChange(newLayouts); // handleFinishResize(w, column.id);
       }
     }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
       key: column.id,

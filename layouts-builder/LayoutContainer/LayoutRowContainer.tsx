@@ -36,6 +36,7 @@ interface LayoutRowContainerProps {
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
   onFocusItem?: (source: SourceType) => void;
+  onLayoutChange: (layouts: ILayoutSection[]) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -48,6 +49,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   setActualLayout,
   renderComponent,
   onFocusItem,
+  onLayoutChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dragStart, setDragStart] = useState<boolean>(false);
@@ -127,11 +129,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setIsSectionDragged(false);
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
-  };
-
-  const onResize = (w: number) => {
-    const containerWidth = containerRef.current?.clientWidth;
   };
 
   return (
@@ -158,12 +157,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             currentWidth={Math.round(column.width)}
             onResize={(w, init) => {
               setCurrentColumn(column.id);
-              onResize(w);
-              const width = findWidthPercentByPx(
-                init,
-                column.width,
-                w,
-              );
+
               const rest = column.width - w;
               const add = rest / (columns.length - 1);
 
@@ -188,6 +182,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               );
               setAddToWidth(0);
               setActualLayout(newLayouts);
+              onLayoutChange(newLayouts);
               // handleFinishResize(w, column.id);
             }}
           >

@@ -933,7 +933,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       setActualLayout = _a.setActualLayout,
       renderComponent = _a.renderComponent,
-      onFocusItem = _a.onFocusItem;
+      onFocusItem = _a.onFocusItem,
+      onLayoutChange = _a.onLayoutChange;
   var containerRef = React.useRef(null);
 
   var _b = React.useState(false);
@@ -1000,13 +1001,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
-  };
-
-  var _onResize = function onResize(w) {
-    var _a;
-
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.clientWidth;
   };
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1030,10 +1026,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       currentWidth: Math.round(column.width),
       onResize: function onResize(w, init) {
         setCurrentColumn(column.id);
-
-        _onResize();
-
-        findWidthPercentByPx(init, column.width, w);
         var rest = column.width - w;
         var add = rest / (columns.length - 1);
         setAddToWidth(function (prev) {
@@ -1051,7 +1043,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           init: column.width
         });
         setAddToWidth(0);
-        setActualLayout(newLayouts); // handleFinishResize(w, column.id);
+        setActualLayout(newLayouts);
+        onLayoutChange(newLayouts); // handleFinishResize(w, column.id);
       }
     }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
       key: column.id,
@@ -1115,13 +1108,13 @@ var LayoutContainer = function LayoutContainer(_a) {
       var staticComponent = _a.staticComponent;
   var containeRef = React.useRef(null);
 
-  var _b = React.useState([]),
-      actualLayout = _b[0],
-      setActualLayout = _b[1];
+  var _b = React.useState(false),
+      runChange = _b[0],
+      setRunChange = _b[1];
 
-  var _c = React.useState(false);
-      _c[0];
-      var setIsSectionDragged = _c[1];
+  var _c = React.useState([]),
+      actualLayout = _c[0],
+      setActualLayout = _c[1];
 
   var _d = React.useState([]),
       renderableLayout = _d[0],
@@ -1137,12 +1130,14 @@ var LayoutContainer = function LayoutContainer(_a) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
       setRenderableLayout(renderable);
     }
-  }, [actualLayout, data]);
+  }, [actualLayout, data]); // run layout update
+
   React.useEffect(function () {
-    if (actualLayout.length > 0) {
+    if (runChange) {
       onLayoutChange(actualLayout);
+      setRunChange(false);
     }
-  }, [actualLayout]); // Drop item to create new column or setion or add item to column
+  }, [runChange]); // Drop item to create new column or setion or add item to column
 
   var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
@@ -1172,10 +1167,10 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
 
     var newLayout = reorderLayout(actualLayout, source, destination, target, layoutTarget);
-    setIsSectionDragged(false);
 
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
   };
 
@@ -1183,14 +1178,14 @@ var LayoutContainer = function LayoutContainer(_a) {
     e.stopPropagation();
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('isSection', 'section');
-    setIsSectionDragged(true);
-  }; // Resize row
+  };
 
   var handleResizeSection = function handleResizeSection(currentWidth, sectionId) {
     var newLayouts = changeSectionStyles(actualLayout, sectionId, {
       width: currentWidth
     });
     setActualLayout(newLayouts);
+    onLayoutChange(newLayouts);
   };
 
   if (staticComponent) {
@@ -1243,7 +1238,8 @@ var LayoutContainer = function LayoutContainer(_a) {
         rowId: row.id,
         disabled: disableChange,
         renderComponent: renderComponent,
-        setActualLayout: setActualLayout
+        setActualLayout: setActualLayout,
+        onLayoutChange: onLayoutChange
       }));
     }));
   })));

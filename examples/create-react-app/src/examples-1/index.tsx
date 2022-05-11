@@ -27,7 +27,9 @@ export const Layouts1 = () => {
   const [focusItem, setFocusItem] = useState<any>()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
     storage.set(layouts)
-    // setLayoutTest(layouts)
+    console.log(layouts)
+
+    setLayoutTest(layouts)
   }
   useEffect(() => {
     const l = storage.get()

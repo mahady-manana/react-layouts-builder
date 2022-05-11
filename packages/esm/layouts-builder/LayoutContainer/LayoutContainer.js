@@ -20,13 +20,13 @@ var LayoutContainer = function LayoutContainer(_a) {
       var staticComponent = _a.staticComponent;
   var containeRef = useRef(null);
 
-  var _b = useState([]),
-      actualLayout = _b[0],
-      setActualLayout = _b[1];
+  var _b = useState(false),
+      runChange = _b[0],
+      setRunChange = _b[1];
 
-  var _c = useState(false);
-      _c[0];
-      var setIsSectionDragged = _c[1];
+  var _c = useState([]),
+      actualLayout = _c[0],
+      setActualLayout = _c[1];
 
   var _d = useState([]),
       renderableLayout = _d[0],
@@ -42,12 +42,14 @@ var LayoutContainer = function LayoutContainer(_a) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
       setRenderableLayout(renderable);
     }
-  }, [actualLayout, data]);
+  }, [actualLayout, data]); // run layout update
+
   useEffect(function () {
-    if (actualLayout.length > 0) {
+    if (runChange) {
       onLayoutChange(actualLayout);
+      setRunChange(false);
     }
-  }, [actualLayout]); // Drop item to create new column or setion or add item to column
+  }, [runChange]); // Drop item to create new column or setion or add item to column
 
   var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
@@ -77,10 +79,10 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
 
     var newLayout = reorderLayout(actualLayout, source, destination, target, layoutTarget);
-    setIsSectionDragged(false);
 
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
   };
 
@@ -88,14 +90,14 @@ var LayoutContainer = function LayoutContainer(_a) {
     e.stopPropagation();
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('isSection', 'section');
-    setIsSectionDragged(true);
-  }; // Resize row
+  };
 
   var handleResizeSection = function handleResizeSection(currentWidth, sectionId) {
     var newLayouts = changeSectionStyles(actualLayout, sectionId, {
       width: currentWidth
     });
     setActualLayout(newLayouts);
+    onLayoutChange(newLayouts);
   };
 
   if (staticComponent) {
@@ -148,7 +150,8 @@ var LayoutContainer = function LayoutContainer(_a) {
         rowId: row.id,
         disabled: disableChange,
         renderComponent: renderComponent,
-        setActualLayout: setActualLayout
+        setActualLayout: setActualLayout,
+        onLayoutChange: onLayoutChange
       }));
     }));
   })));

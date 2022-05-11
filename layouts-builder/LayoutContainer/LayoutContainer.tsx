@@ -34,11 +34,11 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   staticComponent,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
+  const [runChange, setRunChange] = useState<boolean>(false);
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
     [],
   );
-  const [isSectionDragged, setIsSectionDragged] =
-    useState<boolean>(false);
+
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
@@ -61,11 +61,13 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     }
   }, [actualLayout, data]);
 
+  // run layout update
   useEffect(() => {
-    if (actualLayout.length > 0) {
+    if (runChange) {
       onLayoutChange(actualLayout);
+      setRunChange(false);
     }
-  }, [actualLayout]);
+  }, [runChange]);
 
   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
@@ -114,9 +116,9 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       layoutTarget,
     );
 
-    setIsSectionDragged(false);
     if (newLayout) {
       setActualLayout(newLayout);
+      onLayoutChange(newLayout);
     }
   };
 
@@ -127,22 +129,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     e.stopPropagation();
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('isSection', 'section');
-    setIsSectionDragged(true);
-  };
-
-  // Resize row
-
-  const handleResizeRow = (
-    currentWidth: number,
-    sectionId: any,
-    rowId: any,
-  ) => {
-    const newLayouts = changeRowWidth(actualLayout, {
-      rowId,
-      sectionId,
-      width: currentWidth,
-    });
-    setActualLayout(newLayouts);
   };
 
   const handleResizeSection = (
@@ -153,6 +139,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       width: currentWidth,
     });
     setActualLayout(newLayouts);
+    onLayoutChange(newLayouts);
   };
 
   if (staticComponent) {
@@ -218,6 +205,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       disabled={disableChange}
                       renderComponent={renderComponent}
                       setActualLayout={setActualLayout}
+                      onLayoutChange={onLayoutChange}
                     />
                   </DroppableRow>
                 );
