@@ -469,14 +469,9 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
 var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
-      dndTargetKey = _a.dndTargetKey;
-      _a.section;
-      var disableChange = _a.disableChange;
-      _a.width;
-      _a.maxWidth;
-      _a.onResize;
-      var onDropItem = _a.onDropItem;
-      _a.onDragStart;
+      dndTargetKey = _a.dndTargetKey,
+      disableChange = _a.disableChange,
+      onDropItem = _a.onDropItem;
 
   var _b = React.useState(),
       droppableTarget = _b[0],
@@ -881,20 +876,6 @@ var reorderLayout = function reorderLayout(layouts, source, dest, place, target)
   return layouts;
 };
 
-var changeRowWidth = function changeRowWidth(layouts, inputs) {
-  return layouts.map(function (section) {
-    if (section.id !== inputs.sectionId) return section;
-    return __assign(__assign({}, section), {
-      rows: section.rows.map(function (row) {
-        if (row.id !== inputs.rowId) return row;
-        return __assign(__assign({}, row), {
-          width: inputs.width
-        });
-      })
-    });
-  });
-};
-
 var changeSectionStyles = function changeSectionStyles(currentLayouts, sectionId, styles) {
   return currentLayouts.map(function (section) {
     if (section.id !== sectionId) return section;
@@ -1131,6 +1112,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       disableChange = _a.disableChange,
       _onClickSection = _a.onClickSection;
       _a.onFocusItem;
+      var staticComponent = _a.staticComponent;
   var containeRef = React.useRef(null);
 
   var _b = React.useState([]),
@@ -1204,22 +1186,18 @@ var LayoutContainer = function LayoutContainer(_a) {
     setIsSectionDragged(true);
   }; // Resize row
 
-
-  var handleResizeRow = function handleResizeRow(currentWidth, sectionId, rowId) {
-    var newLayouts = changeRowWidth(actualLayout, {
-      rowId: rowId,
-      sectionId: sectionId,
-      width: currentWidth
-    });
-    setActualLayout(newLayouts);
-  };
-
   var handleResizeSection = function handleResizeSection(currentWidth, sectionId) {
     var newLayouts = changeSectionStyles(actualLayout, sectionId, {
       width: currentWidth
     });
     setActualLayout(newLayouts);
   };
+
+  if (staticComponent) {
+    return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, data.map(function (item, index) {
+      return renderComponent(item, {}, index);
+    }));
+  }
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "m-auto"
@@ -1229,7 +1207,6 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, renderableLayout.map(function (section, index) {
     var isPublic = disableChange ? false : section.container;
     return /*#__PURE__*/React__default["default"].createElement(DroppableSection, {
-      index: index,
       key: section.id,
       section: section,
       width: section.width,
@@ -1254,18 +1231,9 @@ var LayoutContainer = function LayoutContainer(_a) {
         disableChange: row.isContainer || disableChange,
         index: rowIndex,
         key: row.id,
-        section: section,
-        maxWidth: section.width,
-        width: row.width,
         dndTargetKey: row.id,
         onDropItem: function onDropItem(e, target) {
           return handleDropItem(e, target, section.id, '', row.id, undefined, exports.ILayoutTargetEnum.ROW);
-        },
-        onDragStart: function onDragStart(e) {
-          handleDragSectionStart(e, section.id);
-        },
-        onResize: function onResize(width) {
-          return handleResizeRow(width, section.id, row.id);
         }
       }, /*#__PURE__*/React__default["default"].createElement(LayoutRowContainer, {
         stableKey: stableKey,

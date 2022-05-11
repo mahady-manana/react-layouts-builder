@@ -5,14 +5,9 @@ import classnames from '../../../node_modules/classnames/index.js';
 var DroppableRow = function DroppableRow(_a) {
   var children = _a.children,
       index = _a.index,
-      dndTargetKey = _a.dndTargetKey;
-      _a.section;
-      var disableChange = _a.disableChange;
-      _a.width;
-      _a.maxWidth;
-      _a.onResize;
-      var onDropItem = _a.onDropItem;
-      _a.onDragStart;
+      dndTargetKey = _a.dndTargetKey,
+      disableChange = _a.disableChange,
+      onDropItem = _a.onDropItem;
 
   var _b = useState(),
       droppableTarget = _b[0],

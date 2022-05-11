@@ -31,6 +31,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   disableChange,
   onClickSection,
   onFocusItem,
+  staticComponent,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
@@ -154,6 +155,15 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     setActualLayout(newLayouts);
   };
 
+  if (staticComponent) {
+    return (
+      <>
+        {data.map((item, index) => {
+          return renderComponent(item, {} as any, index);
+        })}
+      </>
+    );
+  }
   return (
     <div className="m-auto">
       <div className="min-h-[100px] " ref={containeRef}>

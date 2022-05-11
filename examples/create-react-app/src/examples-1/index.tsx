@@ -22,6 +22,7 @@ export const Layouts1 = () => {
   const [nodata, setnodata] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [clickSection, setclickSection] = useState<ILayoutSection>()
+  const [staticss, setStaticss] = useState<boolean>(false)
   const [disableChange, setDisableChange] = useState<boolean>(false)
   const [focusItem, setFocusItem] = useState<any>()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
@@ -126,6 +127,9 @@ export const Layouts1 = () => {
       <button onClick={() => setDisableChange(!disableChange)}>
         Toggle Disable change t 000
       </button>
+      <button onClick={() => setStaticss((prev) => !prev)}>
+        Toggle static
+      </button>
       <div
         style={{
           display: "flex",
@@ -158,6 +162,7 @@ export const Layouts1 = () => {
             disableChange={disableChange}
             stableDataKey="id"
             layouts={layoutTest}
+            staticComponent={staticss}
             onLayoutChange={handleLayoutChange}
             onClickSection={(section) => setclickSection(section)}
             onFocusItem={onFocus}
