@@ -189,7 +189,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   };
   const onMouseDown = (clientX: number, width: number) => {
-    // console.log("DOWN", clientX, width);
+  
     setInitClientX(clientX);
     setInitWidth(width);
     setResizeBegin(true);

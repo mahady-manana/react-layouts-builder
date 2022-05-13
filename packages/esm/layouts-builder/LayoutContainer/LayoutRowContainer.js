@@ -156,7 +156,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var _onMouseDown = function onMouseDown(clientX, width) {
-    // console.log("DOWN", clientX, width);
     setInitClientX(clientX);
     setInitWidth(width);
     setResizeBegin(true);

@@ -69,7 +69,6 @@ var DraggableItem = function DraggableItem(_a) {
       var w = diff / percentPX;
       var dir = direction === 'left' ? w : -w;
       var isOneCol = oneCol ? dir * 2 : dir;
-      console.log(width);
 
       var _final = initWidth + isOneCol;
 

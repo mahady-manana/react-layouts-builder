@@ -70,7 +70,6 @@ export const DraggableItem: FC<DraggableProps> = ({
       const dir = direction === 'left' ? w : -w;
       const isOneCol = oneCol ? dir * 2 : dir;
 
-      console.log(width);
 
       const final = initWidth + isOneCol
 

@@ -137,7 +137,6 @@ var DraggableItem = function DraggableItem(_a) {
       var w = diff / percentPX;
       var dir = direction === 'left' ? w : -w;
       var isOneCol = oneCol ? dir * 2 : dir;
-      console.log(width);
 
       var _final = initWidth + isOneCol;
 
@@ -1143,7 +1142,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var _onMouseDown = function onMouseDown(clientX, width) {
-    // console.log("DOWN", clientX, width);
     setInitClientX(clientX);
     setInitWidth(width);
     setResizeBegin(true);
