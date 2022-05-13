@@ -4,14 +4,16 @@ export const mockData = [
     text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1",
     group: "first",
     bg: "#4b00ff",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg"
+    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
+    size: 50
   },
   {
     id: 2,
     text: "bloalbl 2",
     group: "second",
     bg: "#f10",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg"
+    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
+    size: 80
   },
   {
     id: 3,

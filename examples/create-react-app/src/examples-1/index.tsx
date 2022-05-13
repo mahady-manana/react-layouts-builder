@@ -124,6 +124,9 @@ export const Layouts1 = () => {
     setData((prev) => prev.concat(newitems))
   }
 
+  const imageCheckerFn = (items: any) => {
+    return items.img ? true : false
+  }
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -168,6 +171,9 @@ export const Layouts1 = () => {
             onLayoutChange={handleLayoutChange}
             onClickSection={(section) => setclickSection(section)}
             onFocusItem={onFocus}
+            imageCheckerFn={imageCheckerFn}
+            imageSizeFnLoader={(item) => item.size}
+            onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
               return (
                 <div

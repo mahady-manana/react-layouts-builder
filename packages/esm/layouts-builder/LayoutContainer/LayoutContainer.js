@@ -14,9 +14,12 @@ var LayoutContainer = function LayoutContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
+      imageSizeFnLoader = _a.imageSizeFnLoader,
       disableChange = _a.disableChange,
       _onClickSection = _a.onClickSection,
-      staticComponent = _a.staticComponent;
+      staticComponent = _a.staticComponent,
+      imageCheckerFn = _a.imageCheckerFn,
+      onImageResizeFinished = _a.onImageResizeFinished;
   var containeRef = useRef(null);
 
   var _b = useState(false),
@@ -150,7 +153,10 @@ var LayoutContainer = function LayoutContainer(_a) {
         disabled: disableChange,
         renderComponent: renderComponent,
         setActualLayout: setActualLayout,
-        onLayoutChange: onLayoutChange
+        onLayoutChange: onLayoutChange,
+        imageCheckerFn: imageCheckerFn,
+        imageSizeFnLoader: imageSizeFnLoader,
+        onImageResizeFinished: onImageResizeFinished
       }));
     }));
   })));

@@ -28,9 +28,12 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   onLayoutChange,
   stableDataKey: stableKey,
   layouts,
+  imageSizeFnLoader,
   disableChange,
   onClickSection,
   staticComponent,
+  imageCheckerFn,
+  onImageResizeFinished
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [runChange, setRunChange] = useState<boolean>(false);
@@ -209,6 +212,9 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       renderComponent={renderComponent}
                       setActualLayout={setActualLayout}
                       onLayoutChange={onLayoutChange}
+                      imageCheckerFn={imageCheckerFn}
+                      imageSizeFnLoader={imageSizeFnLoader}
+                      onImageResizeFinished={onImageResizeFinished}
                     />
                   </DroppableRow>
                 );

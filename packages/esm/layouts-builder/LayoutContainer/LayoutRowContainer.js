@@ -17,10 +17,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       layouts = _a.layouts,
       sectionId = _a.sectionId,
       rowId = _a.rowId,
+      imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
       renderComponent = _a.renderComponent,
-      onFocusItem = _a.onFocusItem,
-      onLayoutChange = _a.onLayoutChange;
+      imageCheckerFn = _a.imageCheckerFn,
+      onLayoutChange = _a.onLayoutChange,
+      _onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
 
   var _b = useState(false);
@@ -255,6 +257,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       className: "rlb-col-inner"
     }, column.items.map(function (items, index) {
       if (!items) return null;
+      var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
       return /*#__PURE__*/React.createElement(DroppableColumnItem, {
         disableChange: disabled,
         isSection: isSectionDragged,
@@ -264,19 +267,16 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           return handleDropItem(e, target, sectionId, column.id, rowId, items[stableKey], ILayoutTargetEnum.ITEM);
         }
       }, /*#__PURE__*/React.createElement(DraggableItem, {
+        isImage: isImage,
         disableChange: disabled || items['id'] === 'EMPTY_SECTION',
+        imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
+        oneCol: columns.length === 1,
         dndTargetKey: items[stableKey],
+        onImageResizeFinished: function onImageResizeFinished(w) {
+          return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
+        },
         onDragStart: function onDragStart(e) {
           handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
-        },
-        onClick: function onClick() {
-          onFocusItem && onFocusItem({
-            sectionId: sectionId,
-            columnId: column.id,
-            itemKey: items[stableKey],
-            rowId: rowId,
-            isSection: false
-          });
         }
       }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
         columnId: column.id,

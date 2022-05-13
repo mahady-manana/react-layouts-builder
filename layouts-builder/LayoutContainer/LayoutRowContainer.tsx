@@ -37,10 +37,13 @@ interface LayoutRowContainerProps {
   layouts: ILayoutSection[];
   sectionId: string;
   rowId: string;
+  imageSizeFnLoader?: (items: any) => number | undefined;
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
   onFocusItem?: (source: SourceType) => void;
   onLayoutChange: (layouts: ILayoutSection[]) => void;
+  imageCheckerFn?: (items: boolean) => boolean;
+  onImageResizeFinished?: (items: any, width: number) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -50,10 +53,12 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   layouts,
   sectionId,
   rowId,
+  imageSizeFnLoader,
   setActualLayout,
   renderComponent,
-  onFocusItem,
+  imageCheckerFn,
   onLayoutChange,
+  onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dragStart, setDragStart] = useState<boolean>(false);
@@ -66,7 +71,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [initWidth, setInitWidth] = useState<number>();
   const [newWidth, setNewWidth] = useState<number>();
   const [nextWidth, setNextWidth] = useState<number>();
-  const [waitBeforeUpdate, setWaitBeforeUpdate] = useState<number>(500)
+  const [waitBeforeUpdate, setWaitBeforeUpdate] =
+    useState<number>(500);
 
   const [isSectionDragged, setIsSectionDragged] =
     useState<boolean>(false);
@@ -164,18 +170,18 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
       const old = columns[indexCol].width;
       const oldNext = columns[indexCol + 1].width;
-     
-      const rest = oldNext + (old - w)
+
+      const rest = oldNext + (old - w);
       const newWidths = widths.map((wd, index) => {
         if (index === indexCol) return w;
         if (index === indexCol + 1) {
           setNextWidth(rest);
 
-          return rest
+          return rest;
         }
         return wd;
       });
-      setWaitBeforeUpdate(500)
+      setWaitBeforeUpdate(500);
       setNewWidth(w);
       setTimeout(() => {
         setWidths(newWidths);
@@ -192,21 +198,17 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   useEffect(() => {
     if (waitBeforeUpdate > 10) {
       const timer = setTimeout(() => {
-        setWaitBeforeUpdate(prev => prev - 10)
-        
+        setWaitBeforeUpdate((prev) => prev - 10);
       }, 250);
-      clearTimeout(timer)
-      
+      clearTimeout(timer);
     }
     if (waitBeforeUpdate < 10) {
-      runIt()
+      runIt();
     }
-  }, [waitBeforeUpdate])
-  
+  }, [waitBeforeUpdate]);
+
   const runIt = () => {
-    
     if (nextWidth && newWidth) {
-   
       const newLayouts = changeColumnWidth(
         layouts,
         {
@@ -219,7 +221,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
           width: newWidth,
         },
       );
-      
+
       setActualLayout(newLayouts);
       onLayoutChange(newLayouts);
       setNextWidth(0);
@@ -228,13 +230,13 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   };
 
   const onMouseUp = (e: MouseEvent<HTMLElement>) => {
-    runIt()
+    runIt();
     setResizeBegin(false);
     setInitClientX(0);
     setInitWidth(0);
   };
   const onMousLeave = (e: MouseEvent<HTMLElement>) => {
-    runIt()
+    runIt();
     setResizeBegin(false);
     setInitClientX(0);
     setInitWidth(0);
@@ -246,7 +248,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   }, [columns]);
 
-  
   return (
     <div
       className={classNames(
@@ -262,7 +263,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       {columns.map((column, index) => {
         return (
           <ResizableContainer
-          width={`calc(${widths[index]}% - ${
+            width={`calc(${widths[index]}% - ${
               40 / columns.length
             }px)`}
             key={column.id}
@@ -276,7 +277,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               onMouseDown(clientX, width);
             }}
             type="column"
-          
           >
             <DroppableColumnContainer
               key={column.id}
@@ -305,7 +305,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               <div key={column.id} className={`rlb-col-inner`}>
                 {column.items.map((items, index) => {
                   if (!items) return null;
-
+                  const isImage = imageCheckerFn
+                    ? imageCheckerFn(items)
+                    : false;
                   return (
                     <DroppableColumnItem
                       disableChange={disabled}
@@ -325,10 +327,22 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                       }
                     >
                       <DraggableItem
+                        isImage={isImage}
                         disableChange={
                           disabled || items['id'] === 'EMPTY_SECTION'
                         }
+                        imageWidth={
+                          imageSizeFnLoader
+                            ? imageSizeFnLoader(items)
+                            : undefined
+                        }
+                        oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
+                        onImageResizeFinished={(w) =>
+                          onImageResizeFinished
+                            ? onImageResizeFinished(items, w)
+                            : undefined
+                        }
                         onDragStart={(e) => {
                           handleDragStart(
                             e,
@@ -337,16 +351,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             rowId,
                             items[stableKey],
                           );
-                        }}
-                        onClick={() => {
-                          onFocusItem &&
-                            onFocusItem({
-                              sectionId: sectionId,
-                              columnId: column.id,
-                              itemKey: items[stableKey],
-                              rowId: rowId,
-                              isSection: false,
-                            });
                         }}
                       >
                         {items['id'] === 'EMPTY_SECTION' &&
