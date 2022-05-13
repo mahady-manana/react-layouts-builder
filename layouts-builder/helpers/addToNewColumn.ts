@@ -5,7 +5,7 @@ import {
 import {
   SourceType,
   DestinationType,
-  DropTargetPlaceEnum,
+  TargetPlaceEnum,
 } from 'layouts-builder/interface/internalType';
 import { createNewColumn } from './createNewColumn';
 import { keepRowFullWidth } from './keepRowFullWidth';
@@ -15,7 +15,7 @@ const addToNewColumn = (
   targetColumn: ILayoutColumn[],
   targetColumnId: string,
   sourceItemKey: string,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
 ) => {
   const newCols = targetColumn.reduce((acc, next) => {
     const width = 100 / (targetColumn.length + 1);
@@ -37,7 +37,7 @@ const addToNewColumn = (
       width: width,
     };
     const reorder =
-      place === DropTargetPlaceEnum.LEFT
+      place === TargetPlaceEnum.LEFT
         ? [newColAdjustWidth, current]
         : [current, newColAdjustWidth];
     return acc.concat(reorder);
@@ -52,7 +52,7 @@ const addToColmunElement = (
   sourceColumnId: any,
   sourceItemKey: string,
   targetItemKey: any,
-  targetPlace: DropTargetPlaceEnum,
+  targetPlace: TargetPlaceEnum,
 ) => {
   const newColumns = targetColumn.map((col) => {
     if (col.id !== targetColumnId) {
@@ -68,10 +68,10 @@ const addToColmunElement = (
       .reduce((acc, next) => {
         if (next === targetItemKey) {
           switch (targetPlace) {
-            case DropTargetPlaceEnum.TOP:
+            case TargetPlaceEnum.TOP:
               return acc.concat([sourceItemKey, next]);
 
-            case DropTargetPlaceEnum.BOTTOM:
+            case TargetPlaceEnum.BOTTOM:
               return acc.concat([next, sourceItemKey]);
 
             default:
@@ -96,25 +96,25 @@ export const addItemToColumn = (
   column: ILayoutColumn[],
   source: SourceType,
   dest: DestinationType,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
 ) => {
   switch (place) {
-    case DropTargetPlaceEnum.LEFT:
+    case TargetPlaceEnum.LEFT:
       return addToNewColumn(
         column,
         dest.columnId,
         source.itemKey,
-        DropTargetPlaceEnum.LEFT,
+        TargetPlaceEnum.LEFT,
       );
 
-    case DropTargetPlaceEnum.RIGHT:
+    case TargetPlaceEnum.RIGHT:
       return addToNewColumn(
         column,
         dest.columnId,
         source.itemKey,
-        DropTargetPlaceEnum.RIGHT,
+        TargetPlaceEnum.RIGHT,
       );
-    case DropTargetPlaceEnum.TOP:
+    case TargetPlaceEnum.TOP:
       return addToColmunElement(
         column,
         dest.columnId,
@@ -123,7 +123,7 @@ export const addItemToColumn = (
         dest.itemKey,
         place,
       );
-    case DropTargetPlaceEnum.BOTTOM:
+    case TargetPlaceEnum.BOTTOM:
       return addToColmunElement(
         column,
         dest.columnId,
@@ -141,7 +141,7 @@ export const addToColumn = (
   layouts: ILayoutSection[],
   source: SourceType,
   dest: DestinationType,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
 ) => {
   const add: ILayoutSection[] = layouts.map((layout) => {
     if (layout.id !== dest.sectionId) return layout;
@@ -161,8 +161,8 @@ export const addToColumn = (
     add,
     source,
     source.columnId === dest.columnId &&
-      (place === DropTargetPlaceEnum.BOTTOM ||
-        place === DropTargetPlaceEnum.TOP),
+      (place === TargetPlaceEnum.BOTTOM ||
+        place === TargetPlaceEnum.TOP),
   );
   return clean;
 };

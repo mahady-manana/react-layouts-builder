@@ -233,16 +233,16 @@ var DraggableItem = function DraggableItem(_a) {
   }))) : children);
 };
 
-exports.DropTargetPlaceEnum = void 0;
+exports.TargetPlaceEnum = void 0;
 
-(function (DropTargetPlaceEnum) {
-  DropTargetPlaceEnum["LEFT"] = "LEFT";
-  DropTargetPlaceEnum["RIGHT"] = "RIGHT";
-  DropTargetPlaceEnum["TOP"] = "TOP";
-  DropTargetPlaceEnum["BOTTOM"] = "BOTTOM";
-  DropTargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
-  DropTargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
-})(exports.DropTargetPlaceEnum || (exports.DropTargetPlaceEnum = {}));
+(function (TargetPlaceEnum) {
+  TargetPlaceEnum["LEFT"] = "LEFT";
+  TargetPlaceEnum["RIGHT"] = "RIGHT";
+  TargetPlaceEnum["TOP"] = "TOP";
+  TargetPlaceEnum["BOTTOM"] = "BOTTOM";
+  TargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
+  TargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
+})(exports.TargetPlaceEnum || (exports.TargetPlaceEnum = {}));
 
 exports.ILayoutTargetEnum = void 0;
 
@@ -251,63 +251,6 @@ exports.ILayoutTargetEnum = void 0;
   ILayoutTargetEnum["COL"] = "COL";
   ILayoutTargetEnum["ITEM"] = "ITEM";
 })(exports.ILayoutTargetEnum || (exports.ILayoutTargetEnum = {}));
-
-var DroppableColumnItem = function DroppableColumnItem(_a) {
-  var children = _a.children,
-      dndTargetKey = _a.dndTargetKey,
-      isSection = _a.isSection,
-      disableChange = _a.disableChange,
-      onDropItem = _a.onDropItem;
-
-  var _b = React.useState(),
-      droppableTarget = _b[0],
-      setDroppableTarget = _b[1];
-
-  var handleDragOver = function handleDragOver(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-item');
-
-    if (targetDom && !isSection) {
-      setDroppableTarget(targetDom);
-    }
-  };
-
-  var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'rlb-droppable-item rlb-droppable-item-hover' : 'rlb-droppable-item';
-  };
-
-  var handleDragOverLeave = function handleDragOverLeave(e) {
-    setDroppableTarget('');
-  };
-
-  var handleDropToTop = function handleDropToTop(e) {
-    e.preventDefault();
-    onDropItem(e, exports.DropTargetPlaceEnum.TOP);
-    setDroppableTarget('');
-  };
-
-  var handleDropToBottom = function handleDropToBottom(e) {
-    e.preventDefault();
-    onDropItem(e, exports.DropTargetPlaceEnum.BOTTOM);
-    setDroppableTarget('');
-  };
-
-  return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-top")), " top"),
-    "target-droppable-item": "".concat(dndTargetKey, "-top"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToTop
-  }, droppableTarget === "".concat(dndTargetKey, "-top") ? '.' : null) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
-    "target-droppable-item": "".concat(dndTargetKey, "-bottom"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToBottom
-  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? '.' : null) : null);
-};
 
 var DroppableSection = function DroppableSection(_a) {
   var children = _a.children,
@@ -334,87 +277,6 @@ var DroppableSection = function DroppableSection(_a) {
       margin: 'auto'
     }
   }, children));
-};
-
-var DroppableColumnContainer = function DroppableColumnContainer(_a) {
-  var children = _a.children,
-      dndTargetKey = _a.dndTargetKey,
-      isSection = _a.isSection,
-      className = _a.className,
-      disableChange = _a.disableChange;
-      _a.isDragging;
-      var onDropItem = _a.onDropItem;
-
-  var _b = React.useState(),
-      droppableTarget = _b[0],
-      setDroppableTarget = _b[1];
-
-  var _c = React.useState(false),
-      hasDragOVer = _c[0],
-      setHasDragOVer = _c[1];
-
-  var columnRef = React.useRef(null);
-
-  var handleDragOver = function handleDragOver(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    setHasDragOVer(true);
-    var targetEl = e.currentTarget;
-    var targetDom = targetEl.getAttribute('target-droppable-item');
-
-    if (targetDom && !isSection) {
-      setDroppableTarget(targetDom);
-    }
-  };
-
-  var handleDragOverLeave = function handleDragOverLeave(e) {
-    e.preventDefault();
-    setDroppableTarget('');
-  };
-
-  var handleDropToLeft = function handleDropToLeft(e) {
-    e.preventDefault();
-    onDropItem(e, exports.DropTargetPlaceEnum.LEFT);
-    setDroppableTarget('');
-  };
-
-  var handleDropToRigth = function handleDropToRigth(e) {
-    e.preventDefault();
-    onDropItem(e, exports.DropTargetPlaceEnum.RIGHT);
-    setDroppableTarget('');
-  };
-
-  return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('rlb-col', // `w-[${widthNumber}%]`,
-    className),
-    ref: columnRef,
-    onDragOver: function onDragOver() {
-      return setHasDragOVer(true);
-    },
-    onMouseOver: function onMouseOver() {
-      return setHasDragOVer(false);
-    }
-  }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
-    "target-droppable-item": "".concat(dndTargetKey, "-left"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToLeft,
-    style: hasDragOVer ? {
-      display: "block",
-      zIndex: 1999
-    } : {}
-  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames(droppableTarget === "".concat(dndTargetKey, "-right") ? 'rlb-droppable-side-hover' : '', 'ds-right rlb-droppable-side'),
-    "target-droppable-item": "".concat(dndTargetKey, "-right"),
-    onDragOver: handleDragOver,
-    onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToRigth,
-    style: hasDragOVer ? {
-      display: "block",
-      zIndex: 1999
-    } : {}
-  }) : null);
 };
 
 var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
@@ -507,7 +369,7 @@ var DroppableRow = function DroppableRow(_a) {
     "target-droppable-row": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
-      onDropItem(e, exports.DropTargetPlaceEnum.ROW_TOP);
+      onDropItem(e, exports.TargetPlaceEnum.ROW_TOP);
       setDroppableTarget('');
     },
     onDragLeave: handleDragOverLeave
@@ -519,7 +381,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: function onDrop(e) {
-      onDropItem(e, exports.DropTargetPlaceEnum.ROW_BOTTOM);
+      onDropItem(e, exports.TargetPlaceEnum.ROW_BOTTOM);
       setDroppableTarget('');
     }
   }) : null);
@@ -745,7 +607,7 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
       width: width
     });
 
-    var reorder = place === exports.DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
+    var reorder = place === exports.TargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
   var keepFullWidth = keepRowFullWidth(newCols);
@@ -763,10 +625,10 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
     }).reduce(function (acc, next) {
       if (next === targetItemKey) {
         switch (targetPlace) {
-          case exports.DropTargetPlaceEnum.TOP:
+          case exports.TargetPlaceEnum.TOP:
             return acc.concat([sourceItemKey, next]);
 
-          case exports.DropTargetPlaceEnum.BOTTOM:
+          case exports.TargetPlaceEnum.BOTTOM:
             return acc.concat([next, sourceItemKey]);
 
           default:
@@ -789,16 +651,16 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {
   switch (place) {
-    case exports.DropTargetPlaceEnum.LEFT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, exports.DropTargetPlaceEnum.LEFT);
+    case exports.TargetPlaceEnum.LEFT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, exports.TargetPlaceEnum.LEFT);
 
-    case exports.DropTargetPlaceEnum.RIGHT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, exports.DropTargetPlaceEnum.RIGHT);
+    case exports.TargetPlaceEnum.RIGHT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, exports.TargetPlaceEnum.RIGHT);
 
-    case exports.DropTargetPlaceEnum.TOP:
+    case exports.TargetPlaceEnum.TOP:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
 
-    case exports.DropTargetPlaceEnum.BOTTOM:
+    case exports.TargetPlaceEnum.BOTTOM:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
   }
 };
@@ -814,7 +676,7 @@ var addToColumn = function addToColumn(layouts, source, dest, place) {
       })
     });
   });
-  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === exports.DropTargetPlaceEnum.BOTTOM || place === exports.DropTargetPlaceEnum.TOP));
+  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === exports.TargetPlaceEnum.BOTTOM || place === exports.TargetPlaceEnum.TOP));
   return clean;
 };
 
@@ -841,7 +703,7 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
       rows: section.rows.reduce(function (acc, nextRow) {
         if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
 
-        if (place === exports.DropTargetPlaceEnum.ROW_BOTTOM) {
+        if (place === exports.TargetPlaceEnum.ROW_BOTTOM) {
           return acc.concat([nextRow, row]);
         }
 
@@ -996,6 +858,111 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
   return w;
 };
 
+var LayoutDropContainer = function LayoutDropContainer(_a) {
+  var children = _a.children,
+      disableChange = _a.disableChange,
+      targetDROP = _a.targetDROP,
+      setTargetDROP = _a.setTargetDROP,
+      onDragOver = _a.onDragOver,
+      onDragLeave = _a.onDragLeave,
+      onDrop = _a.onDrop;
+  var containerRef = React.useRef(null);
+
+  var _b = React.useState(500),
+      checkAnomalie = _b[0],
+      setCheckAnomalie = _b[1];
+
+  React.useEffect(function () {
+    if (checkAnomalie > 10) {
+      var timer = setTimeout(function () {
+        setCheckAnomalie(function (prev) {
+          return prev - 10;
+        });
+      }, 250);
+      clearTimeout(timer);
+    }
+
+    if (checkAnomalie < 10) {
+      setTargetDROP(undefined);
+    }
+  }, [checkAnomalie]);
+
+  var handleDragOver = function handleDragOver(e) {
+    e.preventDefault();
+    setCheckAnomalie(500);
+    var nearest = findNearestTarget(e.clientX, e.clientY);
+
+    if (nearest) {
+      setTargetDROP(nearest);
+      onDragOver(nearest);
+    } else {
+      onDragOver(nearest);
+      setTargetDROP(undefined);
+    }
+  };
+
+  var findNearestTarget = function findNearestTarget(clientX, clientY) {
+    //   console.log(clientY);
+    var _a, _b, _c, _d;
+
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+    var height = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetHeight;
+    var width = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth;
+    var boundingClient = (_d = containerRef.current) === null || _d === void 0 ? void 0 : _d.getBoundingClientRect();
+
+    if (!height || !width || !(boundingClient === null || boundingClient === void 0 ? void 0 : boundingClient.left)) {
+      return;
+    }
+
+    var demi = height / 2;
+    var reference = clientY - boundingClient.top;
+    var left = clientX - boundingClient.left;
+    var shouldRight = width - left < 50 && width - left > 0;
+
+    if (shouldRight) {
+      return exports.TargetPlaceEnum.RIGHT;
+    }
+
+    if (left < 50 && left > 0) {
+      return exports.TargetPlaceEnum.LEFT;
+    }
+
+    if (reference > demi) return exports.TargetPlaceEnum.BOTTOM;
+    if (reference < demi) return exports.TargetPlaceEnum.TOP;
+  };
+
+  var onExit = function onExit(e) {
+    onDragLeave();
+    setTargetDROP(undefined);
+  };
+
+  var handleDrop = function handleDrop(e) {
+    e.preventDefault();
+    onDrop(e);
+    setTargetDROP(undefined);
+  };
+
+  return /*#__PURE__*/React__default["default"].createElement("div", {
+    ref: containerRef,
+    onDragOver: handleDragOver,
+    onDragLeave: onExit,
+    onDrop: handleDrop
+  }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rbl-drop-item-indicator",
+    style: {
+      visibility: targetDROP === exports.TargetPlaceEnum.TOP ? 'visible' : 'hidden'
+    }
+  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rbl-drop-item-indicator",
+    style: {
+      visibility: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
+    }
+  }) : null);
+};
+
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       stableKey = _a.stableKey,
@@ -1053,11 +1020,38 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _m = React.useState(500),
       waitBeforeUpdate = _m[0],
-      setWaitBeforeUpdate = _m[1];
+      setWaitBeforeUpdate = _m[1]; // TARGET DROP STATE
 
-  var _o = React.useState(false),
-      isSectionDragged = _o[0],
-      setIsSectionDragged = _o[1];
+
+  var _o = React.useState(),
+      targetDROP = _o[0],
+      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
+
+
+  var _p = React.useState({
+    columnId: '',
+    itemKey: '',
+    sectionId: '',
+    targetPlace: '',
+    rowId: ''
+  }),
+      destination = _p[0],
+      setDestination = _p[1];
+
+  var resetDrag = function resetDrag() {
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '',
+      rowId: ''
+    });
+    setTargetDROP(undefined);
+  };
+
+  var _q = React.useState(false);
+      _q[0];
+      var setIsSectionDragged = _q[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -1074,7 +1068,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   }; //   // Drop item to create new column or setion or add item to column
 
 
-  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
+  var handleDropItem = function handleDropItem(e, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
     var isSection = e.dataTransfer.getData('isSection');
     var sourceSectionId = e.dataTransfer.getData('sectionId');
@@ -1088,27 +1082,29 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       isSection: !!isSection,
       rowId: sourceRowId
     };
-    var destination = {
-      columnId: columnId,
-      itemKey: itemKey,
-      sectionId: sectionId,
-      targetPlace: target,
-      rowId: rowId
-    };
 
-    if (!itemKey && !sourceItemKey) {
+    if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }
 
     setDragStart(false);
-    var newLayout = reorderLayout(layouts, source, destination, target, layoutTarget);
+    var newLayout = reorderLayout(layouts, source, destination, destination.targetPlace, layoutTarget);
     setIsSectionDragged(false);
 
     if (newLayout) {
       setActualLayout(newLayout);
       onLayoutChange(newLayout);
     }
+
+    setTargetDROP(undefined);
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '',
+      rowId: ''
+    });
   };
 
   var onMouseMove = function onMouseMove(e) {
@@ -1199,7 +1195,21 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return col.width;
       }));
     }
-  }, [columns]);
+  }, [columns]); // DRAG EVENT
+
+  var handleDragOverItem = function handleDragOverItem(destination) {
+    setDestination(function (prev) {
+      return __assign(__assign({}, prev), destination);
+    });
+  };
+
+  var styleSide = function styleSide(colId, place) {
+    var conditions = destination.columnId === colId && destination.targetPlace === place;
+    return {
+      visibility: conditions ? 'visible' : 'hidden'
+    };
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
     style: {
@@ -1225,32 +1235,35 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         _onMouseDown(clientX, width);
       },
       type: "column"
-    }, /*#__PURE__*/React__default["default"].createElement(DroppableColumnContainer, {
-      key: column.id,
-      disableChange: resizeBegin ? true : disabled,
-      //   isSection={isSectionDragged} TO DO
-      styles: column.styles,
-      className: column.className,
-      dndTargetKey: column.id,
-      width: column.width,
-      currentColumLength: 1,
-      onDropItem: function onDropItem(e, target) {
-        return handleDropItem(e, target, sectionId, column.id, rowId, undefined, exports.ILayoutTargetEnum.COL);
-      }
     }, /*#__PURE__*/React__default["default"].createElement("div", {
+      className: "rlb-flex"
+    }, /*#__PURE__*/React__default["default"].createElement("div", {
+      className: "rbl-side-drop-indicator",
+      style: styleSide(column.id, exports.TargetPlaceEnum.LEFT)
+    }), /*#__PURE__*/React__default["default"].createElement("div", {
       key: column.id,
       className: "rlb-col-inner"
     }, column.items.map(function (items, index) {
       if (!items) return null;
       var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
-      return /*#__PURE__*/React__default["default"].createElement(DroppableColumnItem, {
+      return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
+        targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+        setTargetDROP: setTargetDROP,
+        onDragOver: function onDragOver(target) {
+          return handleDragOverItem({
+            columnId: column.id,
+            itemKey: items[stableKey],
+            sectionId: sectionId,
+            targetPlace: target,
+            rowId: rowId
+          });
+        },
+        onDrop: function onDrop(e) {
+          handleDropItem(e, exports.ILayoutTargetEnum.ITEM);
+        },
+        onDragLeave: resetDrag,
         disableChange: disabled,
-        isSection: isSectionDragged,
-        key: index,
-        dndTargetKey: items[stableKey],
-        onDropItem: function onDropItem(e, target) {
-          return handleDropItem(e, target, sectionId, column.id, rowId, items[stableKey], exports.ILayoutTargetEnum.ITEM);
-        }
+        key: index
       }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
         isImage: isImage,
         disableChange: disabled || items['id'] === 'EMPTY_SECTION',
@@ -1269,7 +1282,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         rowId: rowId,
         sectionId: sectionId
       }) : null));
-    }))));
+    })), /*#__PURE__*/React__default["default"].createElement("div", {
+      className: "rbl-side-drop-indicator",
+      style: styleSide(column.id, exports.TargetPlaceEnum.RIGHT)
+    })));
   }));
 };
 

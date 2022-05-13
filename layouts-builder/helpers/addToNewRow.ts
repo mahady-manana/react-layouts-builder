@@ -5,7 +5,7 @@ import {
 } from 'layouts-builder/interface';
 import {
   DestinationType,
-  DropTargetPlaceEnum,
+  TargetPlaceEnum,
   SourceType,
 } from 'layouts-builder/interface/internalType';
 import { createNewRow } from './createNewRow';
@@ -15,7 +15,7 @@ export const addToNewRow = (
   layouts: ILayoutSection[],
   source: SourceType,
   dest: DestinationType,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
 ) => {
   const newLayouts = layouts.map((section) => {
     if (section.id !== dest.sectionId) {
@@ -29,7 +29,7 @@ export const addToNewRow = (
       rows: section.rows.reduce((acc, nextRow) => {
         if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
 
-        if (place === DropTargetPlaceEnum.ROW_BOTTOM) {
+        if (place === TargetPlaceEnum.ROW_BOTTOM) {
           return acc.concat([nextRow, row]);
         }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType.js';
+import { TargetPlaceEnum } from '../../interface/internalType.js';
 import classnames from '../../../node_modules/classnames/index.js';
 
 var DroppableRow = function DroppableRow(_a) {
@@ -39,7 +39,7 @@ var DroppableRow = function DroppableRow(_a) {
     "target-droppable-row": "".concat(dndTargetKey, "-top"),
     onDragOver: handleDragOver,
     onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.ROW_TOP);
+      onDropItem(e, TargetPlaceEnum.ROW_TOP);
       setDroppableTarget('');
     },
     onDragLeave: handleDragOverLeave
@@ -51,7 +51,7 @@ var DroppableRow = function DroppableRow(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: function onDrop(e) {
-      onDropItem(e, DropTargetPlaceEnum.ROW_BOTTOM);
+      onDropItem(e, TargetPlaceEnum.ROW_BOTTOM);
       setDroppableTarget('');
     }
   }) : null);

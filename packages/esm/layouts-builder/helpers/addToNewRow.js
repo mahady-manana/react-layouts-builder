@@ -1,5 +1,5 @@
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
-import { DropTargetPlaceEnum } from '../interface/internalType.js';
+import { TargetPlaceEnum } from '../interface/internalType.js';
 import { createNewRow } from './createNewRow.js';
 import { removeItemFromSource } from './removeItemFromSource.js';
 
@@ -14,7 +14,7 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
       rows: section.rows.reduce(function (acc, nextRow) {
         if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
 
-        if (place === DropTargetPlaceEnum.ROW_BOTTOM) {
+        if (place === TargetPlaceEnum.ROW_BOTTOM) {
           return acc.concat([nextRow, row]);
         }
 

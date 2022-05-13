@@ -1,4 +1,6 @@
-export enum DropTargetPlaceEnum {
+
+
+export enum TargetPlaceEnum {
   LEFT = 'LEFT',
   RIGHT = 'RIGHT',
   TOP = 'TOP',
@@ -13,6 +15,7 @@ export enum ILayoutTargetEnum {
   ITEM = 'ITEM',
 }
 
+
 export interface SourceType {
   sectionId: string;
   columnId: string;
@@ -25,7 +28,7 @@ export interface DestinationType {
   columnId: string;
   rowId: any;
   itemKey?: any;
-  targetPlace: DropTargetPlaceEnum;
+  targetPlace: TargetPlaceEnum;
 }
 
 export interface Rgba {

@@ -1,5 +1,5 @@
 import { FC, ReactNode, DragEvent, CSSProperties } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType';
+import { TargetPlaceEnum } from '../../interface/internalType';
 interface DraggableProps {
     children: ReactNode;
     dndTargetKey: string;
@@ -11,7 +11,7 @@ interface DraggableProps {
     className?: string;
     styles?: CSSProperties;
     resizingWidth?: number;
-    onDropItem: (e: DragEvent<HTMLDivElement>, target: DropTargetPlaceEnum) => void;
+    onDropItem: (e: DragEvent<HTMLDivElement>, target: TargetPlaceEnum) => void;
 }
 export declare const DroppableColumnContainer: FC<DraggableProps>;
 export {};

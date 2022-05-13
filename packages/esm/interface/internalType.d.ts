@@ -1,4 +1,4 @@
-export declare enum DropTargetPlaceEnum {
+export declare enum TargetPlaceEnum {
     LEFT = "LEFT",
     RIGHT = "RIGHT",
     TOP = "TOP",
@@ -23,7 +23,7 @@ export interface DestinationType {
     columnId: string;
     rowId: any;
     itemKey?: any;
-    targetPlace: DropTargetPlaceEnum;
+    targetPlace: TargetPlaceEnum;
 }
 export interface Rgba {
     r: number;

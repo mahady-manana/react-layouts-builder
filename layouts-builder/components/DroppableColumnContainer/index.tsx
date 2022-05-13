@@ -8,7 +8,7 @@ import React, {
   useRef,
   CSSProperties,
 } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType';
+import { TargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {
   children: ReactNode;
@@ -23,7 +23,7 @@ interface DraggableProps {
   resizingWidth?: number;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum,
+    target: TargetPlaceEnum,
   ) => void;
 }
 export const DroppableColumnContainer: FC<DraggableProps> = ({
@@ -56,12 +56,12 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   };
   const handleDropToLeft = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.LEFT);
+    onDropItem(e, TargetPlaceEnum.LEFT);
     setDroppableTarget('');
   };
   const handleDropToRigth = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.RIGHT);
+    onDropItem(e, TargetPlaceEnum.RIGHT);
     setDroppableTarget('');
   };
 
@@ -89,7 +89,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToLeft}
-          style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
+          // style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
         ></div>
       ) : null}
 
@@ -108,7 +108,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToRigth}
 
-          style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
+          // style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
         ></div>
       ) : null}
     </div>

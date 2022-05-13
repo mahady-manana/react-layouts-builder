@@ -7,6 +7,7 @@
 .flex {
   display: flex;
 }
+
 .flex-col {
   flex-direction: column;
 }
@@ -255,10 +256,10 @@
   position: absolute;
   opacity: 0;
   width: 8px;
-  height: 80px;
+  height: 50px;
   background: #fc0454;
   z-index: 900;
-  top: calc(50% - 40px);
+  top: calc(50% - 25px);
   border: 2px solid #ffffff;
   border-radius: 50px;
   cursor: col-resize;
@@ -280,4 +281,20 @@
 .resize-img,
 .resize-img * {
   cursor: col-resize;
+}
+/* drop item indicator */
+.rbl-drop-item-indicator {
+  background: red;
+  height: 8px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  visibility: hidden;
+}
+/* drop in size indicator */
+.rbl-side-drop-indicator {
+  background: red;
+  width: 8px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  visibility: hidden;
 }

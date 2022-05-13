@@ -2,7 +2,7 @@ import { ILayoutSection } from 'layouts-builder/interface';
 import {
   SourceType,
   DestinationType,
-  DropTargetPlaceEnum,
+  TargetPlaceEnum,
   ILayoutTargetEnum,
 } from 'layouts-builder/interface/internalType';
 import { addToColumn } from './addToNewColumn';
@@ -13,7 +13,7 @@ const reorderLayoutItem = (
   layouts: ILayoutSection[],
   source: SourceType,
   dest: DestinationType,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
   target: ILayoutTargetEnum,
 ) => {
   switch (target) {
@@ -32,7 +32,7 @@ export const reorderLayout = (
   layouts: ILayoutSection[],
   source: SourceType,
   dest: DestinationType,
-  place: DropTargetPlaceEnum,
+  place: TargetPlaceEnum,
   target: ILayoutTargetEnum,
 ) => {
   // Do not run reorder if place doesnt change

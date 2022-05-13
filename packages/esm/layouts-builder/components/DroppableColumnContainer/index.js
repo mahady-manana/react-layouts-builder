@@ -15,9 +15,9 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
       droppableTarget = _b[0],
       setDroppableTarget = _b[1];
 
-  var _c = useState(false),
-      hasDragOVer = _c[0],
-      setHasDragOVer = _c[1];
+  var _c = useState(false);
+      _c[0];
+      var setHasDragOVer = _c[1];
 
   var columnRef = useRef(null);
 
@@ -65,21 +65,13 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToLeft,
-    style: hasDragOVer ? {
-      display: "block",
-      zIndex: 1999
-    } : {}
+    onDrop: handleDropToLeft
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: classnames(droppableTarget === "".concat(dndTargetKey, "-right") ? 'rlb-droppable-side-hover' : '', 'ds-right rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToRigth,
-    style: hasDragOVer ? {
-      display: "block",
-      zIndex: 1999
-    } : {}
+    onDrop: handleDropToRigth
   }) : null);
 };
 

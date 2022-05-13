@@ -1,13 +1,13 @@
-var DropTargetPlaceEnum;
+var TargetPlaceEnum;
 
-(function (DropTargetPlaceEnum) {
-  DropTargetPlaceEnum["LEFT"] = "LEFT";
-  DropTargetPlaceEnum["RIGHT"] = "RIGHT";
-  DropTargetPlaceEnum["TOP"] = "TOP";
-  DropTargetPlaceEnum["BOTTOM"] = "BOTTOM";
-  DropTargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
-  DropTargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
-})(DropTargetPlaceEnum || (DropTargetPlaceEnum = {}));
+(function (TargetPlaceEnum) {
+  TargetPlaceEnum["LEFT"] = "LEFT";
+  TargetPlaceEnum["RIGHT"] = "RIGHT";
+  TargetPlaceEnum["TOP"] = "TOP";
+  TargetPlaceEnum["BOTTOM"] = "BOTTOM";
+  TargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
+  TargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
+})(TargetPlaceEnum || (TargetPlaceEnum = {}));
 
 var ILayoutTargetEnum;
 
@@ -17,4 +17,4 @@ var ILayoutTargetEnum;
   ILayoutTargetEnum["ITEM"] = "ITEM";
 })(ILayoutTargetEnum || (ILayoutTargetEnum = {}));
 
-export { DropTargetPlaceEnum, ILayoutTargetEnum };
+export { ILayoutTargetEnum, TargetPlaceEnum };

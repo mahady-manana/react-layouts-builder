@@ -1,14 +1,14 @@
 import { typeof as _typeof } from '../../_virtual/_rollupPluginBabelHelpers.js';
+import { __assign } from '../../node_modules/tslib/tslib.es6.js';
 import React, { useRef, useState, useEffect } from 'react';
 import { DraggableItem } from '../components/draggable/Draggable.js';
-import { DroppableColumnItem } from '../components/DroppableColumnItem/index.js';
+import { TargetPlaceEnum, ILayoutTargetEnum } from '../interface/internalType.js';
 import classnames from '../../node_modules/classnames/index.js';
-import { DroppableColumnContainer } from '../components/DroppableColumnContainer/index.js';
-import { ILayoutTargetEnum } from '../interface/internalType.js';
 import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
 import { findWidthPercentByPx } from '../helpers/findWidth.js';
+import { LayoutDropContainer } from './LayoutDropContainer.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
@@ -67,11 +67,38 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _m = useState(500),
       waitBeforeUpdate = _m[0],
-      setWaitBeforeUpdate = _m[1];
+      setWaitBeforeUpdate = _m[1]; // TARGET DROP STATE
 
-  var _o = useState(false),
-      isSectionDragged = _o[0],
-      setIsSectionDragged = _o[1];
+
+  var _o = useState(),
+      targetDROP = _o[0],
+      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
+
+
+  var _p = useState({
+    columnId: '',
+    itemKey: '',
+    sectionId: '',
+    targetPlace: '',
+    rowId: ''
+  }),
+      destination = _p[0],
+      setDestination = _p[1];
+
+  var resetDrag = function resetDrag() {
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '',
+      rowId: ''
+    });
+    setTargetDROP(undefined);
+  };
+
+  var _q = useState(false);
+      _q[0];
+      var setIsSectionDragged = _q[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -88,7 +115,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   }; //   // Drop item to create new column or setion or add item to column
 
 
-  var handleDropItem = function handleDropItem(e, target, sectionId, columnId, rowId, itemKey, layoutTarget) {
+  var handleDropItem = function handleDropItem(e, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
     var isSection = e.dataTransfer.getData('isSection');
     var sourceSectionId = e.dataTransfer.getData('sectionId');
@@ -102,27 +129,29 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       isSection: !!isSection,
       rowId: sourceRowId
     };
-    var destination = {
-      columnId: columnId,
-      itemKey: itemKey,
-      sectionId: sectionId,
-      targetPlace: target,
-      rowId: rowId
-    };
 
-    if (!itemKey && !sourceItemKey) {
+    if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }
 
     setDragStart(false);
-    var newLayout = reorderLayout(layouts, source, destination, target, layoutTarget);
+    var newLayout = reorderLayout(layouts, source, destination, destination.targetPlace, layoutTarget);
     setIsSectionDragged(false);
 
     if (newLayout) {
       setActualLayout(newLayout);
       onLayoutChange(newLayout);
     }
+
+    setTargetDROP(undefined);
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '',
+      rowId: ''
+    });
   };
 
   var onMouseMove = function onMouseMove(e) {
@@ -213,7 +242,21 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return col.width;
       }));
     }
-  }, [columns]);
+  }, [columns]); // DRAG EVENT
+
+  var handleDragOverItem = function handleDragOverItem(destination) {
+    setDestination(function (prev) {
+      return __assign(__assign({}, prev), destination);
+    });
+  };
+
+  var styleSide = function styleSide(colId, place) {
+    var conditions = destination.columnId === colId && destination.targetPlace === place;
+    return {
+      visibility: conditions ? 'visible' : 'hidden'
+    };
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
     style: {
@@ -239,32 +282,35 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         _onMouseDown(clientX, width);
       },
       type: "column"
-    }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
-      key: column.id,
-      disableChange: resizeBegin ? true : disabled,
-      //   isSection={isSectionDragged} TO DO
-      styles: column.styles,
-      className: column.className,
-      dndTargetKey: column.id,
-      width: column.width,
-      currentColumLength: 1,
-      onDropItem: function onDropItem(e, target) {
-        return handleDropItem(e, target, sectionId, column.id, rowId, undefined, ILayoutTargetEnum.COL);
-      }
     }, /*#__PURE__*/React.createElement("div", {
+      className: "rlb-flex"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "rbl-side-drop-indicator",
+      style: styleSide(column.id, TargetPlaceEnum.LEFT)
+    }), /*#__PURE__*/React.createElement("div", {
       key: column.id,
       className: "rlb-col-inner"
     }, column.items.map(function (items, index) {
       if (!items) return null;
       var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
-      return /*#__PURE__*/React.createElement(DroppableColumnItem, {
+      return /*#__PURE__*/React.createElement(LayoutDropContainer, {
+        targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+        setTargetDROP: setTargetDROP,
+        onDragOver: function onDragOver(target) {
+          return handleDragOverItem({
+            columnId: column.id,
+            itemKey: items[stableKey],
+            sectionId: sectionId,
+            targetPlace: target,
+            rowId: rowId
+          });
+        },
+        onDrop: function onDrop(e) {
+          handleDropItem(e, ILayoutTargetEnum.ITEM);
+        },
+        onDragLeave: resetDrag,
         disableChange: disabled,
-        isSection: isSectionDragged,
-        key: index,
-        dndTargetKey: items[stableKey],
-        onDropItem: function onDropItem(e, target) {
-          return handleDropItem(e, target, sectionId, column.id, rowId, items[stableKey], ILayoutTargetEnum.ITEM);
-        }
+        key: index
       }, /*#__PURE__*/React.createElement(DraggableItem, {
         isImage: isImage,
         disableChange: disabled || items['id'] === 'EMPTY_SECTION',
@@ -283,7 +329,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         rowId: rowId,
         sectionId: sectionId
       }) : null));
-    }))));
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "rbl-side-drop-indicator",
+      style: styleSide(column.id, TargetPlaceEnum.RIGHT)
+    })));
   }));
 };
 

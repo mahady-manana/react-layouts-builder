@@ -41,9 +41,9 @@ export default {
       include: ['layouts-builder/**/*'],
       exclude: ['packages/**/*', 'node_modules'],
     }),
-    cleaner({
-      targets: ['./packages'],
-    }),
+    // cleaner({
+    //   targets: ['./packages'],
+    // }),
     peerDepsExternal(),
     commonjs({ extensions: ['.js', '.ts'] }),
   ],

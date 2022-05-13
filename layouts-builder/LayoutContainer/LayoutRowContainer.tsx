@@ -1,4 +1,5 @@
 import React, {
+  CSSProperties,
   Dispatch,
   DragEvent,
   FC,
@@ -9,15 +10,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  DraggableItem,
-  DroppableColumnItem,
-  DroppableColumnContainer,
-} from '../components';
+import { DraggableItem } from '../components';
 import { ILayoutSection } from '../interface';
 import {
   DestinationType,
-  DropTargetPlaceEnum,
+  TargetPlaceEnum,
   ILayoutTargetEnum,
   SourceType,
 } from '../interface/internalType';
@@ -28,7 +25,7 @@ import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
 import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import classNames from 'classnames';
-import { gridValue } from 'layouts-builder/helpers/gridValue';
+import { LayoutDropContainer } from './LayoutDropContainer';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -74,6 +71,29 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [waitBeforeUpdate, setWaitBeforeUpdate] =
     useState<number>(500);
 
+  // TARGET DROP STATE
+  const [targetDROP, setTargetDROP] = useState<TargetPlaceEnum>();
+
+  // TARGET DESTINATION STATE
+  const [destination, setDestination] = useState<DestinationType>({
+    columnId: '',
+    itemKey: '',
+    sectionId: '',
+    targetPlace: '' as any,
+    rowId: '',
+  });
+
+  const resetDrag = () => {
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '' as any,
+      rowId: '',
+    });
+    setTargetDROP(undefined);
+  };
+
   const [isSectionDragged, setIsSectionDragged] =
     useState<boolean>(false);
 
@@ -99,11 +119,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   //   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
     e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum,
-    sectionId: string,
-    columnId: string,
-    rowId: any,
-    itemKey: any,
     layoutTarget: ILayoutTargetEnum,
   ) => {
     const sourceItemKey = e.dataTransfer.getData('itemKey');
@@ -123,14 +138,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       isSection: !!isSection,
       rowId: sourceRowId,
     };
-    const destination: DestinationType = {
-      columnId: columnId,
-      itemKey: itemKey,
-      sectionId: sectionId,
-      targetPlace: target,
-      rowId,
-    };
-    if (!itemKey && !sourceItemKey) {
+
+    if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }
@@ -139,7 +148,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       layouts,
       source,
       destination,
-      target,
+      destination.targetPlace,
       layoutTarget,
     );
 
@@ -148,6 +157,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       setActualLayout(newLayout);
       onLayoutChange(newLayout);
     }
+    setTargetDROP(undefined);
+    setDestination({
+      columnId: '',
+      itemKey: '',
+      sectionId: '',
+      targetPlace: '' as any,
+      rowId: '',
+    });
   };
 
   const onMouseMove = (e: MouseEvent<HTMLElement>) => {
@@ -189,7 +206,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   };
   const onMouseDown = (clientX: number, width: number) => {
-  
     setInitClientX(clientX);
     setInitWidth(width);
     setResizeBegin(true);
@@ -248,6 +264,26 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   }, [columns]);
 
+  // DRAG EVENT
+  const handleDragOverItem = (destination: DestinationType) => {
+    setDestination((prev) => ({
+      ...prev,
+      ...destination,
+    }));
+  };
+
+  const styleSide = (
+    colId: string,
+    place: TargetPlaceEnum,
+  ): CSSProperties => {
+    const conditions =
+      destination.columnId === colId &&
+      destination.targetPlace === place;
+    return {
+      visibility: conditions ? 'visible' : 'hidden',
+    };
+  };
+
   return (
     <div
       className={classNames(
@@ -278,30 +314,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             }}
             type="column"
           >
-            <DroppableColumnContainer
-              key={column.id}
-              disableChange={resizeBegin ? true : disabled}
-              //   isSection={isSectionDragged} TO DO
-              styles={column.styles}
-              className={column.className}
-              dndTargetKey={column.id}
-              width={column.width}
-              currentColumLength={
-                1
-                // sectionData.columns.length || 1
-              }
-              onDropItem={(e, target) =>
-                handleDropItem(
-                  e,
-                  target,
-                  sectionId,
-                  column.id,
-                  rowId,
-                  undefined,
-                  ILayoutTargetEnum.COL,
-                )
-              }
-            >
+            <div className="rlb-flex">
+               <div
+                className="rbl-side-drop-indicator"
+                style={styleSide(column.id, TargetPlaceEnum.LEFT)}
+              ></div>
               <div key={column.id} className={`rlb-col-inner`}>
                 {column.items.map((items, index) => {
                   if (!items) return null;
@@ -309,22 +326,28 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                     ? imageCheckerFn(items)
                     : false;
                   return (
-                    <DroppableColumnItem
-                      disableChange={disabled}
-                      isSection={isSectionDragged}
-                      key={index}
-                      dndTargetKey={items[stableKey]}
-                      onDropItem={(e, target) =>
-                        handleDropItem(
-                          e,
-                          target,
-                          sectionId,
-                          column.id,
-                          rowId,
-                          items[stableKey],
-                          ILayoutTargetEnum.ITEM,
-                        )
+                    <LayoutDropContainer
+                      targetDROP={
+                        destination.itemKey === items[stableKey]
+                          ? targetDROP
+                          : undefined
                       }
+                      setTargetDROP={setTargetDROP}
+                      onDragOver={(target) =>
+                        handleDragOverItem({
+                          columnId: column.id,
+                          itemKey: items[stableKey],
+                          sectionId: sectionId,
+                          targetPlace: target as any,
+                          rowId,
+                        })
+                      }
+                      onDrop={(e) => {
+                        handleDropItem(e, ILayoutTargetEnum.ITEM);
+                      }}
+                      onDragLeave={resetDrag}
+                      disableChange={disabled}
+                      key={index}
                     >
                       <DraggableItem
                         isImage={isImage}
@@ -368,11 +391,15 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             })
                           : null}
                       </DraggableItem>
-                    </DroppableColumnItem>
+                    </LayoutDropContainer>
                   );
                 })}
               </div>
-            </DroppableColumnContainer>
+              <div
+                className="rbl-side-drop-indicator"
+                style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
+              ></div>
+            </div>
           </ResizableContainer>
         );
       })}

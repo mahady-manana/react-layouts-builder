@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, DragEvent, useState } from 'react';
-import { DropTargetPlaceEnum } from '../../interface/internalType';
+import { TargetPlaceEnum } from '../../interface/internalType';
 
 interface DraggableProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface DraggableProps {
   disableChange?: boolean;
   onDropItem: (
     e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum,
+    target: TargetPlaceEnum,
   ) => void;
 }
 export const DroppableColumnItem: FC<DraggableProps> = ({
@@ -42,12 +42,12 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
 
   const handleDropToTop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.TOP);
+    onDropItem(e, TargetPlaceEnum.TOP);
     setDroppableTarget('');
   };
   const handleDropToBottom = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    onDropItem(e, DropTargetPlaceEnum.BOTTOM);
+    onDropItem(e, TargetPlaceEnum.BOTTOM);
     setDroppableTarget('');
   };
   return (

@@ -1,5 +1,5 @@
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
-import { DropTargetPlaceEnum } from '../interface/internalType.js';
+import { TargetPlaceEnum } from '../interface/internalType.js';
 import { createNewColumn } from './createNewColumn.js';
 import { keepRowFullWidth } from './keepRowFullWidth.js';
 import { removeItemFromSource } from './removeItemFromSource.js';
@@ -24,7 +24,7 @@ var addToNewColumn = function addToNewColumn(targetColumn, targetColumnId, sourc
       width: width
     });
 
-    var reorder = place === DropTargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
+    var reorder = place === TargetPlaceEnum.LEFT ? [newColAdjustWidth, current] : [current, newColAdjustWidth];
     return acc.concat(reorder);
   }, []);
   var keepFullWidth = keepRowFullWidth(newCols);
@@ -42,10 +42,10 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
     }).reduce(function (acc, next) {
       if (next === targetItemKey) {
         switch (targetPlace) {
-          case DropTargetPlaceEnum.TOP:
+          case TargetPlaceEnum.TOP:
             return acc.concat([sourceItemKey, next]);
 
-          case DropTargetPlaceEnum.BOTTOM:
+          case TargetPlaceEnum.BOTTOM:
             return acc.concat([next, sourceItemKey]);
 
           default:
@@ -68,16 +68,16 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
 
 var addItemToColumn = function addItemToColumn(column, source, dest, place) {
   switch (place) {
-    case DropTargetPlaceEnum.LEFT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.LEFT);
+    case TargetPlaceEnum.LEFT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, TargetPlaceEnum.LEFT);
 
-    case DropTargetPlaceEnum.RIGHT:
-      return addToNewColumn(column, dest.columnId, source.itemKey, DropTargetPlaceEnum.RIGHT);
+    case TargetPlaceEnum.RIGHT:
+      return addToNewColumn(column, dest.columnId, source.itemKey, TargetPlaceEnum.RIGHT);
 
-    case DropTargetPlaceEnum.TOP:
+    case TargetPlaceEnum.TOP:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
 
-    case DropTargetPlaceEnum.BOTTOM:
+    case TargetPlaceEnum.BOTTOM:
       return addToColmunElement(column, dest.columnId, source.columnId, source.itemKey, dest.itemKey, place);
   }
 };
@@ -93,7 +93,7 @@ var addToColumn = function addToColumn(layouts, source, dest, place) {
       })
     });
   });
-  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === DropTargetPlaceEnum.BOTTOM || place === DropTargetPlaceEnum.TOP));
+  var clean = removeItemFromSource(add, source, source.columnId === dest.columnId && (place === TargetPlaceEnum.BOTTOM || place === TargetPlaceEnum.TOP));
   return clean;
 };
 

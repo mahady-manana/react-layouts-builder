@@ -10,7 +10,7 @@ import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import {
   DestinationType,
-  DropTargetPlaceEnum,
+  TargetPlaceEnum,
   ILayoutTargetEnum,
   SourceType,
 } from '../interface/internalType';
@@ -74,7 +74,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
     e: DragEvent<HTMLDivElement>,
-    target: DropTargetPlaceEnum,
+    target: TargetPlaceEnum,
     sectionId: string,
     columnId: string,
     rowId: any,
