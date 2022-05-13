@@ -25,7 +25,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
   type,
   resizable,
   children,
-  colNumber,
   resizing,
   onMouseDown,
   width,

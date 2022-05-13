@@ -17,6 +17,7 @@ interface DraggableProps {
   width: number | string;
   disableChange?: boolean;
   isSection?: boolean;
+  isDragging?: boolean
   className?: string;
   styles?: CSSProperties;
   resizingWidth?: number;
@@ -31,13 +32,16 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
   isSection,
   className,
   disableChange,
+  isDragging,
   onDropItem,
 }) => {
   const [droppableTarget, setDroppableTarget] = useState<string>();
+  const [hasDragOVer, setHasDragOVer] = useState(false)
   const columnRef = useRef<HTMLDivElement>(null);
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    setHasDragOVer(true)
     const targetEl = e.currentTarget;
     const targetDom = targetEl.getAttribute('target-droppable-item');
 
@@ -69,6 +73,9 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
         className,
       )}
       ref={columnRef}
+      onDragOver={() => setHasDragOVer(true)}
+      onMouseOver={() => setHasDragOVer(false)}
+      
     >
       {!disableChange ? (
         <div
@@ -82,6 +89,7 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToLeft}
+          style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
         ></div>
       ) : null}
 
@@ -99,6 +107,8 @@ export const DroppableColumnContainer: FC<DraggableProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragOverLeave}
           onDrop={handleDropToRigth}
+
+          style={hasDragOVer ? {display: "block", zIndex : 1999}: {}}
         ></div>
       ) : null}
     </div>

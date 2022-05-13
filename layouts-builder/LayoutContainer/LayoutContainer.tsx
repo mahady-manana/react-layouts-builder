@@ -30,7 +30,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   disableChange,
   onClickSection,
-  onFocusItem,
   staticComponent,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
@@ -38,7 +37,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
     [],
   );
-
+  
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
@@ -79,6 +78,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     itemKey: any,
     layoutTarget: ILayoutTargetEnum,
   ) => {
+
     const sourceItemKey = e.dataTransfer.getData('itemKey');
     const isSection = e.dataTransfer.getData('isSection');
     const sourceSectionId = e.dataTransfer.getData('sectionId');
@@ -103,6 +103,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       targetPlace: target,
       rowId,
     };
+    
     if (!itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
       return;
@@ -151,9 +152,11 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       </>
     );
   }
+
+  
   return (
     <div className="m-auto">
-      <div className="min-h-[100px] " ref={containeRef}>
+      <div className="min-h-[100px] " ref={containeRef} >
         {renderableLayout.map((section, index) => {
           const isPublic = disableChange ? false : section.container;
           return (

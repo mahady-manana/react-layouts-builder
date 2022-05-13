@@ -3,9 +3,8 @@ import React, { useRef } from 'react';
 var ResizableContainer = function ResizableContainer(_a) {
   var type = _a.type,
       resizable = _a.resizable,
-      children = _a.children;
-      _a.colNumber;
-      var resizing = _a.resizing,
+      children = _a.children,
+      resizing = _a.resizing,
       _onMouseDown = _a.onMouseDown,
       width = _a.width,
       isLast = _a.isLast,

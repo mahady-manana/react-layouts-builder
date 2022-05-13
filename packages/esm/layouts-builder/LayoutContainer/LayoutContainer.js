@@ -15,9 +15,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      _onClickSection = _a.onClickSection;
-      _a.onFocusItem;
-      var staticComponent = _a.staticComponent;
+      _onClickSection = _a.onClickSection,
+      staticComponent = _a.staticComponent;
   var containeRef = useRef(null);
 
   var _b = useState(false),

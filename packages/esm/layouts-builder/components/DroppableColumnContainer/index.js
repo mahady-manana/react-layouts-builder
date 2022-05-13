@@ -7,18 +7,24 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
       dndTargetKey = _a.dndTargetKey,
       isSection = _a.isSection,
       className = _a.className,
-      disableChange = _a.disableChange,
-      onDropItem = _a.onDropItem;
+      disableChange = _a.disableChange;
+      _a.isDragging;
+      var onDropItem = _a.onDropItem;
 
   var _b = useState(),
       droppableTarget = _b[0],
       setDroppableTarget = _b[1];
+
+  var _c = useState(false),
+      hasDragOVer = _c[0],
+      setHasDragOVer = _c[1];
 
   var columnRef = useRef(null);
 
   var handleDragOver = function handleDragOver(e) {
     e.stopPropagation();
     e.preventDefault();
+    setHasDragOVer(true);
     var targetEl = e.currentTarget;
     var targetDom = targetEl.getAttribute('target-droppable-item');
 
@@ -47,19 +53,33 @@ var DroppableColumnContainer = function DroppableColumnContainer(_a) {
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-col', // `w-[${widthNumber}%]`,
     className),
-    ref: columnRef
+    ref: columnRef,
+    onDragOver: function onDragOver() {
+      return setHasDragOVer(true);
+    },
+    onMouseOver: function onMouseOver() {
+      return setHasDragOVer(false);
+    }
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: classnames(droppableTarget === "".concat(dndTargetKey, "-left") ? 'rlb-droppable-side-hover' : '', 'ds-left rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-left"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToLeft
+    onDrop: handleDropToLeft,
+    style: hasDragOVer ? {
+      display: "block",
+      zIndex: 1999
+    } : {}
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: classnames(droppableTarget === "".concat(dndTargetKey, "-right") ? 'rlb-droppable-side-hover' : '', 'ds-right rlb-droppable-side'),
     "target-droppable-item": "".concat(dndTargetKey, "-right"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
-    onDrop: handleDropToRigth
+    onDrop: handleDropToRigth,
+    style: hasDragOVer ? {
+      display: "block",
+      zIndex: 1999
+    } : {}
   }) : null);
 };
 

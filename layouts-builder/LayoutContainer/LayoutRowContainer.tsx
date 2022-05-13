@@ -129,7 +129,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       return;
     }
     setDragStart(false);
-
     const newLayout = reorderLayout(
       layouts,
       source,
@@ -247,6 +246,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   }, [columns]);
 
+  
   return (
     <div
       className={classNames(
