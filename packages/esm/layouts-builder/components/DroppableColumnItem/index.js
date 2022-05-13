@@ -24,7 +24,7 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
   };
 
   var isHoveredTargetClassName = function isHoveredTargetClassName(conditions) {
-    return conditions ? 'rlb-droppable-item-hover' : 'rlb-droppable-item';
+    return conditions ? 'rlb-droppable-item rlb-droppable-item-hover' : 'rlb-droppable-item';
   };
 
   var handleDragOverLeave = function handleDragOverLeave(e) {
@@ -49,13 +49,13 @@ var DroppableColumnItem = function DroppableColumnItem(_a) {
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToTop
-  }, droppableTarget === "".concat(dndTargetKey, "-top") ? 'Add item to column...' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }, droppableTarget === "".concat(dndTargetKey, "-top") ? '.' : null) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "".concat(isHoveredTargetClassName(droppableTarget === "".concat(dndTargetKey, "-bottom")), " bottom"),
     "target-droppable-item": "".concat(dndTargetKey, "-bottom"),
     onDragOver: handleDragOver,
     onDragLeave: handleDragOverLeave,
     onDrop: handleDropToBottom
-  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? 'Add item to column...' : null) : null);
+  }, droppableTarget === "".concat(dndTargetKey, "-bottom") ? '.' : null) : null);
 };
 
 export { DroppableColumnItem };

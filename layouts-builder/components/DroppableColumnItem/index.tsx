@@ -32,7 +32,7 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
   };
   const isHoveredTargetClassName = (conditions: boolean) => {
     return conditions
-      ? 'rlb-droppable-item-hover'
+      ? 'rlb-droppable-item rlb-droppable-item-hover'
       : 'rlb-droppable-item';
   };
 
@@ -63,7 +63,7 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
           onDrop={handleDropToTop}
         >
           {droppableTarget === `${dndTargetKey}-top`
-            ? 'Add item to column...'
+            ? '.'
             : null}
         </div>
       ) : null}
@@ -80,7 +80,7 @@ export const DroppableColumnItem: FC<DraggableProps> = ({
           onDrop={handleDropToBottom}
         >
           {droppableTarget === `${dndTargetKey}-bottom`
-            ? 'Add item to column...'
+            ? '.'
             : null}
         </div>
       ) : null}

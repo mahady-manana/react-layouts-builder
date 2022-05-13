@@ -22,19 +22,11 @@ export const DroppableSection: FC<DraggableProps> = ({
   onResize,
 }) => {
   return (
-    <ResizableContainer
-      isSection
-      resizable={resizable}
-      noPadding
-      onClick={onClickSection}
-      type="container"
-      onResizeEnd={onResize}
-      styles={{ width }}
-    >
+   
       <div
         className={classNames('rlb-section rlb-section-container ')}
-        draggable={false}
-        onDragStart={onDragStart}
+        // draggable={false}
+        // onDragStart={onDragStart}
         style={{
           background: section.backgroundImage
             ? `url(${section.backgroundImage})`
@@ -51,6 +43,5 @@ export const DroppableSection: FC<DraggableProps> = ({
           {children}
         </div>
       </div>
-    </ResizableContainer>
   );
 };

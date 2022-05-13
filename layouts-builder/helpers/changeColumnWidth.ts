@@ -11,7 +11,7 @@ export const changeColumnWidth = (
   cols: {
     width: number;
     colId: any;
-    init: number;
+    next: number;
   },
 ) => {
   return layouts.map((section) => {
@@ -20,28 +20,38 @@ export const changeColumnWidth = (
       ...section,
       rows: section.rows.map((row) => {
         if (row.id !== container.rowId) return row;
-        const newCols = row.columns.map((col) => {
+        const newCols = row.columns.map((col, index) => {
+          const findIndex = row.columns.findIndex(thicol => thicol.id === cols.colId)
           const makeItGrid =
             row.columns.length % 2 === 0
-              ? gridValue(10, cols.width)
+              ? gridValue(5, cols.width)
               : cols.width;
+            
+            console.log("makeItGrid", makeItGrid);
+            
           if (!makeItGrid) return col;
           if (col.id === cols.colId) {
             return {
               ...col,
-              width: makeItGrid,
+              width: Math.round(makeItGrid),
             };
           }
-          const rest = cols.init - makeItGrid;
-          const add = rest / (row.columns.length - 1);
+          
+          if (index === findIndex + 1) {
+            return {
+              ...col,
+              width: Math.round(cols.next),
+            };
+          }
 
-          return { ...col, width: Math.round(col.width + add) };
+          return col
         });
 
         const full =
           row.columns.length > 1
             ? keepRowFullWidth(newCols)
             : newCols;
+        
         return {
           ...row,
           columns: full,

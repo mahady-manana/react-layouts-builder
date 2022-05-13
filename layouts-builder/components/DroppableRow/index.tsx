@@ -58,7 +58,6 @@ export const DroppableRow: FC<DraggableProps> = ({
 
       <div
         className={classNames('rlb-section')}
-        draggable={!disableChange}
       >
         {children}
       </div>

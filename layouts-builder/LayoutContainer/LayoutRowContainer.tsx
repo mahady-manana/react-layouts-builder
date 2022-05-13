@@ -2,8 +2,10 @@ import React, {
   Dispatch,
   DragEvent,
   FC,
+  MouseEvent,
   ReactNode,
   SetStateAction,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -25,6 +27,8 @@ import { ResizableContainer } from 'layouts-builder/components/ResizableContaine
 import { reorderLayout } from 'layouts-builder/helpers/reorderLayout';
 import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
 import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
+import classNames from 'classnames';
+import { gridValue } from 'layouts-builder/helpers/gridValue';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -55,6 +59,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [dragStart, setDragStart] = useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [addToWidth, setAddToWidth] = useState<number>(0);
+  const [resizeBegin, setResizeBegin] = useState<boolean>(false);
+  const [widths, setWidths] = useState<number[]>([]);
+  const [indexCol, setIndexCol] = useState<number>(0);
+  const [initClientX, setInitClientX] = useState<number>();
+  const [initWidth, setInitWidth] = useState<number>();
+  const [newWidth, setNewWidth] = useState<number>();
+  const [nextWidth, setNextWidth] = useState<number>();
+  const [waitBeforeUpdate, setWaitBeforeUpdate] = useState<number>(500)
 
   const [isSectionDragged, setIsSectionDragged] =
     useState<boolean>(false);
@@ -133,62 +145,142 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
   };
 
+  const onMouseMove = (e: MouseEvent<HTMLElement>) => {
+    if (resizeBegin) {
+      if (e.clientX === 0 || !initClientX || !initWidth) return;
+
+      const diff = initClientX - e.clientX;
+      const needX2 = columns.length === 1;
+
+      const add = needX2 ? diff * 2 : diff * 1;
+      // const addition = left ? add : -add;
+      const cWidth = initWidth - add;
+
+      const w = findWidthPercentByPx(
+        initWidth,
+        columns[indexCol].width,
+        cWidth,
+        true,
+      );
+
+      const old = columns[indexCol].width;
+      const oldNext = columns[indexCol + 1].width;
+     
+      const rest = oldNext + (old - w)
+      const newWidths = widths.map((wd, index) => {
+        if (index === indexCol) return w;
+        if (index === indexCol + 1) {
+          setNextWidth(rest);
+
+          return rest
+        }
+        return wd;
+      });
+      setWaitBeforeUpdate(500)
+      setNewWidth(w);
+      setTimeout(() => {
+        setWidths(newWidths);
+      }, 250);
+    }
+  };
+  const onMouseDown = (clientX: number, width: number) => {
+    // console.log("DOWN", clientX, width);
+    setInitClientX(clientX);
+    setInitWidth(width);
+    setResizeBegin(true);
+  };
+
+  useEffect(() => {
+    if (waitBeforeUpdate > 10) {
+      const timer = setTimeout(() => {
+        setWaitBeforeUpdate(prev => prev - 10)
+        
+      }, 250);
+      clearTimeout(timer)
+      
+    }
+    if (waitBeforeUpdate < 10) {
+      runIt()
+    }
+  }, [waitBeforeUpdate])
+  
+  const runIt = () => {
+    
+    if (nextWidth && newWidth) {
+   
+      const newLayouts = changeColumnWidth(
+        layouts,
+        {
+          rowId: rowId,
+          sectionId: sectionId,
+        },
+        {
+          colId: currentColumn,
+          next: nextWidth,
+          width: newWidth,
+        },
+      );
+      
+      setActualLayout(newLayouts);
+      onLayoutChange(newLayouts);
+      setNextWidth(0);
+      setNewWidth(0);
+    }
+  };
+
+  const onMouseUp = (e: MouseEvent<HTMLElement>) => {
+    runIt()
+    setResizeBegin(false);
+    setInitClientX(0);
+    setInitWidth(0);
+  };
+  const onMousLeave = (e: MouseEvent<HTMLElement>) => {
+    runIt()
+    setResizeBegin(false);
+    setInitClientX(0);
+    setInitWidth(0);
+  };
+
+  useEffect(() => {
+    if (columns.length) {
+      setWidths(columns.map((col) => col.width));
+    }
+  }, [columns]);
+
   return (
     <div
-      className="section-content flex"
+      className={classNames(
+        'section-content flex',
+        resizeBegin ? 'rbl-resizing' : '',
+      )}
       style={{ width: '100%', margin: 'auto' }}
       ref={containerRef}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMousLeave}
     >
       {columns.map((column, index) => {
         return (
           <ResizableContainer
-            isCol
-            colIndex={index}
+          width={`calc(${widths[index]}% - ${
+              40 / columns.length
+            }px)`}
             key={column.id}
+            isLast={columns.length === index + 1}
+            isNextTo={index === indexCol + 1}
             resizable={true}
             colNumber={columns.length}
-            styles={{
-              width:
-                addToWidth && currentColumn !== column.id
-                  ? `${Math.round(column.width + addToWidth)}%`
-                  : `${Math.round(column.width)}%`,
+            onMouseDown={(clientX, width) => {
+              setIndexCol(index);
+              setCurrentColumn(column.id);
+              onMouseDown(clientX, width);
             }}
             type="column"
-            currentWidth={Math.round(column.width)}
-            onResize={(w, init) => {
-              setCurrentColumn(column.id);
-
-              const rest = column.width - w;
-              const add = rest / (columns.length - 1);
-
-              setAddToWidth((prev) =>
-                Math.abs((prev || 0) - add) > 5 ? prev : add,
-              );
-            }}
-            onResizeColEnd={(_init, final) => {
-              setCurrentColumn(undefined);
-
-              const newLayouts = changeColumnWidth(
-                layouts,
-                {
-                  sectionId: sectionId,
-                  rowId: rowId,
-                },
-                {
-                  width: final,
-                  colId: column.id,
-                  init: column.width,
-                },
-              );
-              setAddToWidth(0);
-              setActualLayout(newLayouts);
-              onLayoutChange(newLayouts);
-              // handleFinishResize(w, column.id);
-            }}
+          
           >
             <DroppableColumnContainer
               key={column.id}
-              disableChange={disabled}
+              disableChange={resizeBegin ? true : disabled}
               //   isSection={isSectionDragged} TO DO
               styles={column.styles}
               className={column.className}

@@ -1,13 +1,14 @@
 import { typeof as _typeof } from '../../_virtual/_rollupPluginBabelHelpers.js';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { DraggableItem } from '../components/draggable/Draggable.js';
 import { DroppableColumnItem } from '../components/DroppableColumnItem/index.js';
-import '../../node_modules/classnames/index.js';
-import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
+import classnames from '../../node_modules/classnames/index.js';
 import { DroppableColumnContainer } from '../components/DroppableColumnContainer/index.js';
 import { ILayoutTargetEnum } from '../interface/internalType.js';
+import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
+import { findWidthPercentByPx } from '../helpers/findWidth.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
@@ -30,13 +31,45 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       currentColumn = _c[0],
       setCurrentColumn = _c[1];
 
-  var _d = useState(0),
-      addToWidth = _d[0],
-      setAddToWidth = _d[1];
+  var _d = useState(0);
+      _d[0];
+      _d[1];
 
   var _e = useState(false),
-      isSectionDragged = _e[0],
-      setIsSectionDragged = _e[1];
+      resizeBegin = _e[0],
+      setResizeBegin = _e[1];
+
+  var _f = useState([]),
+      widths = _f[0],
+      setWidths = _f[1];
+
+  var _g = useState(0),
+      indexCol = _g[0],
+      setIndexCol = _g[1];
+
+  var _h = useState(),
+      initClientX = _h[0],
+      setInitClientX = _h[1];
+
+  var _j = useState(),
+      initWidth = _j[0],
+      setInitWidth = _j[1];
+
+  var _k = useState(),
+      newWidth = _k[0],
+      setNewWidth = _k[1];
+
+  var _l = useState(),
+      nextWidth = _l[0],
+      setNextWidth = _l[1];
+
+  var _m = useState(500),
+      waitBeforeUpdate = _m[0],
+      setWaitBeforeUpdate = _m[1];
+
+  var _o = useState(false),
+      isSectionDragged = _o[0],
+      setIsSectionDragged = _o[1];
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
@@ -90,50 +123,124 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     }
   };
 
+  var onMouseMove = function onMouseMove(e) {
+    if (resizeBegin) {
+      if (e.clientX === 0 || !initClientX || !initWidth) return;
+      var diff = initClientX - e.clientX;
+      var needX2 = columns.length === 1;
+      var add = needX2 ? diff * 2 : diff * 1; // const addition = left ? add : -add;
+
+      var cWidth = initWidth - add;
+      var w_1 = findWidthPercentByPx(initWidth, columns[indexCol].width, cWidth, true);
+      var old = columns[indexCol].width;
+      var oldNext = columns[indexCol + 1].width;
+      var rest_1 = oldNext + (old - w_1);
+      var newWidths_1 = widths.map(function (wd, index) {
+        if (index === indexCol) return w_1;
+
+        if (index === indexCol + 1) {
+          setNextWidth(rest_1);
+          return rest_1;
+        }
+
+        return wd;
+      });
+      setWaitBeforeUpdate(500);
+      setNewWidth(w_1);
+      setTimeout(function () {
+        setWidths(newWidths_1);
+      }, 250);
+    }
+  };
+
+  var _onMouseDown = function onMouseDown(clientX, width) {
+    // console.log("DOWN", clientX, width);
+    setInitClientX(clientX);
+    setInitWidth(width);
+    setResizeBegin(true);
+  };
+
+  useEffect(function () {
+    if (waitBeforeUpdate > 10) {
+      var timer = setTimeout(function () {
+        setWaitBeforeUpdate(function (prev) {
+          return prev - 10;
+        });
+      }, 250);
+      clearTimeout(timer);
+    }
+
+    if (waitBeforeUpdate < 10) {
+      runIt();
+    }
+  }, [waitBeforeUpdate]);
+
+  var runIt = function runIt() {
+    if (nextWidth && newWidth) {
+      var newLayouts = changeColumnWidth(layouts, {
+        rowId: rowId,
+        sectionId: sectionId
+      }, {
+        colId: currentColumn,
+        next: nextWidth,
+        width: newWidth
+      });
+      setActualLayout(newLayouts);
+      onLayoutChange(newLayouts);
+      setNextWidth(0);
+      setNewWidth(0);
+    }
+  };
+
+  var onMouseUp = function onMouseUp(e) {
+    runIt();
+    setResizeBegin(false);
+    setInitClientX(0);
+    setInitWidth(0);
+  };
+
+  var onMousLeave = function onMousLeave(e) {
+    runIt();
+    setResizeBegin(false);
+    setInitClientX(0);
+    setInitWidth(0);
+  };
+
+  useEffect(function () {
+    if (columns.length) {
+      setWidths(columns.map(function (col) {
+        return col.width;
+      }));
+    }
+  }, [columns]);
   return /*#__PURE__*/React.createElement("div", {
-    className: "section-content flex",
+    className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
     style: {
       width: '100%',
       margin: 'auto'
     },
-    ref: containerRef
+    ref: containerRef,
+    onMouseMove: onMouseMove,
+    onMouseUp: onMouseUp,
+    onMouseLeave: onMousLeave
   }, columns.map(function (column, index) {
     return /*#__PURE__*/React.createElement(ResizableContainer, {
-      isCol: true,
-      colIndex: index,
+      width: "calc(".concat(widths[index], "% - ").concat(40 / columns.length, "px)"),
       key: column.id,
+      isLast: columns.length === index + 1,
+      isNextTo: index === indexCol + 1,
       resizable: true,
       colNumber: columns.length,
-      styles: {
-        width: addToWidth && currentColumn !== column.id ? "".concat(Math.round(column.width + addToWidth), "%") : "".concat(Math.round(column.width), "%")
-      },
-      type: "column",
-      currentWidth: Math.round(column.width),
-      onResize: function onResize(w, init) {
+      onMouseDown: function onMouseDown(clientX, width) {
+        setIndexCol(index);
         setCurrentColumn(column.id);
-        var rest = column.width - w;
-        var add = rest / (columns.length - 1);
-        setAddToWidth(function (prev) {
-          return Math.abs((prev || 0) - add) > 5 ? prev : add;
-        });
+
+        _onMouseDown(clientX, width);
       },
-      onResizeColEnd: function onResizeColEnd(_init, _final) {
-        setCurrentColumn(undefined);
-        var newLayouts = changeColumnWidth(layouts, {
-          sectionId: sectionId,
-          rowId: rowId
-        }, {
-          width: _final,
-          colId: column.id,
-          init: column.width
-        });
-        setAddToWidth(0);
-        setActualLayout(newLayouts);
-        onLayoutChange(newLayouts); // handleFinishResize(w, column.id);
-      }
+      type: "column"
     }, /*#__PURE__*/React.createElement(DroppableColumnContainer, {
       key: column.id,
-      disableChange: disabled,
+      disableChange: resizeBegin ? true : disabled,
       //   isSection={isSectionDragged} TO DO
       styles: column.styles,
       className: column.className,

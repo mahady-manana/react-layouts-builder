@@ -8,21 +8,27 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
     return __assign(__assign({}, section), {
       rows: section.rows.map(function (row) {
         if (row.id !== container.rowId) return row;
-        var newCols = row.columns.map(function (col) {
-          var makeItGrid = row.columns.length % 2 === 0 ? gridValue(10, cols.width) : cols.width;
+        var newCols = row.columns.map(function (col, index) {
+          var findIndex = row.columns.findIndex(function (thicol) {
+            return thicol.id === cols.colId;
+          });
+          var makeItGrid = row.columns.length % 2 === 0 ? gridValue(5, cols.width) : cols.width;
+          console.log("makeItGrid", makeItGrid);
           if (!makeItGrid) return col;
 
           if (col.id === cols.colId) {
             return __assign(__assign({}, col), {
-              width: makeItGrid
+              width: Math.round(makeItGrid)
             });
           }
 
-          var rest = cols.init - makeItGrid;
-          var add = rest / (row.columns.length - 1);
-          return __assign(__assign({}, col), {
-            width: Math.round(col.width + add)
-          });
+          if (index === findIndex + 1) {
+            return __assign(__assign({}, col), {
+              width: Math.round(cols.next)
+            });
+          }
+
+          return col;
         });
         var full = row.columns.length > 1 ? keepRowFullWidth(newCols) : newCols;
         return __assign(__assign({}, row), {

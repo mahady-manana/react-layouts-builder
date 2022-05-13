@@ -37,18 +37,10 @@
 .rlb-section-settings>span {
     padding-right: 8px;
 }
-.rlb-section-settings {
-    /* visibility: hidden; */
-    visibility: hidden;
-    background: #bbb;
-    display: flex;
-    padding: 5px;
-    position: absolute;
-    right: -2px;
-    top: -35px;
-    z-index: 500;
-    cursor: pointer;
+.rbl-resizing, .rbl-resizing * {
+    cursor: col-resize;
 }
+
 .rlb-section-setting-title {
     color: white;
     padding-left: 10px;
@@ -79,6 +71,7 @@
     width: 95%;
     margin: auto;
     position: absolute;
+    transition: .2s ease-in;
     
 }
 .rlb-droppable-section.top {
@@ -100,13 +93,13 @@
     z-index: 500;
 }
 .rlb-droppable-section.top.hover {
-    box-shadow: 0px -2px 0px 0 #fff;
-    border-top: 2px solid #fc0454;
+    box-shadow: 0px -5px 0px 0 #fff;
+    border-top: 5px solid #fc0454;
 }
 
 .rlb-droppable-section.bottom.hover {
-    box-shadow: 0px 2px 0px 0 #fff;
-    border-bottom: 2px solid #fc0454;
+    box-shadow: 0px 5px 0px 0 #fff;
+    border-bottom: 5px solid #fc0454;
 }
 
 .rlb-col:hover .rlb-droppable-side {
@@ -115,7 +108,7 @@
 
 .rlb-droppable-side {
     padding: 0;
-    transition-duration: .2s;
+    transition: .2s ease-in;
     width: 40px;
     position: absolute;
     height: 100%;
@@ -145,6 +138,7 @@
 
 .rlb-droppable-item {
     height: 10px;
+    transition: .2s ease-in;
 }
 
 .rlb-droppable-item-hover {
@@ -152,32 +146,22 @@
     text-align: center;
     /* margin-top: 8px;
     margin-bottom: 8px; */
-    box-shadow: 0px 2px 0px 0 #fff;
-    border-bottom: 2px solid #fc0454;
+    box-shadow: 0px 5px 0px 0 #fff;
+    border-bottom: 5px solid #fc0454;
 }
 
 .rlb-droppable-side-hover.ds-left {
-    box-shadow: -2px 0px 0px 0 #fff;
-    border-left: 2px solid #fc0454;
+    box-shadow: -5px 0px 0px 0 #fff;
+    border-left: 5px solid #fc0454;
 }
 .rlb-droppable-side-hover.ds-right {
-    border-right: 2px solid #fc0454;
-    box-shadow: 2px 0px 0px 0 #fff;
+    border-right: 5px solid #fc0454;
+    box-shadow: 5px 0px 0px 0 #fff;
 }
 .white {
     color: white;
 }
 
-/* sections settings */
-.rlb-section-setting-modal {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    background: #fff;
-    box-shadow: 2px 2px 18px 0 #ccc;
-    z-index: 999;
-}
 .rlb-range-input {
     display: flex;
     align-items: center;
@@ -215,37 +199,31 @@
  
 .rlb-resize-handler {
     background: #fff0;
-    cursor: col-resize;
+    opacity: 0;
+    width: 40px;
+    position: relative;
+    flex-grow: 0;
+    flex-shrink: 0;
+    transition: opacity 200ms ease-out 0s;
+    
+}
+.resize-hand {
+    background: #7c7c7c;
+    border: 2px solid #fff;
+    border-radius: 10px;
     height: 100%;
     position: absolute;
+    right: 50%;
     top: 0;
-    opacity: 0;
-    width: 30px;
-    z-index: 800;
+    width: 8px;
+    cursor: col-resize;
 }
 .rlb-resize-handler:hover {
     opacity: 1;
     z-index: 1000;
 }
-.rlb-resizable-inner:hover .rlb-resize-handler, .rlb-resize-handler:hover {
-    z-index: 1000;
-}
-.rlb-resize-handler.left {
-    left: -20px;
-}
-.rlb-resize-handler.right {
-    right: -20px;
-}
-.rlb-resize-handler.left:before {
-    content: "";
-    width: 6px;
-    position: absolute;
-    height: 60%;
-    top: 20%;
-    background: #7c7c7c;
-    left: 5px;
-    border-right: 3px solid #fff;
-}
+
+
 .rlb-resizable-inner {
     width: "100%";
     position: relative;
@@ -253,16 +231,17 @@
 .rlb-resize-handler:hover ~ .rlb-col .rlb-droppable-side {
     visibility: hidden;
 }
-.rlb-resize-handler.right:before {
+/* .rlb-resize-handler:before {
     content: "";
-    width: 6px;
+    width: 8px;
     position: absolute;
-    height: 60%;
-    top: 20%;
+    height: 100%;
+    top: 0;
     background: #7c7c7c;
-    right: 5px;
-    border-right: 3px solid #fff;
-}
+    right: 20px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+} */
 /* draggable container*/
 .rlb-draggable-container {
     position: relative;
@@ -275,14 +254,4 @@
 
 .rlb-draggable-container.draggable:hover .rlb-drag-icon {
     visibility: visible;
-}
-.rlb-drag-icon {
-    background: #f2f3f4;
-    border-radius: 5px;
-    left: -13px;
-    padding-block: 5px;
-    position: absolute;
-    top: 5px;
-    visibility: hidden;
-    z-index: 999;
 }
