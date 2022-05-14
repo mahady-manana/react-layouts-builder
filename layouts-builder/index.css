@@ -115,12 +115,12 @@
 }
 .resize-hand {
   background: #7c7c7c;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 10px;
-  height: 100%;
+  height: 90%;
   position: absolute;
   right: 50%;
-  top: 0;
+  top: 5%;
   width: 8px;
   cursor: col-resize;
 }
@@ -134,17 +134,7 @@
   position: relative;
 }
 
-/* .rlb-resize-handler:before {
-    content: "";
-    width: 8px;
-    position: absolute;
-    height: 100%;
-    top: 0;
-    background: #7c7c7c;
-    right: 20px;
-    border: 2px solid #fff;
-    border-radius: 10px;
-} */
+
 /* draggable container*/
 .rlb-draggable-container {
   position: relative;
@@ -170,7 +160,7 @@
   background: #fc0454;
   z-index: 900;
   top: calc(50% - 25px);
-  border: 2px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50px;
   cursor: col-resize;
 }
@@ -196,7 +186,7 @@
 .rbl-drop-item-indicator {
   background: #fc0454;
   height: 8px;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 10px;
   visibility: hidden;
   width: 100%;
@@ -204,7 +194,7 @@
 .rbl-drop-row-indicator {
   background: #fc0454;
   height: 8px;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 10px;
   visibility: hidden;
   width: 100%;
@@ -213,7 +203,7 @@
 .rbl-side-drop-indicator {
   background: #fc0454;
   width: 8px;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 10px;
   visibility: hidden;
 }
