@@ -99,9 +99,8 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         {renderableLayout.map((section, sectionIndex) => {
           return (
             <div
+              key={section.id}
               className="rlb-section rlb-section-container"
-              // draggable={false}
-              // onDragStart={onDragStart}
               style={{
                 background: section.backgroundImage
                   ? `url(${section.backgroundImage})`

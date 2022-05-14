@@ -65,9 +65,8 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
+      key: section.id,
       className: "rlb-section rlb-section-container",
-      // draggable={false}
-      // onDragStart={onDragStart}
       style: {
         background: section.backgroundImage ? "url(".concat(section.backgroundImage, ")") : section.backgroundColor,
         backgroundRepeat: 'no-repeat',
