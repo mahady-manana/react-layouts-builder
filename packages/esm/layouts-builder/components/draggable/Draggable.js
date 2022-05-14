@@ -119,6 +119,10 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React.createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: onDragStart,
+    onDragEnd: function onDragEnd(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),

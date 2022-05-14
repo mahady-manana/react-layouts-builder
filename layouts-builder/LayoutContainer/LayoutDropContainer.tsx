@@ -65,10 +65,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   ): TargetPlaceEnum | undefined => {
     //   console.log(clientY);
       
-      containerRef.current?.scrollIntoView({
-          behavior: "smooth",  
-          block: "center"
-      })
+    containerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    })
     const height = containerRef.current?.offsetHeight;
     const width = containerRef.current?.offsetWidth;
     const boundingClient =

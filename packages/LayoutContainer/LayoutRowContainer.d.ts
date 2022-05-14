@@ -10,8 +10,16 @@ interface LayoutRowContainerProps {
     layouts: ILayoutSection[];
     sectionId: string;
     rowId: string;
+    isLastSection?: boolean;
+    isFirstSection?: boolean;
+    dragActive?: boolean;
+    needRowTarget?: {
+        top: boolean;
+        bottom: boolean;
+    };
     imageSizeFnLoader?: (items: any) => number | undefined;
     setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
+    setDragActive: Dispatch<SetStateAction<boolean>>;
     renderComponent: (item: any, source: SourceType) => ReactNode;
     onFocusItem?: (source: SourceType) => void;
     onLayoutChange: (layouts: ILayoutSection[]) => void;

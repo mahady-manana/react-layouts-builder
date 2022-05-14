@@ -34,8 +34,13 @@ interface LayoutRowContainerProps {
   layouts: ILayoutSection[];
   sectionId: string;
   rowId: string;
+  isLastSection?: boolean;
+  isFirstSection?: boolean;
+  dragActive?: boolean;
+  needRowTarget?: { top: boolean; bottom: boolean };
   imageSizeFnLoader?: (items: any) => number | undefined;
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
+  setDragActive: Dispatch<SetStateAction<boolean>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
   onFocusItem?: (source: SourceType) => void;
   onLayoutChange: (layouts: ILayoutSection[]) => void;
@@ -45,11 +50,16 @@ interface LayoutRowContainerProps {
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   disabled,
+  isFirstSection,
   stableKey,
   columns,
   layouts,
   sectionId,
   rowId,
+  isLastSection,
+  needRowTarget,
+  dragActive,
+  setDragActive,
   imageSizeFnLoader,
   setActualLayout,
   renderComponent,
@@ -58,9 +68,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dragStart, setDragStart] = useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
-  const [addToWidth, setAddToWidth] = useState<number>(0);
   const [resizeBegin, setResizeBegin] = useState<boolean>(false);
   const [widths, setWidths] = useState<number[]>([]);
   const [indexCol, setIndexCol] = useState<number>(0);
@@ -94,8 +102,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setTargetDROP(undefined);
   };
 
-  const [isSectionDragged, setIsSectionDragged] =
-    useState<boolean>(false);
+  
 
   const handleDragStart = (
     e: DragEvent<HTMLDivElement>,
@@ -112,8 +119,10 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    setIsSectionDragged(false);
-    setDragStart(true);
+    const timer = setTimeout(() => {
+      setDragActive(true);
+    }, 500);
+    clearTimeout(timer);
   };
 
   //   // Drop item to create new column or setion or add item to column
@@ -143,7 +152,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       // this is used to prevent drag resize to create new item
       return;
     }
-    setDragStart(false);
+    setDragActive(false);
     const newLayout = reorderLayout(
       layouts,
       source,
@@ -152,7 +161,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       layoutTarget,
     );
 
-    setIsSectionDragged(false);
     if (newLayout) {
       setActualLayout(newLayout);
       onLayoutChange(newLayout);
@@ -266,6 +274,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
   // DRAG EVENT
   const handleDragOverItem = (destination: DestinationType) => {
+    setDragActive(true);
     setDestination((prev) => ({
       ...prev,
       ...destination,
@@ -284,125 +293,203 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     };
   };
 
+  const needTop = isFirstSection
+    ? needRowTarget?.top
+    : needRowTarget?.top && columns.length > 1;
   return (
-    <div
-      className={classNames(
-        'section-content flex',
-        resizeBegin ? 'rbl-resizing' : '',
-      )}
-      style={{ width: '100%', margin: 'auto' }}
-      ref={containerRef}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMousLeave}
-    >
-      {columns.map((column, index) => {
-        return (
-          <ResizableContainer
-            width={`calc(${widths[index]}% - ${
-              40 / columns.length
-            }px)`}
-            key={column.id}
-            isLast={columns.length === index + 1}
-            isNextTo={index === indexCol + 1}
-            resizable={true}
-            colNumber={columns.length}
-            onMouseDown={(clientX, width) => {
-              setIndexCol(index);
-              setCurrentColumn(column.id);
-              onMouseDown(clientX, width);
+    <>
+      <div>
+        {needTop && dragActive ? (
+          <div
+            className="rbl-drop-row-container"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setTargetDROP(TargetPlaceEnum.ROW_TOP);
+              handleDragOverItem({
+                columnId: '',
+                itemKey: undefined,
+                sectionId: sectionId,
+                targetPlace: TargetPlaceEnum.ROW_TOP,
+                rowId,
+              });
             }}
-            type="column"
+            onDragLeave={(e) => {
+              e.preventDefault();
+              setTargetDROP(undefined);
+            }}
+            onDrop={(e) => {
+              handleDropItem(e, ILayoutTargetEnum.ROW);
+            }}
           >
-            <div className="rlb-flex">
-               <div
-                className="rbl-side-drop-indicator"
-                style={styleSide(column.id, TargetPlaceEnum.LEFT)}
-              ></div>
-              <div key={column.id} className={`rlb-col-inner`}>
-                {column.items.map((items, index) => {
-                  if (!items) return null;
-                  const isImage = imageCheckerFn
-                    ? imageCheckerFn(items)
-                    : false;
-                  return (
-                    <LayoutDropContainer
-                      targetDROP={
-                        destination.itemKey === items[stableKey]
-                          ? targetDROP
-                          : undefined
-                      }
-                      setTargetDROP={setTargetDROP}
-                      onDragOver={(target) =>
-                        handleDragOverItem({
-                          columnId: column.id,
-                          itemKey: items[stableKey],
-                          sectionId: sectionId,
-                          targetPlace: target as any,
-                          rowId,
-                        })
-                      }
-                      onDrop={(e) => {
-                        handleDropItem(e, ILayoutTargetEnum.ITEM);
-                      }}
-                      onDragLeave={resetDrag}
-                      disableChange={disabled}
-                      key={index}
-                    >
-                      <DraggableItem
-                        isImage={isImage}
-                        disableChange={
-                          disabled || items['id'] === 'EMPTY_SECTION'
-                        }
-                        imageWidth={
-                          imageSizeFnLoader
-                            ? imageSizeFnLoader(items)
-                            : undefined
-                        }
-                        oneCol={columns.length === 1}
-                        dndTargetKey={items[stableKey]}
-                        onImageResizeFinished={(w) =>
-                          onImageResizeFinished
-                            ? onImageResizeFinished(items, w)
-                            : undefined
-                        }
-                        onDragStart={(e) => {
-                          handleDragStart(
-                            e,
-                            sectionId,
-                            column.id,
-                            rowId,
-                            items[stableKey],
-                          );
-                        }}
-                      >
-                        {items['id'] === 'EMPTY_SECTION' &&
-                        !disabled ? (
-                          <div>
-                            <p>Drop or add block here...</p>
-                          </div>
-                        ) : null}
-                        {items['id'] !== 'EMPTY_SECTION'
-                          ? renderComponent(items, {
+            <div
+              className="rbl-drop-row-indicator"
+              style={{
+                visibility:
+                  targetDROP === TargetPlaceEnum.ROW_TOP
+                    ? 'visible'
+                    : 'hidden',
+              }}
+            ></div>
+          </div>
+        ) : null}
+
+        <div
+          className={classNames(
+            'section-content flex',
+            resizeBegin ? 'rbl-resizing' : '',
+          )}
+          style={{ width: '100%', margin: 'auto' }}
+          ref={containerRef}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMousLeave}
+        >
+          {columns.map((column, index) => {
+            return (
+              <ResizableContainer
+                width={`calc(${widths[index]}% - ${
+                  40 / columns.length
+                }px)`}
+                key={column.id}
+                isLast={columns.length === index + 1}
+                isNextTo={index === indexCol + 1}
+                resizable={true}
+                colNumber={columns.length}
+                onMouseDown={(clientX, width) => {
+                  setIndexCol(index);
+                  setCurrentColumn(column.id);
+                  onMouseDown(clientX, width);
+                }}
+                type="column"
+              >
+                <div className="rlb-flex">
+                  <div
+                    className="rbl-side-drop-indicator"
+                    style={styleSide(column.id, TargetPlaceEnum.LEFT)}
+                  ></div>
+                  <div key={column.id} className={`rlb-col-inner`}>
+                    {column.items.map((items, index) => {
+                      if (!items) return null;
+                      const isImage = imageCheckerFn
+                        ? imageCheckerFn(items)
+                        : false;
+                      return (
+                        <LayoutDropContainer
+                          targetDROP={
+                            destination.itemKey === items[stableKey]
+                              ? targetDROP
+                              : undefined
+                          }
+                          setTargetDROP={setTargetDROP}
+                          onDragOver={(target) =>
+                            handleDragOverItem({
                               columnId: column.id,
                               itemKey: items[stableKey],
-                              rowId: rowId,
                               sectionId: sectionId,
+                              targetPlace: target as any,
+                              rowId,
                             })
-                          : null}
-                      </DraggableItem>
-                    </LayoutDropContainer>
-                  );
-                })}
-              </div>
-              <div
-                className="rbl-side-drop-indicator"
-                style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
-              ></div>
-            </div>
-          </ResizableContainer>
-        );
-      })}
-    </div>
+                          }
+                          onDrop={(e) => {
+                            handleDropItem(e, ILayoutTargetEnum.ITEM);
+                          }}
+                          onDragLeave={resetDrag}
+                          disableChange={disabled}
+                          key={index}
+                        >
+                          <DraggableItem
+                            isImage={isImage}
+                            disableChange={
+                              disabled ||
+                              items['id'] === 'EMPTY_SECTION'
+                            }
+                            imageWidth={
+                              imageSizeFnLoader
+                                ? imageSizeFnLoader(items)
+                                : undefined
+                            }
+                            oneCol={columns.length === 1}
+                            dndTargetKey={items[stableKey]}
+                            onImageResizeFinished={(w) =>
+                              onImageResizeFinished
+                                ? onImageResizeFinished(items, w)
+                                : undefined
+                            }
+                            onDragStart={(e) => {
+                              handleDragStart(
+                                e,
+                                sectionId,
+                                column.id,
+                                rowId,
+                                items[stableKey],
+                              );
+                            }}
+                          >
+                            {items['id'] === 'EMPTY_SECTION' &&
+                            !disabled ? (
+                              <div>
+                                <p>Drop or add block here...</p>
+                              </div>
+                            ) : null}
+                            {items['id'] !== 'EMPTY_SECTION'
+                              ? renderComponent(items, {
+                                  columnId: column.id,
+                                  itemKey: items[stableKey],
+                                  rowId: rowId,
+                                  sectionId: sectionId,
+                                })
+                              : null}
+                          </DraggableItem>
+                        </LayoutDropContainer>
+                      );
+                    })}
+                  </div>
+                  <div
+                    className="rbl-side-drop-indicator"
+                    style={styleSide(
+                      column.id,
+                      TargetPlaceEnum.RIGHT,
+                    )}
+                  ></div>
+                </div>
+              </ResizableContainer>
+            );
+          })}
+        </div>
+        {isLastSection && needRowTarget?.bottom && dragActive ? (
+          <div
+            className="rbl-drop-row-container"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setTargetDROP(TargetPlaceEnum.ROW_BOTTOM);
+              handleDragOverItem({
+                columnId: '',
+                itemKey: undefined,
+                sectionId: sectionId,
+                targetPlace: TargetPlaceEnum.ROW_BOTTOM,
+                rowId,
+              });
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              setTargetDROP(undefined);
+            }}
+            onDrop={(e) => {
+              handleDropItem(e, ILayoutTargetEnum.ROW);
+            }}
+          >
+            <div
+              className="rbl-drop-row-indicator"
+              style={{
+                visibility:
+                  targetDROP === TargetPlaceEnum.ROW_BOTTOM
+                    ? 'visible'
+                    : 'hidden',
+              }}
+            ></div>
+          </div>
+        ) : null}
+      </div>
+    </>
   );
 };

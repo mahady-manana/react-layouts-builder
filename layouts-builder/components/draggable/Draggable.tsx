@@ -120,6 +120,10 @@ export const DraggableItem: FC<DraggableProps> = ({
     <div
       draggable={startResize ? false : !disableChange}
       onDragStart={onDragStart}
+      onDragEnd={e => {
+        e.preventDefault()
+        e.stopPropagation()
+      }}
       className={classNames(
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',

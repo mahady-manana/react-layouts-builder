@@ -3,20 +3,25 @@ import { __assign } from '../../node_modules/tslib/tslib.es6.js';
 import React, { useRef, useState, useEffect } from 'react';
 import { DraggableItem } from '../components/draggable/Draggable.js';
 import { TargetPlaceEnum, ILayoutTargetEnum } from '../interface/internalType.js';
-import classnames from '../../node_modules/classnames/index.js';
 import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
 import { reorderLayout } from '../helpers/reorderLayout.js';
 import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
 import { findWidthPercentByPx } from '../helpers/findWidth.js';
+import classnames from '../../node_modules/classnames/index.js';
 import { LayoutDropContainer } from './LayoutDropContainer.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
+      isFirstSection = _a.isFirstSection,
       stableKey = _a.stableKey,
       columns = _a.columns,
       layouts = _a.layouts,
       sectionId = _a.sectionId,
       rowId = _a.rowId,
+      isLastSection = _a.isLastSection,
+      needRowTarget = _a.needRowTarget,
+      dragActive = _a.dragActive,
+      setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
       renderComponent = _a.renderComponent,
@@ -25,65 +30,57 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       _onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
 
-  var _b = useState(false);
-      _b[0];
-      var setDragStart = _b[1];
+  var _b = useState(),
+      currentColumn = _b[0],
+      setCurrentColumn = _b[1];
 
-  var _c = useState(),
-      currentColumn = _c[0],
-      setCurrentColumn = _c[1];
+  var _c = useState(false),
+      resizeBegin = _c[0],
+      setResizeBegin = _c[1];
 
-  var _d = useState(0);
-      _d[0];
-      _d[1];
+  var _d = useState([]),
+      widths = _d[0],
+      setWidths = _d[1];
 
-  var _e = useState(false),
-      resizeBegin = _e[0],
-      setResizeBegin = _e[1];
+  var _e = useState(0),
+      indexCol = _e[0],
+      setIndexCol = _e[1];
 
-  var _f = useState([]),
-      widths = _f[0],
-      setWidths = _f[1];
+  var _f = useState(),
+      initClientX = _f[0],
+      setInitClientX = _f[1];
 
-  var _g = useState(0),
-      indexCol = _g[0],
-      setIndexCol = _g[1];
+  var _g = useState(),
+      initWidth = _g[0],
+      setInitWidth = _g[1];
 
   var _h = useState(),
-      initClientX = _h[0],
-      setInitClientX = _h[1];
+      newWidth = _h[0],
+      setNewWidth = _h[1];
 
   var _j = useState(),
-      initWidth = _j[0],
-      setInitWidth = _j[1];
+      nextWidth = _j[0],
+      setNextWidth = _j[1];
 
-  var _k = useState(),
-      newWidth = _k[0],
-      setNewWidth = _k[1];
+  var _k = useState(500),
+      waitBeforeUpdate = _k[0],
+      setWaitBeforeUpdate = _k[1]; // TARGET DROP STATE
+
 
   var _l = useState(),
-      nextWidth = _l[0],
-      setNextWidth = _l[1];
-
-  var _m = useState(500),
-      waitBeforeUpdate = _m[0],
-      setWaitBeforeUpdate = _m[1]; // TARGET DROP STATE
+      targetDROP = _l[0],
+      setTargetDROP = _l[1]; // TARGET DESTINATION STATE
 
 
-  var _o = useState(),
-      targetDROP = _o[0],
-      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
-
-
-  var _p = useState({
+  var _m = useState({
     columnId: '',
     itemKey: '',
     sectionId: '',
     targetPlace: '',
     rowId: ''
   }),
-      destination = _p[0],
-      setDestination = _p[1];
+      destination = _m[0],
+      setDestination = _m[1];
 
   var resetDrag = function resetDrag() {
     setDestination({
@@ -96,10 +93,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setTargetDROP(undefined);
   };
 
-  var _q = useState(false);
-      _q[0];
-      var setIsSectionDragged = _q[1];
-
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
 
@@ -110,8 +103,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    setIsSectionDragged(false);
-    setDragStart(true);
+    var timer = setTimeout(function () {
+      setDragActive(true);
+    }, 500);
+    clearTimeout(timer);
   }; //   // Drop item to create new column or setion or add item to column
 
 
@@ -135,9 +130,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       return;
     }
 
-    setDragStart(false);
+    setDragActive(false);
     var newLayout = reorderLayout(layouts, source, destination, destination.targetPlace, layoutTarget);
-    setIsSectionDragged(false);
 
     if (newLayout) {
       setActualLayout(newLayout);
@@ -245,6 +239,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   }, [columns]); // DRAG EVENT
 
   var handleDragOverItem = function handleDragOverItem(destination) {
+    setDragActive(true);
     setDestination(function (prev) {
       return __assign(__assign({}, prev), destination);
     });
@@ -257,7 +252,33 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     };
   };
 
-  return /*#__PURE__*/React.createElement("div", {
+  var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, needTop && dragActive ? /*#__PURE__*/React.createElement("div", {
+    className: "rbl-drop-row-container",
+    onDragOver: function onDragOver(e) {
+      e.preventDefault();
+      setTargetDROP(TargetPlaceEnum.ROW_TOP);
+      handleDragOverItem({
+        columnId: '',
+        itemKey: undefined,
+        sectionId: sectionId,
+        targetPlace: TargetPlaceEnum.ROW_TOP,
+        rowId: rowId
+      });
+    },
+    onDragLeave: function onDragLeave(e) {
+      e.preventDefault();
+      setTargetDROP(undefined);
+    },
+    onDrop: function onDrop(e) {
+      handleDropItem(e, ILayoutTargetEnum.ROW);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rbl-drop-row-indicator",
+    style: {
+      visibility: targetDROP === TargetPlaceEnum.ROW_TOP ? 'visible' : 'hidden'
+    }
+  })) : null, /*#__PURE__*/React.createElement("div", {
     className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
     style: {
       width: '100%',
@@ -333,7 +354,32 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       className: "rbl-side-drop-indicator",
       style: styleSide(column.id, TargetPlaceEnum.RIGHT)
     })));
-  }));
+  })), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
+    className: "rbl-drop-row-container",
+    onDragOver: function onDragOver(e) {
+      e.preventDefault();
+      setTargetDROP(TargetPlaceEnum.ROW_BOTTOM);
+      handleDragOverItem({
+        columnId: '',
+        itemKey: undefined,
+        sectionId: sectionId,
+        targetPlace: TargetPlaceEnum.ROW_BOTTOM,
+        rowId: rowId
+      });
+    },
+    onDragLeave: function onDragLeave(e) {
+      e.preventDefault();
+      setTargetDROP(undefined);
+    },
+    onDrop: function onDrop(e) {
+      handleDropItem(e, ILayoutTargetEnum.ROW);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "rbl-drop-row-indicator",
+    style: {
+      visibility: targetDROP === TargetPlaceEnum.ROW_BOTTOM ? 'visible' : 'hidden'
+    }
+  })) : null));
 };
 
 export { LayoutRowContainer };
