@@ -351,7 +351,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                 key={column.id}
                 isLast={columns.length === index + 1}
                 isNextTo={index === indexCol + 1}
-                resizable={true}
+                resizable={disabled}
                 colNumber={columns.length}
                 onMouseDown={(clientX, width) => {
                   setIndexCol(index);
@@ -361,10 +361,15 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                 type="column"
               >
                 <div className="rlb-flex">
-                  <div
-                    className="rbl-side-drop-indicator"
-                    style={styleSide(column.id, TargetPlaceEnum.LEFT)}
-                  ></div>
+                  {!disabled ? (
+                    <div
+                      className="rbl-side-drop-indicator"
+                      style={styleSide(
+                        column.id,
+                        TargetPlaceEnum.LEFT,
+                      )}
+                    ></div>
+                  ) : null}
                   <div key={column.id} className={`rlb-col-inner`}>
                     {column.items.map((items, index) => {
                       if (!items) return null;
@@ -442,13 +447,15 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                       );
                     })}
                   </div>
-                  <div
-                    className="rbl-side-drop-indicator"
-                    style={styleSide(
-                      column.id,
-                      TargetPlaceEnum.RIGHT,
-                    )}
-                  ></div>
+                  {!disabled ? (
+                    <div
+                      className="rbl-side-drop-indicator"
+                      style={styleSide(
+                        column.id,
+                        TargetPlaceEnum.RIGHT,
+                      )}
+                    ></div>
+                  ) : null}
                 </div>
               </ResizableContainer>
             );

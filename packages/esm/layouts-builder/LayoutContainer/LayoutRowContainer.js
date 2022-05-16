@@ -294,7 +294,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       key: column.id,
       isLast: columns.length === index + 1,
       isNextTo: index === indexCol + 1,
-      resizable: true,
+      resizable: disabled,
       colNumber: columns.length,
       onMouseDown: function onMouseDown(clientX, width) {
         setIndexCol(index);
@@ -305,10 +305,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       type: "column"
     }, /*#__PURE__*/React.createElement("div", {
       className: "rlb-flex"
-    }, /*#__PURE__*/React.createElement("div", {
+    }, !disabled ? /*#__PURE__*/React.createElement("div", {
       className: "rbl-side-drop-indicator",
       style: styleSide(column.id, TargetPlaceEnum.LEFT)
-    }), /*#__PURE__*/React.createElement("div", {
+    }) : null, /*#__PURE__*/React.createElement("div", {
       key: column.id,
       className: "rlb-col-inner"
     }, column.items.map(function (items, index) {
@@ -350,10 +350,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         rowId: rowId,
         sectionId: sectionId
       }) : null));
-    })), /*#__PURE__*/React.createElement("div", {
+    })), !disabled ? /*#__PURE__*/React.createElement("div", {
       className: "rbl-side-drop-indicator",
       style: styleSide(column.id, TargetPlaceEnum.RIGHT)
-    })));
+    }) : null));
   })), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {

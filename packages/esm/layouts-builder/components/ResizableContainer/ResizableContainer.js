@@ -5,10 +5,10 @@ var ResizableContainer = function ResizableContainer(_a) {
       resizable = _a.resizable,
       children = _a.children,
       resizing = _a.resizing,
-      _onMouseDown = _a.onMouseDown,
       width = _a.width,
       isLast = _a.isLast,
-      isNextTo = _a.isNextTo;
+      isNextTo = _a.isNextTo,
+      _onMouseDown = _a.onMouseDown;
   var columnRef = useRef(null);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "rlb-content-container",
@@ -25,7 +25,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     },
     "data-resizable-type": type
   }, /*#__PURE__*/React.createElement("div", {
-    className: 'resize-hand',
+    className: "resize-hand",
     onMouseDown: function onMouseDown(e) {
       var _a;
 
