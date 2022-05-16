@@ -351,7 +351,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                 key={column.id}
                 isLast={columns.length === index + 1}
                 isNextTo={index === indexCol + 1}
-                resizable={disabled}
+                resizable={!disabled}
                 colNumber={columns.length}
                 onMouseDown={(clientX, width) => {
                   setIndexCol(index);

@@ -294,7 +294,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       key: column.id,
       isLast: columns.length === index + 1,
       isNextTo: index === indexCol + 1,
-      resizable: disabled,
+      resizable: !disabled,
       colNumber: columns.length,
       onMouseDown: function onMouseDown(clientX, width) {
         setIndexCol(index);
