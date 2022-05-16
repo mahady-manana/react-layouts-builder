@@ -10,6 +10,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       onDragLeave = _a.onDragLeave,
       onDrop = _a.onDrop;
   var containerRef = useRef(null);
+  var activeDropRef = useRef(null);
 
   var _b = useState(500),
       checkAnomalie = _b[0],
@@ -48,9 +49,9 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     //   console.log(clientY);
     var _a, _b, _c, _d;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
+    (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
     });
     var height = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetHeight;
     var width = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth;
@@ -97,12 +98,14 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     className: "rbl-drop-item-indicator",
     style: {
       visibility: targetDROP === TargetPlaceEnum.TOP ? 'visible' : 'hidden'
-    }
+    },
+    ref: targetDROP === TargetPlaceEnum.TOP ? activeDropRef : null
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {
       visibility: targetDROP === TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
-    }
+    },
+    ref: targetDROP === TargetPlaceEnum.BOTTOM ? activeDropRef : null
   }) : null);
 };
 

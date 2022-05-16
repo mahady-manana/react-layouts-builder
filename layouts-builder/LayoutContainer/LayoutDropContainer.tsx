@@ -31,6 +31,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   onDrop,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const activeDropRef = useRef<HTMLDivElement>(null);
   const [checkAnomalie, setCheckAnomalie] = useState(500);
 
   useEffect(() => {
@@ -47,8 +48,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setCheckAnomalie(500);
-    
-    
+
     const nearest = findNearestTarget(e.clientX, e.clientY);
     if (nearest) {
       setTargetDROP(nearest);
@@ -64,11 +64,11 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     clientY: number,
   ): TargetPlaceEnum | undefined => {
     //   console.log(clientY);
-      
-    containerRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    })
+
+    activeDropRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
     const height = containerRef.current?.offsetHeight;
     const width = containerRef.current?.offsetWidth;
     const boundingClient =
@@ -116,6 +116,9 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
                 ? 'visible'
                 : 'hidden',
           }}
+          ref={
+            targetDROP === TargetPlaceEnum.TOP ? activeDropRef : null
+          }
         ></div>
       ) : null}
 
@@ -129,6 +132,11 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
                 ? 'visible'
                 : 'hidden',
           }}
+          ref={
+            targetDROP === TargetPlaceEnum.BOTTOM
+              ? activeDropRef
+              : null
+          }
         ></div>
       ) : null}
     </div>
