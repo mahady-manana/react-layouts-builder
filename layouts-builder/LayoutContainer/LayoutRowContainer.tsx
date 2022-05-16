@@ -102,8 +102,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setTargetDROP(undefined);
   };
 
-  
-
   const handleDragStart = (
     e: DragEvent<HTMLDivElement>,
     sectionId: string,
@@ -348,7 +346,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             return (
               <ResizableContainer
                 width={`calc(${widths[index]}% - ${
-                  40 / columns.length
+                  columns.length > 1 ? 40 / columns.length : 0
                 }px)`}
                 key={column.id}
                 isLast={columns.length === index + 1}
