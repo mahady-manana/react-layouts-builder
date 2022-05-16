@@ -419,6 +419,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                                 : undefined
                             }
                             onDragStart={(e) => {
+                              if (disabled) {
+                                return
+                              }
                               handleDragStart(
                                 e,
                                 sectionId,

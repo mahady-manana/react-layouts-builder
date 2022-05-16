@@ -342,6 +342,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
         },
         onDragStart: function onDragStart(e) {
+          if (disabled) {
+            return;
+          }
+
           handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
         }
       }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {

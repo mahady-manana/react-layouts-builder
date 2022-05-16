@@ -812,6 +812,11 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
   var handleDragOver = function handleDragOver(e) {
     e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
     setCheckAnomalie(500);
     var nearest = findNearestTarget(e.clientX, e.clientY);
 
@@ -858,12 +863,21 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var onExit = function onExit(e) {
+    if (disableChange) {
+      return;
+    }
+
     onDragLeave();
     setTargetDROP(undefined);
   };
 
   var handleDrop = function handleDrop(e) {
     e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
     onDrop(e);
     setTargetDROP(undefined);
   };
@@ -1221,6 +1235,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
         },
         onDragStart: function onDragStart(e) {
+          if (disabled) {
+            return;
+          }
+
           handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
         }
       }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {

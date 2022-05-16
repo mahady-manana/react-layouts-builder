@@ -47,6 +47,9 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   }, [checkAnomalie]);
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (disableChange) {
+      return;
+    }
     setCheckAnomalie(500);
 
     const nearest = findNearestTarget(e.clientX, e.clientY);
@@ -92,11 +95,17 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (reference < demi) return TargetPlaceEnum.TOP;
   };
   const onExit = (e: DragEvent<HTMLDivElement>) => {
+    if (disableChange) {
+      return;
+    }
     onDragLeave();
     setTargetDROP(undefined);
   };
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (disableChange) {
+      return;
+    }
     onDrop(e);
     setTargetDROP(undefined);
   };

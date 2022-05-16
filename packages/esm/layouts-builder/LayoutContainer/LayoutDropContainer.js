@@ -33,6 +33,11 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
   var handleDragOver = function handleDragOver(e) {
     e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
     setCheckAnomalie(500);
     var nearest = findNearestTarget(e.clientX, e.clientY);
 
@@ -79,12 +84,21 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var onExit = function onExit(e) {
+    if (disableChange) {
+      return;
+    }
+
     onDragLeave();
     setTargetDROP(undefined);
   };
 
   var handleDrop = function handleDrop(e) {
     e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
     onDrop(e);
     setTargetDROP(undefined);
   };
