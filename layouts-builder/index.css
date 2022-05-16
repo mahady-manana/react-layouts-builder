@@ -213,3 +213,10 @@
   width: 100%;
   align-items: center;
 }
+
+/* PUBLIC ONLY */
+
+.rbl-vert-spacing {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}

@@ -33,14 +33,14 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
         {children}
       </div>
 
-      {resizable && !isLast ? (
+      {!isLast ? (
         <div
           className="rlb-resize-handler"
           style={{ opacity: resizing ? 1 : undefined }}
           data-resizable-type={type}
         >
           <div
-            className="resize-hand"
+            className={resizable ? 'resize-hand' : 'rbl-no-action'}
             onMouseDown={(e) => {
               e.preventDefault();
               e.stopPropagation();

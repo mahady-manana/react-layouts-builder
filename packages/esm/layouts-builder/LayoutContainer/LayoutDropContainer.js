@@ -93,7 +93,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     ref: containerRef,
     onDragOver: handleDragOver,
     onDragLeave: onExit,
-    onDrop: handleDrop
+    onDrop: handleDrop,
+    className: disableChange ? 'rbl-vert-spacing' : ''
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {

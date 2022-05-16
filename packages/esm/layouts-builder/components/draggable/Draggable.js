@@ -136,7 +136,7 @@ var DraggableItem = function DraggableItem(_a) {
       width: "".concat(width || 100, "%"),
       margin: oneCol ? 'auto' : undefined
     }
-  }, oneCol ? /*#__PURE__*/React.createElement("div", {
+  }, !disableChange && oneCol ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize imr-left",
     onClick: function onClick(e) {
       return e.stopPropagation();
@@ -151,7 +151,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  })) : null, children, /*#__PURE__*/React.createElement("div", {
+  })) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize imr-right",
     onClick: function onClick(e) {
       return e.stopPropagation();
@@ -166,7 +166,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  }))) : children);
+  })) : null) : children);
 };
 
 export { DraggableItem };

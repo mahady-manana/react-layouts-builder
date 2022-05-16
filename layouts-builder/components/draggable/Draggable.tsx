@@ -144,7 +144,7 @@ export const DraggableItem: FC<DraggableProps> = ({
             margin: oneCol ? 'auto' : undefined,
           }}
         >
-          {oneCol ? (
+          {!disableChange && oneCol ? (
             <div
               className="image-resize imr-left"
               onClick={(e) => e.stopPropagation()}
@@ -160,7 +160,7 @@ export const DraggableItem: FC<DraggableProps> = ({
             </div>
           ) : null}
           {children}
-          <div
+         {!disableChange ? <div
             className="image-resize imr-right"
             onClick={(e) => e.stopPropagation()}
             style={{zIndex: startResize ? 999 : undefined}}
@@ -172,7 +172,7 @@ export const DraggableItem: FC<DraggableProps> = ({
                 onMouseDown(e);
               }}
             ></div>
-          </div>
+          </div>: null}
         </div>
       ) : (
         children

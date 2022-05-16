@@ -106,6 +106,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver={handleDragOver}
       onDragLeave={onExit}
       onDrop={handleDrop}
+      className={disableChange ? 'rbl-vert-spacing' : ''}
     >
       {!disableChange ? (
         <div

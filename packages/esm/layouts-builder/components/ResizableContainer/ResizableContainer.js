@@ -18,14 +18,14 @@ var ResizableContainer = function ResizableContainer(_a) {
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type
-  }, children), resizable && !isLast ? /*#__PURE__*/React.createElement("div", {
+  }, children), !isLast ? /*#__PURE__*/React.createElement("div", {
     className: "rlb-resize-handler",
     style: {
       opacity: resizing ? 1 : undefined
     },
     "data-resizable-type": type
   }, /*#__PURE__*/React.createElement("div", {
-    className: "resize-hand",
+    className: resizable ? 'resize-hand' : 'rbl-no-action',
     onMouseDown: function onMouseDown(e) {
       var _a;
 

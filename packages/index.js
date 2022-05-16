@@ -300,7 +300,7 @@ var DraggableItem = function DraggableItem(_a) {
       width: "".concat(width || 100, "%"),
       margin: oneCol ? 'auto' : undefined
     }
-  }, oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
+  }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-left",
     onClick: function onClick(e) {
       return e.stopPropagation();
@@ -315,7 +315,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  })) : null, children, /*#__PURE__*/React__default["default"].createElement("div", {
+  })) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-right",
     onClick: function onClick(e) {
       return e.stopPropagation();
@@ -330,7 +330,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  }))) : children);
+  })) : null) : children);
 };
 
 exports.TargetPlaceEnum = void 0;
@@ -370,14 +370,14 @@ var ResizableContainer = function ResizableContainer(_a) {
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type
-  }, children), resizable && !isLast ? /*#__PURE__*/React__default["default"].createElement("div", {
+  }, children), !isLast ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-resize-handler",
     style: {
       opacity: resizing ? 1 : undefined
     },
     "data-resizable-type": type
   }, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "resize-hand",
+    className: resizable ? 'resize-hand' : 'rbl-no-action',
     onMouseDown: function onMouseDown(e) {
       var _a;
 
@@ -872,7 +872,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     ref: containerRef,
     onDragOver: handleDragOver,
     onDragLeave: onExit,
-    onDrop: handleDrop
+    onDrop: handleDrop,
+    className: disableChange ? 'rbl-vert-spacing' : ''
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {
