@@ -22,7 +22,7 @@ export const addToItem = (
             return {
               ...col,
               childIds: col.childIds.reduce((acc, next) => {
-                if (next === dest.itemKey) {
+                if (next.toString() === dest.itemKey.toString()) {
                   if (bottom) return acc.concat(next, itemKey);
                   return acc.concat(itemKey, next);
                 }
