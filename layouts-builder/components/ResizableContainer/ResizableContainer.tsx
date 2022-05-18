@@ -9,8 +9,9 @@ interface ResizableContainerProps {
   isLast?: boolean;
   isNextTo?: boolean;
   resizing?: boolean;
+  children?: any
 }
-export const ResizableContainer: FC<ResizableContainerProps> = ({
+const ResizableContainerComponent: FC<ResizableContainerProps> = ({
   type,
   resizable,
   children,
@@ -56,3 +57,6 @@ export const ResizableContainer: FC<ResizableContainerProps> = ({
     </>
   );
 };
+
+
+export const ResizableContainer = React.memo(ResizableContainerComponent)

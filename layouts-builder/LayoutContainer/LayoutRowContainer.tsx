@@ -6,6 +6,7 @@ import React, {
   MouseEvent,
   ReactNode,
   SetStateAction,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -48,7 +49,7 @@ interface LayoutRowContainerProps {
   onImageResizeFinished?: (items: any, width: number) => void;
 }
 
-export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
+const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
   disabled,
   isFirstSection,
   stableKey,
@@ -294,6 +295,132 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const needTop = isFirstSection
     ? needRowTarget?.top
     : needRowTarget?.top && columns.length > 1;
+
+  const component = React.useMemo(
+    () => (item, source) => {
+      return renderComponent(item, source);
+    },
+    [],
+  );
+
+  const columnsComonent = React.useMemo(
+    () =>
+      columns.map((column, index) => {
+        return (
+          <ResizableContainer
+            width={`calc(${widths[index]}% - ${
+              columns.length > 1 ? 20 / columns.length : 0
+            }px)`}
+            key={column.id}
+            isLast={columns.length === index + 1}
+            isNextTo={index === indexCol + 1}
+            resizable={!disabled}
+            colNumber={columns.length}
+            onMouseDown={(clientX, width) => {
+              setIndexCol(index);
+              setCurrentColumn(column.id);
+              onMouseDown(clientX, width);
+            }}
+            type="column"
+          >
+            <div className="rlb-flex">
+              {!disabled ? (
+                <div
+                  className="rbl-side-drop-indicator"
+                  style={styleSide(column.id, TargetPlaceEnum.LEFT)}
+                ></div>
+              ) : null}
+              <div key={column.id} className={`rlb-col-inner`}>
+                {column.items.map((items, index) => {
+                  if (!items) return null;
+                  const isImage = imageCheckerFn
+                    ? imageCheckerFn(items)
+                    : false;
+                  return (
+                    <LayoutDropContainer
+                      targetDROP={
+                        destination.itemKey === items[stableKey]
+                          ? targetDROP
+                          : undefined
+                      }
+                      setTargetDROP={setTargetDROP}
+                      onDragOver={(target) =>
+                        handleDragOverItem({
+                          columnId: column.id,
+                          itemKey: items[stableKey],
+                          sectionId: sectionId,
+                          targetPlace: target as any,
+                          rowId,
+                        })
+                      }
+                      onDrop={(e) => {
+                        handleDropItem(e, ILayoutTargetEnum.ITEM);
+                      }}
+                      onDragLeave={resetDrag}
+                      disableChange={disabled}
+                      key={index}
+                    >
+                      <DraggableItem
+                        isImage={isImage}
+                        disableChange={
+                          disabled || items['id'] === 'EMPTY_SECTION'
+                        }
+                        imageWidth={
+                          imageSizeFnLoader
+                            ? imageSizeFnLoader(items)
+                            : undefined
+                        }
+                        oneCol={columns.length === 1}
+                        dndTargetKey={items[stableKey]}
+                        onImageResizeFinished={(w) =>
+                          onImageResizeFinished
+                            ? onImageResizeFinished(items, w)
+                            : undefined
+                        }
+                        onDragStart={(e) => {
+                          if (disabled) {
+                            return;
+                          }
+                          handleDragStart(
+                            e,
+                            sectionId,
+                            column.id,
+                            rowId,
+                            items[stableKey],
+                          );
+                        }}
+                      >
+                        {items['id'] === 'EMPTY_SECTION' &&
+                        !disabled ? (
+                          <div>
+                            <p>Drop or add block here...</p>
+                          </div>
+                        ) : null}
+                        {items['id'] !== 'EMPTY_SECTION'
+                          ? component(items, {
+                              columnId: column.id,
+                              itemKey: items[stableKey],
+                              rowId: rowId,
+                              sectionId: sectionId,
+                            })
+                          : null}
+                      </DraggableItem>
+                    </LayoutDropContainer>
+                  );
+                })}
+              </div>
+              {!disabled ? (
+                <div
+                  className="rbl-side-drop-indicator"
+                  style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
+                ></div>
+              ) : null}
+            </div>
+          </ResizableContainer>
+        );
+      }),
+    [columns, targetDROP, widths],
+  );
   return (
     <>
       <div>
@@ -342,127 +469,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
           onMouseUp={onMouseUp}
           onMouseLeave={onMousLeave}
         >
-          {columns.map((column, index) => {
-            return (
-              <ResizableContainer
-                width={`calc(${widths[index]}% - ${
-                  columns.length > 1 ? 20 / columns.length : 0
-                }px)`}
-                key={column.id}
-                isLast={columns.length === index + 1}
-                isNextTo={index === indexCol + 1}
-                resizable={!disabled}
-                colNumber={columns.length}
-                onMouseDown={(clientX, width) => {
-                  setIndexCol(index);
-                  setCurrentColumn(column.id);
-                  onMouseDown(clientX, width);
-                }}
-                type="column"
-              >
-                <div className="rlb-flex">
-                  {!disabled ? (
-                    <div
-                      className="rbl-side-drop-indicator"
-                      style={styleSide(
-                        column.id,
-                        TargetPlaceEnum.LEFT,
-                      )}
-                    ></div>
-                  ) : null}
-                  <div key={column.id} className={`rlb-col-inner`}>
-                    {column.items.map((items, index) => {
-                      if (!items) return null;
-                      const isImage = imageCheckerFn
-                        ? imageCheckerFn(items)
-                        : false;
-                      return (
-                        <LayoutDropContainer
-                          targetDROP={
-                            destination.itemKey === items[stableKey]
-                              ? targetDROP
-                              : undefined
-                          }
-                          setTargetDROP={setTargetDROP}
-                          onDragOver={(target) =>
-                            handleDragOverItem({
-                              columnId: column.id,
-                              itemKey: items[stableKey],
-                              sectionId: sectionId,
-                              targetPlace: target as any,
-                              rowId,
-                            })
-                          }
-                          onDrop={(e) => {
-                            handleDropItem(e, ILayoutTargetEnum.ITEM);
-                          }}
-                          onDragLeave={resetDrag}
-                          disableChange={disabled}
-                          key={index}
-                        >
-                          <DraggableItem
-                            isImage={isImage}
-                            disableChange={
-                              disabled ||
-                              items['id'] === 'EMPTY_SECTION'
-                            }
-                            imageWidth={
-                              imageSizeFnLoader
-                                ? imageSizeFnLoader(items)
-                                : undefined
-                            }
-                            oneCol={columns.length === 1}
-                            dndTargetKey={items[stableKey]}
-                            onImageResizeFinished={(w) =>
-                              onImageResizeFinished
-                                ? onImageResizeFinished(items, w)
-                                : undefined
-                            }
-                            onDragStart={(e) => {
-                              if (disabled) {
-                                return
-                              }
-                              handleDragStart(
-                                e,
-                                sectionId,
-                                column.id,
-                                rowId,
-                                items[stableKey],
-                              );
-                            }}
-                          >
-                            {items['id'] === 'EMPTY_SECTION' &&
-                            !disabled ? (
-                              <div>
-                                <p>Drop or add block here...</p>
-                              </div>
-                            ) : null}
-                            {items['id'] !== 'EMPTY_SECTION'
-                              ? renderComponent(items, {
-                                  columnId: column.id,
-                                  itemKey: items[stableKey],
-                                  rowId: rowId,
-                                  sectionId: sectionId,
-                                })
-                              : null}
-                          </DraggableItem>
-                        </LayoutDropContainer>
-                      );
-                    })}
-                  </div>
-                  {!disabled ? (
-                    <div
-                      className="rbl-side-drop-indicator"
-                      style={styleSide(
-                        column.id,
-                        TargetPlaceEnum.RIGHT,
-                      )}
-                    ></div>
-                  ) : null}
-                </div>
-              </ResizableContainer>
-            );
-          })}
+          {columnsComonent}
         </div>
         {isLastSection && needRowTarget?.bottom && dragActive ? (
           <div
@@ -501,3 +508,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     </>
   );
 };
+
+export const LayoutRowContainer = React.memo(
+  LayoutRowContainerComponent,
+);

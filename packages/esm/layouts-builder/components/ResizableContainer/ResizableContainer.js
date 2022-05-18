@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-var ResizableContainer = function ResizableContainer(_a) {
+var ResizableContainerComponent = function ResizableContainerComponent(_a) {
   var type = _a.type,
       resizable = _a.resizable,
       children = _a.children,
@@ -35,5 +35,7 @@ var ResizableContainer = function ResizableContainer(_a) {
     }
   })) : null);
 };
+
+var ResizableContainer = /*#__PURE__*/React.memo(ResizableContainerComponent);
 
 export { ResizableContainer };

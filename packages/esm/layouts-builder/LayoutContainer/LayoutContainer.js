@@ -3,16 +3,15 @@ import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 
-var LayoutContainer = function LayoutContainer(_a) {
+var LayoutContainerComponent = function LayoutContainerComponent(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       imageSizeFnLoader = _a.imageSizeFnLoader,
-      disableChange = _a.disableChange;
-      _a.onClickSection;
-      var staticComponent = _a.staticComponent,
+      disableChange = _a.disableChange,
+      staticComponent = _a.staticComponent,
       imageCheckerFn = _a.imageCheckerFn,
       onImageResizeFinished = _a.onImageResizeFinished;
   var containeRef = useRef(null);
@@ -46,6 +45,8 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [actualLayout, data]); // run layout update
 
   useEffect(function () {
+    console.log("Test layout change and data change");
+
     if (runChange) {
       onLayoutChange(actualLayout);
       setRunChange(false);
@@ -80,6 +81,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         margin: 'auto'
       }
     }, section.rows.map(function (row, rowIndex) {
+      console.log("this run section section");
       return /*#__PURE__*/React.createElement(LayoutRowContainer, {
         key: row.id,
         stableKey: stableKey,
@@ -107,5 +109,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     })));
   })));
 };
+
+var LayoutContainer = /*#__PURE__*/React.memo(LayoutContainerComponent);
 
 export { LayoutContainer };

@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ILayoutSection } from '../interface';
 import { SourceType } from '../interface/internalType';
 import { IRenderableColumn } from '../interface/renderableInterface';
@@ -26,5 +26,5 @@ interface LayoutRowContainerProps {
     imageCheckerFn?: (items: boolean) => boolean;
     onImageResizeFinished?: (items: any, width: number) => void;
 }
-export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
+export declare const LayoutRowContainer: React.NamedExoticComponent<LayoutRowContainerProps>;
 export {};

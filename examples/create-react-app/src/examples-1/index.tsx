@@ -118,7 +118,6 @@ export const Layouts1 = () => {
       itemKey: focusItem.itemKey,
       rowId: focusItem.rowId
     })
-    console.log(add)
 
     setLayoutTest(add)
     setData((prev) => prev.concat(newitems))
@@ -175,6 +174,8 @@ export const Layouts1 = () => {
             imageSizeFnLoader={(item) => item.size}
             onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
+              
+              
               return (
                 <div
                   key={data.id}

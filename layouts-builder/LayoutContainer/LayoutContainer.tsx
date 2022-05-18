@@ -13,7 +13,7 @@ import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles
 import { LayoutRowContainer } from './LayoutRowContainer';
 import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
 
-export const LayoutContainer: FC<ILayoutContainer> = ({
+const LayoutContainerComponent: FC<ILayoutContainer> = ({
   data,
   renderComponent,
   onLayoutChange,
@@ -21,7 +21,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   imageSizeFnLoader,
   disableChange,
-  onClickSection,
   staticComponent,
   imageCheckerFn,
   onImageResizeFinished,
@@ -53,35 +52,19 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
       setRenderableLayout(renderable);
     }
+    
   }, [actualLayout, data]);
 
   // run layout update
   useEffect(() => {
+
+    console.log("Test layout change and data change");
     if (runChange) {
       onLayoutChange(actualLayout);
       setRunChange(false);
     }
   }, [runChange]);
 
-  const handleDragSectionStart = (
-    e: DragEvent<HTMLDivElement>,
-    sectionId: string,
-  ) => {
-    e.stopPropagation();
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('isSection', 'section');
-  };
-
-  const handleResizeSection = (
-    currentWidth: number,
-    sectionId: any,
-  ) => {
-    const newLayouts = changeSectionStyles(actualLayout, sectionId, {
-      width: currentWidth,
-    });
-    setActualLayout(newLayouts);
-    onLayoutChange(newLayouts);
-  };
 
   if (staticComponent) {
     return (
@@ -115,6 +98,8 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 style={{ width: section.width, margin: 'auto' }}
               >
                 {section.rows.map((row, rowIndex) => {
+                  console.log("this run section section");
+                  
                   return (
                     <LayoutRowContainer
                       key={row.id}
@@ -156,3 +141,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     </div>
   );
 };
+
+
+export const LayoutContainer = React.memo(LayoutContainerComponent)

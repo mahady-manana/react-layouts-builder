@@ -10,7 +10,7 @@ import { findWidthPercentByPx } from '../helpers/findWidth.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { LayoutDropContainer } from './LayoutDropContainer.js';
 
-var LayoutRowContainer = function LayoutRowContainer(_a) {
+var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
       stableKey = _a.stableKey,
@@ -253,6 +253,84 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
+  var component = React.useMemo(function () {
+    return function (item, source) {
+      return renderComponent(item, source);
+    };
+  }, []);
+  var columnsComonent = React.useMemo(function () {
+    return columns.map(function (column, index) {
+      return /*#__PURE__*/React.createElement(ResizableContainer, {
+        width: "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 20 / columns.length : 0, "px)"),
+        key: column.id,
+        isLast: columns.length === index + 1,
+        isNextTo: index === indexCol + 1,
+        resizable: !disabled,
+        colNumber: columns.length,
+        onMouseDown: function onMouseDown(clientX, width) {
+          setIndexCol(index);
+          setCurrentColumn(column.id);
+
+          _onMouseDown(clientX, width);
+        },
+        type: "column"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "rlb-flex"
+      }, !disabled ? /*#__PURE__*/React.createElement("div", {
+        className: "rbl-side-drop-indicator",
+        style: styleSide(column.id, TargetPlaceEnum.LEFT)
+      }) : null, /*#__PURE__*/React.createElement("div", {
+        key: column.id,
+        className: "rlb-col-inner"
+      }, column.items.map(function (items, index) {
+        if (!items) return null;
+        var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
+        return /*#__PURE__*/React.createElement(LayoutDropContainer, {
+          targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+          setTargetDROP: setTargetDROP,
+          onDragOver: function onDragOver(target) {
+            return handleDragOverItem({
+              columnId: column.id,
+              itemKey: items[stableKey],
+              sectionId: sectionId,
+              targetPlace: target,
+              rowId: rowId
+            });
+          },
+          onDrop: function onDrop(e) {
+            handleDropItem(e, ILayoutTargetEnum.ITEM);
+          },
+          onDragLeave: resetDrag,
+          disableChange: disabled,
+          key: index
+        }, /*#__PURE__*/React.createElement(DraggableItem, {
+          isImage: isImage,
+          disableChange: disabled || items['id'] === 'EMPTY_SECTION',
+          imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
+          oneCol: columns.length === 1,
+          dndTargetKey: items[stableKey],
+          onImageResizeFinished: function onImageResizeFinished(w) {
+            return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
+          },
+          onDragStart: function onDragStart(e) {
+            if (disabled) {
+              return;
+            }
+
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
+          }
+        }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? component(items, {
+          columnId: column.id,
+          itemKey: items[stableKey],
+          rowId: rowId,
+          sectionId: sectionId
+        }) : null));
+      })), !disabled ? /*#__PURE__*/React.createElement("div", {
+        className: "rbl-side-drop-indicator",
+        style: styleSide(column.id, TargetPlaceEnum.RIGHT)
+      }) : null));
+    });
+  }, [columns, targetDROP, widths]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, needTop && dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
@@ -288,77 +366,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     onMouseMove: onMouseMove,
     onMouseUp: onMouseUp,
     onMouseLeave: onMousLeave
-  }, columns.map(function (column, index) {
-    return /*#__PURE__*/React.createElement(ResizableContainer, {
-      width: "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 20 / columns.length : 0, "px)"),
-      key: column.id,
-      isLast: columns.length === index + 1,
-      isNextTo: index === indexCol + 1,
-      resizable: !disabled,
-      colNumber: columns.length,
-      onMouseDown: function onMouseDown(clientX, width) {
-        setIndexCol(index);
-        setCurrentColumn(column.id);
-
-        _onMouseDown(clientX, width);
-      },
-      type: "column"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "rlb-flex"
-    }, !disabled ? /*#__PURE__*/React.createElement("div", {
-      className: "rbl-side-drop-indicator",
-      style: styleSide(column.id, TargetPlaceEnum.LEFT)
-    }) : null, /*#__PURE__*/React.createElement("div", {
-      key: column.id,
-      className: "rlb-col-inner"
-    }, column.items.map(function (items, index) {
-      if (!items) return null;
-      var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
-      return /*#__PURE__*/React.createElement(LayoutDropContainer, {
-        targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
-        setTargetDROP: setTargetDROP,
-        onDragOver: function onDragOver(target) {
-          return handleDragOverItem({
-            columnId: column.id,
-            itemKey: items[stableKey],
-            sectionId: sectionId,
-            targetPlace: target,
-            rowId: rowId
-          });
-        },
-        onDrop: function onDrop(e) {
-          handleDropItem(e, ILayoutTargetEnum.ITEM);
-        },
-        onDragLeave: resetDrag,
-        disableChange: disabled,
-        key: index
-      }, /*#__PURE__*/React.createElement(DraggableItem, {
-        isImage: isImage,
-        disableChange: disabled || items['id'] === 'EMPTY_SECTION',
-        imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
-        oneCol: columns.length === 1,
-        dndTargetKey: items[stableKey],
-        onImageResizeFinished: function onImageResizeFinished(w) {
-          return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
-        },
-        onDragStart: function onDragStart(e) {
-          if (disabled) {
-            return;
-          }
-
-          handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
-        }
-      }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
-        columnId: column.id,
-        itemKey: items[stableKey],
-        rowId: rowId,
-        sectionId: sectionId
-      }) : null));
-    })), !disabled ? /*#__PURE__*/React.createElement("div", {
-      className: "rbl-side-drop-indicator",
-      style: styleSide(column.id, TargetPlaceEnum.RIGHT)
-    }) : null));
-  })), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
+  }, columnsComonent), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
       e.preventDefault();
@@ -385,5 +393,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     }
   })) : null));
 };
+
+var LayoutRowContainer = /*#__PURE__*/React.memo(LayoutRowContainerComponent);
 
 export { LayoutRowContainer };

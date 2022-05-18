@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 interface ResizableContainerProps {
     resizable?: boolean;
     colNumber?: number;
@@ -8,6 +8,7 @@ interface ResizableContainerProps {
     isLast?: boolean;
     isNextTo?: boolean;
     resizing?: boolean;
+    children?: any;
 }
-export declare const ResizableContainer: FC<ResizableContainerProps>;
+export declare const ResizableContainer: React.NamedExoticComponent<ResizableContainerProps>;
 export {};
