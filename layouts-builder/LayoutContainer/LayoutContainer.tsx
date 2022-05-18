@@ -1,5 +1,4 @@
 import React, {
-  DragEvent,
   FC,
   useEffect,
   useRef,
@@ -9,11 +8,10 @@ import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import { IRenderableLayout } from '../interface/renderableInterface';
 import '../index.css';
-import { changeSectionStyles } from 'layouts-builder/helpers/changeSectionStyles';
 import { LayoutRowContainer } from './LayoutRowContainer';
 import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
 
-const LayoutContainerComponent: FC<ILayoutContainer> = ({
+export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
   renderComponent,
   onLayoutChange,
@@ -76,6 +74,8 @@ const LayoutContainerComponent: FC<ILayoutContainer> = ({
     );
   }
 
+  console.log("is this runinign");
+  
   return (
     <div className="m-auto">
       <div className="min-h-[100px]" ref={containeRef}>
@@ -141,6 +141,3 @@ const LayoutContainerComponent: FC<ILayoutContainer> = ({
     </div>
   );
 };
-
-
-export const LayoutContainer = React.memo(LayoutContainerComponent)

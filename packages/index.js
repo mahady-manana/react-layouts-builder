@@ -898,7 +898,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }) : null);
 };
 
-var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
+var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
       stableKey = _a.stableKey,
@@ -1141,7 +1141,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
-  var component = React__default["default"].useMemo(function () {
+  React__default["default"].useMemo(function () {
     return function (item, source) {
       return renderComponent(item, source);
     };
@@ -1207,7 +1207,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
 
             handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
-        }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? component(items, {
+        }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
           itemKey: items[stableKey],
           rowId: rowId,
@@ -1218,7 +1218,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
         style: styleSide(column.id, exports.TargetPlaceEnum.RIGHT)
       }) : null));
     });
-  }, [columns, targetDROP, widths]);
+  }, [columns, targetDROP, widths, renderComponent]);
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", null, needTop && dragActive ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
@@ -1280,9 +1280,9 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
       visibility: targetDROP === exports.TargetPlaceEnum.ROW_BOTTOM ? 'visible' : 'hidden'
     }
   })) : null));
-};
-
-var LayoutRowContainer = /*#__PURE__*/React__default["default"].memo(LayoutRowContainerComponent);
+}; // export const LayoutRowContainer = React.memo(
+//   LayoutRowContainerComponent,
+// );
 
 var needRowTarget = function needRowTarget(layouts, currentRow, _a) {
   // check row length
@@ -1306,7 +1306,7 @@ var needRowTarget = function needRowTarget(layouts, currentRow, _a) {
   };
 };
 
-var LayoutContainerComponent = function LayoutContainerComponent(_a) {
+var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -1362,6 +1362,7 @@ var LayoutContainerComponent = function LayoutContainerComponent(_a) {
     }));
   }
 
+  console.log("is this runinign");
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "m-auto"
   }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1412,8 +1413,6 @@ var LayoutContainerComponent = function LayoutContainerComponent(_a) {
     })));
   })));
 };
-
-var LayoutContainer = /*#__PURE__*/React__default["default"].memo(LayoutContainerComponent);
 
 var createNewSection = function createNewSection(itemKey, isContainer, defaultWidth) {
   var row = createNewRow(itemKey);

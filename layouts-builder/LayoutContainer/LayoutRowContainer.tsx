@@ -49,7 +49,7 @@ interface LayoutRowContainerProps {
   onImageResizeFinished?: (items: any, width: number) => void;
 }
 
-const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
+export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   disabled,
   isFirstSection,
   stableKey,
@@ -306,6 +306,7 @@ const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
   const columnsComonent = React.useMemo(
     () =>
       columns.map((column, index) => {
+        
         return (
           <ResizableContainer
             width={`calc(${widths[index]}% - ${
@@ -397,7 +398,7 @@ const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
                           </div>
                         ) : null}
                         {items['id'] !== 'EMPTY_SECTION'
-                          ? component(items, {
+                          ? renderComponent(items, {
                               columnId: column.id,
                               itemKey: items[stableKey],
                               rowId: rowId,
@@ -419,7 +420,7 @@ const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
           </ResizableContainer>
         );
       }),
-    [columns, targetDROP, widths],
+    [columns, targetDROP, widths, renderComponent],
   );
   return (
     <>
@@ -509,6 +510,6 @@ const LayoutRowContainerComponent: FC<LayoutRowContainerProps> = ({
   );
 };
 
-export const LayoutRowContainer = React.memo(
-  LayoutRowContainerComponent,
-);
+// export const LayoutRowContainer = React.memo(
+//   LayoutRowContainerComponent,
+// );

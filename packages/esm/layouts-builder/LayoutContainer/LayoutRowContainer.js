@@ -10,7 +10,7 @@ import { findWidthPercentByPx } from '../helpers/findWidth.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { LayoutDropContainer } from './LayoutDropContainer.js';
 
-var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
+var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
       stableKey = _a.stableKey,
@@ -253,7 +253,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
-  var component = React.useMemo(function () {
+  React.useMemo(function () {
     return function (item, source) {
       return renderComponent(item, source);
     };
@@ -319,7 +319,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
 
             handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
-        }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? component(items, {
+        }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
           itemKey: items[stableKey],
           rowId: rowId,
@@ -330,7 +330,7 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
         style: styleSide(column.id, TargetPlaceEnum.RIGHT)
       }) : null));
     });
-  }, [columns, targetDROP, widths]);
+  }, [columns, targetDROP, widths, renderComponent]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, needTop && dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
@@ -392,8 +392,8 @@ var LayoutRowContainerComponent = function LayoutRowContainerComponent(_a) {
       visibility: targetDROP === TargetPlaceEnum.ROW_BOTTOM ? 'visible' : 'hidden'
     }
   })) : null));
-};
-
-var LayoutRowContainer = /*#__PURE__*/React.memo(LayoutRowContainerComponent);
+}; // export const LayoutRowContainer = React.memo(
+//   LayoutRowContainerComponent,
+// );
 
 export { LayoutRowContainer };

@@ -11,7 +11,6 @@ import {
   addToItem
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
-import { v4 as uuidv4 } from "uuid"
 import "react-layouts-builder/packages/index.css"
 import { ChangeEvent } from "react"
 
@@ -174,17 +173,18 @@ export const Layouts1 = () => {
             imageSizeFnLoader={(item) => item.size}
             onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
-              
-              
               return (
                 <div
                   key={data.id}
                   className="min-h-[50px] h-full p-2"
                   style={
                     {
-                      // background: data.bg
+                      border: value
                     }
                   }
+                  onClick={() => {
+                    setValue(prev => prev === "" ? "1px solid #000": "")
+                  }}
                 >
                   {data.img ? (
                     <img

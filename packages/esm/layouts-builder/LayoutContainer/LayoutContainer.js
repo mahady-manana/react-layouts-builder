@@ -3,7 +3,7 @@ import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 
-var LayoutContainerComponent = function LayoutContainerComponent(_a) {
+var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -59,6 +59,7 @@ var LayoutContainerComponent = function LayoutContainerComponent(_a) {
     }));
   }
 
+  console.log("is this runinign");
   return /*#__PURE__*/React.createElement("div", {
     className: "m-auto"
   }, /*#__PURE__*/React.createElement("div", {
@@ -109,7 +110,5 @@ var LayoutContainerComponent = function LayoutContainerComponent(_a) {
     })));
   })));
 };
-
-var LayoutContainer = /*#__PURE__*/React.memo(LayoutContainerComponent);
 
 export { LayoutContainer };
