@@ -253,11 +253,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
-  React.useMemo(function () {
-    return function (item, source) {
-      return renderComponent(item, source);
-    };
-  }, []);
   var columnsComonent = React.useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React.createElement(ResizableContainer, {

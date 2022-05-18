@@ -1141,11 +1141,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
-  React__default["default"].useMemo(function () {
-    return function (item, source) {
-      return renderComponent(item, source);
-    };
-  }, []);
   var columnsComonent = React__default["default"].useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
@@ -1348,8 +1343,6 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [actualLayout, data]); // run layout update
 
   React.useEffect(function () {
-    console.log("Test layout change and data change");
-
     if (runChange) {
       onLayoutChange(actualLayout);
       setRunChange(false);
@@ -1362,7 +1355,6 @@ var LayoutContainer = function LayoutContainer(_a) {
     }));
   }
 
-  console.log("is this runinign");
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "m-auto"
   }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1385,7 +1377,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         margin: 'auto'
       }
     }, section.rows.map(function (row, rowIndex) {
-      console.log("this run section section");
       return /*#__PURE__*/React__default["default"].createElement(LayoutRowContainer, {
         key: row.id,
         stableKey: stableKey,

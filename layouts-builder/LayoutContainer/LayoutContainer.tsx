@@ -55,8 +55,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
   // run layout update
   useEffect(() => {
-
-    console.log("Test layout change and data change");
     if (runChange) {
       onLayoutChange(actualLayout);
       setRunChange(false);
@@ -73,8 +71,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       </>
     );
   }
-
-  console.log("is this runinign");
   
   return (
     <div className="m-auto">
@@ -98,7 +94,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 style={{ width: section.width, margin: 'auto' }}
               >
                 {section.rows.map((row, rowIndex) => {
-                  console.log("this run section section");
                   
                   return (
                     <LayoutRowContainer

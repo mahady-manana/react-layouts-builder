@@ -13,6 +13,7 @@ import {
 import { storage } from "../localSorage"
 import "react-layouts-builder/packages/index.css"
 import { ChangeEvent } from "react"
+import { TestComponent } from "./TestComponent"
 
 export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
@@ -20,6 +21,8 @@ export const Layouts1 = () => {
   const [value, setValue] = useState("")
   const [nodata, setnodata] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
+  const [focused, setFocused] = useState<any>()
+
   const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [staticss, setStaticss] = useState<boolean>(false)
   const [disableChange, setDisableChange] = useState<boolean>(false)
@@ -174,29 +177,11 @@ export const Layouts1 = () => {
             onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
               return (
-                <div
-                  key={data.id}
-                  className="min-h-[50px] h-full p-2"
-                  style={
-                    {
-                      border: value
-                    }
-                  }
-                  onClick={() => {
-                    setValue(prev => prev === "" ? "1px solid #000": "")
-                  }}
-                >
-                  {data.img ? (
-                    <img
-                      src={data.img}
-                      alt=""
-                      width="400"
-                      style={{ width: "100%" }}
-                    />
-                  ) : (
-                    <p>Data : {data.text}</p>
-                  )}
-                </div>
+                <TestComponent
+                  data={data}
+                  onClick={(d) => setFocused(d.id)}
+                  focused={data.id === focused}
+                />
               )
             }}
           />

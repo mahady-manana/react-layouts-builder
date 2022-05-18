@@ -45,8 +45,6 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [actualLayout, data]); // run layout update
 
   useEffect(function () {
-    console.log("Test layout change and data change");
-
     if (runChange) {
       onLayoutChange(actualLayout);
       setRunChange(false);
@@ -59,7 +57,6 @@ var LayoutContainer = function LayoutContainer(_a) {
     }));
   }
 
-  console.log("is this runinign");
   return /*#__PURE__*/React.createElement("div", {
     className: "m-auto"
   }, /*#__PURE__*/React.createElement("div", {
@@ -82,7 +79,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         margin: 'auto'
       }
     }, section.rows.map(function (row, rowIndex) {
-      console.log("this run section section");
       return /*#__PURE__*/React.createElement(LayoutRowContainer, {
         key: row.id,
         stableKey: stableKey,

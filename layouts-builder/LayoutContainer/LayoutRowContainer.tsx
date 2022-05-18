@@ -296,13 +296,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     ? needRowTarget?.top
     : needRowTarget?.top && columns.length > 1;
 
-  const component = React.useMemo(
-    () => (item, source) => {
-      return renderComponent(item, source);
-    },
-    [],
-  );
-
   const columnsComonent = React.useMemo(
     () =>
       columns.map((column, index) => {
