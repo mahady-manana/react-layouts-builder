@@ -346,7 +346,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             return (
               <ResizableContainer
                 width={`calc(${widths[index]}% - ${
-                  columns.length > 1 ? 40 / columns.length : 0
+                  columns.length > 1 ? 20 / columns.length : 0
                 }px)`}
                 key={column.id}
                 isLast={columns.length === index + 1}

@@ -1183,7 +1183,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     onMouseLeave: onMousLeave
   }, columns.map(function (column, index) {
     return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-      width: "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 40 / columns.length : 0, "px)"),
+      width: "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 20 / columns.length : 0, "px)"),
       key: column.id,
       isLast: columns.length === index + 1,
       isNextTo: index === indexCol + 1,
