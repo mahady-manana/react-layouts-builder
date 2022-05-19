@@ -27,8 +27,6 @@ export const changeColumnWidth = (
               ? gridValue(5, cols.width)
               : cols.width;
             
-            console.log("makeItGrid", makeItGrid);
-            
           if (!makeItGrid) return col;
           if (col.id === cols.colId) {
             return {

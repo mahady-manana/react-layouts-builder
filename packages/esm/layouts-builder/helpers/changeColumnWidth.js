@@ -13,7 +13,6 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
             return thicol.id === cols.colId;
           });
           var makeItGrid = row.columns.length % 2 === 0 ? gridValue(5, cols.width) : cols.width;
-          console.log("makeItGrid", makeItGrid);
           if (!makeItGrid) return col;
 
           if (col.id === cols.colId) {

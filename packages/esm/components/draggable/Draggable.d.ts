@@ -3,7 +3,7 @@ interface DraggableProps {
     children: ReactNode;
     dndTargetKey: string;
     disableChange?: boolean;
-    onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+    onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
     isImage?: boolean;
     imageWidth?: number;
     oneCol?: boolean;

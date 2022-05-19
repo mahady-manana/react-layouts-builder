@@ -276,7 +276,7 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: function onDragStart(e) {
-      return _onDragStart(e);
+      return _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
@@ -735,7 +735,6 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
             return thicol.id === cols.colId;
           });
           var makeItGrid = row.columns.length % 2 === 0 ? gridValue(5, cols.width) : cols.width;
-          console.log("makeItGrid", makeItGrid);
           if (!makeItGrid) return col;
 
           if (col.id === cols.colId) {
@@ -827,7 +826,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
-    //   console.log(clientY);
     var _a, _b, _c, _d;
 
     (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
@@ -983,7 +981,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setTargetDROP(undefined);
   };
 
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
+  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -993,6 +991,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
+    e.dataTransfer.setDragImage(el, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1200,12 +1199,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
           },
-          onDragStart: function onDragStart(e) {
+          onDragStart: function onDragStart(e, el) {
             if (disabled) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,

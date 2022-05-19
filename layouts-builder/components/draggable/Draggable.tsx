@@ -14,7 +14,7 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+  onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
   isImage?: boolean;
   imageWidth?: number;
   oneCol?: boolean;
@@ -115,7 +115,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   return (
     <div
       draggable={startResize ? false : !disableChange}
-      onDragStart={(e) => onDragStart(e)}
+      onDragStart={(e) => onDragStart(e, containerRef.current as any)}
       onDragEnd={(e) => {
         e.preventDefault();
         e.stopPropagation();

@@ -66,8 +66,6 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     clientX: number,
     clientY: number,
   ): TargetPlaceEnum | undefined => {
-    //   console.log(clientY);
-
     activeDropRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',

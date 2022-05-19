@@ -119,7 +119,7 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React.createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: function onDragStart(e) {
-      return _onDragStart(e);
+      return _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();

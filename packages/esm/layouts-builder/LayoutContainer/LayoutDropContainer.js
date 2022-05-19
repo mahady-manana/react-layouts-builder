@@ -51,7 +51,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
-    //   console.log(clientY);
     var _a, _b, _c, _d;
 
     (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({

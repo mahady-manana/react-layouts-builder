@@ -109,6 +109,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     columnId: string,
     rowId: any,
     itemkey: any,
+    el?: HTMLElement
   ) => {
     e.stopPropagation();
 
@@ -118,6 +119,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
+
+    e.dataTransfer.setDragImage(el as any, 0,0)
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -372,7 +375,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             ? onImageResizeFinished(items, w)
                             : undefined
                         }
-                        onDragStart={(e) => {
+                        onDragStart={(e, el) => {
                           if (disabled) {
                             return;
                           }
@@ -382,6 +385,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             column.id,
                             rowId,
                             items[stableKey],
+                            el
                           );
                         }}
                       >
