@@ -985,6 +985,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
+    var _a, _b, _c;
+
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -994,11 +996,14 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    var width = el === null || el === void 0 ? void 0 : el.clientWidth;
-    var clone = el === null || el === void 0 ? void 0 : el.cloneNode(true);
+    console.log(el);
+    var width = (_a = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _a === void 0 ? void 0 : _a.clientWidth;
+    var height = (_b = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _b === void 0 ? void 0 : _b.clientHeight;
+    var clone = (_c = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _c === void 0 ? void 0 : _c.cloneNode(true);
     clone.style.position = 'absolute';
     clone.style.transform = 'translate(-11000,-11000)';
     clone.style.width = "".concat(width, "px");
+    clone.style.height = "".concat(height, "px");
     clone.setAttribute("id", "ghostElement");
     document.body.appendChild(clone); // clone.style.position = 'absolute';
 

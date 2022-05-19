@@ -120,12 +120,17 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
-    const width = el?.clientWidth;
+    console.log(el);
     
-    const clone = el?.cloneNode(true) as HTMLElement;
+    const width = el?.firstElementChild?.clientWidth;
+    const height = el?.firstElementChild?.clientHeight;
+    
+    const clone = el?.firstElementChild?.cloneNode(true) as HTMLElement;
     clone.style.position = 'absolute';
     clone.style.transform = 'translate(-11000,-11000)';
     clone.style.width = `${width}px`;
+    clone.style.height = `${height}px`;
+
     clone.setAttribute("id", "ghostElement")
     document.body.appendChild(clone)
     // clone.style.position = 'absolute';
