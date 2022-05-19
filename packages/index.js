@@ -279,11 +279,8 @@ var DraggableItem = function DraggableItem(_a) {
       return _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
-      var _a;
-
       e.preventDefault();
       e.stopPropagation();
-      (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
@@ -790,9 +787,13 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   var containerRef = React.useRef(null);
   var activeDropRef = React.useRef(null);
 
-  var _b = React.useState(500),
-      checkAnomalie = _b[0],
-      setCheckAnomalie = _b[1];
+  var _b = React.useState(0),
+      initY = _b[0],
+      setInitY = _b[1];
+
+  var _c = React.useState(500),
+      checkAnomalie = _c[0],
+      setCheckAnomalie = _c[1];
 
   React.useEffect(function () {
     if (checkAnomalie > 10) {
@@ -814,6 +815,10 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
     if (disableChange) {
       return;
+    }
+
+    if (!initY) {
+      setInitY(e.clientY);
     }
 
     setCheckAnomalie(500);
@@ -993,18 +998,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('itemKeyType', itemKeyType);
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId); // const width = el?.firstElementChild?.clientWidth;
-    // const height = el?.firstElementChild?.clientHeight;
-    // const clone = el?.firstElementChild as any;
-    // clone.style.position = 'absolute';
-    // clone.style.transform = 'translate(-11000,-11000)';
-    // clone.style.width = `${width}px`;
-    // clone.style.height = `${height}px`;
-    // clone.setAttribute("id", "ghostElement")
-    // document.body.appendChild(clone)
-    // // clone.style.position = 'absolute';
-    // e.dataTransfer.setDragImage(clone as any, 0, 0);
-
+    e.dataTransfer.setData('rowId', rowId);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1013,15 +1007,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
-    var _a;
-
     var sourceItemKey = e.dataTransfer.getData('itemKey');
     var isSection = e.dataTransfer.getData('isSection');
     var sourceSectionId = e.dataTransfer.getData('sectionId');
     var sourceColumnKey = e.dataTransfer.getData('colmunId');
     var sourceRowId = e.dataTransfer.getData('rowId');
     var itemKeyType = e.dataTransfer.getData('itemKeyType');
-    (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
     var source = {
       columnId: sourceColumnKey,
       itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,

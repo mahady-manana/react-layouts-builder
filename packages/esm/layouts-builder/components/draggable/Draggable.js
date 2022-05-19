@@ -122,11 +122,8 @@ var DraggableItem = function DraggableItem(_a) {
       return _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
-      var _a;
-
       e.preventDefault();
       e.stopPropagation();
-      (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,

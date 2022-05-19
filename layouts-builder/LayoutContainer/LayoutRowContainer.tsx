@@ -119,20 +119,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    
-    // const width = el?.firstElementChild?.clientWidth;
-    // const height = el?.firstElementChild?.clientHeight;
-    
-    // const clone = el?.firstElementChild as any;
-    // clone.style.position = 'absolute';
-    // clone.style.transform = 'translate(-11000,-11000)';
-    // clone.style.width = `${width}px`;
-    // clone.style.height = `${height}px`;
 
-    // clone.setAttribute("id", "ghostElement")
-    // document.body.appendChild(clone)
-    // // clone.style.position = 'absolute';
-    // e.dataTransfer.setDragImage(clone as any, 0, 0);
+  
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -151,8 +139,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     const sourceRowId = e.dataTransfer.getData('rowId');
     const itemKeyType = e.dataTransfer.getData('itemKeyType');
 
-    
-    document.getElementById('ghostElement')?.remove()
     const source: SourceType = {
       columnId: sourceColumnKey,
       itemKey:

@@ -12,9 +12,13 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   var containerRef = useRef(null);
   var activeDropRef = useRef(null);
 
-  var _b = useState(500),
-      checkAnomalie = _b[0],
-      setCheckAnomalie = _b[1];
+  var _b = useState(0),
+      initY = _b[0],
+      setInitY = _b[1];
+
+  var _c = useState(500),
+      checkAnomalie = _c[0],
+      setCheckAnomalie = _c[1];
 
   useEffect(function () {
     if (checkAnomalie > 10) {
@@ -36,6 +40,10 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
     if (disableChange) {
       return;
+    }
+
+    if (!initY) {
+      setInitY(e.clientY);
     }
 
     setCheckAnomalie(500);
