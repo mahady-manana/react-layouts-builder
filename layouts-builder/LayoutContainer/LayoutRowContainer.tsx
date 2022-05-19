@@ -120,7 +120,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    el.style.backgroundColor = "#ccc";
+    el.style.backgroundColor = "transparent";
     el.style.padding = "10px";
     el.style.width = width ? `${width}px`: '' 
     el.style.position = "absolute"; 

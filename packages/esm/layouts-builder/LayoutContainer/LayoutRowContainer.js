@@ -103,7 +103,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    el.style.backgroundColor = "#ccc";
+    el.style.backgroundColor = "transparent";
     el.style.padding = "10px";
     el.style.width = width ? "".concat(width, "px") : '';
     el.style.position = "absolute";
