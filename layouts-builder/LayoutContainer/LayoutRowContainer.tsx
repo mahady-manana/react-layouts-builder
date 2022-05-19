@@ -109,7 +109,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     columnId: string,
     rowId: any,
     itemkey: any,
-    el?: HTMLElement
+    el?: HTMLElement,
   ) => {
     e.stopPropagation();
 
@@ -120,7 +120,16 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
-    e.dataTransfer.setDragImage(el as any, 0,0)
+    const width = el?.clientWidth;
+    
+    const clone = el?.cloneNode(true) as HTMLElement;
+    clone.style.position = 'absolute';
+    clone.style.transform = 'translate(-11000,-11000)';
+    clone.style.width = `${width}px`;
+    clone.setAttribute("id", "ghostElement")
+    document.body.appendChild(clone)
+    // clone.style.position = 'absolute';
+    e.dataTransfer.setDragImage(clone as any, 0, 0);
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -139,6 +148,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     const sourceRowId = e.dataTransfer.getData('rowId');
     const itemKeyType = e.dataTransfer.getData('itemKeyType');
 
+    
+    document.getElementById('ghostElement')?.remove()
     const source: SourceType = {
       columnId: sourceColumnKey,
       itemKey:
@@ -149,8 +160,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       isSection: !!isSection,
       rowId: sourceRowId,
     };
-
-    document.getElementById('ghostElement')?.remove();
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -385,7 +394,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             column.id,
                             rowId,
                             items[stableKey],
-                            el
+                            el,
                           );
                         }}
                       >

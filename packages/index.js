@@ -279,8 +279,11 @@ var DraggableItem = function DraggableItem(_a) {
       return _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
+      var _a;
+
       e.preventDefault();
       e.stopPropagation();
+      (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
@@ -991,7 +994,15 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    e.dataTransfer.setDragImage(el, 0, 0);
+    var width = el === null || el === void 0 ? void 0 : el.clientWidth;
+    var clone = el === null || el === void 0 ? void 0 : el.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.transform = 'translate(-11000,-11000)';
+    clone.style.width = "".concat(width, "px");
+    clone.setAttribute("id", "ghostElement");
+    document.body.appendChild(clone); // clone.style.position = 'absolute';
+
+    e.dataTransfer.setDragImage(clone, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1008,6 +1019,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     var sourceColumnKey = e.dataTransfer.getData('colmunId');
     var sourceRowId = e.dataTransfer.getData('rowId');
     var itemKeyType = e.dataTransfer.getData('itemKeyType');
+    (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
     var source = {
       columnId: sourceColumnKey,
       itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
@@ -1015,7 +1027,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       isSection: !!isSection,
       rowId: sourceRowId
     };
-    (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item

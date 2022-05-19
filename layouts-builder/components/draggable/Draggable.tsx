@@ -119,6 +119,7 @@ export const DraggableItem: FC<DraggableProps> = ({
       onDragEnd={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        document.getElementById('ghostElement')?.remove()
       }}
       className={classNames(
         'rlb-draggable-container flex-grow',
