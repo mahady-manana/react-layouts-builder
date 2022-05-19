@@ -14,7 +14,7 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (e: DragEvent<HTMLDivElement>, el: HTMLElement, width?: number) => void;
+  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
   isImage?: boolean;
   imageWidth?: number;
   oneCol?: boolean;
@@ -115,11 +115,10 @@ export const DraggableItem: FC<DraggableProps> = ({
   return (
     <div
       draggable={startResize ? false : !disableChange}
-      onDragStart={e => onDragStart(e, containerRef.current?.cloneNode(true) as any, containerRef.current?.offsetWidth)}
+      onDragStart={(e) => onDragStart(e)}
       onDragEnd={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        document.getElementById("ghostElement")?.remove()
       }}
       className={classNames(
         'rlb-draggable-container flex-grow',

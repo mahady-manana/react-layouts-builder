@@ -119,16 +119,11 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React.createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: function onDragStart(e) {
-      var _a, _b;
-
-      return _onDragStart(e, (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.cloneNode(true), (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth);
+      return _onDragStart(e);
     },
     onDragEnd: function onDragEnd(e) {
-      var _a;
-
       e.preventDefault();
       e.stopPropagation();
-      (_a = document.getElementById("ghostElement")) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,

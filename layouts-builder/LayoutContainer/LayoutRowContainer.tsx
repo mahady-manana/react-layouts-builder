@@ -109,8 +109,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     columnId: string,
     rowId: any,
     itemkey: any,
-    el: HTMLElement,
-    width?: number
   ) => {
     e.stopPropagation();
 
@@ -120,15 +118,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    el.style.backgroundColor = "transparent";
-    el.style.padding = "10px";
-    el.style.width = width ? `${width}px`: '' 
-    el.style.position = "absolute"; 
-    el.setAttribute("id", "ghostElement")
-    el.style.transform = "translate(-10000px, -10000px)";
-
-    document.body.appendChild(el)
-    e.dataTransfer.setDragImage(el, 0,0)
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -158,7 +147,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       rowId: sourceRowId,
     };
 
-    document.getElementById("ghostElement")?.remove()
+    document.getElementById('ghostElement')?.remove();
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -383,7 +372,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             ? onImageResizeFinished(items, w)
                             : undefined
                         }
-                        onDragStart={(e, el,width) => {
+                        onDragStart={(e) => {
                           if (disabled) {
                             return;
                           }
@@ -393,8 +382,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             column.id,
                             rowId,
                             items[stableKey],
-                            el,
-                            width
                           );
                         }}
                       >

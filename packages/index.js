@@ -276,16 +276,11 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: function onDragStart(e) {
-      var _a, _b;
-
-      return _onDragStart(e, (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.cloneNode(true), (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth);
+      return _onDragStart(e);
     },
     onDragEnd: function onDragEnd(e) {
-      var _a;
-
       e.preventDefault();
       e.stopPropagation();
-      (_a = document.getElementById("ghostElement")) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
@@ -988,7 +983,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setTargetDROP(undefined);
   };
 
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el, width) {
+  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -998,14 +993,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    el.style.backgroundColor = "transparent";
-    el.style.padding = "10px";
-    el.style.width = width ? "".concat(width, "px") : '';
-    el.style.position = "absolute";
-    el.setAttribute("id", "ghostElement");
-    el.style.transform = "translate(-10000px, -10000px)";
-    document.body.appendChild(el);
-    e.dataTransfer.setDragImage(el, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1029,7 +1016,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       isSection: !!isSection,
       rowId: sourceRowId
     };
-    (_a = document.getElementById("ghostElement")) === null || _a === void 0 ? void 0 : _a.remove();
+    (_a = document.getElementById('ghostElement')) === null || _a === void 0 ? void 0 : _a.remove();
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -1213,12 +1200,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
           },
-          onDragStart: function onDragStart(e, el, width) {
+          onDragStart: function onDragStart(e) {
             if (disabled) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el, width);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
