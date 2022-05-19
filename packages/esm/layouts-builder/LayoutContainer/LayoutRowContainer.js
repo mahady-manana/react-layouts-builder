@@ -94,8 +94,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
-    var _a, _b, _c;
-
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -104,19 +102,18 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('itemKeyType', itemKeyType);
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
-    console.log(el);
-    var width = (_a = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _a === void 0 ? void 0 : _a.clientWidth;
-    var height = (_b = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _b === void 0 ? void 0 : _b.clientHeight;
-    var clone = (_c = el === null || el === void 0 ? void 0 : el.firstElementChild) === null || _c === void 0 ? void 0 : _c.cloneNode(true);
-    clone.style.position = 'absolute';
-    clone.style.transform = 'translate(-11000,-11000)';
-    clone.style.width = "".concat(width, "px");
-    clone.style.height = "".concat(height, "px");
-    clone.setAttribute("id", "ghostElement");
-    document.body.appendChild(clone); // clone.style.position = 'absolute';
+    e.dataTransfer.setData('rowId', rowId); // const width = el?.firstElementChild?.clientWidth;
+    // const height = el?.firstElementChild?.clientHeight;
+    // const clone = el?.firstElementChild as any;
+    // clone.style.position = 'absolute';
+    // clone.style.transform = 'translate(-11000,-11000)';
+    // clone.style.width = `${width}px`;
+    // clone.style.height = `${height}px`;
+    // clone.setAttribute("id", "ghostElement")
+    // document.body.appendChild(clone)
+    // // clone.style.position = 'absolute';
+    // e.dataTransfer.setDragImage(clone as any, 0, 0);
 
-    e.dataTransfer.setDragImage(clone, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -329,7 +326,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
