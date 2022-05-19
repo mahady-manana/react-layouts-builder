@@ -14,11 +14,11 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (e: DragEvent<HTMLDivElement>) => void;
+  onDragStart: (e: DragEvent<HTMLDivElement>, el: HTMLElement, width?: number) => void;
   isImage?: boolean;
   imageWidth?: number;
   oneCol?: boolean;
-  onImageResizeFinished?: (width: number) => void
+  onImageResizeFinished?: (width: number) => void;
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
@@ -28,18 +28,18 @@ export const DraggableItem: FC<DraggableProps> = ({
   isImage,
   oneCol,
   onDragStart,
-  onImageResizeFinished
+  onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState<number>(0);
-  const [finalWidth, setFinalWidth] = useState<number>(0)
+  const [finalWidth, setFinalWidth] = useState<number>(0);
   const [initWidth, setInitWidth] = useState<number>();
   const [initClientX, setInitClientX] = useState<number>();
   const [direction, setDirection] = useState<'left' | 'right'>();
   const [percentPX, setPercentPX] = useState<number>();
   const [startResize, setStartResize] = useState<boolean>(false);
-  const [waitBeforeUpdate, setWaitBeforeUpdate] = useState(500)
-  
+  const [waitBeforeUpdate, setWaitBeforeUpdate] = useState(500);
+
   useEffect(() => {
     if (imageWidth) {
       setWidth(imageWidth);
@@ -65,44 +65,40 @@ export const DraggableItem: FC<DraggableProps> = ({
       direction
     ) {
       const diff = initClientX - newCX;
-  
+
       const w = diff / percentPX;
       const dir = direction === 'left' ? w : -w;
       const isOneCol = oneCol ? dir * 2 : dir;
 
-
-      const final = initWidth + isOneCol
+      const final = initWidth + isOneCol;
 
       if (final > 100) {
-        setWidth(100)
-        setFinalWidth(100)
+        setWidth(100);
+        setFinalWidth(100);
       } else if (final < 15) {
-        setWidth(15)
-        setFinalWidth(15)
+        setWidth(15);
+        setFinalWidth(15);
       } else {
         setWidth(final);
-        setFinalWidth(final)
+        setFinalWidth(final);
       }
-
     }
   };
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
-    
-    runIt()
+    runIt();
   };
 
   const runIt = () => {
-    
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width)
-      setFinalWidth(0)
+      onImageResizeFinished(width);
+      setFinalWidth(0);
     }
     setInitWidth(0);
     setStartResize(false);
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
-  }
+  };
 
   useEffect(() => {
     if (waitBeforeUpdate > 10) {
@@ -119,10 +115,11 @@ export const DraggableItem: FC<DraggableProps> = ({
   return (
     <div
       draggable={startResize ? false : !disableChange}
-      onDragStart={onDragStart}
-      onDragEnd={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onDragStart={e => onDragStart(e, containerRef.current?.cloneNode(true) as any, containerRef.current?.offsetWidth)}
+      onDragEnd={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById("ghostElement")?.remove()
       }}
       className={classNames(
         'rlb-draggable-container flex-grow',
@@ -148,7 +145,7 @@ export const DraggableItem: FC<DraggableProps> = ({
             <div
               className="image-resize imr-left"
               onClick={(e) => e.stopPropagation()}
-              style={{zIndex: startResize ? 999 : undefined}}
+              style={{ zIndex: startResize ? 999 : undefined }}
             >
               <div
                 className="hand-image"
@@ -160,19 +157,21 @@ export const DraggableItem: FC<DraggableProps> = ({
             </div>
           ) : null}
           {children}
-         {!disableChange ? <div
-            className="image-resize imr-right"
-            onClick={(e) => e.stopPropagation()}
-            style={{zIndex: startResize ? 999 : undefined}}
-          >
+          {!disableChange ? (
             <div
-              className="hand-image"
-              onMouseDown={(e) => {
-                setDirection('right');
-                onMouseDown(e);
-              }}
-            ></div>
-          </div>: null}
+              className="image-resize imr-right"
+              onClick={(e) => e.stopPropagation()}
+              style={{ zIndex: startResize ? 999 : undefined }}
+            >
+              <div
+                className="hand-image"
+                onMouseDown={(e) => {
+                  setDirection('right');
+                  onMouseDown(e);
+                }}
+              ></div>
+            </div>
+          ) : null}
         </div>
       ) : (
         children

@@ -8,7 +8,7 @@ var DraggableItem = function DraggableItem(_a) {
       imageWidth = _a.imageWidth,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
-      onDragStart = _a.onDragStart,
+      _onDragStart = _a.onDragStart,
       onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
 
@@ -118,10 +118,17 @@ var DraggableItem = function DraggableItem(_a) {
   }, [waitBeforeUpdate]);
   return /*#__PURE__*/React.createElement("div", {
     draggable: startResize ? false : !disableChange,
-    onDragStart: onDragStart,
+    onDragStart: function onDragStart(e) {
+      var _a, _b;
+
+      return _onDragStart(e, (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.cloneNode(true), (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth);
+    },
     onDragEnd: function onDragEnd(e) {
+      var _a;
+
       e.preventDefault();
       e.stopPropagation();
+      (_a = document.getElementById("ghostElement")) === null || _a === void 0 ? void 0 : _a.remove();
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,

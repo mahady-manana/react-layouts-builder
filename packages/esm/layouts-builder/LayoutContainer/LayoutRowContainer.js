@@ -93,7 +93,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setTargetDROP(undefined);
   };
 
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey) {
+  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el, width) {
     e.stopPropagation();
 
     var itemKeyType = _typeof(itemkey);
@@ -103,6 +103,14 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
+    el.style.backgroundColor = "#ccc";
+    el.style.padding = "10px";
+    el.style.width = width ? "".concat(width, "px") : '';
+    el.style.position = "absolute";
+    el.setAttribute("id", "ghostElement");
+    el.style.transform = "translate(-10000px, -10000px)";
+    document.body.appendChild(el);
+    e.dataTransfer.setDragImage(el, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -111,6 +119,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
+    var _a;
+
     var sourceItemKey = e.dataTransfer.getData('itemKey');
     var isSection = e.dataTransfer.getData('isSection');
     var sourceSectionId = e.dataTransfer.getData('sectionId');
@@ -124,6 +134,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       isSection: !!isSection,
       rowId: sourceRowId
     };
+    (_a = document.getElementById("ghostElement")) === null || _a === void 0 ? void 0 : _a.remove();
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -307,12 +318,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
           },
-          onDragStart: function onDragStart(e) {
+          onDragStart: function onDragStart(e, el, width) {
             if (disabled) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el, width);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
