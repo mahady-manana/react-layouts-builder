@@ -301,7 +301,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         }, /*#__PURE__*/React.createElement(DraggableItem, {
           isImage: isImage,
           disableChange: disabled || items['id'] === 'EMPTY_SECTION',
-          imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
+          sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
           onImageResizeFinished: function onImageResizeFinished(w) {

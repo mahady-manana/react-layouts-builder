@@ -162,7 +162,7 @@ var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       disableChange = _a.disableChange,
-      imageWidth = _a.imageWidth,
+      sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
       _onDragStart = _a.onDragStart,
@@ -174,52 +174,98 @@ var DraggableItem = function DraggableItem(_a) {
       setWidth = _b[1];
 
   var _c = React.useState(0),
-      finalWidth = _c[0],
-      setFinalWidth = _c[1];
+      height = _c[0],
+      setHeight = _c[1];
 
-  var _d = React.useState(),
-      initWidth = _d[0],
-      setInitWidth = _d[1];
+  var _d = React.useState(0),
+      finalWidth = _d[0],
+      setFinalWidth = _d[1];
 
-  var _e = React.useState(),
-      initClientX = _e[0],
-      setInitClientX = _e[1];
+  var _e = React.useState(0),
+      finalHeight = _e[0],
+      setFinalHeight = _e[1];
 
   var _f = React.useState(),
-      direction = _f[0],
-      setDirection = _f[1];
+      initWidth = _f[0],
+      setInitWidth = _f[1];
 
   var _g = React.useState(),
-      percentPX = _g[0],
-      setPercentPX = _g[1];
+      initClientX = _g[0],
+      setInitClientX = _g[1];
 
-  var _h = React.useState(false),
-      startResize = _h[0],
-      setStartResize = _h[1];
+  var _h = React.useState(0),
+      initHeight = _h[0],
+      setInitHeight = _h[1];
 
-  var _j = React.useState(500),
-      waitBeforeUpdate = _j[0],
-      setWaitBeforeUpdate = _j[1];
+  var _j = React.useState(),
+      initClientY = _j[0],
+      setInitClientY = _j[1];
+
+  var _k = React.useState(),
+      direction = _k[0],
+      setDirection = _k[1];
+
+  var _l = React.useState(),
+      percentPX = _l[0],
+      setPercentPX = _l[1];
+
+  var _m = React.useState(false),
+      startResize = _m[0],
+      setStartResize = _m[1];
+
+  var _o = React.useState(500),
+      waitBeforeUpdate = _o[0],
+      setWaitBeforeUpdate = _o[1];
 
   React.useEffect(function () {
-    if (imageWidth) {
-      setWidth(imageWidth);
+    if (sizes === null || sizes === void 0 ? void 0 : sizes.width) {
+      setWidth(sizes === null || sizes === void 0 ? void 0 : sizes.width);
     }
-  }, [imageWidth]);
 
-  var _onMouseDown = function onMouseDown(e) {
-    var _a, _b;
+    if ((sizes === null || sizes === void 0 ? void 0 : sizes.height) && oneCol) {
+      setHeight(sizes === null || sizes === void 0 ? void 0 : sizes.height);
+    }
+  }, [sizes]);
+
+  var _onMouseDown = function onMouseDown(e, isVert) {
+    var _a, _b, _c;
 
     if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
-    setInitWidth(imageWidth || 100);
+
+    if (isVert) {
+      var init = containerRef.current.offsetHeight;
+      setInitHeight(init);
+      setHeight((sizes === null || sizes === void 0 ? void 0 : sizes.height) || init);
+      setInitClientY(e.clientY);
+    } else {
+      setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
+      setInitClientX(e.clientX);
+    }
+
     setStartResize(true);
-    setInitClientX(e.clientX);
     var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
-    setPercentPX(p1px);
+    var p1pxVert = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetHeight;
+    var valPerc = isVert ? p1pxVert : p1px;
+    setPercentPX(valPerc);
   };
 
   var onMouseMouve = function onMouseMouve(e) {
     var newCX = e.clientX;
+    var newCY = e.clientY;
+
+    if (initClientY && initHeight && startResize && percentPX && direction === 'vertical') {
+      var diff = initClientY - newCY;
+
+      var _final = initHeight - diff;
+
+      if (_final < 100) {
+        setHeight(100);
+        setFinalHeight(100);
+      } else {
+        setHeight(_final);
+        setFinalHeight(_final);
+      }
+    }
 
     if (initClientX && initWidth && startResize && percentPX && direction) {
       var diff = initClientX - newCX;
@@ -252,11 +298,18 @@ var DraggableItem = function DraggableItem(_a) {
       setFinalWidth(0);
     }
 
+    if (onImageResizeFinished && height && finalHeight) {
+      onImageResizeFinished(height, true);
+      setFinalHeight(0);
+    }
+
     setInitWidth(0);
     setStartResize(false);
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
+    setInitClientY(0);
+    setInitHeight(0);
   };
 
   React.useEffect(function () {
@@ -293,6 +346,7 @@ var DraggableItem = function DraggableItem(_a) {
     className: "image_rlb",
     style: {
       width: "".concat(width || 100, "%"),
+      height: height ? height : undefined,
       margin: oneCol ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
@@ -309,6 +363,21 @@ var DraggableItem = function DraggableItem(_a) {
       setDirection('left');
 
       _onMouseDown(e);
+    }
+  })) : null, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "image-resize-bottom",
+    onClick: function onClick(e) {
+      return e.stopPropagation();
+    },
+    style: {
+      zIndex: startResize ? 999 : undefined
+    }
+  }, /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "hand-image",
+    onMouseDown: function onMouseDown(e) {
+      setDirection('vertical');
+
+      _onMouseDown(e, true);
     }
   })) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-right",
@@ -1197,7 +1266,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
           isImage: isImage,
           disableChange: disabled || items['id'] === 'EMPTY_SECTION',
-          imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
+          sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
           onImageResizeFinished: function onImageResizeFinished(w) {

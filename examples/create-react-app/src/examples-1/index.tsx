@@ -173,7 +173,10 @@ export const Layouts1 = () => {
             onClickSection={(section) => setclickSection(section)}
             onFocusItem={onFocus}
             imageCheckerFn={imageCheckerFn}
-            imageSizeFnLoader={(item) => item.size}
+            imageSizeFnLoader={(item) => ({
+              width: item.size,
+              height: item.height
+            })}
             onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
               return (
