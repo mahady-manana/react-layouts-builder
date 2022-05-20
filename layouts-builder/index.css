@@ -182,6 +182,10 @@
 .resize-img * {
   cursor: col-resize;
 }
+.resize-row,
+.resize-row * {
+  cursor: row-resize;
+}
 /* drop item indicator */
 .rbl-drop-item-indicator {
   background: #fc0454;

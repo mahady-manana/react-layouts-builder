@@ -21,10 +21,10 @@ interface DraggableProps {
   isImage?: boolean;
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
-  onImageResizeFinished?: (
-    height: number,
-    isHeight?: boolean,
-  ) => void;
+  onImageResizeFinished?: (data: {
+    height?: number;
+    width?: number;
+  }) => void;
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
@@ -138,11 +138,11 @@ export const DraggableItem: FC<DraggableProps> = ({
 
   const runIt = () => {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width);
+      onImageResizeFinished({ width: Math.round(width) });
       setFinalWidth(0);
     }
     if (onImageResizeFinished && height && finalHeight) {
-      onImageResizeFinished(height, true);
+      onImageResizeFinished({ height: Math.round(height) });
       setFinalHeight(0);
     }
 
@@ -178,7 +178,11 @@ export const DraggableItem: FC<DraggableProps> = ({
       className={classNames(
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',
-        startResize ? 'resize-img' : '',
+        startResize
+          ? `${
+              direction === 'vertical' ? 'resize-row' : 'resize-img'
+            }`
+          : '',
       )}
       data-draggable={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}

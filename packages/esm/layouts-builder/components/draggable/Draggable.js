@@ -137,12 +137,16 @@ var DraggableItem = function DraggableItem(_a) {
 
   var runIt = function runIt() {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width);
+      onImageResizeFinished({
+        width: Math.round(width)
+      });
       setFinalWidth(0);
     }
 
     if (onImageResizeFinished && height && finalHeight) {
-      onImageResizeFinished(height, true);
+      onImageResizeFinished({
+        height: Math.round(height)
+      });
       setFinalHeight(0);
     }
 
@@ -178,7 +182,7 @@ var DraggableItem = function DraggableItem(_a) {
       e.preventDefault();
       e.stopPropagation();
     },
-    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
+    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? "".concat(direction === 'vertical' ? 'resize-row' : 'resize-img') : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
     ref: containerRef,

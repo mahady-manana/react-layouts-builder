@@ -50,7 +50,7 @@ interface LayoutRowContainerProps {
   imageCheckerFn?: (items: boolean) => boolean;
   onImageResizeFinished?: (
     items: any,
-    value: number,
+    value: { width?: number; height?: number },
     isHeight?: boolean,
   ) => void;
 }
@@ -373,13 +373,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         }
                         oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
-                        onImageResizeFinished={(w, isHeight) =>
+                        onImageResizeFinished={(values) =>
                           onImageResizeFinished
-                            ? onImageResizeFinished(
-                                items,
-                                w,
-                                isHeight,
-                              )
+                            ? onImageResizeFinished(items, values)
                             : undefined
                         }
                         onDragStart={(e, el) => {

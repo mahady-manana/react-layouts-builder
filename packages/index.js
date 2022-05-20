@@ -294,12 +294,16 @@ var DraggableItem = function DraggableItem(_a) {
 
   var runIt = function runIt() {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width);
+      onImageResizeFinished({
+        width: Math.round(width)
+      });
       setFinalWidth(0);
     }
 
     if (onImageResizeFinished && height && finalHeight) {
-      onImageResizeFinished(height, true);
+      onImageResizeFinished({
+        height: Math.round(height)
+      });
       setFinalHeight(0);
     }
 
@@ -335,7 +339,7 @@ var DraggableItem = function DraggableItem(_a) {
       e.preventDefault();
       e.stopPropagation();
     },
-    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
+    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? "".concat(direction === 'vertical' ? 'resize-row' : 'resize-img') : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
     ref: containerRef,
@@ -1269,8 +1273,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
-          onImageResizeFinished: function onImageResizeFinished(w, isHeight) {
-            return _onImageResizeFinished ? _onImageResizeFinished(items, w, isHeight) : undefined;
+          onImageResizeFinished: function onImageResizeFinished(values) {
+            return _onImageResizeFinished ? _onImageResizeFinished(items, values) : undefined;
           },
           onDragStart: function onDragStart(e, el) {
             if (disabled) {

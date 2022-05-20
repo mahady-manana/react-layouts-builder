@@ -67,7 +67,6 @@ export interface ILayoutContainer {
   imageCheckerFn?: (item: any) => boolean;
   onImageResizeFinished?: (
     items: any,
-    value: number,
-    isHeight?: boolean,
+    value: { width?: number; height?: number },
   ) => void;
 }

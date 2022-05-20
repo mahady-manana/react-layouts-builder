@@ -180,7 +180,7 @@ export const Layouts1 = () => {
               width: item.size,
               height: item.height
             })}
-            onImageResizeFinished={(item, w, is) => console.log(item, w, is)}
+            onImageResizeFinished={(item, w) => console.log(item, w)}
             renderComponent={(data) => {
               return (
                 <TestComponent

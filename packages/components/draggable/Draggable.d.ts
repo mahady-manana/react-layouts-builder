@@ -10,7 +10,10 @@ interface DraggableProps {
         height?: number;
     };
     oneCol?: boolean;
-    onImageResizeFinished?: (height: number, isHeight?: boolean) => void;
+    onImageResizeFinished?: (data: {
+        height?: number;
+        width?: number;
+    }) => void;
 }
 export declare const DraggableItem: FC<DraggableProps>;
 export {};
