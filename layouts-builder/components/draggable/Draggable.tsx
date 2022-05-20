@@ -14,23 +14,17 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (
-    e: DragEvent<HTMLDivElement>,
-    element?: HTMLElement,
-  ) => void;
+  onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
   isImage?: boolean;
-  sizes?: { width?: number; height?: number };
+  imageWidth?: number;
   oneCol?: boolean;
-  onImageResizeFinished?: (data: {
-    height?: number;
-    width?: number;
-  }) => void;
+  onImageResizeFinished?: (width: number) => void;
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   disableChange,
-  sizes,
+  imageWidth,
   isImage,
   oneCol,
   onDragStart,
@@ -38,73 +32,31 @@ export const DraggableItem: FC<DraggableProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
   const [finalWidth, setFinalWidth] = useState<number>(0);
-  const [finalHeight, setFinalHeight] = useState<number>(0);
   const [initWidth, setInitWidth] = useState<number>();
   const [initClientX, setInitClientX] = useState<number>();
-
-  const [initHeight, setInitHeight] = useState<number>(0);
-  const [initClientY, setInitClientY] = useState<number>();
-  const [direction, setDirection] = useState<
-    'left' | 'right' | 'vertical'
-  >();
+  const [direction, setDirection] = useState<'left' | 'right'>();
   const [percentPX, setPercentPX] = useState<number>();
   const [startResize, setStartResize] = useState<boolean>(false);
   const [waitBeforeUpdate, setWaitBeforeUpdate] = useState(500);
 
   useEffect(() => {
-    if (sizes?.width) {
-      setWidth(sizes?.width);
+    if (imageWidth) {
+      setWidth(imageWidth);
     }
-    if (sizes?.height && oneCol) {
-      setHeight(sizes?.height);
-    }
-  }, [sizes]);
+  }, [imageWidth]);
 
-  const onMouseDown = (
-    e: MouseEvent<HTMLElement>,
-    isVert?: boolean,
-  ) => {
+  const onMouseDown = (e: MouseEvent<HTMLElement>) => {
     if (!containerRef.current?.offsetWidth) return;
-    if (isVert) {
-      const init = containerRef.current.offsetHeight;
-      setInitHeight(init);
-      setHeight(sizes?.height || init);
-      setInitClientY(e.clientY);
-    } else {
-      setInitWidth(sizes?.width || 100);
-      setInitClientX(e.clientX);
-    }
+    setInitWidth(imageWidth || 100);
     setStartResize(true);
+    setInitClientX(e.clientX);
     const p1px = containerRef.current?.offsetWidth / 100;
-    const p1pxVert = containerRef.current?.offsetHeight;
-    const valPerc = isVert ? p1pxVert : p1px;
-    setPercentPX(valPerc);
+    setPercentPX(p1px);
   };
   const onMouseMouve = (e: MouseEvent<HTMLElement>) => {
     const newCX = e.clientX;
-    const newCY = e.clientY;
 
-    if (
-      initClientY &&
-      initHeight &&
-      startResize &&
-      percentPX &&
-      direction === 'vertical'
-    ) {
-      const diff = initClientY - newCY;
-
-      const final = initHeight - diff;
-
-      if (final < 100) {
-        setHeight(100);
-        setFinalHeight(100);
-      } else {
-        setHeight(final);
-        setFinalHeight(final);
-      }
-    }
     if (
       initClientX &&
       initWidth &&
@@ -138,21 +90,14 @@ export const DraggableItem: FC<DraggableProps> = ({
 
   const runIt = () => {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished({ width: Math.round(width) });
+      onImageResizeFinished(width);
       setFinalWidth(0);
     }
-    if (onImageResizeFinished && height && finalHeight) {
-      onImageResizeFinished({ height: Math.round(height) });
-      setFinalHeight(0);
-    }
-
     setInitWidth(0);
     setStartResize(false);
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
-    setInitClientY(0);
-    setInitHeight(0);
   };
 
   useEffect(() => {
@@ -178,11 +123,7 @@ export const DraggableItem: FC<DraggableProps> = ({
       className={classNames(
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',
-        startResize
-          ? `${
-              direction === 'vertical' ? 'resize-row' : 'resize-img'
-            }`
-          : '',
+        startResize ? 'resize-img' : '',
       )}
       data-draggable={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}
@@ -196,7 +137,6 @@ export const DraggableItem: FC<DraggableProps> = ({
           className="image_rlb"
           style={{
             width: `${width || 100}%`,
-            height: height ? height : undefined,
             margin: oneCol ? 'auto' : undefined,
           }}
         >
@@ -211,21 +151,6 @@ export const DraggableItem: FC<DraggableProps> = ({
                 onMouseDown={(e) => {
                   setDirection('left');
                   onMouseDown(e);
-                }}
-              ></div>
-            </div>
-          ) : null}
-          {!disableChange && oneCol ? (
-            <div
-              className="image-resize-bottom"
-              onClick={(e) => e.stopPropagation()}
-              style={{ zIndex: startResize ? 999 : undefined }}
-            >
-              <div
-                className="hand-image"
-                onMouseDown={(e) => {
-                  setDirection('vertical');
-                  onMouseDown(e, true);
                 }}
               ></div>
             </div>

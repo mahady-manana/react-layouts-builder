@@ -17,20 +17,14 @@ interface LayoutRowContainerProps {
         top: boolean;
         bottom: boolean;
     };
-    imageSizeFnLoader?: (items: any) => {
-        width?: number;
-        height?: number;
-    } | undefined;
+    imageSizeFnLoader?: (items: any) => number | undefined;
     setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
     setDragActive: Dispatch<SetStateAction<boolean>>;
     renderComponent: (item: any, source: SourceType) => ReactNode;
     onFocusItem?: (source: SourceType) => void;
     onLayoutChange: (layouts: ILayoutSection[]) => void;
     imageCheckerFn?: (items: boolean) => boolean;
-    onImageResizeFinished?: (items: any, value: {
-        width?: number;
-        height?: number;
-    }, isHeight?: boolean) => void;
+    onImageResizeFinished?: (items: any, width: number) => void;
 }
 export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
 export {};

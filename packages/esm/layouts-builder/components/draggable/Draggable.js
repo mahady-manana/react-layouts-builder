@@ -5,7 +5,7 @@ var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       disableChange = _a.disableChange,
-      sizes = _a.sizes,
+      imageWidth = _a.imageWidth,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
       _onDragStart = _a.onDragStart,
@@ -17,98 +17,52 @@ var DraggableItem = function DraggableItem(_a) {
       setWidth = _b[1];
 
   var _c = useState(0),
-      height = _c[0],
-      setHeight = _c[1];
+      finalWidth = _c[0],
+      setFinalWidth = _c[1];
 
-  var _d = useState(0),
-      finalWidth = _d[0],
-      setFinalWidth = _d[1];
+  var _d = useState(),
+      initWidth = _d[0],
+      setInitWidth = _d[1];
 
-  var _e = useState(0),
-      finalHeight = _e[0],
-      setFinalHeight = _e[1];
+  var _e = useState(),
+      initClientX = _e[0],
+      setInitClientX = _e[1];
 
   var _f = useState(),
-      initWidth = _f[0],
-      setInitWidth = _f[1];
+      direction = _f[0],
+      setDirection = _f[1];
 
   var _g = useState(),
-      initClientX = _g[0],
-      setInitClientX = _g[1];
+      percentPX = _g[0],
+      setPercentPX = _g[1];
 
-  var _h = useState(0),
-      initHeight = _h[0],
-      setInitHeight = _h[1];
+  var _h = useState(false),
+      startResize = _h[0],
+      setStartResize = _h[1];
 
-  var _j = useState(),
-      initClientY = _j[0],
-      setInitClientY = _j[1];
-
-  var _k = useState(),
-      direction = _k[0],
-      setDirection = _k[1];
-
-  var _l = useState(),
-      percentPX = _l[0],
-      setPercentPX = _l[1];
-
-  var _m = useState(false),
-      startResize = _m[0],
-      setStartResize = _m[1];
-
-  var _o = useState(500),
-      waitBeforeUpdate = _o[0],
-      setWaitBeforeUpdate = _o[1];
+  var _j = useState(500),
+      waitBeforeUpdate = _j[0],
+      setWaitBeforeUpdate = _j[1];
 
   useEffect(function () {
-    if (sizes === null || sizes === void 0 ? void 0 : sizes.width) {
-      setWidth(sizes === null || sizes === void 0 ? void 0 : sizes.width);
+    if (imageWidth) {
+      setWidth(imageWidth);
     }
+  }, [imageWidth]);
 
-    if ((sizes === null || sizes === void 0 ? void 0 : sizes.height) && oneCol) {
-      setHeight(sizes === null || sizes === void 0 ? void 0 : sizes.height);
-    }
-  }, [sizes]);
-
-  var _onMouseDown = function onMouseDown(e, isVert) {
-    var _a, _b, _c;
+  var _onMouseDown = function onMouseDown(e) {
+    var _a, _b;
 
     if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
-
-    if (isVert) {
-      var init = containerRef.current.offsetHeight;
-      setInitHeight(init);
-      setHeight((sizes === null || sizes === void 0 ? void 0 : sizes.height) || init);
-      setInitClientY(e.clientY);
-    } else {
-      setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
-      setInitClientX(e.clientX);
-    }
-
+    setInitWidth(imageWidth || 100);
     setStartResize(true);
+    setInitClientX(e.clientX);
     var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
-    var p1pxVert = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetHeight;
-    var valPerc = isVert ? p1pxVert : p1px;
-    setPercentPX(valPerc);
+    setPercentPX(p1px);
   };
 
   var onMouseMouve = function onMouseMouve(e) {
     var newCX = e.clientX;
-    var newCY = e.clientY;
-
-    if (initClientY && initHeight && startResize && percentPX && direction === 'vertical') {
-      var diff = initClientY - newCY;
-
-      var _final = initHeight - diff;
-
-      if (_final < 100) {
-        setHeight(100);
-        setFinalHeight(100);
-      } else {
-        setHeight(_final);
-        setFinalHeight(_final);
-      }
-    }
 
     if (initClientX && initWidth && startResize && percentPX && direction) {
       var diff = initClientX - newCX;
@@ -137,17 +91,8 @@ var DraggableItem = function DraggableItem(_a) {
 
   var runIt = function runIt() {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished({
-        width: Math.round(width)
-      });
+      onImageResizeFinished(width);
       setFinalWidth(0);
-    }
-
-    if (onImageResizeFinished && height && finalHeight) {
-      onImageResizeFinished({
-        height: Math.round(height)
-      });
-      setFinalHeight(0);
     }
 
     setInitWidth(0);
@@ -155,8 +100,6 @@ var DraggableItem = function DraggableItem(_a) {
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
-    setInitClientY(0);
-    setInitHeight(0);
   };
 
   useEffect(function () {
@@ -182,7 +125,7 @@ var DraggableItem = function DraggableItem(_a) {
       e.preventDefault();
       e.stopPropagation();
     },
-    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? "".concat(direction === 'vertical' ? 'resize-row' : 'resize-img') : ''),
+    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
     ref: containerRef,
@@ -193,7 +136,6 @@ var DraggableItem = function DraggableItem(_a) {
     className: "image_rlb",
     style: {
       width: "".concat(width || 100, "%"),
-      height: height ? height : undefined,
       margin: oneCol ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React.createElement("div", {
@@ -210,21 +152,6 @@ var DraggableItem = function DraggableItem(_a) {
       setDirection('left');
 
       _onMouseDown(e);
-    }
-  })) : null, !disableChange && oneCol ? /*#__PURE__*/React.createElement("div", {
-    className: "image-resize-bottom",
-    onClick: function onClick(e) {
-      return e.stopPropagation();
-    },
-    style: {
-      zIndex: startResize ? 999 : undefined
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "hand-image",
-    onMouseDown: function onMouseDown(e) {
-      setDirection('vertical');
-
-      _onMouseDown(e, true);
     }
   })) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize imr-right",

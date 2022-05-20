@@ -5,15 +5,9 @@ interface DraggableProps {
     disableChange?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
     isImage?: boolean;
-    sizes?: {
-        width?: number;
-        height?: number;
-    };
+    imageWidth?: number;
     oneCol?: boolean;
-    onImageResizeFinished?: (data: {
-        height?: number;
-        width?: number;
-    }) => void;
+    onImageResizeFinished?: (width: number) => void;
 }
 export declare const DraggableItem: FC<DraggableProps>;
 export {};

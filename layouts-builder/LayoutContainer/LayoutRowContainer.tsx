@@ -39,20 +39,14 @@ interface LayoutRowContainerProps {
   isFirstSection?: boolean;
   dragActive?: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
-  imageSizeFnLoader?: (
-    items: any,
-  ) => { width?: number; height?: number } | undefined;
+  imageSizeFnLoader?: (items: any) => number | undefined;
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
   setDragActive: Dispatch<SetStateAction<boolean>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
   onFocusItem?: (source: SourceType) => void;
   onLayoutChange: (layouts: ILayoutSection[]) => void;
   imageCheckerFn?: (items: boolean) => boolean;
-  onImageResizeFinished?: (
-    items: any,
-    value: { width?: number; height?: number },
-    isHeight?: boolean,
-  ) => void;
+  onImageResizeFinished?: (items: any, width: number) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -126,6 +120,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
+  
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -366,16 +361,16 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         disableChange={
                           disabled || items['id'] === 'EMPTY_SECTION'
                         }
-                        sizes={
+                        imageWidth={
                           imageSizeFnLoader
                             ? imageSizeFnLoader(items)
                             : undefined
                         }
                         oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
-                        onImageResizeFinished={(values) =>
+                        onImageResizeFinished={(w) =>
                           onImageResizeFinished
-                            ? onImageResizeFinished(items, values)
+                            ? onImageResizeFinished(items, w)
                             : undefined
                         }
                         onDragStart={(e, el) => {

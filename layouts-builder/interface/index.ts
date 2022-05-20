@@ -59,14 +59,9 @@ export interface ILayoutContainer {
   loading?: boolean;
   labels?: ILayoutLabels;
   disableChange?: boolean;
-  imageSizeFnLoader?: (
-    items: any,
-  ) => { width?: number; height?: number } | undefined;
+  imageSizeFnLoader?: (items: any) => number | undefined
   onClickSection?: (section: ILayoutSection) => void;
   onFocusItem?: (section: SourceType) => void;
-  imageCheckerFn?: (item: any) => boolean;
-  onImageResizeFinished?: (
-    items: any,
-    value: { width?: number; height?: number },
-  ) => void;
+  imageCheckerFn?: (item:any) => boolean
+  onImageResizeFinished?: (items: any, width: number) => void
 }

@@ -301,11 +301,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         }, /*#__PURE__*/React.createElement(DraggableItem, {
           isImage: isImage,
           disableChange: disabled || items['id'] === 'EMPTY_SECTION',
-          sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
+          imageWidth: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
-          onImageResizeFinished: function onImageResizeFinished(values) {
-            return _onImageResizeFinished ? _onImageResizeFinished(items, values) : undefined;
+          onImageResizeFinished: function onImageResizeFinished(w) {
+            return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
           },
           onDragStart: function onDragStart(e, el) {
             if (disabled) {
