@@ -32,7 +32,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const activeDropRef = useRef<HTMLDivElement>(null);
-  const [initY, setInitY] = useState<number>(0)
+  const [initY, setInitY] = useState<number>(0);
   const [checkAnomalie, setCheckAnomalie] = useState(500);
 
   useEffect(() => {
@@ -51,8 +51,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
+    console.log(e.pageY, e.pageY);
+
     if (!initY) {
-      setInitY(e.clientY)
+      setInitY(e.clientY);
     }
     setCheckAnomalie(500);
     const nearest = findNearestTarget(e.clientX, e.clientY);
@@ -69,10 +71,6 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     clientX: number,
     clientY: number,
   ): TargetPlaceEnum | undefined => {
-    activeDropRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
     const height = containerRef.current?.offsetHeight;
     const width = containerRef.current?.offsetWidth;
     const boundingClient =

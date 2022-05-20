@@ -42,6 +42,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
+    console.log(e.pageY, e.pageY);
+
     if (!initY) {
       setInitY(e.clientY);
     }
@@ -59,15 +61,11 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
 
-    (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
-    var height = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetHeight;
-    var width = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth;
-    var boundingClient = (_d = containerRef.current) === null || _d === void 0 ? void 0 : _d.getBoundingClientRect();
+    var height = (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetHeight;
+    var width = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth;
+    var boundingClient = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.getBoundingClientRect();
 
     if (!height || !width || !(boundingClient === null || boundingClient === void 0 ? void 0 : boundingClient.left)) {
       return;
