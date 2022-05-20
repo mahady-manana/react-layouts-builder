@@ -27,7 +27,7 @@ interface LayoutRowContainerProps {
     onFocusItem?: (source: SourceType) => void;
     onLayoutChange: (layouts: ILayoutSection[]) => void;
     imageCheckerFn?: (items: boolean) => boolean;
-    onImageResizeFinished?: (items: any, width: number) => void;
+    onImageResizeFinished?: (items: any, value: number, isHeight?: boolean) => void;
 }
 export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
 export {};

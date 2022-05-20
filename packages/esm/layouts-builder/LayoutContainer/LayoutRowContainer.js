@@ -304,8 +304,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
-          onImageResizeFinished: function onImageResizeFinished(w) {
-            return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
+          onImageResizeFinished: function onImageResizeFinished(w, isHeight) {
+            return _onImageResizeFinished ? _onImageResizeFinished(items, w, isHeight) : undefined;
           },
           onDragStart: function onDragStart(e, el) {
             if (disabled) {

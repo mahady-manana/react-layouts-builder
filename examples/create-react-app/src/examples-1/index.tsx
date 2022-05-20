@@ -128,6 +128,9 @@ export const Layouts1 = () => {
   const imageCheckerFn = (items: any) => {
     return items.img ? true : false
   }
+  const check = (block: any, value: number, isHeight?: boolean) => {
+    console.log(value, isHeight)
+  }
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -177,7 +180,7 @@ export const Layouts1 = () => {
               width: item.size,
               height: item.height
             })}
-            onImageResizeFinished={(item, w) => console.log(item, w)}
+            onImageResizeFinished={(item, w, is) => console.log(item, w, is)}
             renderComponent={(data) => {
               return (
                 <TestComponent

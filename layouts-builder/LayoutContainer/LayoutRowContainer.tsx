@@ -48,7 +48,11 @@ interface LayoutRowContainerProps {
   onFocusItem?: (source: SourceType) => void;
   onLayoutChange: (layouts: ILayoutSection[]) => void;
   imageCheckerFn?: (items: boolean) => boolean;
-  onImageResizeFinished?: (items: any, width: number) => void;
+  onImageResizeFinished?: (
+    items: any,
+    value: number,
+    isHeight?: boolean,
+  ) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -369,9 +373,13 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         }
                         oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
-                        onImageResizeFinished={(w) =>
+                        onImageResizeFinished={(w, isHeight) =>
                           onImageResizeFinished
-                            ? onImageResizeFinished(items, w)
+                            ? onImageResizeFinished(
+                                items,
+                                w,
+                                isHeight,
+                              )
                             : undefined
                         }
                         onDragStart={(e, el) => {
