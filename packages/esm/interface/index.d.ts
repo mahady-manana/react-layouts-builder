@@ -59,5 +59,8 @@ export interface ILayoutContainer {
     onClickSection?: (section: ILayoutSection) => void;
     onFocusItem?: (section: SourceType) => void;
     imageCheckerFn?: (item: any) => boolean;
-    onImageResizeFinished?: (items: any, width: number) => void;
+    onImageResizeFinished?: (items: any, sizes: {
+        width?: number;
+        height?: number;
+    }) => void;
 }

@@ -193,9 +193,9 @@ var DraggableItem = function DraggableItem(_a) {
       height = _g[0],
       setHeight = _g[1];
 
-  var _h = React.useState(0);
-      _h[0];
-      var setFinalHeight = _h[1];
+  var _h = React.useState(0),
+      finalHeight = _h[0],
+      setFinalHeight = _h[1];
 
   var _j = React.useState(),
       initHeight = _j[0],
@@ -294,8 +294,17 @@ var DraggableItem = function DraggableItem(_a) {
 
   var runIt = function runIt() {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width);
+      onImageResizeFinished({
+        width: width
+      });
       setFinalWidth(0);
+    }
+
+    if (onImageResizeFinished && height && finalHeight) {
+      onImageResizeFinished({
+        height: height
+      });
+      setFinalHeight(0);
     }
 
     setInitWidth(0);
@@ -328,8 +337,8 @@ var DraggableItem = function DraggableItem(_a) {
       var img = document.querySelector('.image_has_height img');
 
       if (img) {
-        (_a = img.style) === null || _a === void 0 ? void 0 : _a.setProperty("max-height", "".concat(height, "px"));
-        (_b = img.style) === null || _b === void 0 ? void 0 : _b.setProperty("object-fit", "cover");
+        (_a = img.style) === null || _a === void 0 ? void 0 : _a.setProperty('max-height', "".concat(height, "px"));
+        (_b = img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
   }, [height]);

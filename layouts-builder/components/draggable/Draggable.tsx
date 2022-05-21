@@ -21,7 +21,10 @@ interface DraggableProps {
   isImage?: boolean;
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
-  onImageResizeFinished?: (width: number) => void;
+  onImageResizeFinished?: (sizes: {
+    width?: number;
+    height?: number;
+  }) => void;
 }
 export const DraggableItem: FC<DraggableProps> = ({
   children,
@@ -131,8 +134,12 @@ export const DraggableItem: FC<DraggableProps> = ({
 
   const runIt = () => {
     if (onImageResizeFinished && width && finalWidth) {
-      onImageResizeFinished(width);
+      onImageResizeFinished({ width });
       setFinalWidth(0);
+    }
+    if (onImageResizeFinished && height && finalHeight) {
+      onImageResizeFinished({ height });
+      setFinalHeight(0);
     }
     setInitWidth(0);
     setStartResize(false);
@@ -156,12 +163,10 @@ export const DraggableItem: FC<DraggableProps> = ({
   }, [waitBeforeUpdate]);
   useEffect(() => {
     if (height) {
-      const img = document.querySelector(
-        '.image_has_height img',
-      );
+      const img = document.querySelector('.image_has_height img');
       if (img) {
-        (img as any).style?.setProperty("max-height", `${height}px`);
-        (img as any).style?.setProperty("object-fit", `cover`);
+        (img as any).style?.setProperty('max-height', `${height}px`);
+        (img as any).style?.setProperty('object-fit', `cover`);
       }
     }
   }, [height]);
