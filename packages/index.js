@@ -334,7 +334,7 @@ var DraggableItem = function DraggableItem(_a) {
     var _a, _b;
 
     if (height) {
-      var img = document.querySelector('.image_has_height img');
+      var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
 
       if (img) {
         (_a = img.style) === null || _a === void 0 ? void 0 : _a.setProperty('max-height', "".concat(height, "px"));
@@ -359,7 +359,8 @@ var DraggableItem = function DraggableItem(_a) {
     onMouseUp: onMouseLeaveOrUp,
     onMouseLeave: onMouseLeaveOrUp
   }, isImage ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('image_rlb', height ? 'image_has_height' : ''),
+    className: "image_rlb",
+    id: "rbl_image_".concat(dndTargetKey),
     style: {
       width: "".concat(width || 100, "%"),
       maxHeight: height ? height : undefined,

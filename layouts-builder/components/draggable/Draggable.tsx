@@ -163,7 +163,9 @@ export const DraggableItem: FC<DraggableProps> = ({
   }, [waitBeforeUpdate]);
   useEffect(() => {
     if (height) {
-      const img = document.querySelector('.image_has_height img');
+      const img = document.querySelector(
+        `#rbl_image_${dndTargetKey} img`,
+      );
       if (img) {
         (img as any).style?.setProperty('max-height', `${height}px`);
         (img as any).style?.setProperty('object-fit', `cover`);
@@ -193,10 +195,8 @@ export const DraggableItem: FC<DraggableProps> = ({
     >
       {isImage ? (
         <div
-          className={classNames(
-            'image_rlb',
-            height ? 'image_has_height' : '',
-          )}
+          className="image_rlb"
+          id={`rbl_image_${dndTargetKey}`}
           style={{
             width: `${width || 100}%`,
             maxHeight: height ? height : undefined,
