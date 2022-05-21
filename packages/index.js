@@ -363,7 +363,7 @@ var DraggableItem = function DraggableItem(_a) {
     id: "rbl_image_".concat(dndTargetKey),
     style: {
       width: "".concat(width || 100, "%"),
-      maxHeight: height ? height : undefined,
+      maxHeight: height ? height : (sizes === null || sizes === void 0 ? void 0 : sizes.height),
       margin: oneCol ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {

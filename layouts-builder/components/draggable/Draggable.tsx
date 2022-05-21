@@ -199,7 +199,7 @@ export const DraggableItem: FC<DraggableProps> = ({
           id={`rbl_image_${dndTargetKey}`}
           style={{
             width: `${width || 100}%`,
-            maxHeight: height ? height : undefined,
+            maxHeight: height ? height : undefined || sizes?.height,
             margin: oneCol ? 'auto' : undefined,
           }}
         >
