@@ -17,7 +17,10 @@ interface LayoutRowContainerProps {
         top: boolean;
         bottom: boolean;
     };
-    imageSizeFnLoader?: (items: any) => number | undefined;
+    imageSizeFnLoader?: (items: any) => {
+        width?: number;
+        height?: number;
+    } | undefined;
     setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
     setDragActive: Dispatch<SetStateAction<boolean>>;
     renderComponent: (item: any, source: SourceType) => ReactNode;

@@ -5,7 +5,10 @@ interface DraggableProps {
     disableChange?: boolean;
     onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
     isImage?: boolean;
-    imageWidth?: number;
+    sizes?: {
+        width?: number;
+        height?: number;
+    };
     oneCol?: boolean;
     onImageResizeFinished?: (width: number) => void;
 }

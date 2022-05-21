@@ -5,7 +5,7 @@ var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       disableChange = _a.disableChange,
-      imageWidth = _a.imageWidth,
+      sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
       _onDragStart = _a.onDragStart,
@@ -32,29 +32,58 @@ var DraggableItem = function DraggableItem(_a) {
       direction = _f[0],
       setDirection = _f[1];
 
-  var _g = useState(),
-      percentPX = _g[0],
-      setPercentPX = _g[1];
+  var _g = useState(0),
+      height = _g[0],
+      setHeight = _g[1];
 
-  var _h = useState(false),
-      startResize = _h[0],
-      setStartResize = _h[1];
+  var _h = useState(0);
+      _h[0];
+      var setFinalHeight = _h[1];
 
-  var _j = useState(500),
-      waitBeforeUpdate = _j[0],
-      setWaitBeforeUpdate = _j[1];
+  var _j = useState(),
+      initHeight = _j[0],
+      setInitHeight = _j[1];
+
+  var _k = useState(0),
+      initClientY = _k[0],
+      setInitClientY = _k[1];
+
+  var _l = useState(),
+      percentPX = _l[0],
+      setPercentPX = _l[1];
+
+  var _m = useState(false),
+      startResize = _m[0],
+      setStartResize = _m[1];
+
+  var _o = useState(500),
+      waitBeforeUpdate = _o[0],
+      setWaitBeforeUpdate = _o[1];
 
   useEffect(function () {
-    if (imageWidth) {
-      setWidth(imageWidth);
+    if (sizes === null || sizes === void 0 ? void 0 : sizes.width) {
+      setWidth(sizes.width);
     }
-  }, [imageWidth]);
+  }, [sizes === null || sizes === void 0 ? void 0 : sizes.width]);
+  useEffect(function () {
+    if (sizes === null || sizes === void 0 ? void 0 : sizes.height) {
+      setHeight(sizes.height);
+    }
+  }, [sizes === null || sizes === void 0 ? void 0 : sizes.height]);
 
-  var _onMouseDown = function onMouseDown(e) {
+  var _onMouseDown = function onMouseDown(e, isBottom) {
     var _a, _b;
 
     if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
-    setInitWidth(imageWidth || 100);
+
+    if (isBottom) {
+      var h = containerRef.current.offsetHeight;
+      setInitHeight((sizes === null || sizes === void 0 ? void 0 : sizes.height) || h);
+      setInitClientY(e.clientY);
+      return;
+    }
+
+    setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
     setStartResize(true);
     setInitClientX(e.clientX);
     var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
@@ -63,6 +92,23 @@ var DraggableItem = function DraggableItem(_a) {
 
   var onMouseMouve = function onMouseMouve(e) {
     var newCX = e.clientX;
+    var newCY = e.clientY;
+
+    if (direction === 'vertical' && initHeight) {
+      var diff = initClientY - newCY;
+
+      var _final = initHeight - diff;
+
+      if (_final < 100) {
+        setHeight(100);
+        setFinalHeight(100);
+      } else {
+        setHeight(_final);
+        setFinalHeight(_final);
+      }
+
+      return;
+    }
 
     if (initClientX && initWidth && startResize && percentPX && direction) {
       var diff = initClientX - newCX;
@@ -100,6 +146,8 @@ var DraggableItem = function DraggableItem(_a) {
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
+    setInitClientY(0);
+    setInitHeight(0);
   };
 
   useEffect(function () {
@@ -116,6 +164,18 @@ var DraggableItem = function DraggableItem(_a) {
       runIt();
     }
   }, [waitBeforeUpdate]);
+  useEffect(function () {
+    var _a, _b;
+
+    if (height) {
+      var img = document.querySelector('.image_has_height img');
+
+      if (img) {
+        (_a = img.style) === null || _a === void 0 ? void 0 : _a.setProperty("max-height", "".concat(height, "px"));
+        (_b = img.style) === null || _b === void 0 ? void 0 : _b.setProperty("object-fit", "cover");
+      }
+    }
+  }, [height]);
   return /*#__PURE__*/React.createElement("div", {
     draggable: startResize ? false : !disableChange,
     onDragStart: function onDragStart(e) {
@@ -133,9 +193,10 @@ var DraggableItem = function DraggableItem(_a) {
     onMouseUp: onMouseLeaveOrUp,
     onMouseLeave: onMouseLeaveOrUp
   }, isImage ? /*#__PURE__*/React.createElement("div", {
-    className: "image_rlb",
+    className: classnames('image_rlb', height ? 'image_has_height' : ''),
     style: {
       width: "".concat(width || 100, "%"),
+      maxHeight: height ? height : undefined,
       margin: oneCol ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React.createElement("div", {
@@ -152,6 +213,22 @@ var DraggableItem = function DraggableItem(_a) {
       setDirection('left');
 
       _onMouseDown(e);
+    }
+  })) : null, !disableChange ? /*#__PURE__*/React.createElement("div", {
+    className: "image-resize-bottom",
+    onClick: function onClick(e) {
+      return e.stopPropagation();
+    },
+    style: {
+      zIndex: startResize ? 999 : undefined
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hand-image",
+    onMouseDown: function onMouseDown(e) {
+      e.preventDefault();
+      setDirection('vertical');
+
+      _onMouseDown(e, true);
     }
   })) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize imr-right",

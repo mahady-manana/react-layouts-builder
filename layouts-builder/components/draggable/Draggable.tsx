@@ -14,9 +14,12 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
+  onDragStart: (
+    e: DragEvent<HTMLDivElement>,
+    element?: HTMLElement,
+  ) => void;
   isImage?: boolean;
-  imageWidth?: number;
+  sizes?: { width?: number; height?: number };
   oneCol?: boolean;
   onImageResizeFinished?: (width: number) => void;
 }
@@ -24,7 +27,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   children,
   dndTargetKey,
   disableChange,
-  imageWidth,
+  sizes,
   isImage,
   oneCol,
   onDragStart,
@@ -35,20 +38,41 @@ export const DraggableItem: FC<DraggableProps> = ({
   const [finalWidth, setFinalWidth] = useState<number>(0);
   const [initWidth, setInitWidth] = useState<number>();
   const [initClientX, setInitClientX] = useState<number>();
-  const [direction, setDirection] = useState<'left' | 'right'>();
+  const [direction, setDirection] = useState<
+    'left' | 'right' | 'vertical'
+  >();
+  const [height, setHeight] = useState<number>(0);
+  const [finalHeight, setFinalHeight] = useState(0);
+  const [initHeight, setInitHeight] = useState<number>();
+  const [initClientY, setInitClientY] = useState<number>(0);
   const [percentPX, setPercentPX] = useState<number>();
   const [startResize, setStartResize] = useState<boolean>(false);
   const [waitBeforeUpdate, setWaitBeforeUpdate] = useState(500);
 
   useEffect(() => {
-    if (imageWidth) {
-      setWidth(imageWidth);
+    if (sizes?.width) {
+      setWidth(sizes.width);
     }
-  }, [imageWidth]);
+  }, [sizes?.width]);
 
-  const onMouseDown = (e: MouseEvent<HTMLElement>) => {
+  useEffect(() => {
+    if (sizes?.height) {
+      setHeight(sizes.height);
+    }
+  }, [sizes?.height]);
+
+  const onMouseDown = (
+    e: MouseEvent<HTMLElement>,
+    isBottom?: boolean,
+  ) => {
     if (!containerRef.current?.offsetWidth) return;
-    setInitWidth(imageWidth || 100);
+    if (isBottom) {
+      const h = containerRef.current.offsetHeight;
+      setInitHeight(sizes?.height || h);
+      setInitClientY(e.clientY);
+      return;
+    }
+    setInitWidth(sizes?.width || 100);
     setStartResize(true);
     setInitClientX(e.clientX);
     const p1px = containerRef.current?.offsetWidth / 100;
@@ -56,6 +80,23 @@ export const DraggableItem: FC<DraggableProps> = ({
   };
   const onMouseMouve = (e: MouseEvent<HTMLElement>) => {
     const newCX = e.clientX;
+    const newCY = e.clientY;
+
+    if (direction === 'vertical' && initHeight) {
+      const diff = initClientY - newCY;
+
+      const final = initHeight - diff;
+
+      if (final < 100) {
+        setHeight(100);
+        setFinalHeight(100);
+      } else {
+        setHeight(final);
+        setFinalHeight(final);
+      }
+
+      return;
+    }
 
     if (
       initClientX &&
@@ -98,6 +139,8 @@ export const DraggableItem: FC<DraggableProps> = ({
     setInitClientX(0);
     setPercentPX(0);
     setDirection(undefined);
+    setInitClientY(0);
+    setInitHeight(0);
   };
 
   useEffect(() => {
@@ -111,6 +154,17 @@ export const DraggableItem: FC<DraggableProps> = ({
       runIt();
     }
   }, [waitBeforeUpdate]);
+  useEffect(() => {
+    if (height) {
+      const img = document.querySelector(
+        '.image_has_height img',
+      );
+      if (img) {
+        (img as any).style?.setProperty("max-height", `${height}px`);
+        (img as any).style?.setProperty("object-fit", `cover`);
+      }
+    }
+  }, [height]);
 
   return (
     <div
@@ -134,9 +188,13 @@ export const DraggableItem: FC<DraggableProps> = ({
     >
       {isImage ? (
         <div
-          className="image_rlb"
+          className={classNames(
+            'image_rlb',
+            height ? 'image_has_height' : '',
+          )}
           style={{
             width: `${width || 100}%`,
+            maxHeight: height ? height : undefined,
             margin: oneCol ? 'auto' : undefined,
           }}
         >
@@ -151,6 +209,22 @@ export const DraggableItem: FC<DraggableProps> = ({
                 onMouseDown={(e) => {
                   setDirection('left');
                   onMouseDown(e);
+                }}
+              ></div>
+            </div>
+          ) : null}
+          {!disableChange ? (
+            <div
+              className="image-resize-bottom"
+              onClick={(e) => e.stopPropagation()}
+              style={{ zIndex: startResize ? 999 : undefined }}
+            >
+              <div
+                className="hand-image"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setDirection('vertical');
+                  onMouseDown(e, true);
                 }}
               ></div>
             </div>

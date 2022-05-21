@@ -39,7 +39,9 @@ interface LayoutRowContainerProps {
   isFirstSection?: boolean;
   dragActive?: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
-  imageSizeFnLoader?: (items: any) => number | undefined;
+  imageSizeFnLoader?: (
+    items: any,
+  ) => { width?: number; height?: number } | undefined;
   setActualLayout: Dispatch<SetStateAction<ILayoutSection[]>>;
   setDragActive: Dispatch<SetStateAction<boolean>>;
   renderComponent: (item: any, source: SourceType) => ReactNode;
@@ -120,7 +122,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
-  
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -361,7 +362,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         disableChange={
                           disabled || items['id'] === 'EMPTY_SECTION'
                         }
-                        imageWidth={
+                        sizes={
                           imageSizeFnLoader
                             ? imageSizeFnLoader(items)
                             : undefined
