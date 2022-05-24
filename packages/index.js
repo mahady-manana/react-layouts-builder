@@ -996,13 +996,15 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {
-      visibility: targetDROP === exports.TargetPlaceEnum.TOP ? 'visible' : 'hidden'
+      visibility: 'visible',
+      display: targetDROP === exports.TargetPlaceEnum.TOP ? 'block' : 'none'
     },
     ref: targetDROP === exports.TargetPlaceEnum.TOP ? activeDropRef : null
   }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {
-      visibility: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
+      visibility: 'visible',
+      display: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'block' : 'none'
     },
     ref: targetDROP === exports.TargetPlaceEnum.BOTTOM ? activeDropRef : null
   }) : null);
