@@ -229,9 +229,10 @@ var DraggableItem = function DraggableItem(_a) {
   }, [sizes === null || sizes === void 0 ? void 0 : sizes.height]);
 
   var _onMouseDown = function onMouseDown(e, isBottom) {
-    var _a, _b;
+    var _a, _b, _c;
 
-    if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
+    if (!((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth)) return;
 
     if (isBottom) {
       var h = containerRef.current.offsetHeight;
@@ -243,7 +244,7 @@ var DraggableItem = function DraggableItem(_a) {
     setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
     setStartResize(true);
     setInitClientX(e.clientX);
-    var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
+    var p1px = ((_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth) / 100;
     setPercentPX(p1px);
   };
 
@@ -289,6 +290,9 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
+    var _a;
+
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "true");
     runIt();
   };
 
@@ -343,7 +347,7 @@ var DraggableItem = function DraggableItem(_a) {
     }
   }, [height]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    draggable: startResize ? false : !disableChange,
+    draggable: !disableChange,
     onDragStart: function onDragStart(e) {
       return _onDragStart(e, containerRef.current);
     },
@@ -369,7 +373,8 @@ var DraggableItem = function DraggableItem(_a) {
   }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-left",
     onClick: function onClick(e) {
-      return e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
     },
     style: {
       zIndex: startResize ? 999 : undefined
@@ -377,6 +382,7 @@ var DraggableItem = function DraggableItem(_a) {
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "hand-image",
     onMouseDown: function onMouseDown(e) {
+      e.preventDefault();
       setDirection('left');
 
       _onMouseDown(e);
@@ -384,7 +390,8 @@ var DraggableItem = function DraggableItem(_a) {
   })) : null, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize-bottom",
     onClick: function onClick(e) {
-      return e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
     },
     style: {
       zIndex: startResize ? 999 : undefined
@@ -400,7 +407,8 @@ var DraggableItem = function DraggableItem(_a) {
   })) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-right",
     onClick: function onClick(e) {
-      return e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
     },
     style: {
       zIndex: startResize ? 999 : undefined
@@ -897,6 +905,22 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     }
   }, [checkAnomalie]);
 
+  var isElementInViewport = function isElementInViewport(el) {
+    // Special bonus for those using jQuery
+    if (!el) return true;
+    var rect = el.getBoundingClientRect();
+    var container = document.getElementById('container_layout_scroll');
+    return rect.top >= 0 && // rect.left >= 0 &&
+    rect.bottom <= ((container === null || container === void 0 ? void 0 : container.clientHeight) || document.documentElement.clientHeight)
+    /* or $(window).height() */
+    // &&
+    // rect.right <=
+    //   (window.innerWidth ||
+    //     document.documentElement
+    //       .clientWidth) /* or $(window).width() */
+    ;
+  };
+
   var handleDragOver = function handleDragOver(e) {
     e.preventDefault();
 
@@ -904,7 +928,16 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    console.log(e.pageY, e.pageY);
+    if (activeDropRef.current) {
+      var isInVewportActive = isElementInViewport(activeDropRef.current);
+
+      if (!isInVewportActive) {
+        activeDropRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
 
     if (!initY) {
       setInitY(e.clientY);

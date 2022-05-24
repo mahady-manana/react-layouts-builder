@@ -35,6 +35,22 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     }
   }, [checkAnomalie]);
 
+  var isElementInViewport = function isElementInViewport(el) {
+    // Special bonus for those using jQuery
+    if (!el) return true;
+    var rect = el.getBoundingClientRect();
+    var container = document.getElementById('container_layout_scroll');
+    return rect.top >= 0 && // rect.left >= 0 &&
+    rect.bottom <= ((container === null || container === void 0 ? void 0 : container.clientHeight) || document.documentElement.clientHeight)
+    /* or $(window).height() */
+    // &&
+    // rect.right <=
+    //   (window.innerWidth ||
+    //     document.documentElement
+    //       .clientWidth) /* or $(window).width() */
+    ;
+  };
+
   var handleDragOver = function handleDragOver(e) {
     e.preventDefault();
 
@@ -42,7 +58,16 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    console.log(e.pageY, e.pageY);
+    if (activeDropRef.current) {
+      var isInVewportActive = isElementInViewport(activeDropRef.current);
+
+      if (!isInVewportActive) {
+        activeDropRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
 
     if (!initY) {
       setInitY(e.clientY);

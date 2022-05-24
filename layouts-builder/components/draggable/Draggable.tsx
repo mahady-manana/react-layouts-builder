@@ -68,6 +68,7 @@ export const DraggableItem: FC<DraggableProps> = ({
     e: MouseEvent<HTMLElement>,
     isBottom?: boolean,
   ) => {
+    containerRef.current?.removeAttribute('draggable');
     if (!containerRef.current?.offsetWidth) return;
     if (isBottom) {
       const h = containerRef.current.offsetHeight;
@@ -129,6 +130,7 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   };
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
+    containerRef.current?.setAttribute('draggable', "true");
     runIt();
   };
 
@@ -175,7 +177,7 @@ export const DraggableItem: FC<DraggableProps> = ({
 
   return (
     <div
-      draggable={startResize ? false : !disableChange}
+      draggable={!disableChange}
       onDragStart={(e) => onDragStart(e, containerRef.current as any)}
       onDragEnd={(e) => {
         e.preventDefault();
@@ -206,12 +208,16 @@ export const DraggableItem: FC<DraggableProps> = ({
           {!disableChange && oneCol ? (
             <div
               className="image-resize imr-left"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               style={{ zIndex: startResize ? 999 : undefined }}
             >
               <div
                 className="hand-image"
                 onMouseDown={(e) => {
+                  e.preventDefault();
                   setDirection('left');
                   onMouseDown(e);
                 }}
@@ -221,7 +227,10 @@ export const DraggableItem: FC<DraggableProps> = ({
           {!disableChange ? (
             <div
               className="image-resize-bottom"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               style={{ zIndex: startResize ? 999 : undefined }}
             >
               <div
@@ -238,7 +247,10 @@ export const DraggableItem: FC<DraggableProps> = ({
           {!disableChange ? (
             <div
               className="image-resize imr-right"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               style={{ zIndex: startResize ? 999 : undefined }}
             >
               <div

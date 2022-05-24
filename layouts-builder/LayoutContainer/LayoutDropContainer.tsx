@@ -46,12 +46,42 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       setTargetDROP(undefined);
     }
   }, [checkAnomalie]);
+  const isElementInViewport = (el) => {
+    // Special bonus for those using jQuery
+    if (!el) return true;
+    const rect = el.getBoundingClientRect();
+    const container = document.getElementById(
+      'container_layout_scroll',
+    );
+    return (
+      rect.top >= 0 &&
+      // rect.left >= 0 &&
+      rect.bottom <=
+        (container?.clientHeight ||
+          document.documentElement
+            .clientHeight) /* or $(window).height() */ // &&
+      // rect.right <=
+      //   (window.innerWidth ||
+      //     document.documentElement
+      //       .clientWidth) /* or $(window).width() */
+    );
+  };
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (disableChange) {
       return;
     }
-    console.log(e.pageY, e.pageY);
+    if (activeDropRef.current) {
+      const isInVewportActive = isElementInViewport(
+        activeDropRef.current,
+      );
+      if (!isInVewportActive) {
+        activeDropRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }
 
     if (!initY) {
       setInitY(e.clientY);

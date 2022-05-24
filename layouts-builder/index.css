@@ -159,18 +159,18 @@
   width: 8px;
   height: 50px;
   background: #fc0454;
-  z-index: 900;
+  z-index: 999;
   top: calc(50% - 25px);
   border: 1px solid #ffffff;
   border-radius: 50px;
   cursor: col-resize;
 }
 .image-resize.imr-left {
-  left: 20px;
+  left: 30px;
 }
 
 .image-resize.imr-right {
-  right: 21px;
+  right: 30px;
 }
 .hand-image {
   width: 100%;
