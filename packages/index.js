@@ -886,9 +886,13 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       initY = _b[0],
       setInitY = _b[1];
 
-  var _c = React.useState(500),
-      checkAnomalie = _c[0],
-      setCheckAnomalie = _c[1];
+  var _c = React.useState(0);
+      _c[0];
+      _c[1];
+
+  var _d = React.useState(500),
+      checkAnomalie = _d[0],
+      setCheckAnomalie = _d[1];
 
   React.useEffect(function () {
     if (checkAnomalie > 10) {
@@ -905,24 +909,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     }
   }, [checkAnomalie]);
 
-  var isElementInViewport = function isElementInViewport(el) {
-    // Special bonus for those using jQuery
-    if (!el) return true;
-    var rect = el.getBoundingClientRect();
-    var container = document.getElementById('container_layout_scroll');
-    return rect.top >= 0 && // rect.left >= 0 &&
-    rect.bottom <= ((container === null || container === void 0 ? void 0 : container.clientHeight) || window.innerHeight || document.documentElement.clientHeight)
-    /* or $(window).height() */
-    // &&
-    // rect.right <=
-    //   (window.innerWidth ||
-    //     document.documentElement
-    //       .clientWidth) /* or $(window).width() */
-    ;
-  };
-
   var handleDragOver = function handleDragOver(e) {
-    var _a, _b;
+    var _a;
 
     e.preventDefault();
 
@@ -930,28 +918,9 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    if (activeDropRef.current) {
-      var isInVewportActive = isElementInViewport(activeDropRef.current);
-
-      if (!isInVewportActive) {
-        activeDropRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      } else {
-        if (e.clientY < 200) {
-          (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        } else if (e.clientY > 450) {
-          (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end'
-          });
-        }
-      }
-    }
+    (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+      behavior: 'smooth'
+    });
 
     if (!initY) {
       setInitY(e.clientY);
