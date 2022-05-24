@@ -72,30 +72,12 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
-    if (activeDropRef.current) {
-      const isInVewportActive = isElementInViewport(
-        activeDropRef.current,
-      );
-      if (!isInVewportActive) {
-        activeDropRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
-      } else {
-        if (e.clientY < 200) {
-          containerRef.current?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        } else if (e.clientY > 450) {
-          containerRef.current?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end',
-          });
-        }
-      }
+    if (e.clientY < 200 || e.clientY > 500) {
+      activeDropRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
     }
-
     if (!initY) {
       setInitY(e.clientY);
     }
