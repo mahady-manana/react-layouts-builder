@@ -58,6 +58,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       // rect.left >= 0 &&
       rect.bottom <=
         (container?.clientHeight ||
+          window.innerHeight ||
           document.documentElement
             .clientHeight) /* or $(window).height() */ // &&
       // rect.right <=
@@ -80,6 +81,18 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
           behavior: 'smooth',
           block: 'center',
         });
+      } else {
+        if (e.clientY < 200) {
+          containerRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        } else if (e.clientY > 450) {
+          containerRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+          });
+        }
       }
     }
 

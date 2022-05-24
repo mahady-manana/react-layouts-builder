@@ -41,7 +41,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     var rect = el.getBoundingClientRect();
     var container = document.getElementById('container_layout_scroll');
     return rect.top >= 0 && // rect.left >= 0 &&
-    rect.bottom <= ((container === null || container === void 0 ? void 0 : container.clientHeight) || document.documentElement.clientHeight)
+    rect.bottom <= ((container === null || container === void 0 ? void 0 : container.clientHeight) || window.innerHeight || document.documentElement.clientHeight)
     /* or $(window).height() */
     // &&
     // rect.right <=
@@ -52,6 +52,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   };
 
   var handleDragOver = function handleDragOver(e) {
+    var _a, _b;
+
     e.preventDefault();
 
     if (disableChange) {
@@ -66,6 +68,18 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
           behavior: 'smooth',
           block: 'center'
         });
+      } else {
+        if (e.clientY < 200) {
+          (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        } else if (e.clientY > 450) {
+          (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end'
+          });
+        }
       }
     }
 
