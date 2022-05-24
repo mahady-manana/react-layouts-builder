@@ -48,7 +48,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+    var winH = window.innerHeight;
+    if (e.clientY < 200 || e.clientY > winH - 200) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'
     });
 

@@ -53,8 +53,9 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
-
-    activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const winH = window.innerHeight;
+    if (e.clientY < 200 || e.clientY > winH - 200)
+      activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     if (!initY) {
       setInitY(e.clientY);
