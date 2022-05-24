@@ -124,9 +124,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
         <div
           className="rbl-drop-item-indicator"
           style={{
-            visibility: 'visible',
-            display:
-              targetDROP === TargetPlaceEnum.TOP ? 'block' : 'none',
+            visibility:
+              targetDROP === TargetPlaceEnum.TOP
+                ? 'visible'
+                : 'hidden',
           }}
           ref={
             targetDROP === TargetPlaceEnum.TOP ? activeDropRef : null
@@ -139,11 +140,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
         <div
           className="rbl-drop-item-indicator"
           style={{
-            visibility: 'visible',
-            display:
+            visibility:
               targetDROP === TargetPlaceEnum.BOTTOM
-                ? 'block'
-                : 'none',
+                ? 'visible'
+                : 'hidden',
           }}
           ref={
             targetDROP === TargetPlaceEnum.BOTTOM
