@@ -12,6 +12,7 @@ import React, {
 
 interface DraggableProps {
   children: ReactNode;
+  isLast?: boolean
   disableChange?: boolean;
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
@@ -24,6 +25,7 @@ interface DraggableProps {
 export const LayoutDropContainer: FC<DraggableProps> = ({
   children,
   disableChange,
+  isLast,
   targetDROP,
   setTargetDROP,
   onDragOver,
@@ -136,7 +138,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       ) : null}
 
       {children}
-      {!disableChange ? (
+      {!disableChange && isLast ? (
         <div
           className="rbl-drop-item-indicator"
           style={{

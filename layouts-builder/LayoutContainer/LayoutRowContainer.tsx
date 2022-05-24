@@ -48,7 +48,10 @@ interface LayoutRowContainerProps {
   onFocusItem?: (source: SourceType) => void;
   onLayoutChange: (layouts: ILayoutSection[]) => void;
   imageCheckerFn?: (items: boolean) => boolean;
-  onImageResizeFinished?: (items: any, sizes: { width?: number; height?: number }) => void;
+  onImageResizeFinished?: (
+    items: any,
+    sizes: { width?: number; height?: number },
+  ) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -333,8 +336,13 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)
                     : false;
+
                   return (
                     <LayoutDropContainer
+                      isLast={
+                        index + 1 === column.items.length &&
+                        columns.length > 1
+                      }
                       targetDROP={
                         destination.itemKey === items[stableKey]
                           ? targetDROP

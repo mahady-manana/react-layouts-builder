@@ -2,6 +2,7 @@ import { TargetPlaceEnum } from 'layouts-builder/interface/internalType';
 import { FC, ReactNode, DragEvent, Dispatch, SetStateAction } from 'react';
 interface DraggableProps {
     children: ReactNode;
+    isLast?: boolean;
     disableChange?: boolean;
     targetDROP?: TargetPlaceEnum;
     setTargetDROP: Dispatch<SetStateAction<TargetPlaceEnum | undefined>>;

@@ -281,6 +281,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
         return /*#__PURE__*/React.createElement(LayoutDropContainer, {
+          isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
           setTargetDROP: setTargetDROP,
           onDragOver: function onDragOver(target) {
