@@ -119,9 +119,10 @@
   border-radius: 10px;
   height: 90%;
   position: absolute;
-  right: 8px;
+  left: 50%;
   top: 5%;
   width: 8px;
+  transform: translateX(-50%);
   cursor: col-resize;
 }
 .rlb-resize-handler:hover {
