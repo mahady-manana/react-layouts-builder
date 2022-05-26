@@ -125,15 +125,17 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
+    let ghostEle;
+    ghostEle =
+      (el?.cloneNode(true) as HTMLDivElement) ||
+      document.createElement('div');
+    ghostEle.setAttribute('id', 'clonedGhost');
 
-    const ghostEle = el?.cloneNode(true) as HTMLDivElement;
-    ghostEle.setAttribute('id', "clonedGhost");
-  
     // Append it to `body`
     document.body.appendChild(ghostEle);
 
-      e.dataTransfer.setDragImage(ghostEle as any, 0, 0);
-    
+    e.dataTransfer.setDragImage(ghostEle as any, 0, 0);
+
     const timer = setTimeout(() => {
       setDragActive(true);
     }, 500);
@@ -369,7 +371,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                       }
                       onDrop={(e) => {
                         handleDropItem(e, ILayoutTargetEnum.ITEM);
-                        document.getElementById('clonedGhost')?.remove()
+                        document
+                          .getElementById('clonedGhost')
+                          ?.remove();
                       }}
                       onDragLeave={resetDrag}
                       disableChange={disabled}

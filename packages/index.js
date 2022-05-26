@@ -1099,8 +1099,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    var ghostEle = el === null || el === void 0 ? void 0 : el.cloneNode(true);
-    ghostEle.setAttribute('id', "clonedGhost"); // Append it to `body`
+    var ghostEle;
+    ghostEle = (el === null || el === void 0 ? void 0 : el.cloneNode(true)) || document.createElement('div');
+    ghostEle.setAttribute('id', 'clonedGhost'); // Append it to `body`
 
     document.body.appendChild(ghostEle);
     e.dataTransfer.setDragImage(ghostEle, 0, 0);
