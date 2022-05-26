@@ -17,13 +17,9 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       initY = _b[0],
       setInitY = _b[1];
 
-  var _c = useState(0);
-      _c[0];
-      _c[1];
-
-  var _d = useState(500),
-      checkAnomalie = _d[0],
-      setCheckAnomalie = _d[1];
+  var _c = useState(500),
+      checkAnomalie = _c[0],
+      setCheckAnomalie = _c[1];
 
   useEffect(function () {
     if (checkAnomalie > 10) {

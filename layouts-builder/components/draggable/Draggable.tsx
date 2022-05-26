@@ -132,6 +132,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
     containerRef.current?.setAttribute('draggable', "true");
     runIt();
+    document.getElementById('clonedGhost')?.remove()
   };
 
   const runIt = () => {

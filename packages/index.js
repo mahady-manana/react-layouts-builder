@@ -290,10 +290,11 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a;
+    var _a, _b;
 
     (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "true");
     runIt();
+    (_b = document.getElementById('clonedGhost')) === null || _b === void 0 ? void 0 : _b.remove();
   };
 
   var runIt = function runIt() {
@@ -887,13 +888,9 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       initY = _b[0],
       setInitY = _b[1];
 
-  var _c = React.useState(0);
-      _c[0];
-      _c[1];
-
-  var _d = React.useState(500),
-      checkAnomalie = _d[0],
-      setCheckAnomalie = _d[1];
+  var _c = React.useState(500),
+      checkAnomalie = _c[0],
+      setCheckAnomalie = _c[1];
 
   React.useEffect(function () {
     if (checkAnomalie > 10) {
@@ -1102,6 +1099,20 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
+    var img = el === null || el === void 0 ? void 0 : el.cloneNode(true);
+
+    if (img) {
+      img.setAttributes('id', 'clonedGhost');
+      img.style.width = '100px';
+      img.style.height = '100px';
+      img.style.position = 'absolute';
+      img.style.top = '0px';
+      img.style.left = '-100px';
+      img.style.padding = '10px';
+      document.body.appendChild(img);
+      e.dataTransfer.setDragImage(img, 0, 0);
+    }
+
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1293,7 +1304,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
             });
           },
           onDrop: function onDrop(e) {
+            var _a;
+
             handleDropItem(e, exports.ILayoutTargetEnum.ITEM);
+            (_a = document.getElementById('clonedGhost')) === null || _a === void 0 ? void 0 : _a.remove();
           },
           onDragLeave: resetDrag,
           disableChange: disabled,
@@ -1312,7 +1326,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,

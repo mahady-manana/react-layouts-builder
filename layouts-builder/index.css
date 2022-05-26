@@ -237,3 +237,10 @@
   z-index: 900;
   left: calc(50% - 25px);
 }
+div#ghost {
+  background: aqua;
+  width: 150px;
+  text-align: center;
+  padding: 50px;
+  border-radius: 10px;
+}

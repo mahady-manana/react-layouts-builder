@@ -133,10 +133,11 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a;
+    var _a, _b;
 
     (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "true");
     runIt();
+    (_b = document.getElementById('clonedGhost')) === null || _b === void 0 ? void 0 : _b.remove();
   };
 
   var runIt = function runIt() {

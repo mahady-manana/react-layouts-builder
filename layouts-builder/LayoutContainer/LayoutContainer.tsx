@@ -1,9 +1,4 @@
-import React, {
-  FC,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import { IRenderableLayout } from '../interface/renderableInterface';
@@ -50,7 +45,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
       setRenderableLayout(renderable);
     }
-    
   }, [actualLayout, data]);
 
   // run layout update
@@ -61,7 +55,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     }
   }, [runChange]);
 
-
   if (staticComponent) {
     return (
       <>
@@ -71,7 +64,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       </>
     );
   }
-  
+
   return (
     <div className="m-auto">
       <div className="min-h-[100px]" ref={containeRef}>
@@ -94,7 +87,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 style={{ width: section.width, margin: 'auto' }}
               >
                 {section.rows.map((row, rowIndex) => {
-                  
                   return (
                     <LayoutRowContainer
                       key={row.id}
