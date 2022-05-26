@@ -126,7 +126,14 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     setTargetDROP(undefined);
     const el = document.getElementById('draggedDiv');
     if (el) {
-      el.style.position = 'unset';
+      el.style.position = '';
+      el.style.pointerEvents = '';
+      el.style.position = '';
+      el.style.top = ``;
+      el.style.left = ``;
+      el.style.width = ``;
+      el.style.height = ``;
+      el.style.overflow = ``;
       el.removeAttribute('id');
     }
   };
