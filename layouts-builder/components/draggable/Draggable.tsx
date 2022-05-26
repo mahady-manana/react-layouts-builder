@@ -130,9 +130,8 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   };
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
-    containerRef.current?.setAttribute('draggable', "true");
+    containerRef.current?.setAttribute('draggable', 'true');
     runIt();
-    document.getElementById('clonedGhost')?.remove()
   };
 
   const runIt = () => {
@@ -179,10 +178,24 @@ export const DraggableItem: FC<DraggableProps> = ({
   return (
     <div
       draggable={!disableChange}
-      onDragStart={(e) => onDragStart(e, containerRef.current as any)}
+      onDragStart={(e) => {
+        onDragStart(e, containerRef.current as any);
+      }}
       onDragEnd={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        const el = document.getElementById('draggedDiv')
+        if (el) {
+          el.style.position = "unset"
+        }
+      }}
+      onDrag={e => {
+        const cloned = e.currentTarget as HTMLDivElement;
+        cloned.setAttribute('id', 'draggedDiv')
+        cloned.style.position = "fixed"
+        cloned.style.top = `${e.clientY}px`
+        cloned.style.left = `${e.clientX}px`
+        cloned.style.zIndex = `999`
       }}
       className={classNames(
         'rlb-draggable-container flex-grow',

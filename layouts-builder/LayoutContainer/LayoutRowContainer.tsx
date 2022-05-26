@@ -125,16 +125,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
 
-    let ghostEle;
-    ghostEle =
-      (el?.cloneNode(true) as HTMLDivElement) ||
-      document.createElement('div');
-    ghostEle.setAttribute('id', 'clonedGhost');
+    const div = e.target;
 
-    // Append it to `body`
-    document.body.appendChild(ghostEle);
-
-    e.dataTransfer.setDragImage(ghostEle as any, 0, 0);
+    e.dataTransfer.setDragImage(div as any, 1111110, 1111110);
 
     const timer = setTimeout(() => {
       setDragActive(true);

@@ -290,11 +290,10 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a, _b;
+    var _a;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "true");
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', 'true');
     runIt();
-    (_b = document.getElementById('clonedGhost')) === null || _b === void 0 ? void 0 : _b.remove();
   };
 
   var runIt = function runIt() {
@@ -350,11 +349,24 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
-      return _onDragStart(e, containerRef.current);
+      _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
       e.stopPropagation();
+      var el = document.getElementById('draggedDiv');
+
+      if (el) {
+        el.style.position = "unset";
+      }
+    },
+    onDrag: function onDrag(e) {
+      var cloned = e.currentTarget;
+      cloned.setAttribute('id', 'draggedDiv');
+      cloned.style.position = "fixed";
+      cloned.style.top = "".concat(e.clientY, "px");
+      cloned.style.left = "".concat(e.clientX, "px");
+      cloned.style.zIndex = "999";
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
@@ -916,6 +928,14 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
+    var div = document.getElementById('draggedDiv');
+
+    if (div) {
+      div.style.position = 'fixed';
+      div.style.top = "".concat(e.clientY, "px");
+      div.style.left = "".concat(e.clientX, "px");
+    }
+
     var winH = window.innerHeight;
     if (e.clientY < 200 || e.clientY > winH - 200) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'
@@ -1099,12 +1119,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    var ghostEle;
-    ghostEle = (el === null || el === void 0 ? void 0 : el.cloneNode(true)) || document.createElement('div');
-    ghostEle.setAttribute('id', 'clonedGhost'); // Append it to `body`
-
-    document.body.appendChild(ghostEle);
-    e.dataTransfer.setDragImage(ghostEle, 0, 0);
+    var div = e.target;
+    e.dataTransfer.setDragImage(div, 1111110, 1111110);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -1318,7 +1334,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,

@@ -45,6 +45,14 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
+    var div = document.getElementById('draggedDiv');
+
+    if (div) {
+      div.style.position = 'fixed';
+      div.style.top = "".concat(e.clientY, "px");
+      div.style.left = "".concat(e.clientX, "px");
+    }
+
     var winH = window.innerHeight;
     if (e.clientY < 200 || e.clientY > winH - 200) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'

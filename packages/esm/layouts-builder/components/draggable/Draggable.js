@@ -133,11 +133,10 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a, _b;
+    var _a;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "true");
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', 'true');
     runIt();
-    (_b = document.getElementById('clonedGhost')) === null || _b === void 0 ? void 0 : _b.remove();
   };
 
   var runIt = function runIt() {
@@ -193,11 +192,24 @@ var DraggableItem = function DraggableItem(_a) {
   return /*#__PURE__*/React.createElement("div", {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
-      return _onDragStart(e, containerRef.current);
+      _onDragStart(e, containerRef.current);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
       e.stopPropagation();
+      var el = document.getElementById('draggedDiv');
+
+      if (el) {
+        el.style.position = "unset";
+      }
+    },
+    onDrag: function onDrag(e) {
+      var cloned = e.currentTarget;
+      cloned.setAttribute('id', 'draggedDiv');
+      cloned.style.position = "fixed";
+      cloned.style.top = "".concat(e.clientY, "px");
+      cloned.style.left = "".concat(e.clientX, "px");
+      cloned.style.zIndex = "999";
     },
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,

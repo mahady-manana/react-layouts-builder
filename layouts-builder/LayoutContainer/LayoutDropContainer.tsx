@@ -12,7 +12,7 @@ import React, {
 
 interface DraggableProps {
   children: ReactNode;
-  isLast?: boolean
+  isLast?: boolean;
   disableChange?: boolean;
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
@@ -53,6 +53,14 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     e.preventDefault();
     if (disableChange) {
       return;
+    }
+    const div = document.getElementById(
+      'draggedDiv',
+    ) as HTMLDivElement;
+    if (div) {
+      div.style.position = 'fixed';
+      div.style.top = `${e.clientY}px`;
+      div.style.left = `${e.clientX}px`;
     }
     const winH = window.innerHeight;
     if (e.clientY < 200 || e.clientY > winH - 200)

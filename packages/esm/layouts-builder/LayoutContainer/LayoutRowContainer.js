@@ -103,12 +103,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    var ghostEle;
-    ghostEle = (el === null || el === void 0 ? void 0 : el.cloneNode(true)) || document.createElement('div');
-    ghostEle.setAttribute('id', 'clonedGhost'); // Append it to `body`
-
-    document.body.appendChild(ghostEle);
-    e.dataTransfer.setDragImage(ghostEle, 0, 0);
+    var div = e.target;
+    e.dataTransfer.setDragImage(div, 1111110, 1111110);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
@@ -322,7 +318,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
               return;
             }
 
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey], el);
+            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] === 'EMPTY_SECTION' && !disabled ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Drop or add block here...")) : null, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
