@@ -54,14 +54,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
-    const div = document.getElementById(
-      'draggedDiv',
-    ) as HTMLDivElement;
-    if (div) {
-      div.style.position = 'fixed';
-      div.style.top = `${e.clientY}px`;
-      div.style.left = `${e.clientX}px`;
-    }
+
     const winH = window.innerHeight;
     if (e.clientY < 200 || e.clientY > winH - 200)
       activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,6 +71,17 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver(nearest);
       setTargetDROP(undefined);
     }
+    const cloned = document.getElementById(
+      'draggedDiv',
+    ) as HTMLDivElement;
+    cloned.style.pointerEvents = 'none';
+    cloned.style.position = 'fixed';
+    cloned.style.top = `${e.clientY}px`;
+    cloned.style.left = `${e.clientX}px`;
+    cloned.style.width = `200px`;
+    cloned.style.height = `200px`;
+    cloned.style.overflow = `hidden`;
+    cloned.style.zIndex = `99`;
   };
 
   const findNearestTarget = (
@@ -120,6 +124,11 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     }
     onDrop(e);
     setTargetDROP(undefined);
+    const el = document.getElementById('draggedDiv');
+    if (el) {
+      el.style.position = 'unset';
+      el.removeAttribute('id');
+    }
   };
   return (
     <div

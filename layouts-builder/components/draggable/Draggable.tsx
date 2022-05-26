@@ -180,23 +180,30 @@ export const DraggableItem: FC<DraggableProps> = ({
       draggable={!disableChange}
       onDragStart={(e) => {
         onDragStart(e, containerRef.current as any);
+        e.currentTarget.setAttribute('id', 'draggedDiv');
       }}
       onDragEnd={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        const el = document.getElementById('draggedDiv')
+        const el = document.getElementById('draggedDiv');
         if (el) {
-          el.style.position = "unset"
+          el.style.position = '';
+          el.style.pointerEvents = '';
+          el.style.position = '';
+          el.style.top = ``;
+          el.style.left = ``;
+          el.style.width = ``;
+          el.style.height = ``;
+          el.style.overflow = ``;
+          el.removeAttribute('id');
         }
       }}
-      onDrag={e => {
-        const cloned = e.currentTarget as HTMLDivElement;
-        cloned.setAttribute('id', 'draggedDiv')
-        cloned.style.position = "fixed"
-        cloned.style.top = `${e.clientY}px`
-        cloned.style.left = `${e.clientX}px`
-        cloned.style.zIndex = `999`
-      }}
+      //   // const cloned = e.currentTarget as HTMLDivElement;
+      // onDrag={e => {
+      //   // cloned.style.position = "fixed"
+      //   // cloned.style.top = `${e.clientY}px`
+      //   // cloned.style.left = `${e.clientX}px`
+      // }}
       className={classNames(
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',

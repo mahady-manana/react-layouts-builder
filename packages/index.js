@@ -350,6 +350,8 @@ var DraggableItem = function DraggableItem(_a) {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
       _onDragStart(e, containerRef.current);
+
+      e.currentTarget.setAttribute('id', 'draggedDiv');
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
@@ -357,17 +359,23 @@ var DraggableItem = function DraggableItem(_a) {
       var el = document.getElementById('draggedDiv');
 
       if (el) {
-        el.style.position = "unset";
+        el.style.position = '';
+        el.style.pointerEvents = '';
+        el.style.position = '';
+        el.style.top = "";
+        el.style.left = "";
+        el.style.width = "";
+        el.style.height = "";
+        el.style.overflow = "";
+        el.removeAttribute('id');
       }
     },
-    onDrag: function onDrag(e) {
-      var cloned = e.currentTarget;
-      cloned.setAttribute('id', 'draggedDiv');
-      cloned.style.position = "fixed";
-      cloned.style.top = "".concat(e.clientY, "px");
-      cloned.style.left = "".concat(e.clientX, "px");
-      cloned.style.zIndex = "999";
-    },
+    //   // const cloned = e.currentTarget as HTMLDivElement;
+    // onDrag={e => {
+    //   // cloned.style.position = "fixed"
+    //   // cloned.style.top = `${e.clientY}px`
+    //   // cloned.style.left = `${e.clientX}px`
+    // }}
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
@@ -928,14 +936,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    var div = document.getElementById('draggedDiv');
-
-    if (div) {
-      div.style.position = 'fixed';
-      div.style.top = "".concat(e.clientY, "px");
-      div.style.left = "".concat(e.clientX, "px");
-    }
-
     var winH = window.innerHeight;
     if (e.clientY < 200 || e.clientY > winH - 200) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'
@@ -955,6 +955,16 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       onDragOver(nearest);
       setTargetDROP(undefined);
     }
+
+    var cloned = document.getElementById('draggedDiv');
+    cloned.style.pointerEvents = 'none';
+    cloned.style.position = 'fixed';
+    cloned.style.top = "".concat(e.clientY, "px");
+    cloned.style.left = "".concat(e.clientX, "px");
+    cloned.style.width = "200px";
+    cloned.style.height = "200px";
+    cloned.style.overflow = "hidden";
+    cloned.style.zIndex = "99";
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
@@ -1003,6 +1013,12 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
     onDrop(e);
     setTargetDROP(undefined);
+    var el = document.getElementById('draggedDiv');
+
+    if (el) {
+      el.style.position = 'unset';
+      el.removeAttribute('id');
+    }
   };
 
   return /*#__PURE__*/React__default["default"].createElement("div", {

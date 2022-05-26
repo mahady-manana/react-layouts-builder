@@ -193,6 +193,8 @@ var DraggableItem = function DraggableItem(_a) {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
       _onDragStart(e, containerRef.current);
+
+      e.currentTarget.setAttribute('id', 'draggedDiv');
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
@@ -200,17 +202,23 @@ var DraggableItem = function DraggableItem(_a) {
       var el = document.getElementById('draggedDiv');
 
       if (el) {
-        el.style.position = "unset";
+        el.style.position = '';
+        el.style.pointerEvents = '';
+        el.style.position = '';
+        el.style.top = "";
+        el.style.left = "";
+        el.style.width = "";
+        el.style.height = "";
+        el.style.overflow = "";
+        el.removeAttribute('id');
       }
     },
-    onDrag: function onDrag(e) {
-      var cloned = e.currentTarget;
-      cloned.setAttribute('id', 'draggedDiv');
-      cloned.style.position = "fixed";
-      cloned.style.top = "".concat(e.clientY, "px");
-      cloned.style.left = "".concat(e.clientX, "px");
-      cloned.style.zIndex = "999";
-    },
+    //   // const cloned = e.currentTarget as HTMLDivElement;
+    // onDrag={e => {
+    //   // cloned.style.position = "fixed"
+    //   // cloned.style.top = `${e.clientY}px`
+    //   // cloned.style.left = `${e.clientX}px`
+    // }}
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
