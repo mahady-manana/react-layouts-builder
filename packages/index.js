@@ -1509,7 +1509,14 @@ var LayoutContainer = function LayoutContainer(_a) {
     className: "m-auto"
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "min-h-[100px]",
-    ref: containeRef
+    ref: containeRef,
+    onDragOver: function onDragOver(e) {
+      var cloned = document.getElementById('draggedDiv');
+      cloned.style.pointerEvents = 'none';
+      cloned.style.position = 'fixed';
+      cloned.style.top = "".concat(e.clientY, "px");
+      cloned.style.left = "".concat(e.clientX, "px");
+    }
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,

@@ -67,7 +67,19 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
   return (
     <div className="m-auto">
-      <div className="min-h-[100px]" ref={containeRef}>
+      <div
+        className="min-h-[100px]"
+        ref={containeRef}
+        onDragOver={(e) => {
+          const cloned = document.getElementById(
+            'draggedDiv',
+          ) as HTMLDivElement;
+          cloned.style.pointerEvents = 'none';
+          cloned.style.position = 'fixed';
+          cloned.style.top = `${e.clientY}px`;
+          cloned.style.left = `${e.clientX}px`;
+        }}
+      >
         {renderableLayout.map((section, sectionIndex) => {
           return (
             <div
