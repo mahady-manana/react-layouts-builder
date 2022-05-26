@@ -28,8 +28,6 @@ export const Layouts1 = () => {
   const [disableChange, setDisableChange] = useState<boolean>(false)
   const [focusItem, setFocusItem] = useState<any>()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
-    storage.set(layouts)
-    console.log(layouts)
 
     setLayoutTest(layouts)
   }

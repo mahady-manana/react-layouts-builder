@@ -103,20 +103,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('sectionId', sectionId);
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
-    var img = el === null || el === void 0 ? void 0 : el.cloneNode(true);
+    var ghostEle = el === null || el === void 0 ? void 0 : el.cloneNode(true);
+    ghostEle.setAttribute('id', "clonedGhost"); // Append it to `body`
 
-    if (img) {
-      img.setAttributes('id', 'clonedGhost');
-      img.style.width = '100px';
-      img.style.height = '100px';
-      img.style.position = 'absolute';
-      img.style.top = '0px';
-      img.style.left = '-100px';
-      img.style.padding = '10px';
-      document.body.appendChild(img);
-      e.dataTransfer.setDragImage(img, 0, 0);
-    }
-
+    document.body.appendChild(ghostEle);
+    e.dataTransfer.setDragImage(ghostEle, 0, 0);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);

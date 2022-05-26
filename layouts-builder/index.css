@@ -237,10 +237,12 @@
   z-index: 900;
   left: calc(50% - 25px);
 }
-div#ghost {
-  background: aqua;
-  width: 150px;
+#clonedGhost {
+  background: #fc0454;
+  width: 250px;
   text-align: center;
-  padding: 50px;
+  padding: 10px;
+  height: 250px;
   border-radius: 10px;
+  overflow: hidden;
 }
