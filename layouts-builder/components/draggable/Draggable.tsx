@@ -186,6 +186,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         e.preventDefault();
         e.stopPropagation();
         const el = document.getElementById('draggedDiv');
+
         if (el) {
           el.style.position = '';
           el.style.pointerEvents = '';

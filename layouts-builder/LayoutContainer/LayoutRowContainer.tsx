@@ -127,7 +127,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
     const div = e.target;
 
-    e.dataTransfer.setDragImage(div as any, 1111110, 1111110);
+    e.dataTransfer.setDragImage(div as any, 5000, 5000);
 
     const timer = setTimeout(() => {
       setDragActive(true);

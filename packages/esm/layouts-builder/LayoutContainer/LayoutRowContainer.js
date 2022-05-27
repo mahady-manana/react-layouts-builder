@@ -104,7 +104,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     e.dataTransfer.setData('colmunId', columnId);
     e.dataTransfer.setData('rowId', rowId);
     var div = e.target;
-    e.dataTransfer.setDragImage(div, 1111110, 1111110);
+    e.dataTransfer.setDragImage(div, 5000, 5000);
     var timer = setTimeout(function () {
       setDragActive(true);
     }, 500);
