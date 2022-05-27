@@ -894,9 +894,9 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
 
 var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
-      disableChange = _a.disableChange,
-      isLast = _a.isLast,
-      targetDROP = _a.targetDROP,
+      disableChange = _a.disableChange;
+      _a.isLast;
+      var targetDROP = _a.targetDROP,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -1040,7 +1040,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       visibility: targetDROP === exports.TargetPlaceEnum.TOP ? 'visible' : 'hidden'
     },
     ref: targetDROP === exports.TargetPlaceEnum.TOP ? activeDropRef : null
-  }) : null, children, !disableChange && isLast ? /*#__PURE__*/React__default["default"].createElement("div", {
+  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rbl-drop-item-indicator",
     style: {
       visibility: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'

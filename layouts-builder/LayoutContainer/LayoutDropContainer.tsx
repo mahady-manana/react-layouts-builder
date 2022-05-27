@@ -161,7 +161,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       ) : null}
 
       {children}
-      {!disableChange && isLast ? (
+      {!disableChange ? (
         <div
           className="rbl-drop-item-indicator"
           style={{
