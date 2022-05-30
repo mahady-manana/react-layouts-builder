@@ -54,9 +54,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
+    console.log('Child dragover');
 
     const winH = window.innerHeight;
-    if (e.clientY < 200 || e.clientY > winH - 200)
+    if (e.clientY < 100 || e.clientY > winH - 100)
       activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     if (!initY) {
@@ -143,11 +144,11 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver={handleDragOver}
       onDragLeave={onExit}
       onDrop={handleDrop}
-      className={disableChange ? 'rbl-vert-spacing' : ''}
+      className={disableChange ? 'rbl-vert-spacing' : 'rbl-relative'}
     >
       {!disableChange ? (
         <div
-          className="rbl-drop-item-indicator"
+          className="rbl-drop-item-indicator top"
           style={{
             visibility:
               targetDROP === TargetPlaceEnum.TOP
@@ -163,7 +164,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       {children}
       {!disableChange ? (
         <div
-          className="rbl-drop-item-indicator"
+          className="rbl-drop-item-indicator bottom"
           style={{
             visibility:
               targetDROP === TargetPlaceEnum.BOTTOM

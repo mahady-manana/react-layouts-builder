@@ -45,8 +45,9 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
+    console.log('Child dragover');
     var winH = window.innerHeight;
-    if (e.clientY < 200 || e.clientY > winH - 200) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
+    if (e.clientY < 100 || e.clientY > winH - 100) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'
     });
 
@@ -142,15 +143,15 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     onDragOver: handleDragOver,
     onDragLeave: onExit,
     onDrop: handleDrop,
-    className: disableChange ? 'rbl-vert-spacing' : ''
+    className: disableChange ? 'rbl-vert-spacing' : 'rbl-relative'
   }, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "rbl-drop-item-indicator",
+    className: "rbl-drop-item-indicator top",
     style: {
       visibility: targetDROP === TargetPlaceEnum.TOP ? 'visible' : 'hidden'
     },
     ref: targetDROP === TargetPlaceEnum.TOP ? activeDropRef : null
   }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
-    className: "rbl-drop-item-indicator",
+    className: "rbl-drop-item-indicator bottom",
     style: {
       visibility: targetDROP === TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
     },
