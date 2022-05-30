@@ -341,8 +341,8 @@ var DraggableItem = function DraggableItem(_a) {
       var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
 
       if (img) {
-        (_a = img.style) === null || _a === void 0 ? void 0 : _a.setProperty('max-height', "".concat(height, "px"));
-        (_b = img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
+        (_a = img === null || img === void 0 ? void 0 : img.style) === null || _a === void 0 ? void 0 : _a.setProperty('max-height', "".concat(height, "px"));
+        (_b = img === null || img === void 0 ? void 0 : img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
   }, [height]);

@@ -169,8 +169,8 @@ export const DraggableItem: FC<DraggableProps> = ({
         `#rbl_image_${dndTargetKey} img`,
       );
       if (img) {
-        (img as any).style?.setProperty('max-height', `${height}px`);
-        (img as any).style?.setProperty('object-fit', `cover`);
+        (img as any)?.style?.setProperty('max-height', `${height}px`);
+        (img as any)?.style?.setProperty('object-fit', `cover`);
       }
     }
   }, [height]);
