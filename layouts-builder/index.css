@@ -246,6 +246,10 @@
   position: absolute;
   pointer-events: none;
 }
+.rbl-drop-row-indicator,
+.rbl-side-drop-indicator {
+  pointer-events: none;
+}
 .rbl-relative {
   position: relative;
 }
