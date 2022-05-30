@@ -48,7 +48,9 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
                   id: 'EMPTY_SECTION'
                 };
                 return data.find(function (dt) {
-                  return dt[key] === itemKey || dt[key] === itemKey.toString();
+                  var _a;
+
+                  return dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
                 });
               })
             };
@@ -658,7 +660,7 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
             childIds: col.childIds.filter(function (id) {
               if (!id) return true;
               if (duplicate) return id !== 'DUPLICATE';
-              return id !== source.itemKey;
+              return id.toString() !== source.itemKey.toString();
             })
           });
         }).filter(function (col) {

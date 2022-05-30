@@ -38,7 +38,9 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
                   id: 'EMPTY_SECTION'
                 };
                 return data.find(function (dt) {
-                  return dt[key] === itemKey || dt[key] === itemKey.toString();
+                  var _a;
+
+                  return dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
                 });
               })
             };

@@ -17,7 +17,7 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
             childIds: col.childIds.filter(function (id) {
               if (!id) return true;
               if (duplicate) return id !== 'DUPLICATE';
-              return id !== source.itemKey;
+              return id.toString() !== source.itemKey.toString();
             })
           });
         }).filter(function (col) {

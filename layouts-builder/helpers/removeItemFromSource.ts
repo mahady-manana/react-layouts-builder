@@ -25,7 +25,7 @@ export const removeItemFromSource = (
               childIds: col.childIds.filter((id) => {
                 if (!id) return true;
                 if (duplicate) return id !== 'DUPLICATE';
-                return id !== source.itemKey;
+                return id.toString() !== source.itemKey.toString();
               }),
             };
           })

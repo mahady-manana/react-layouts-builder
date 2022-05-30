@@ -40,7 +40,7 @@ export const createRenderableLayout = (
                   return {
                     id: 'EMPTY_SECTION',
                   };
-                return data.find((dt) => dt[key] === itemKey || dt[key] === itemKey.toString());
+                return data.find((dt) => dt[key] === itemKey || dt[key]?.toString() === itemKey.toString());
               }),
             }),
           ),
