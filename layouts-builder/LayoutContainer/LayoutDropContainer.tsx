@@ -54,7 +54,6 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     if (disableChange) {
       return;
     }
-    console.log('Child dragover');
 
     const winH = window.innerHeight;
     if (e.clientY < 100 || e.clientY > winH - 100)

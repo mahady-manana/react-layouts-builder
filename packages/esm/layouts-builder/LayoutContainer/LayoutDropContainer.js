@@ -45,7 +45,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    console.log('Child dragover');
     var winH = window.innerHeight;
     if (e.clientY < 100 || e.clientY > winH - 100) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
       behavior: 'smooth'
