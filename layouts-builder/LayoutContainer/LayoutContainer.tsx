@@ -74,10 +74,13 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
           const cloned = document.getElementById(
             'draggedDiv',
           ) as HTMLDivElement;
-          cloned.style.pointerEvents = 'none';
-          cloned.style.position = 'fixed';
-          cloned.style.top = `${e.clientY}px`;
-          cloned.style.left = `${e.clientX}px`;
+
+          if (cloned) {
+            cloned.style.pointerEvents = 'none';
+            cloned.style.position = 'fixed';
+            cloned.style.top = `${e.clientY}px`;
+            cloned.style.left = `${e.clientX}px`;
+          }
         }}
       >
         {renderableLayout.map((section, sectionIndex) => {

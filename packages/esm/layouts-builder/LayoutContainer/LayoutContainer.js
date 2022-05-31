@@ -64,10 +64,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef,
     onDragOver: function onDragOver(e) {
       var cloned = document.getElementById('draggedDiv');
-      cloned.style.pointerEvents = 'none';
-      cloned.style.position = 'fixed';
-      cloned.style.top = "".concat(e.clientY, "px");
-      cloned.style.left = "".concat(e.clientX, "px");
+
+      if (cloned) {
+        cloned.style.pointerEvents = 'none';
+        cloned.style.position = 'fixed';
+        cloned.style.top = "".concat(e.clientY, "px");
+        cloned.style.left = "".concat(e.clientX, "px");
+      }
     }
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
