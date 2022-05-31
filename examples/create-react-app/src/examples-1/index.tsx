@@ -28,7 +28,6 @@ export const Layouts1 = () => {
   const [disableChange, setDisableChange] = useState<boolean>(false)
   const [focusItem, setFocusItem] = useState<any>()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
-
     setLayoutTest(layouts)
   }
   useEffect(() => {
@@ -129,11 +128,9 @@ export const Layouts1 = () => {
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
-        Toggle Disable change t 000
+        Toggle Disable change t 000 : {disableChange ? "YES" : "NO"}
       </button>
-      <button onClick={() => setStaticss((prev) => !prev)}>
-        Toggle static
-      </button>
+
       <div
         style={{
           display: "flex",
@@ -157,7 +154,10 @@ export const Layouts1 = () => {
           )
         })}
       </div>
-      <div id="container_layout_scroll" style={{ height: "88vh", overflowY: "scroll" }}>
+      <div
+        id="container_layout_scroll"
+        style={{ height: "88vh", overflowY: "scroll" }}
+      >
         {loading ? (
           <div>loading...</div>
         ) : (

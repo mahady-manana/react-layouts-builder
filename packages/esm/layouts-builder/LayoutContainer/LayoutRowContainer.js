@@ -96,6 +96,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
     e.stopPropagation();
 
+    if (disabled) {
+      return;
+    }
+
     var itemKeyType = _typeof(itemkey);
 
     e.dataTransfer.setData('itemKey', itemkey);
@@ -306,7 +310,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           key: index
         }, /*#__PURE__*/React.createElement(DraggableItem, {
           isImage: isImage,
-          disableChange: disabled || items['id'] === 'EMPTY_SECTION',
+          disableChange: disabled,
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],

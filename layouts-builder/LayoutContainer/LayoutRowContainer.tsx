@@ -117,7 +117,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     el?: Element,
   ) => {
     e.stopPropagation();
-
+    if (disabled) {
+      return;
+    }
     const itemKeyType = typeof itemkey;
     e.dataTransfer.setData('itemKey', itemkey);
     e.dataTransfer.setData('itemKeyType', itemKeyType);
@@ -374,9 +376,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                     >
                       <DraggableItem
                         isImage={isImage}
-                        disableChange={
-                          disabled || items['id'] === 'EMPTY_SECTION'
-                        }
+                        disableChange={disabled}
                         sizes={
                           imageSizeFnLoader
                             ? imageSizeFnLoader(items)

@@ -294,7 +294,11 @@ var DraggableItem = function DraggableItem(_a) {
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
     var _a;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', 'true');
+    if (disableChange) {
+      return;
+    }
+
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "".concat(!disableChange));
     runIt();
   };
 
@@ -348,12 +352,21 @@ var DraggableItem = function DraggableItem(_a) {
       }
     }
   }, [height]);
+  React.useEffect(function () {
+    var _a;
+
+    if (disableChange) {
+      (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
+    }
+  }, [disableChange]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
-      _onDragStart(e, containerRef.current);
+      if (!disableChange) {
+        _onDragStart(e, containerRef.current);
 
-      e.currentTarget.setAttribute('id', 'draggedDiv');
+        e.currentTarget.setAttribute('id', 'draggedDiv');
+      }
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
@@ -896,9 +909,8 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
 
 var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
-      disableChange = _a.disableChange;
-      _a.isLast;
-      var targetDROP = _a.targetDROP,
+      disableChange = _a.disableChange,
+      targetDROP = _a.targetDROP,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -963,8 +975,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     cloned.style.position = 'fixed';
     cloned.style.top = "".concat(e.clientY, "px");
     cloned.style.left = "".concat(e.clientX, "px");
-    cloned.style.width = "200px";
-    cloned.style.height = "200px";
+    cloned.style.maxWidth = "500px";
+    cloned.style.maxHeight = "500px";
     cloned.style.overflow = "hidden";
     cloned.style.zIndex = "99";
   };
@@ -1136,6 +1148,10 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
     e.stopPropagation();
+
+    if (disabled) {
+      return;
+    }
 
     var itemKeyType = _typeof(itemkey);
 
@@ -1347,7 +1363,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           key: index
         }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
           isImage: isImage,
-          disableChange: disabled || items['id'] === 'EMPTY_SECTION',
+          disableChange: disabled,
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],

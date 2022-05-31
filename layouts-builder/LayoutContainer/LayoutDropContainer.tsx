@@ -25,7 +25,6 @@ interface DraggableProps {
 export const LayoutDropContainer: FC<DraggableProps> = ({
   children,
   disableChange,
-  isLast,
   targetDROP,
   setTargetDROP,
   onDragOver,
@@ -78,8 +77,8 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     cloned.style.position = 'fixed';
     cloned.style.top = `${e.clientY}px`;
     cloned.style.left = `${e.clientX}px`;
-    cloned.style.width = `200px`;
-    cloned.style.height = `200px`;
+    cloned.style.maxWidth = `500px`;
+    cloned.style.maxHeight = `500px`;
     cloned.style.overflow = `hidden`;
     cloned.style.zIndex = `99`;
   };

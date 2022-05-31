@@ -3,9 +3,8 @@ import React, { useRef, useState, useEffect } from 'react';
 
 var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
-      disableChange = _a.disableChange;
-      _a.isLast;
-      var targetDROP = _a.targetDROP,
+      disableChange = _a.disableChange,
+      targetDROP = _a.targetDROP,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -70,8 +69,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     cloned.style.position = 'fixed';
     cloned.style.top = "".concat(e.clientY, "px");
     cloned.style.left = "".concat(e.clientX, "px");
-    cloned.style.width = "200px";
-    cloned.style.height = "200px";
+    cloned.style.maxWidth = "500px";
+    cloned.style.maxHeight = "500px";
     cloned.style.overflow = "hidden";
     cloned.style.zIndex = "99";
   };

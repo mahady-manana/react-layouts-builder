@@ -135,7 +135,11 @@ var DraggableItem = function DraggableItem(_a) {
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
     var _a;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', 'true');
+    if (disableChange) {
+      return;
+    }
+
+    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "".concat(!disableChange));
     runIt();
   };
 
@@ -189,12 +193,21 @@ var DraggableItem = function DraggableItem(_a) {
       }
     }
   }, [height]);
+  useEffect(function () {
+    var _a;
+
+    if (disableChange) {
+      (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
+    }
+  }, [disableChange]);
   return /*#__PURE__*/React.createElement("div", {
     draggable: !disableChange,
     onDragStart: function onDragStart(e) {
-      _onDragStart(e, containerRef.current);
+      if (!disableChange) {
+        _onDragStart(e, containerRef.current);
 
-      e.currentTarget.setAttribute('id', 'draggedDiv');
+        e.currentTarget.setAttribute('id', 'draggedDiv');
+      }
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();

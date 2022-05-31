@@ -130,7 +130,13 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   };
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
-    containerRef.current?.setAttribute('draggable', 'true');
+    if (disableChange) {
+      return;
+    }
+    containerRef.current?.setAttribute(
+      'draggable',
+      `${!disableChange}`,
+    );
     runIt();
   };
 
@@ -175,12 +181,20 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   }, [height]);
 
+  useEffect(() => {
+    if (disableChange) {
+      containerRef.current?.removeAttribute('draggable');
+    }
+  }, [disableChange]);
+
   return (
     <div
       draggable={!disableChange}
       onDragStart={(e) => {
-        onDragStart(e, containerRef.current as any);
-        e.currentTarget.setAttribute('id', 'draggedDiv');
+        if (!disableChange) {
+          onDragStart(e, containerRef.current as any);
+          e.currentTarget.setAttribute('id', 'draggedDiv');
+        }
       }}
       onDragEnd={(e) => {
         e.preventDefault();
