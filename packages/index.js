@@ -403,7 +403,7 @@ var DraggableItem = function DraggableItem(_a) {
     id: "rbl_image_".concat(dndTargetKey),
     style: {
       width: "".concat(width || 100, "%"),
-      maxHeight: height ? height : (sizes === null || sizes === void 0 ? void 0 : sizes.height),
+      maxHeight: height ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,
       margin: oneCol ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1329,9 +1329,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         },
         type: "column"
       }, /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "rlb-flex"
+        className: "rlb-flex rbl-relative"
       }, !disabled ? /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "rbl-side-drop-indicator",
+        className: "rbl-side-drop-indicator left",
         style: styleSide(column.id, exports.TargetPlaceEnum.LEFT)
       }) : null, /*#__PURE__*/React__default["default"].createElement("div", {
         key: column.id,
@@ -1384,7 +1384,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           sectionId: sectionId
         }) : null));
       })), !disabled ? /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "rbl-side-drop-indicator",
+        className: "rbl-side-drop-indicator right",
         style: styleSide(column.id, exports.TargetPlaceEnum.RIGHT)
       }) : null));
     });

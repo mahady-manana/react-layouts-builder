@@ -253,3 +253,15 @@
 .rbl-relative {
   position: relative;
 }
+
+.rbl-side-drop-indicator.left {
+  left: 0;
+  height: 100%;
+  position: absolute;
+}
+
+.rbl-side-drop-indicator.right {
+  right: 0;
+  height: 100%;
+  position: absolute;
+}

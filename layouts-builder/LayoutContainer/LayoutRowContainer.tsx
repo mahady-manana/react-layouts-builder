@@ -329,10 +329,10 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             }}
             type="column"
           >
-            <div className="rlb-flex">
+            <div className="rlb-flex rbl-relative">
               {!disabled ? (
                 <div
-                  className="rbl-side-drop-indicator"
+                  className="rbl-side-drop-indicator left"
                   style={styleSide(column.id, TargetPlaceEnum.LEFT)}
                 ></div>
               ) : null}
@@ -424,7 +424,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               </div>
               {!disabled ? (
                 <div
-                  className="rbl-side-drop-indicator"
+                  className="rbl-side-drop-indicator right"
                   style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
                 ></div>
               ) : null}

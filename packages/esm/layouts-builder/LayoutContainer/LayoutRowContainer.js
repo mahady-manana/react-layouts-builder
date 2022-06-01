@@ -276,9 +276,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         },
         type: "column"
       }, /*#__PURE__*/React.createElement("div", {
-        className: "rlb-flex"
+        className: "rlb-flex rbl-relative"
       }, !disabled ? /*#__PURE__*/React.createElement("div", {
-        className: "rbl-side-drop-indicator",
+        className: "rbl-side-drop-indicator left",
         style: styleSide(column.id, TargetPlaceEnum.LEFT)
       }) : null, /*#__PURE__*/React.createElement("div", {
         key: column.id,
@@ -331,7 +331,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           sectionId: sectionId
         }) : null));
       })), !disabled ? /*#__PURE__*/React.createElement("div", {
-        className: "rbl-side-drop-indicator",
+        className: "rbl-side-drop-indicator right",
         style: styleSide(column.id, TargetPlaceEnum.RIGHT)
       }) : null));
     });
