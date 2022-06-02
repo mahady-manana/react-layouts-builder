@@ -222,6 +222,8 @@ var DraggableItem = function DraggableItem(_a) {
         el.style.left = "";
         el.style.width = "";
         el.style.height = "";
+        el.style.maxWidth = "";
+        el.style.maxHeight = "";
         el.style.overflow = "";
         el.removeAttribute('id');
       }

@@ -1,4 +1,3 @@
-import { loadPartialConfig } from '@babel/core';
 import classNames from 'classnames';
 import React, {
   FC,
@@ -209,6 +208,8 @@ export const DraggableItem: FC<DraggableProps> = ({
           el.style.left = ``;
           el.style.width = ``;
           el.style.height = ``;
+          el.style.maxWidth = ``;
+          el.style.maxHeight = ``;
           el.style.overflow = ``;
           el.removeAttribute('id');
         }
