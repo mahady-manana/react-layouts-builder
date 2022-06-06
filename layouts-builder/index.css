@@ -192,6 +192,7 @@
   border-radius: 10px;
   visibility: hidden;
   width: 100%;
+  z-index: 49;
 }
 .rbl-drop-row-indicator {
   background: #fc0454;
@@ -200,6 +201,7 @@
   border-radius: 10px;
   visibility: hidden;
   width: 100%;
+  z-index: 49;
 }
 /* drop in size indicator */
 .rbl-side-drop-indicator {
@@ -208,12 +210,14 @@
   border: 1px solid #fff;
   border-radius: 10px;
   visibility: hidden;
+  z-index: 49;
 }
 .rbl-drop-row-container {
   height: 25px;
   display: flex;
   width: 100%;
   align-items: center;
+  z-index: 49;
 }
 
 /* PUBLIC ONLY */
