@@ -38,9 +38,9 @@ var addToColmunElement = function addToColmunElement(targetColumn, targetColumnI
     }
 
     var newColItems = col.childIds.map(function (k) {
-      return sourceColumnId === targetColumnId && k === sourceItemKey ? 'DUPLICATE' : k;
+      return sourceColumnId === targetColumnId && k.toString() === sourceItemKey.toString() ? 'DUPLICATE' : k;
     }).reduce(function (acc, next) {
-      if (next === targetItemKey) {
+      if (next.toString() === targetItemKey.toString()) {
         switch (targetPlace) {
           case TargetPlaceEnum.TOP:
             return acc.concat([sourceItemKey, next]);

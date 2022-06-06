@@ -53,7 +53,7 @@ export const createLayout = (
   if (!currentLayouts || currentLayouts?.length === 0) {
     const layouts = data.map((dataItem) =>
       createNewSection(
-        [dataItem[stableDataKey]],
+        [dataItem[stableDataKey]?.toString()],
         options?.isContainer,
         options?.width,
       ),

@@ -42,7 +42,9 @@ import { createNewSection } from './createNewSection.js';
 var createLayout = function createLayout(data, stableDataKey, currentLayouts, options) {
   if (!currentLayouts || (currentLayouts === null || currentLayouts === void 0 ? void 0 : currentLayouts.length) === 0) {
     var layouts = data.map(function (dataItem) {
-      return createNewSection([dataItem[stableDataKey]], options === null || options === void 0 ? void 0 : options.isContainer, options === null || options === void 0 ? void 0 : options.width);
+      var _a;
+
+      return createNewSection([(_a = dataItem[stableDataKey]) === null || _a === void 0 ? void 0 : _a.toString()], options === null || options === void 0 ? void 0 : options.isContainer, options === null || options === void 0 ? void 0 : options.width);
     });
     return layouts; // const newSections = createNewSection(
     //   data.map((dt) => dt[stableDataKey]),

@@ -61,12 +61,12 @@ const addToColmunElement = (
 
     const newColItems = col.childIds
       .map((k) =>
-        sourceColumnId === targetColumnId && k === sourceItemKey
+        sourceColumnId === targetColumnId && k.toString() === sourceItemKey.toString()
           ? 'DUPLICATE'
           : k,
       )
       .reduce((acc, next) => {
-        if (next === targetItemKey) {
+        if (next.toString() === targetItemKey.toString()) {
           switch (targetPlace) {
             case TargetPlaceEnum.TOP:
               return acc.concat([sourceItemKey, next]);
