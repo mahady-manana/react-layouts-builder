@@ -1,4 +1,6 @@
+import React from "react"
 import { useState } from "react"
+import { ComponentTestts } from "./ComponentTest"
 
 interface Props {
   data:
@@ -29,8 +31,11 @@ interface Props {
 
   onClick: (data: any) => void
   focused?: boolean
+  component?: any
 }
-export const TestComponent = (props: Props) => {
+
+export const TestComponent = React.memo((props: Props) => {
+  console.log("This if rerender", props.data.id)
   return (
     <div
       key={props.data.id}
@@ -41,15 +46,11 @@ export const TestComponent = (props: Props) => {
       onClick={() => props.onClick(props.data)}
     >
       {props.data.img ? (
-        <img
-          src={props.data.img}
-          alt=""
-          width="400"
-          style={{ width: "100%" }}
-        />
+        <img src={props.data.img} alt="" width="400" style={{ width: 100 }} />
       ) : (
         <p>Data : {props.data.text}</p>
       )}
+      <ComponentTestts data={props.data} />
     </div>
   )
-}
+})

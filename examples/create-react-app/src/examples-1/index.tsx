@@ -14,6 +14,8 @@ import { storage } from "../localSorage"
 import "react-layouts-builder/packages/index.css"
 import { ChangeEvent } from "react"
 import { TestComponent } from "./TestComponent"
+import { useCallback } from "react"
+import { ComponentTestts } from "./ComponentTest"
 
 export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
@@ -125,6 +127,9 @@ export const Layouts1 = () => {
   const imageCheckerFn = (items: any) => {
     return items.img ? true : false
   }
+  const focus = useCallback((dat: any) => {
+    setFocused(dat.id)
+  }, [])
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -161,28 +166,41 @@ export const Layouts1 = () => {
         {loading ? (
           <div>loading...</div>
         ) : (
-          <LayoutContainer
-            data={data}
-            disableChange={disableChange}
-            stableDataKey="id"
-            layouts={layoutTest}
-            staticComponent={staticss}
-            onLayoutChange={handleLayoutChange}
-            onClickSection={(section) => setclickSection(section)}
-            onFocusItem={onFocus}
-            imageCheckerFn={imageCheckerFn}
-            imageSizeFnLoader={(item) => item.size}
-            onImageResizeFinished={(item, w) => console.log(item, w)}
-            renderComponent={(data) => {
+          // <LayoutContainer
+          //   data={data}
+          //   disableChange={disableChange}
+          //   stableDataKey="id"
+          //   layouts={layoutTest}
+          //   staticComponent={staticss}
+          //   onLayoutChange={handleLayoutChange}
+          //   onClickSection={(section) => setclickSection(section)}
+          //   onFocusItem={onFocus}
+          //   imageCheckerFn={imageCheckerFn}
+          //   imageSizeFnLoader={(item) => item.size}
+          //   onImageResizeFinished={(item, w) => console.log(item, w)}
+          //   renderComponent={(data) => {
+          //     return (
+          //       <TestComponent
+          //         data={data}
+          //         onClick={(d) => setFocused(d.id)}
+          //         focused={data.id === focused}
+          //       />
+          //     )
+          //   }}
+          // />
+          <div>
+            {data.map((dt) => {
               return (
                 <TestComponent
-                  data={data}
-                  onClick={(d) => setFocused(d.id)}
-                  focused={data.id === focused}
+                  key={`${dt.id}`}
+                  data={dt}
+                  onClick={focus}
+                  focused={dt.id === focused}
+                  // component={<ComponentTestts data={dt}/>}
                 />
               )
-            }}
-          />
+            })}
+          </div>
         )}
       </div>
       <div>
