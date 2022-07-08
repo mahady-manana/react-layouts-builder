@@ -5,6 +5,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
       disableChange = _a.disableChange,
       targetDROP = _a.targetDROP,
+      disableSide = _a.disableSide,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -91,11 +92,11 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     var left = clientX - boundingClient.left;
     var shouldRight = width - left < 50 && width - left > 0;
 
-    if (shouldRight) {
+    if (shouldRight && !disableSide) {
       return TargetPlaceEnum.RIGHT;
     }
 
-    if (left < 50 && left > 0) {
+    if (left < 50 && left > 0 && !disableSide) {
       return TargetPlaceEnum.LEFT;
     }
 

@@ -5,13 +5,14 @@ import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
-      renderComponent = _a.renderComponent,
-      onLayoutChange = _a.onLayoutChange,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
-      imageSizeFnLoader = _a.imageSizeFnLoader,
       disableChange = _a.disableChange,
       staticComponent = _a.staticComponent,
+      maxColumns = _a.maxColumns,
+      renderComponent = _a.renderComponent,
+      onLayoutChange = _a.onLayoutChange,
+      imageSizeFnLoader = _a.imageSizeFnLoader,
       imageCheckerFn = _a.imageCheckerFn,
       onImageResizeFinished = _a.onImageResizeFinished;
   var containeRef = useRef(null);
@@ -98,6 +99,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         sectionId: section.id,
         rowId: row.id,
         disabled: disableChange,
+        maxColumns: maxColumns,
         isLastSection: renderableLayout.length === sectionIndex + 1,
         isFirstSection: sectionIndex === 0,
         needRowTarget: needRowTarget(renderableLayout, row, {

@@ -14,6 +14,7 @@ interface DraggableProps {
   children: ReactNode;
   isLast?: boolean;
   disableChange?: boolean;
+  disableSide: boolean
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
     SetStateAction<TargetPlaceEnum | undefined>
@@ -26,6 +27,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   children,
   disableChange,
   targetDROP,
+  disableSide,
   setTargetDROP,
   onDragOver,
   onDragLeave,
@@ -98,12 +100,12 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     const reference = clientY - boundingClient.top;
 
     const left = clientX - boundingClient.left;
+    
     const shouldRight = width - left < 50 && width - left > 0;
-
-    if (shouldRight) {
+    if (shouldRight && !disableSide) {
       return TargetPlaceEnum.RIGHT;
     }
-    if (left < 50 && left > 0) {
+    if (left < 50 && left > 0 && !disableSide) {
       return TargetPlaceEnum.LEFT;
     }
     if (reference > demi) return TargetPlaceEnum.BOTTOM;

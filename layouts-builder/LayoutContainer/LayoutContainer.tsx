@@ -8,13 +8,14 @@ import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
-  renderComponent,
-  onLayoutChange,
   stableDataKey: stableKey,
   layouts,
-  imageSizeFnLoader,
   disableChange,
   staticComponent,
+  maxColumns,
+  renderComponent,
+  onLayoutChange,
+  imageSizeFnLoader,
   imageCheckerFn,
   onImageResizeFinished,
 }) => {
@@ -112,6 +113,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                       sectionId={section.id}
                       rowId={row.id}
                       disabled={disableChange}
+                      maxColumns={maxColumns}
                       isLastSection={
                         renderableLayout.length === sectionIndex + 1
                       }

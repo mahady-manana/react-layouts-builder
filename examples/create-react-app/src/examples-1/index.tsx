@@ -166,41 +166,29 @@ export const Layouts1 = () => {
         {loading ? (
           <div>loading...</div>
         ) : (
-          // <LayoutContainer
-          //   data={data}
-          //   disableChange={disableChange}
-          //   stableDataKey="id"
-          //   layouts={layoutTest}
-          //   staticComponent={staticss}
-          //   onLayoutChange={handleLayoutChange}
-          //   onClickSection={(section) => setclickSection(section)}
-          //   onFocusItem={onFocus}
-          //   imageCheckerFn={imageCheckerFn}
-          //   imageSizeFnLoader={(item) => item.size}
-          //   onImageResizeFinished={(item, w) => console.log(item, w)}
-          //   renderComponent={(data) => {
-          //     return (
-          //       <TestComponent
-          //         data={data}
-          //         onClick={(d) => setFocused(d.id)}
-          //         focused={data.id === focused}
-          //       />
-          //     )
-          //   }}
-          // />
-          <div>
-            {data.map((dt) => {
+          <LayoutContainer
+            data={data}
+            disableChange={disableChange}
+            stableDataKey="id"
+            layouts={layoutTest}
+            staticComponent={staticss}
+            maxColumns={2}
+            onLayoutChange={handleLayoutChange}
+            onClickSection={(section) => setclickSection(section)}
+            onFocusItem={onFocus}
+            imageCheckerFn={imageCheckerFn}
+            imageSizeFnLoader={(item) => item.size}
+            onImageResizeFinished={(item, w) => console.log(item, w)}
+            renderComponent={(data) => {
               return (
                 <TestComponent
-                  key={`${dt.id}`}
-                  data={dt}
-                  onClick={focus}
-                  focused={dt.id === focused}
-                  // component={<ComponentTestts data={dt}/>}
+                  data={data}
+                  onClick={(d) => setFocused(d.id)}
+                  focused={data.id === focused}
                 />
               )
-            })}
-          </div>
+            }}
+          />
         )}
       </div>
       <div>

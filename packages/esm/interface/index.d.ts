@@ -46,6 +46,7 @@ export interface ILayoutContainer {
     data: any[];
     stableDataKey: string;
     staticComponent?: boolean;
+    maxColumns?: number;
     renderComponent: (data: any, layout: SourceType, index?: number) => ReactNode | any;
     onLayoutChange: (data: ILayoutSection[]) => void;
     layouts?: ILayoutSection[];

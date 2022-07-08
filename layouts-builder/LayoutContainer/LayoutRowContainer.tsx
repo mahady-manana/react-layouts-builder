@@ -39,6 +39,7 @@ interface LayoutRowContainerProps {
   isFirstSection?: boolean;
   dragActive?: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
+  maxColumns?: number;
   imageSizeFnLoader?: (
     items: any,
   ) => { width?: number; height?: number } | undefined;
@@ -65,6 +66,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   isLastSection,
   needRowTarget,
   dragActive,
+  maxColumns,
   setDragActive,
   imageSizeFnLoader,
   setActualLayout,
@@ -74,6 +76,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [columnCountReach, setColumnCountReach] =
+    useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [resizeBegin, setResizeBegin] = useState<boolean>(false);
   const [widths, setWidths] = useState<number[]>([]);
@@ -186,6 +190,17 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       rowId: '',
     });
   };
+
+  useEffect(() => {
+    if (maxColumns) {
+      const isReach = columns.length >= maxColumns;
+      if (isReach) {
+        setColumnCountReach(true);
+      } else {
+        setColumnCountReach(false);
+      }
+    }
+  }, [columns.length, maxColumns]);
 
   const onMouseMove = (e: MouseEvent<HTMLElement>) => {
     if (resizeBegin) {
@@ -330,7 +345,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             type="column"
           >
             <div className="rlb-flex rbl-relative">
-              {!disabled ? (
+              {!disabled && !columnCountReach ? (
                 <div
                   className="rbl-side-drop-indicator left"
                   style={styleSide(column.id, TargetPlaceEnum.LEFT)}
@@ -354,6 +369,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           ? targetDROP
                           : undefined
                       }
+                      disableSide={columnCountReach}
                       setTargetDROP={setTargetDROP}
                       onDragOver={(target) =>
                         handleDragOverItem({
@@ -403,12 +419,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           );
                         }}
                       >
-                        {items['id'] === 'EMPTY_SECTION' &&
-                        !disabled ? (
-                          <div>
-                            <p>Drop or add block here...</p>
-                          </div>
-                        ) : null}
                         {items['id'] !== 'EMPTY_SECTION'
                           ? renderComponent(items, {
                               columnId: column.id,
@@ -422,7 +432,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   );
                 })}
               </div>
-              {!disabled ? (
+              {!disabled && !columnCountReach ? (
                 <div
                   className="rbl-side-drop-indicator right"
                   style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
