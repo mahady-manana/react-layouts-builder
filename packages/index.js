@@ -1218,14 +1218,12 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   React.useEffect(function () {
-    if (maxColumns) {
-      var isReach = columns.length >= maxColumns;
+    var isReach = columns.length >= (maxColumns || 15);
 
-      if (isReach) {
-        setColumnCountReach(true);
-      } else {
-        setColumnCountReach(false);
-      }
+    if (isReach) {
+      setColumnCountReach(true);
+    } else {
+      setColumnCountReach(false);
     }
   }, [columns.length, maxColumns]);
 

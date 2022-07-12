@@ -24,7 +24,7 @@ export const Layouts1 = () => {
   const [nodata, setnodata] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [focused, setFocused] = useState<any>()
-
+const [mobile, setMobile] = useState(false)
   const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [staticss, setStaticss] = useState<boolean>(false)
   const [disableChange, setDisableChange] = useState<boolean>(false)

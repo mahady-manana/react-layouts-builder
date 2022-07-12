@@ -192,13 +192,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   };
 
   useEffect(() => {
-    if (maxColumns) {
-      const isReach = columns.length >= maxColumns;
-      if (isReach) {
-        setColumnCountReach(true);
-      } else {
-        setColumnCountReach(false);
-      }
+    const isReach = columns.length >= (maxColumns || 15);
+    if (isReach) {
+      setColumnCountReach(true);
+    } else {
+      setColumnCountReach(false);
     }
   }, [columns.length, maxColumns]);
 
