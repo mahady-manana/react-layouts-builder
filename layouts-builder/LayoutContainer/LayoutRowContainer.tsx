@@ -38,6 +38,7 @@ interface LayoutRowContainerProps {
   isLastSection?: boolean;
   isFirstSection?: boolean;
   dragActive?: boolean;
+  colResize: boolean
   needRowTarget?: { top: boolean; bottom: boolean };
   maxColumns?: number;
   imageSizeFnLoader?: (
@@ -66,6 +67,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   isLastSection,
   needRowTarget,
   dragActive,
+  colResize,
   maxColumns,
   setDragActive,
   imageSizeFnLoader,

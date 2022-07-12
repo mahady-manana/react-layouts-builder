@@ -12,6 +12,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   disableChange,
   staticComponent,
+  colResize = true,
   maxColumns,
   renderComponent,
   onLayoutChange,
@@ -127,6 +128,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                           rowIndex,
                         },
                       )}
+                      colResize={colResize}
                       renderComponent={renderComponent}
                       setActualLayout={setActualLayout}
                       onLayoutChange={onLayoutChange}
