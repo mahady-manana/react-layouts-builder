@@ -20,8 +20,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive,
-      maxColumns = _a.maxColumns,
+      dragActive = _a.dragActive;
+      _a.colResize;
+      var maxColumns = _a.maxColumns,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,

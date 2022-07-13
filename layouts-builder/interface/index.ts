@@ -49,6 +49,7 @@ export interface ILayoutContainer {
   data: any[];
   stableDataKey: string;
   staticComponent?: boolean;
+  maxWidth?: number | string;
   maxColumns?: number;
   colResize?: boolean;
   renderComponent: (

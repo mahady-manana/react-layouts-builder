@@ -269,3 +269,7 @@
   height: 100%;
   position: absolute;
 }
+.rlb-main-container,
+.rlb-static-container {
+  margin: auto;
+}

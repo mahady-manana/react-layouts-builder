@@ -14,6 +14,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   staticComponent,
   colResize = true,
   maxColumns,
+  maxWidth,
   renderComponent,
   onLayoutChange,
   imageSizeFnLoader,
@@ -59,16 +60,16 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
   if (staticComponent) {
     return (
-      <>
+      <div className="rlb-static-container" style={{ maxWidth: maxWidth }}>
         {data.map((item, index) => {
           return renderComponent(item, {} as any, index);
         })}
-      </>
+      </div>
     );
   }
 
   return (
-    <div className="m-auto">
+    <div className="rlb-main-container m-auto" style={{ maxWidth: maxWidth }}>
       <div
         className="min-h-[100px]"
         ref={containeRef}

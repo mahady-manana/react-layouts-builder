@@ -13,6 +13,7 @@ interface LayoutRowContainerProps {
     isLastSection?: boolean;
     isFirstSection?: boolean;
     dragActive?: boolean;
+    colResize: boolean;
     needRowTarget?: {
         top: boolean;
         bottom: boolean;

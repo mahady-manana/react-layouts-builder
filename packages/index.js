@@ -1078,8 +1078,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive,
-      maxColumns = _a.maxColumns,
+      dragActive = _a.dragActive;
+      _a.colResize;
+      var maxColumns = _a.maxColumns,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -1503,7 +1504,10 @@ var LayoutContainer = function LayoutContainer(_a) {
       layouts = _a.layouts,
       disableChange = _a.disableChange,
       staticComponent = _a.staticComponent,
+      _b = _a.colResize,
+      colResize = _b === void 0 ? true : _b,
       maxColumns = _a.maxColumns,
+      maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
       imageSizeFnLoader = _a.imageSizeFnLoader,
@@ -1511,21 +1515,21 @@ var LayoutContainer = function LayoutContainer(_a) {
       onImageResizeFinished = _a.onImageResizeFinished;
   var containeRef = React.useRef(null);
 
-  var _b = React.useState(false),
-      runChange = _b[0],
-      setRunChange = _b[1];
+  var _c = React.useState(false),
+      runChange = _c[0],
+      setRunChange = _c[1];
 
-  var _c = React.useState([]),
-      actualLayout = _c[0],
-      setActualLayout = _c[1];
+  var _d = React.useState([]),
+      actualLayout = _d[0],
+      setActualLayout = _d[1];
 
-  var _d = React.useState(false),
-      dragActive = _d[0],
-      setDragActive = _d[1];
+  var _e = React.useState(false),
+      dragActive = _e[0],
+      setDragActive = _e[1];
 
-  var _e = React.useState([]),
-      renderableLayout = _e[0],
-      setRenderableLayout = _e[1];
+  var _f = React.useState([]),
+      renderableLayout = _f[0],
+      setRenderableLayout = _f[1];
 
   React.useEffect(function () {
     if (layouts && layouts.length > 0) {
@@ -1547,13 +1551,21 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [runChange]);
 
   if (staticComponent) {
-    return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, data.map(function (item, index) {
+    return /*#__PURE__*/React__default["default"].createElement("div", {
+      className: "rlb-static-container",
+      style: {
+        maxWidth: maxWidth
+      }
+    }, data.map(function (item, index) {
       return renderComponent(item, {}, index);
     }));
   }
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "m-auto"
+    className: "rlb-main-container m-auto",
+    style: {
+      maxWidth: maxWidth
+    }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "min-h-[100px]",
     ref: containeRef,
@@ -1601,6 +1613,7 @@ var LayoutContainer = function LayoutContainer(_a) {
           sectionIndex: sectionIndex,
           rowIndex: rowIndex
         }),
+        colResize: colResize,
         renderComponent: renderComponent,
         setActualLayout: setActualLayout,
         onLayoutChange: onLayoutChange,
