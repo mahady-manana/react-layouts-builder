@@ -8,8 +8,8 @@ var DraggableItem = function DraggableItem(_a) {
       sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
-      _onDragStart = _a.onDragStart,
-      onImageResizeFinished = _a.onImageResizeFinished;
+      // onDragStart,
+  onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
 
   var _b = useState(0),
@@ -72,10 +72,9 @@ var DraggableItem = function DraggableItem(_a) {
   }, [sizes === null || sizes === void 0 ? void 0 : sizes.height]);
 
   var _onMouseDown = function onMouseDown(e, isBottom) {
-    var _a, _b, _c;
+    var _a, _b;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
-    if (!((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth)) return;
+    if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
 
     if (isBottom) {
       var h = containerRef.current.offsetHeight;
@@ -87,7 +86,7 @@ var DraggableItem = function DraggableItem(_a) {
     setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
     setStartResize(true);
     setInitClientX(e.clientX);
-    var p1px = ((_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth) / 100;
+    var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
     setPercentPX(p1px);
   };
 
@@ -133,13 +132,6 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a;
-
-    if (disableChange) {
-      return;
-    }
-
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "".concat(!disableChange));
     runIt();
   };
 
@@ -193,41 +185,13 @@ var DraggableItem = function DraggableItem(_a) {
       }
     }
   }, [height]);
-  useEffect(function () {
-    var _a;
-
-    if (disableChange) {
-      (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
-    }
-  }, [disableChange]);
   return /*#__PURE__*/React.createElement("div", {
-    draggable: !disableChange,
-    onDragStart: function onDragStart(e) {
-      if (!disableChange) {
-        _onDragStart(e, containerRef.current);
-
-        e.currentTarget.setAttribute('id', 'draggedDiv');
-      }
-    },
-    onDragEnd: function onDragEnd(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var el = document.getElementById('draggedDiv');
-
-      if (el) {
-        el.style.position = '';
-        el.style.pointerEvents = '';
-        el.style.position = '';
-        el.style.top = "";
-        el.style.left = "";
-        el.style.width = "";
-        el.style.height = "";
-        el.style.maxWidth = "";
-        el.style.maxHeight = "";
-        el.style.overflow = "";
-        el.removeAttribute('id');
-      }
-    },
+    // onDragStart={(e) => {
+    //   if (!disableChange) {
+    //     onDragStart(e, containerRef.current as any);
+    //     e.currentTarget.setAttribute('id', 'draggedDiv');
+    //   }
+    // }}
     //   // const cloned = e.currentTarget as HTMLDivElement;
     // onDrag={e => {
     //   // cloned.style.position = "fixed"
@@ -236,6 +200,7 @@ var DraggableItem = function DraggableItem(_a) {
     // }}
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
+    "data-draggable-id": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
     ref: containerRef,
     onMouseMove: onMouseMouve,

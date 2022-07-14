@@ -8,7 +8,8 @@ import {
   createNewSection,
   changeSectionStyles,
   addToRow,
-  addToItem
+  addToItem,
+  LayoutProvider
 } from "react-layouts-builder"
 import { storage } from "../localSorage"
 import "react-layouts-builder/packages/index.css"
@@ -24,7 +25,7 @@ export const Layouts1 = () => {
   const [nodata, setnodata] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [focused, setFocused] = useState<any>()
-const [mobile, setMobile] = useState(false)
+  const [mobile, setMobile] = useState(false)
   const [clickSection, setclickSection] = useState<ILayoutSection>()
   const [staticss, setStaticss] = useState<boolean>(false)
   const [disableChange, setDisableChange] = useState<boolean>(false)
@@ -166,29 +167,31 @@ const [mobile, setMobile] = useState(false)
         {loading ? (
           <div>loading...</div>
         ) : (
-          <LayoutContainer
-            data={data}
-            disableChange={disableChange}
-            stableDataKey="id"
-            layouts={layoutTest}
-            staticComponent={staticss}
-            maxColumns={2}
-            onLayoutChange={handleLayoutChange}
-            onClickSection={(section) => setclickSection(section)}
-            onFocusItem={onFocus}
-            imageCheckerFn={imageCheckerFn}
-            imageSizeFnLoader={(item) => item.size}
-            onImageResizeFinished={(item, w) => console.log(item, w)}
-            renderComponent={(data) => {
-              return (
-                <TestComponent
-                  data={data}
-                  onClick={(d) => setFocused(d.id)}
-                  focused={data.id === focused}
-                />
-              )
-            }}
-          />
+          <LayoutProvider>
+            <LayoutContainer
+              data={data}
+              disableChange={disableChange}
+              stableDataKey="id"
+              layouts={layoutTest}
+              staticComponent={staticss}
+              maxColumns={2}
+              onLayoutChange={handleLayoutChange}
+              onClickSection={(section) => setclickSection(section)}
+              onFocusItem={onFocus}
+              imageCheckerFn={imageCheckerFn}
+              imageSizeFnLoader={(item) => item.size}
+              onImageResizeFinished={(item, w) => console.log(item, w)}
+              renderComponent={(data) => {
+                return (
+                  <TestComponent
+                    data={data}
+                    onClick={(d) => setFocused(d.id)}
+                    focused={data.id === focused}
+                  />
+                )
+              }}
+            />
+          </LayoutProvider>
         )}
       </div>
       <div>

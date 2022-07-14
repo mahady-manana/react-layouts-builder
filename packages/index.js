@@ -63,16 +63,6 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
   return dataLayout;
 };
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
-}
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -160,15 +150,15 @@ var classnames = createCommonjsModule(function (module) {
 }());
 });
 
-var DraggableItem = function DraggableItem(_a) {
+var DraggableItem$1 = function DraggableItem(_a) {
   var children = _a.children,
       dndTargetKey = _a.dndTargetKey,
       disableChange = _a.disableChange,
       sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
-      _onDragStart = _a.onDragStart,
-      onImageResizeFinished = _a.onImageResizeFinished;
+      // onDragStart,
+  onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = React.useRef(null);
 
   var _b = React.useState(0),
@@ -231,10 +221,9 @@ var DraggableItem = function DraggableItem(_a) {
   }, [sizes === null || sizes === void 0 ? void 0 : sizes.height]);
 
   var _onMouseDown = function onMouseDown(e, isBottom) {
-    var _a, _b, _c;
+    var _a, _b;
 
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
-    if (!((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth)) return;
+    if (!((_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetWidth)) return;
 
     if (isBottom) {
       var h = containerRef.current.offsetHeight;
@@ -246,7 +235,7 @@ var DraggableItem = function DraggableItem(_a) {
     setInitWidth((sizes === null || sizes === void 0 ? void 0 : sizes.width) || 100);
     setStartResize(true);
     setInitClientX(e.clientX);
-    var p1px = ((_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.offsetWidth) / 100;
+    var p1px = ((_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth) / 100;
     setPercentPX(p1px);
   };
 
@@ -292,13 +281,6 @@ var DraggableItem = function DraggableItem(_a) {
   };
 
   var onMouseLeaveOrUp = function onMouseLeaveOrUp(e) {
-    var _a;
-
-    if (disableChange) {
-      return;
-    }
-
-    (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('draggable', "".concat(!disableChange));
     runIt();
   };
 
@@ -352,41 +334,13 @@ var DraggableItem = function DraggableItem(_a) {
       }
     }
   }, [height]);
-  React.useEffect(function () {
-    var _a;
-
-    if (disableChange) {
-      (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.removeAttribute('draggable');
-    }
-  }, [disableChange]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    draggable: !disableChange,
-    onDragStart: function onDragStart(e) {
-      if (!disableChange) {
-        _onDragStart(e, containerRef.current);
-
-        e.currentTarget.setAttribute('id', 'draggedDiv');
-      }
-    },
-    onDragEnd: function onDragEnd(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var el = document.getElementById('draggedDiv');
-
-      if (el) {
-        el.style.position = '';
-        el.style.pointerEvents = '';
-        el.style.position = '';
-        el.style.top = "";
-        el.style.left = "";
-        el.style.width = "";
-        el.style.height = "";
-        el.style.maxWidth = "";
-        el.style.maxHeight = "";
-        el.style.overflow = "";
-        el.removeAttribute('id');
-      }
-    },
+    // onDragStart={(e) => {
+    //   if (!disableChange) {
+    //     onDragStart(e, containerRef.current as any);
+    //     e.currentTarget.setAttribute('id', 'draggedDiv');
+    //   }
+    // }}
     //   // const cloned = e.currentTarget as HTMLDivElement;
     // onDrag={e => {
     //   // cloned.style.position = "fixed"
@@ -395,6 +349,7 @@ var DraggableItem = function DraggableItem(_a) {
     // }}
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
+    "data-draggable-id": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
     ref: containerRef,
     onMouseMove: onMouseMouve,
@@ -1068,6 +1023,68 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }) : null);
 };
 
+var AppContext = /*#__PURE__*/React.createContext({});
+var LayoutProvider = function LayoutProvider(_a) {
+  var children = _a.children;
+
+  var _b = React.useState(),
+      sourceId = _b[0],
+      setSourceId = _b[1];
+
+  var _c = React.useState(),
+      source = _c[0],
+      setSource = _c[1];
+
+  var _d = React.useState([]),
+      currentLayouts = _d[0],
+      setCurrentLayouts = _d[1];
+
+  var _e = React.useState(),
+      destination = _e[0],
+      setDestination = _e[1];
+
+  var _f = React.useState(false),
+      isDragStart = _f[0],
+      setIsDragStart = _f[1];
+
+  var _g = React.useState({
+    init: [],
+    current: []
+  }),
+      point = _g[0],
+      setPoint = _g[1];
+
+  var onDragStart = function onDragStart(id) {
+    setSourceId(id);
+  };
+
+  var onDragEnd = function onDragEnd() {
+    setSourceId(undefined);
+  };
+
+  var context = React.useMemo(function () {
+    return {
+      source: source,
+      destination: destination,
+      point: point,
+      isDragStart: isDragStart,
+      sourceId: sourceId,
+      currentLayouts: currentLayouts,
+      setCurrentLayouts: setCurrentLayouts,
+      setSourceId: setSourceId,
+      setIsDragStart: setIsDragStart,
+      setPoint: setPoint,
+      setSource: setSource,
+      setDestination: setDestination,
+      onDragStart: onDragStart,
+      onDragEnd: onDragEnd
+    };
+  }, [source, destination, point, isDragStart, sourceId, currentLayouts]);
+  return /*#__PURE__*/React__default["default"].createElement(AppContext.Provider, {
+    value: context
+  }, children);
+};
+
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
@@ -1128,23 +1145,27 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _l = React.useState(500),
       waitBeforeUpdate = _l[0],
-      setWaitBeforeUpdate = _l[1]; // TARGET DROP STATE
+      setWaitBeforeUpdate = _l[1];
+
+  var _m = React.useContext(AppContext),
+      source = _m.source,
+      setSource = _m.setSource; // TARGET DROP STATE
 
 
-  var _m = React.useState(),
-      targetDROP = _m[0],
-      setTargetDROP = _m[1]; // TARGET DESTINATION STATE
+  var _o = React.useState(),
+      targetDROP = _o[0],
+      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
 
 
-  var _o = React.useState({
+  var _p = React.useState({
     columnId: '',
     itemKey: '',
     sectionId: '',
     targetPlace: '',
     rowId: ''
   }),
-      destination = _o[0],
-      setDestination = _o[1];
+      destination = _p[0],
+      setDestination = _p[1];
 
   var resetDrag = function resetDrag() {
     setDestination({
@@ -1155,45 +1176,51 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setTargetDROP(undefined);
-  };
-
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
-    e.stopPropagation();
-
-    if (disabled) {
-      return;
-    }
-
-    var itemKeyType = _typeof(itemkey);
-
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
-    var div = e.target;
-    e.dataTransfer.setDragImage(div, 5000, 5000);
-    var timer = setTimeout(function () {
-      setDragActive(true);
-    }, 500);
-    clearTimeout(timer);
-  }; //   // Drop item to create new column or setion or add item to column
+  }; // const handleDragStart = (
+  //   e: DragEvent<HTMLDivElement>,
+  //   sectionId: string,
+  //   columnId: string,
+  //   rowId: any,
+  //   itemkey: any,
+  // ) => {
+  //   e.stopPropagation();
+  //   if (disabled) {
+  //     return;
+  //   }
+  //   const itemKeyType = typeof itemkey;
+  //   e.dataTransfer.setData('itemKey', itemkey);
+  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
+  //   e.dataTransfer.setData('sectionId', sectionId);
+  //   e.dataTransfer.setData('colmunId', columnId);
+  //   e.dataTransfer.setData('rowId', rowId);
+  //   const div = e.target;
+  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
+  //   const timer = setTimeout(() => {
+  //     setDragActive(true);
+  //   }, 500);
+  //   clearTimeout(timer);
+  // };
+  //   // Drop item to create new column or setion or add item to column
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
-    var isSection = e.dataTransfer.getData('isSection');
-    var sourceSectionId = e.dataTransfer.getData('sectionId');
-    var sourceColumnKey = e.dataTransfer.getData('colmunId');
-    var sourceRowId = e.dataTransfer.getData('rowId');
-    var itemKeyType = e.dataTransfer.getData('itemKeyType');
-    var source = {
-      columnId: sourceColumnKey,
-      itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
-      sectionId: sourceSectionId,
-      isSection: !!isSection,
-      rowId: sourceRowId
-    };
+    e.dataTransfer.getData('isSection');
+    e.dataTransfer.getData('sectionId');
+    e.dataTransfer.getData('colmunId');
+    e.dataTransfer.getData('rowId');
+    e.dataTransfer.getData('itemKeyType'); // const source: SourceType = {
+    //   columnId: sourceColumnKey,
+    //   itemKey:
+    //     itemKeyType === 'number'
+    //       ? parseFloat(sourceItemKey)
+    //       : sourceItemKey,
+    //   sectionId: sourceSectionId,
+    //   isSection: !!isSection,
+    //   rowId: sourceRowId,
+    // };
+
+    if (!source) return;
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -1216,6 +1243,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       targetPlace: '',
       rowId: ''
     });
+    setSource(undefined);
   };
 
   React.useEffect(function () {
@@ -1383,7 +1411,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onDragLeave: resetDrag,
           disableChange: disabled,
           key: index
-        }, /*#__PURE__*/React__default["default"].createElement(DraggableItem, {
+        }, /*#__PURE__*/React__default["default"].createElement(DraggableItem$1, {
           isImage: isImage,
           disableChange: disabled,
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
@@ -1391,13 +1419,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           dndTargetKey: items[stableKey],
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
-          },
-          onDragStart: function onDragStart(e, el) {
-            if (disabled) {
-              return;
-            }
-
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,
@@ -1527,6 +1548,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       dragActive = _e[0],
       setDragActive = _e[1];
 
+  var setCurrentLayouts = React.useContext(AppContext).setCurrentLayouts;
+
   var _f = React.useState([]),
       renderableLayout = _f[0],
       setRenderableLayout = _f[1];
@@ -1539,6 +1562,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   React.useEffect(function () {
     if (actualLayout.length > 0) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
+      setCurrentLayouts(actualLayout);
       setRenderableLayout(renderable);
     }
   }, [actualLayout, data]); // run layout update
@@ -1757,7 +1781,92 @@ var addToItem = function addToItem(layouts, itemKey, dest, bottom) {
   return add;
 };
 
+var findSourceLayout = function findSourceLayout(layouts, itemId) {
+  var source = {};
+  var find = layouts.find(function (section) {
+    var row = section.rows.find(function (row) {
+      var cols = row.columns.find(function (col) {
+        var isit = col.childIds.find(function (id) {
+          return id.toString() === (itemId === null || itemId === void 0 ? void 0 : itemId.toString());
+        });
+        return isit;
+      });
+      source.columnId = cols === null || cols === void 0 ? void 0 : cols.id;
+      return cols;
+    });
+    source.rowId = row === null || row === void 0 ? void 0 : row.id;
+    return row;
+  });
+  source.sectionId = find === null || find === void 0 ? void 0 : find.id;
+  if (!find) return;
+  source.itemKey = itemId;
+  if (!source.columnId || !source.sectionId || !source.rowId) return;
+  return source;
+};
+
+var DraggableItem = function DraggableItem(_a) {
+  var draggableId = _a.draggableId,
+      children = _a.children;
+
+  var _b = React.useContext(AppContext);
+      _b.sourceId;
+      _b.point;
+      var currentLayouts = _b.currentLayouts,
+      _onDragStart = _b.onDragStart,
+      setSource = _b.setSource;
+
+  var draggableAttributes = {
+    draggable: true,
+    draggableid: draggableId,
+    onDragStart: function onDragStart(e) {
+      e.stopPropagation();
+
+      _onDragStart(draggableId);
+
+      var source = findSourceLayout(currentLayouts, draggableId);
+
+      if (source) {
+        setSource(source);
+      }
+
+      var div = e.target;
+      e.dataTransfer.setDragImage(div, 5000, 5000);
+      var el = document.querySelector("div[data-draggable-id='".concat(draggableId, "']"));
+
+      if (el) {
+        el.setAttribute('id', 'draggedDiv');
+      }
+    },
+    onDragEnd: function onDragEnd(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var el = document.getElementById('draggedDiv');
+
+      if (el) {
+        el.style.position = '';
+        el.style.pointerEvents = '';
+        el.style.position = '';
+        el.style.top = "";
+        el.style.left = "";
+        el.style.width = "";
+        el.style.height = "";
+        el.style.maxWidth = "";
+        el.style.maxHeight = "";
+        el.style.overflow = "";
+        el.removeAttribute('id');
+      }
+    }
+  };
+  return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, children({
+    draggableProps: draggableAttributes,
+    handleProps: {}
+  }));
+};
+
+exports.AppContext = AppContext;
+exports.DraggableItem = DraggableItem;
 exports.LayoutContainer = LayoutContainer;
+exports.LayoutProvider = LayoutProvider;
 exports.addToItem = addToItem;
 exports.addToRow = addToRow;
 exports.changeSectionStyles = changeSectionStyles;

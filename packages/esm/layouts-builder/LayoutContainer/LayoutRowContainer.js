@@ -1,6 +1,5 @@
-import { typeof as _typeof } from '../../_virtual/_rollupPluginBabelHelpers.js';
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { DraggableItem } from '../components/draggable/Draggable.js';
 import { TargetPlaceEnum, ILayoutTargetEnum } from '../interface/internalType.js';
 import { ResizableContainer } from '../components/ResizableContainer/ResizableContainer.js';
@@ -9,6 +8,7 @@ import { changeColumnWidth } from '../helpers/changeColumnWidth.js';
 import { findWidthPercentByPx } from '../helpers/findWidth.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { LayoutDropContainer } from './LayoutDropContainer.js';
+import { AppContext } from '../Context/AppContext.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
@@ -70,23 +70,27 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _l = useState(500),
       waitBeforeUpdate = _l[0],
-      setWaitBeforeUpdate = _l[1]; // TARGET DROP STATE
+      setWaitBeforeUpdate = _l[1];
+
+  var _m = useContext(AppContext),
+      source = _m.source,
+      setSource = _m.setSource; // TARGET DROP STATE
 
 
-  var _m = useState(),
-      targetDROP = _m[0],
-      setTargetDROP = _m[1]; // TARGET DESTINATION STATE
+  var _o = useState(),
+      targetDROP = _o[0],
+      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
 
 
-  var _o = useState({
+  var _p = useState({
     columnId: '',
     itemKey: '',
     sectionId: '',
     targetPlace: '',
     rowId: ''
   }),
-      destination = _o[0],
-      setDestination = _o[1];
+      destination = _p[0],
+      setDestination = _p[1];
 
   var resetDrag = function resetDrag() {
     setDestination({
@@ -97,45 +101,51 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setTargetDROP(undefined);
-  };
-
-  var handleDragStart = function handleDragStart(e, sectionId, columnId, rowId, itemkey, el) {
-    e.stopPropagation();
-
-    if (disabled) {
-      return;
-    }
-
-    var itemKeyType = _typeof(itemkey);
-
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
-    var div = e.target;
-    e.dataTransfer.setDragImage(div, 5000, 5000);
-    var timer = setTimeout(function () {
-      setDragActive(true);
-    }, 500);
-    clearTimeout(timer);
-  }; //   // Drop item to create new column or setion or add item to column
+  }; // const handleDragStart = (
+  //   e: DragEvent<HTMLDivElement>,
+  //   sectionId: string,
+  //   columnId: string,
+  //   rowId: any,
+  //   itemkey: any,
+  // ) => {
+  //   e.stopPropagation();
+  //   if (disabled) {
+  //     return;
+  //   }
+  //   const itemKeyType = typeof itemkey;
+  //   e.dataTransfer.setData('itemKey', itemkey);
+  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
+  //   e.dataTransfer.setData('sectionId', sectionId);
+  //   e.dataTransfer.setData('colmunId', columnId);
+  //   e.dataTransfer.setData('rowId', rowId);
+  //   const div = e.target;
+  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
+  //   const timer = setTimeout(() => {
+  //     setDragActive(true);
+  //   }, 500);
+  //   clearTimeout(timer);
+  // };
+  //   // Drop item to create new column or setion or add item to column
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
     var sourceItemKey = e.dataTransfer.getData('itemKey');
-    var isSection = e.dataTransfer.getData('isSection');
-    var sourceSectionId = e.dataTransfer.getData('sectionId');
-    var sourceColumnKey = e.dataTransfer.getData('colmunId');
-    var sourceRowId = e.dataTransfer.getData('rowId');
-    var itemKeyType = e.dataTransfer.getData('itemKeyType');
-    var source = {
-      columnId: sourceColumnKey,
-      itemKey: itemKeyType === 'number' ? parseFloat(sourceItemKey) : sourceItemKey,
-      sectionId: sourceSectionId,
-      isSection: !!isSection,
-      rowId: sourceRowId
-    };
+    e.dataTransfer.getData('isSection');
+    e.dataTransfer.getData('sectionId');
+    e.dataTransfer.getData('colmunId');
+    e.dataTransfer.getData('rowId');
+    e.dataTransfer.getData('itemKeyType'); // const source: SourceType = {
+    //   columnId: sourceColumnKey,
+    //   itemKey:
+    //     itemKeyType === 'number'
+    //       ? parseFloat(sourceItemKey)
+    //       : sourceItemKey,
+    //   sectionId: sourceSectionId,
+    //   isSection: !!isSection,
+    //   rowId: sourceRowId,
+    // };
+
+    if (!source) return;
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -158,6 +168,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       targetPlace: '',
       rowId: ''
     });
+    setSource(undefined);
   };
 
   useEffect(function () {
@@ -333,13 +344,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           dndTargetKey: items[stableKey],
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
-          },
-          onDragStart: function onDragStart(e, el) {
-            if (disabled) {
-              return;
-            }
-
-            handleDragStart(e, sectionId, column.id, rowId, items[stableKey]);
           }
         }, items['id'] !== 'EMPTY_SECTION' ? renderComponent(items, {
           columnId: column.id,

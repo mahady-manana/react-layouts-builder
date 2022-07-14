@@ -13,10 +13,10 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  onDragStart: (
-    e: DragEvent<HTMLDivElement>,
-    element?: HTMLElement,
-  ) => void;
+  // onDragStart: (
+  //   e: DragEvent<HTMLDivElement>,
+  //   element?: HTMLElement,
+  // ) => void;
   isImage?: boolean;
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
@@ -32,7 +32,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   sizes,
   isImage,
   oneCol,
-  onDragStart,
+  // onDragStart,
   onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,7 +67,6 @@ export const DraggableItem: FC<DraggableProps> = ({
     e: MouseEvent<HTMLElement>,
     isBottom?: boolean,
   ) => {
-    containerRef.current?.removeAttribute('draggable');
     if (!containerRef.current?.offsetWidth) return;
     if (isBottom) {
       const h = containerRef.current.offsetHeight;
@@ -129,13 +128,6 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   };
   const onMouseLeaveOrUp = (e: MouseEvent<HTMLDivElement>) => {
-    if (disableChange) {
-      return;
-    }
-    containerRef.current?.setAttribute(
-      'draggable',
-      `${!disableChange}`,
-    );
     runIt();
   };
 
@@ -180,40 +172,16 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   }, [height]);
 
-  useEffect(() => {
-    if (disableChange) {
-      containerRef.current?.removeAttribute('draggable');
-    }
-  }, [disableChange]);
 
   return (
     <div
-      draggable={!disableChange}
-      onDragStart={(e) => {
-        if (!disableChange) {
-          onDragStart(e, containerRef.current as any);
-          e.currentTarget.setAttribute('id', 'draggedDiv');
-        }
-      }}
-      onDragEnd={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const el = document.getElementById('draggedDiv');
-
-        if (el) {
-          el.style.position = '';
-          el.style.pointerEvents = '';
-          el.style.position = '';
-          el.style.top = ``;
-          el.style.left = ``;
-          el.style.width = ``;
-          el.style.height = ``;
-          el.style.maxWidth = ``;
-          el.style.maxHeight = ``;
-          el.style.overflow = ``;
-          el.removeAttribute('id');
-        }
-      }}
+      // onDragStart={(e) => {
+      //   if (!disableChange) {
+      //     onDragStart(e, containerRef.current as any);
+      //     e.currentTarget.setAttribute('id', 'draggedDiv');
+      //   }
+      // }}
+      
       //   // const cloned = e.currentTarget as HTMLDivElement;
       // onDrag={e => {
       //   // cloned.style.position = "fixed"
@@ -226,6 +194,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         startResize ? 'resize-img' : '',
       )}
       data-draggable={dndTargetKey}
+      data-draggable-id={dndTargetKey}
       target-dnd-droppable={`${dndTargetKey}`}
       ref={containerRef}
       onMouseMove={onMouseMouve}

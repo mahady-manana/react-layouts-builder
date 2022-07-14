@@ -1,7 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
+import { AppContext } from '../Context/AppContext.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -32,6 +33,8 @@ var LayoutContainer = function LayoutContainer(_a) {
       dragActive = _e[0],
       setDragActive = _e[1];
 
+  var setCurrentLayouts = useContext(AppContext).setCurrentLayouts;
+
   var _f = useState([]),
       renderableLayout = _f[0],
       setRenderableLayout = _f[1];
@@ -44,6 +47,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   useEffect(function () {
     if (actualLayout.length > 0) {
       var renderable = createRenderableLayout(data, actualLayout, stableKey);
+      setCurrentLayouts(actualLayout);
       setRenderableLayout(renderable);
     }
   }, [actualLayout, data]); // run layout update

@@ -1,9 +1,8 @@
-import { FC, ReactNode, DragEvent } from 'react';
+import { FC, ReactNode } from 'react';
 interface DraggableProps {
     children: ReactNode;
     dndTargetKey: string;
     disableChange?: boolean;
-    onDragStart: (e: DragEvent<HTMLDivElement>, element?: HTMLElement) => void;
     isImage?: boolean;
     sizes?: {
         width?: number;

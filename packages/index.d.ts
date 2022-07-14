@@ -6,4 +6,6 @@ export * from './helpers/changeSectionStyles';
 export * from './helpers/createNewSection';
 export * from './helpers/addToRow';
 export * from './helpers/addToNewItem';
+export * from './Context/AppContext';
+export * from './LayoutContainer/DraggableItem';
 export { removeItemFromSource as removeItemFromLayout } from './helpers/removeItemFromSource';

@@ -1,10 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import { IRenderableLayout } from '../interface/renderableInterface';
 import '../index.css';
 import { LayoutRowContainer } from './LayoutRowContainer';
 import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
+import { AppContext } from 'layouts-builder/Context/AppContext';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -27,7 +28,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     [],
   );
   const [dragActive, setDragActive] = useState(false);
-
+const {setCurrentLayouts} = useContext(AppContext)
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
@@ -45,7 +46,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         actualLayout,
         stableKey,
       );
-
+      setCurrentLayouts(actualLayout)
       setRenderableLayout(renderable);
     }
   }, [actualLayout, data]);

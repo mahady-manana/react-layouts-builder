@@ -5,4 +5,6 @@ export { changeSectionStyles } from './helpers/changeSectionStyles.js';
 export { createNewSection } from './helpers/createNewSection.js';
 export { addToRow } from './helpers/addToRow.js';
 export { addToItem } from './helpers/addToNewItem.js';
+export { AppContext, LayoutProvider } from './Context/AppContext.js';
+export { DraggableItem } from './LayoutContainer/DraggableItem.js';
 export { removeItemFromSource as removeItemFromLayout } from './helpers/removeItemFromSource.js';

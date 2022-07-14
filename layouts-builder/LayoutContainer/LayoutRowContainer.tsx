@@ -7,6 +7,7 @@ import React, {
   ReactNode,
   SetStateAction,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -27,6 +28,7 @@ import { changeColumnWidth } from 'layouts-builder/helpers/changeColumnWidth';
 import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import classNames from 'classnames';
 import { LayoutDropContainer } from './LayoutDropContainer';
+import { AppContext } from 'layouts-builder/Context/AppContext';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -38,7 +40,7 @@ interface LayoutRowContainerProps {
   isLastSection?: boolean;
   isFirstSection?: boolean;
   dragActive?: boolean;
-  colResize: boolean
+  colResize: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
   maxColumns?: number;
   imageSizeFnLoader?: (
@@ -91,6 +93,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [waitBeforeUpdate, setWaitBeforeUpdate] =
     useState<number>(500);
 
+  const { source, setSource } = useContext(AppContext);
   // TARGET DROP STATE
   const [targetDROP, setTargetDROP] = useState<TargetPlaceEnum>();
 
@@ -114,34 +117,33 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setTargetDROP(undefined);
   };
 
-  const handleDragStart = (
-    e: DragEvent<HTMLDivElement>,
-    sectionId: string,
-    columnId: string,
-    rowId: any,
-    itemkey: any,
-    el?: Element,
-  ) => {
-    e.stopPropagation();
-    if (disabled) {
-      return;
-    }
-    const itemKeyType = typeof itemkey;
-    e.dataTransfer.setData('itemKey', itemkey);
-    e.dataTransfer.setData('itemKeyType', itemKeyType);
-    e.dataTransfer.setData('sectionId', sectionId);
-    e.dataTransfer.setData('colmunId', columnId);
-    e.dataTransfer.setData('rowId', rowId);
+  // const handleDragStart = (
+  //   e: DragEvent<HTMLDivElement>,
+  //   sectionId: string,
+  //   columnId: string,
+  //   rowId: any,
+  //   itemkey: any,
+  // ) => {
+  //   e.stopPropagation();
+  //   if (disabled) {
+  //     return;
+  //   }
+  //   const itemKeyType = typeof itemkey;
+  //   e.dataTransfer.setData('itemKey', itemkey);
+  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
+  //   e.dataTransfer.setData('sectionId', sectionId);
+  //   e.dataTransfer.setData('colmunId', columnId);
+  //   e.dataTransfer.setData('rowId', rowId);
 
-    const div = e.target;
+  //   const div = e.target;
 
-    e.dataTransfer.setDragImage(div as any, 5000, 5000);
+  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
 
-    const timer = setTimeout(() => {
-      setDragActive(true);
-    }, 500);
-    clearTimeout(timer);
-  };
+  //   const timer = setTimeout(() => {
+  //     setDragActive(true);
+  //   }, 500);
+  //   clearTimeout(timer);
+  // };
 
   //   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
@@ -155,16 +157,18 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     const sourceRowId = e.dataTransfer.getData('rowId');
     const itemKeyType = e.dataTransfer.getData('itemKeyType');
 
-    const source: SourceType = {
-      columnId: sourceColumnKey,
-      itemKey:
-        itemKeyType === 'number'
-          ? parseFloat(sourceItemKey)
-          : sourceItemKey,
-      sectionId: sourceSectionId,
-      isSection: !!isSection,
-      rowId: sourceRowId,
-    };
+    // const source: SourceType = {
+    //   columnId: sourceColumnKey,
+    //   itemKey:
+    //     itemKeyType === 'number'
+    //       ? parseFloat(sourceItemKey)
+    //       : sourceItemKey,
+    //   sectionId: sourceSectionId,
+    //   isSection: !!isSection,
+    //   rowId: sourceRowId,
+    // };
+
+    if (!source) return;
 
     if (!destination.itemKey && !sourceItemKey) {
       // this is used to prevent drag resize to create new item
@@ -191,6 +195,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       targetPlace: '' as any,
       rowId: '',
     });
+    setSource(undefined);
   };
 
   useEffect(() => {
@@ -405,19 +410,18 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                             ? onImageResizeFinished(items, w)
                             : undefined
                         }
-                        onDragStart={(e, el) => {
-                          if (disabled) {
-                            return;
-                          }
-                          handleDragStart(
-                            e,
-                            sectionId,
-                            column.id,
-                            rowId,
-                            items[stableKey],
-                            el,
-                          );
-                        }}
+                        // onDragStart={(e, el) => {
+                        //   if (disabled) {
+                        //     return;
+                        //   }
+                        //   handleDragStart(
+                        //     e,
+                        //     sectionId,
+                        //     column.id,
+                        //     rowId,
+                        //     items[stableKey],
+                        //   );
+                        // }}
                       >
                         {items['id'] !== 'EMPTY_SECTION'
                           ? renderComponent(items, {
