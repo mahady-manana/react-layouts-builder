@@ -7031,7 +7031,7 @@
 
 "react-layouts-builder@file:../..":
   "resolved" "file:../.."
-  "version" "1.0.1-alpha.15"
+  "version" "1.0.1-alpha.18"
 
 "react-refresh@^0.11.0", "react-refresh@>=0.10.0 <1.0.0":
   "integrity" "sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A=="
