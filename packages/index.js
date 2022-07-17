@@ -926,17 +926,18 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     } else {
       onDragOver(nearest);
       setTargetDROP(undefined);
-    }
+    } // const cloned = document.getElementById(
+    //   'draggedDiv',
+    // ) as HTMLDivElement;
+    // cloned.style.pointerEvents = 'none';
+    // cloned.style.position = 'fixed';
+    // cloned.style.top = `${e.clientY}px`;
+    // cloned.style.left = `${e.clientX}px`;
+    // cloned.style.maxWidth = `500px`;
+    // cloned.style.maxHeight = `500px`;
+    // cloned.style.overflow = `hidden`;
+    // cloned.style.zIndex = `99`;
 
-    var cloned = document.getElementById('draggedDiv');
-    cloned.style.pointerEvents = 'none';
-    cloned.style.position = 'fixed';
-    cloned.style.top = "".concat(e.clientY, "px");
-    cloned.style.left = "".concat(e.clientX, "px");
-    cloned.style.maxWidth = "500px";
-    cloned.style.maxHeight = "500px";
-    cloned.style.overflow = "hidden";
-    cloned.style.zIndex = "99";
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
@@ -985,21 +986,21 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
     onDrop(e);
     setTargetDROP(undefined);
-    var el = document.getElementById('draggedDiv');
-
-    if (el) {
-      el.style.position = '';
-      el.style.pointerEvents = '';
-      el.style.position = '';
-      el.style.top = "";
-      el.style.left = "";
-      el.style.width = "";
-      el.style.height = "";
-      el.style.maxWidth = "";
-      el.style.maxHeight = "";
-      el.style.overflow = "";
-      el.removeAttribute('id');
-    }
+    var el = document.getElementById('clonedElement');
+    el === null || el === void 0 ? void 0 : el.remove(); // const el = document.getElementById('draggedDiv');
+    // if (el) {
+    //   el.style.position = '';
+    //   el.style.pointerEvents = '';
+    //   el.style.position = '';
+    //   el.style.top = ``;
+    //   el.style.left = ``;
+    //   el.style.width = ``;
+    //   el.style.height = ``;
+    //   el.style.maxWidth = ``;
+    //   el.style.maxHeight = ``;
+    //   el.style.overflow = ``;
+    //   el.removeAttribute('id');
+    // }
   };
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1204,12 +1205,13 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
-    var sourceItemKey = e.dataTransfer.getData('itemKey');
-    e.dataTransfer.getData('isSection');
-    e.dataTransfer.getData('sectionId');
-    e.dataTransfer.getData('colmunId');
-    e.dataTransfer.getData('rowId');
-    e.dataTransfer.getData('itemKeyType'); // const source: SourceType = {
+    // const sourceItemKey = e.dataTransfer.getData('itemKey');
+    // const isSection = e.dataTransfer.getData('isSection');
+    // const sourceSectionId = e.dataTransfer.getData('sectionId');
+    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
+    // const sourceRowId = e.dataTransfer.getData('rowId');
+    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
+    // const source: SourceType = {
     //   columnId: sourceColumnKey,
     //   itemKey:
     //     itemKeyType === 'number'
@@ -1219,10 +1221,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     //   isSection: !!isSection,
     //   rowId: sourceRowId,
     // };
-
     if (!source) return;
 
-    if (!destination.itemKey && !sourceItemKey) {
+    if (!destination.itemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }
@@ -1592,17 +1593,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "min-h-[100px]",
-    ref: containeRef,
-    onDragOver: function onDragOver(e) {
-      var cloned = document.getElementById('draggedDiv');
-
-      if (cloned) {
-        cloned.style.pointerEvents = 'none';
-        cloned.style.position = 'fixed';
-        cloned.style.top = "".concat(e.clientY, "px");
-        cloned.style.left = "".concat(e.clientX, "px");
-      }
-    }
+    ref: containeRef
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,
@@ -1829,32 +1820,34 @@ var DraggableItem = function DraggableItem(_a) {
         setSource(source);
       }
 
-      var div = e.target;
-      e.dataTransfer.setDragImage(div, 5000, 5000);
-      var el = document.querySelector("div[data-draggable-id='".concat(draggableId, "']"));
-
-      if (el) {
-        el.setAttribute('id', 'draggedDiv');
-      }
+      var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
+      var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
+      cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute("id", "clonedElement");
+      document.body.appendChild(cloned);
+      e.dataTransfer.setDragImage(cloned, 0, 0); // const el = document.querySelector(
+      //   `div[data-draggable-id='${draggableId}']`,
+      // );
+      // if (el) {
+      //   el.setAttribute('id', 'draggedDiv');
+      // }
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
       e.stopPropagation();
-      var el = document.getElementById('draggedDiv');
-
-      if (el) {
-        el.style.position = '';
-        el.style.pointerEvents = '';
-        el.style.position = '';
-        el.style.top = "";
-        el.style.left = "";
-        el.style.width = "";
-        el.style.height = "";
-        el.style.maxWidth = "";
-        el.style.maxHeight = "";
-        el.style.overflow = "";
-        el.removeAttribute('id');
-      }
+      var el = document.getElementById('clonedElement');
+      el === null || el === void 0 ? void 0 : el.remove(); // if (el) {
+      //   el.style.position = '';
+      //   el.style.pointerEvents = '';
+      //   el.style.position = '';
+      //   el.style.top = ``;
+      //   el.style.left = ``;
+      //   el.style.width = ``;
+      //   el.style.height = ``;
+      //   el.style.maxWidth = ``;
+      //   el.style.maxHeight = ``;
+      //   el.style.overflow = ``;
+      //   el.removeAttribute('id');
+      // }
     }
   };
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, children({

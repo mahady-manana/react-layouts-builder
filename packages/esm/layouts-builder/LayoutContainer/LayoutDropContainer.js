@@ -63,17 +63,18 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     } else {
       onDragOver(nearest);
       setTargetDROP(undefined);
-    }
+    } // const cloned = document.getElementById(
+    //   'draggedDiv',
+    // ) as HTMLDivElement;
+    // cloned.style.pointerEvents = 'none';
+    // cloned.style.position = 'fixed';
+    // cloned.style.top = `${e.clientY}px`;
+    // cloned.style.left = `${e.clientX}px`;
+    // cloned.style.maxWidth = `500px`;
+    // cloned.style.maxHeight = `500px`;
+    // cloned.style.overflow = `hidden`;
+    // cloned.style.zIndex = `99`;
 
-    var cloned = document.getElementById('draggedDiv');
-    cloned.style.pointerEvents = 'none';
-    cloned.style.position = 'fixed';
-    cloned.style.top = "".concat(e.clientY, "px");
-    cloned.style.left = "".concat(e.clientX, "px");
-    cloned.style.maxWidth = "500px";
-    cloned.style.maxHeight = "500px";
-    cloned.style.overflow = "hidden";
-    cloned.style.zIndex = "99";
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
@@ -122,21 +123,21 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
 
     onDrop(e);
     setTargetDROP(undefined);
-    var el = document.getElementById('draggedDiv');
-
-    if (el) {
-      el.style.position = '';
-      el.style.pointerEvents = '';
-      el.style.position = '';
-      el.style.top = "";
-      el.style.left = "";
-      el.style.width = "";
-      el.style.height = "";
-      el.style.maxWidth = "";
-      el.style.maxHeight = "";
-      el.style.overflow = "";
-      el.removeAttribute('id');
-    }
+    var el = document.getElementById('clonedElement');
+    el === null || el === void 0 ? void 0 : el.remove(); // const el = document.getElementById('draggedDiv');
+    // if (el) {
+    //   el.style.position = '';
+    //   el.style.pointerEvents = '';
+    //   el.style.position = '';
+    //   el.style.top = ``;
+    //   el.style.left = ``;
+    //   el.style.width = ``;
+    //   el.style.height = ``;
+    //   el.style.maxWidth = ``;
+    //   el.style.maxHeight = ``;
+    //   el.style.overflow = ``;
+    //   el.removeAttribute('id');
+    // }
   };
 
   return /*#__PURE__*/React.createElement("div", {

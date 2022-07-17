@@ -14,7 +14,7 @@ interface DraggableProps {
   children: ReactNode;
   isLast?: boolean;
   disableChange?: boolean;
-  disableSide: boolean
+  disableSide: boolean;
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
     SetStateAction<TargetPlaceEnum | undefined>
@@ -72,17 +72,17 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver(nearest);
       setTargetDROP(undefined);
     }
-    const cloned = document.getElementById(
-      'draggedDiv',
-    ) as HTMLDivElement;
-    cloned.style.pointerEvents = 'none';
-    cloned.style.position = 'fixed';
-    cloned.style.top = `${e.clientY}px`;
-    cloned.style.left = `${e.clientX}px`;
-    cloned.style.maxWidth = `500px`;
-    cloned.style.maxHeight = `500px`;
-    cloned.style.overflow = `hidden`;
-    cloned.style.zIndex = `99`;
+    // const cloned = document.getElementById(
+    //   'draggedDiv',
+    // ) as HTMLDivElement;
+    // cloned.style.pointerEvents = 'none';
+    // cloned.style.position = 'fixed';
+    // cloned.style.top = `${e.clientY}px`;
+    // cloned.style.left = `${e.clientX}px`;
+    // cloned.style.maxWidth = `500px`;
+    // cloned.style.maxHeight = `500px`;
+    // cloned.style.overflow = `hidden`;
+    // cloned.style.zIndex = `99`;
   };
 
   const findNearestTarget = (
@@ -100,7 +100,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     const reference = clientY - boundingClient.top;
 
     const left = clientX - boundingClient.left;
-    
+
     const shouldRight = width - left < 50 && width - left > 0;
     if (shouldRight && !disableSide) {
       return TargetPlaceEnum.RIGHT;
@@ -125,20 +125,22 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
     }
     onDrop(e);
     setTargetDROP(undefined);
-    const el = document.getElementById('draggedDiv');
-    if (el) {
-      el.style.position = '';
-      el.style.pointerEvents = '';
-      el.style.position = '';
-      el.style.top = ``;
-      el.style.left = ``;
-      el.style.width = ``;
-      el.style.height = ``;
-      el.style.maxWidth = ``;
-      el.style.maxHeight = ``;
-      el.style.overflow = ``;
-      el.removeAttribute('id');
-    }
+    const el = document.getElementById('clonedElement');
+    el?.remove();
+    // const el = document.getElementById('draggedDiv');
+    // if (el) {
+    //   el.style.position = '';
+    //   el.style.pointerEvents = '';
+    //   el.style.position = '';
+    //   el.style.top = ``;
+    //   el.style.left = ``;
+    //   el.style.width = ``;
+    //   el.style.height = ``;
+    //   el.style.maxWidth = ``;
+    //   el.style.maxHeight = ``;
+    //   el.style.overflow = ``;
+    //   el.removeAttribute('id');
+    // }
   };
   return (
     <div

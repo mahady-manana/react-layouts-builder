@@ -77,17 +77,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "min-h-[100px]",
-    ref: containeRef,
-    onDragOver: function onDragOver(e) {
-      var cloned = document.getElementById('draggedDiv');
-
-      if (cloned) {
-        cloned.style.pointerEvents = 'none';
-        cloned.style.position = 'fixed';
-        cloned.style.top = "".concat(e.clientY, "px");
-        cloned.style.left = "".concat(e.clientX, "px");
-      }
-    }
+    ref: containeRef
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
       key: section.id,

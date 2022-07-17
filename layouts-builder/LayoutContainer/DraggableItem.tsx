@@ -35,33 +35,37 @@ export const DraggableItem: FC<DraggableItemProps> = ({
       if (source) {
         setSource(source);
       }
-      const div = e.target;
-      e.dataTransfer.setDragImage(div as any, 5000, 5000);
-      const el = document.querySelector(
-        `div[data-draggable-id='${draggableId}']`,
-      );
-      if (el) {
-        el.setAttribute('id', 'draggedDiv');
-      }
+      const div = document.querySelector(`div[data-draggable-id="${draggableId}"]`) ;
+      const cloned = div?.cloneNode(true) as HTMLElement | null
+      cloned?.setAttribute("id", "clonedElement")
+      document.body.appendChild(cloned as any);
+
+      e.dataTransfer.setDragImage(cloned as any, 0, 0);
+      // const el = document.querySelector(
+      //   `div[data-draggable-id='${draggableId}']`,
+      // );
+      // if (el) {
+      //   el.setAttribute('id', 'draggedDiv');
+      // }
     },
     onDragEnd: (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const el = document.getElementById('draggedDiv');
-
-      if (el) {
-        el.style.position = '';
-        el.style.pointerEvents = '';
-        el.style.position = '';
-        el.style.top = ``;
-        el.style.left = ``;
-        el.style.width = ``;
-        el.style.height = ``;
-        el.style.maxWidth = ``;
-        el.style.maxHeight = ``;
-        el.style.overflow = ``;
-        el.removeAttribute('id');
-      }
+      const el = document.getElementById('clonedElement');
+      el?.remove()
+      // if (el) {
+      //   el.style.position = '';
+      //   el.style.pointerEvents = '';
+      //   el.style.position = '';
+      //   el.style.top = ``;
+      //   el.style.left = ``;
+      //   el.style.width = ``;
+      //   el.style.height = ``;
+      //   el.style.maxWidth = ``;
+      //   el.style.maxHeight = ``;
+      //   el.style.overflow = ``;
+      //   el.removeAttribute('id');
+      // }
     },
   };
   return (

@@ -129,12 +129,13 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
-    var sourceItemKey = e.dataTransfer.getData('itemKey');
-    e.dataTransfer.getData('isSection');
-    e.dataTransfer.getData('sectionId');
-    e.dataTransfer.getData('colmunId');
-    e.dataTransfer.getData('rowId');
-    e.dataTransfer.getData('itemKeyType'); // const source: SourceType = {
+    // const sourceItemKey = e.dataTransfer.getData('itemKey');
+    // const isSection = e.dataTransfer.getData('isSection');
+    // const sourceSectionId = e.dataTransfer.getData('sectionId');
+    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
+    // const sourceRowId = e.dataTransfer.getData('rowId');
+    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
+    // const source: SourceType = {
     //   columnId: sourceColumnKey,
     //   itemKey:
     //     itemKeyType === 'number'
@@ -144,10 +145,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     //   isSection: !!isSection,
     //   rowId: sourceRowId,
     // };
-
     if (!source) return;
 
-    if (!destination.itemKey && !sourceItemKey) {
+    if (!destination.itemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }

@@ -150,12 +150,12 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e: DragEvent<HTMLDivElement>,
     layoutTarget: ILayoutTargetEnum,
   ) => {
-    const sourceItemKey = e.dataTransfer.getData('itemKey');
-    const isSection = e.dataTransfer.getData('isSection');
-    const sourceSectionId = e.dataTransfer.getData('sectionId');
-    const sourceColumnKey = e.dataTransfer.getData('colmunId');
-    const sourceRowId = e.dataTransfer.getData('rowId');
-    const itemKeyType = e.dataTransfer.getData('itemKeyType');
+    // const sourceItemKey = e.dataTransfer.getData('itemKey');
+    // const isSection = e.dataTransfer.getData('isSection');
+    // const sourceSectionId = e.dataTransfer.getData('sectionId');
+    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
+    // const sourceRowId = e.dataTransfer.getData('rowId');
+    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
 
     // const source: SourceType = {
     //   columnId: sourceColumnKey,
@@ -170,7 +170,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
     if (!source) return;
 
-    if (!destination.itemKey && !sourceItemKey) {
+    if (!destination.itemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }

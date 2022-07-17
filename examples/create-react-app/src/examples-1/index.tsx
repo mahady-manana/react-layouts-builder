@@ -131,6 +131,9 @@ export const Layouts1 = () => {
   const focus = useCallback((dat: any) => {
     setFocused(dat.id)
   }, [])
+  const handleDelete = (id: number) => {
+    
+  }
   return (
     <div>
       <button onClick={() => setDisableChange(!disableChange)}>
@@ -187,6 +190,7 @@ export const Layouts1 = () => {
                     data={data}
                     onClick={(d) => setFocused(d.id)}
                     focused={data.id === focused}
+                    onDelete={handleDelete}
                   />
                 )
               }}

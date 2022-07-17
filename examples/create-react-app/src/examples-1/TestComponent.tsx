@@ -32,6 +32,7 @@ interface Props {
   onClick: (data: any) => void
   focused?: boolean
   component?: any
+  onDelete: (id: number) => void
 }
 
 export const TestComponent = React.memo((props: Props) => {
@@ -49,13 +50,13 @@ export const TestComponent = React.memo((props: Props) => {
           >
             <div
               style={{
-                background: "#000",
+                border: "1px solid #000",
                 width: 50,
                 height: 50
               }}
               {...draggableProps}
             >
-              clickcikc
+              ...
             </div>
             {props.data.img ? (
               <img
@@ -68,6 +69,7 @@ export const TestComponent = React.memo((props: Props) => {
               <p>Data : {props.data.text}</p>
             )}
             <ComponentTestts data={props.data} />
+            <button onClick={() => props.onDelete(props.data.id)}>Delete</button>
           </div>
         )
       }}
