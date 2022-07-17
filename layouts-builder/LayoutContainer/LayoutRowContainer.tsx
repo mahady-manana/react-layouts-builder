@@ -170,10 +170,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
     if (!source) return;
 
-    if (!destination.itemKey) {
+    if (layoutTarget !== ILayoutTargetEnum.ROW && !destination.itemKey) {
       // this is used to prevent drag resize to create new item
       return;
     }
+
     setDragActive(false);
     const newLayout = reorderLayout(
       layouts,

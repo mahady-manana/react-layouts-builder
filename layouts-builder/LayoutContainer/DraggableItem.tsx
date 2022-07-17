@@ -36,8 +36,11 @@ export const DraggableItem: FC<DraggableItemProps> = ({
         setSource(source);
       }
       const div = document.querySelector(`div[data-draggable-id="${draggableId}"]`) ;
+  
+      
       const cloned = div?.cloneNode(true) as HTMLElement | null
       cloned?.setAttribute("id", "clonedElement")
+      
       document.body.appendChild(cloned as any);
 
       e.dataTransfer.setDragImage(cloned as any, 0, 0);
