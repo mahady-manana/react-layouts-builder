@@ -276,4 +276,5 @@
 #clonedElement {
   max-width: 600px;
   z-index: 999;
+  background-color: #0003;
 }
