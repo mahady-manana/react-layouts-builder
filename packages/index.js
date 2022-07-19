@@ -89,6 +89,16 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
 function createCommonjsModule(fn) {
   var module = { exports: {} };
 	return fn(module, module.exports), module.exports;
@@ -425,11 +435,14 @@ exports.TargetPlaceEnum = void 0;
   TargetPlaceEnum["BOTTOM"] = "BOTTOM";
   TargetPlaceEnum["ROW_TOP"] = "ROW_TOP";
   TargetPlaceEnum["ROW_BOTTOM"] = "ROW_BOTTOM";
+  TargetPlaceEnum["SECTION_TOP"] = "SECTION_TOP";
+  TargetPlaceEnum["SECTION_BOTTOM"] = "SECTION_BOTTOM";
 })(exports.TargetPlaceEnum || (exports.TargetPlaceEnum = {}));
 
 exports.ILayoutTargetEnum = void 0;
 
 (function (ILayoutTargetEnum) {
+  ILayoutTargetEnum["SECTION"] = "SECTION";
   ILayoutTargetEnum["ROW"] = "ROW";
   ILayoutTargetEnum["COL"] = "COL";
   ILayoutTargetEnum["ITEM"] = "ITEM";
@@ -752,24 +765,33 @@ var createNewRow = function createNewRow(itemkey, iscontianer) {
   };
 };
 
-var addToNewRow = function addToNewRow(layouts, source, dest, place) {
-  var newLayouts = layouts.map(function (section) {
-    if (section.id !== dest.sectionId) {
-      return section;
+var createNewSection = function createNewSection(itemKey, isContainer, defaultWidth) {
+  var row = createNewRow(itemKey);
+  return {
+    id: v4(),
+    className: '',
+    order: 0,
+    backgroundColor: '',
+    backgroundImage: '',
+    width: defaultWidth || '100%',
+    rows: [row],
+    container: isContainer
+  };
+};
+
+var addToNewSection = function addToNewSection(layouts, source, dest, place) {
+  var newLayouts = layouts.reduce(function (section, next) {
+    if (next.id === dest.sectionId) {
+      var newSection = createNewSection([source.itemKey], false);
+
+      if (place === exports.TargetPlaceEnum.ROW_TOP) {
+        return __spreadArray(__spreadArray([], section, true), [newSection, next], false);
+      }
+
+      return __spreadArray(__spreadArray([], section, true), [next, newSection], false);
     }
 
-    var row = createNewRow([source.itemKey]);
-    return __assign(__assign({}, section), {
-      rows: section.rows.reduce(function (acc, nextRow) {
-        if (nextRow.id !== dest.rowId) return acc.concat(nextRow);
-
-        if (place === exports.TargetPlaceEnum.ROW_BOTTOM) {
-          return acc.concat([nextRow, row]);
-        }
-
-        return acc.concat([row, nextRow]);
-      }, [])
-    });
+    return __spreadArray(__spreadArray([], section, true), [next], false);
   }, []);
   var clean = removeItemFromSource(newLayouts, source);
   return clean;
@@ -778,7 +800,7 @@ var addToNewRow = function addToNewRow(layouts, source, dest, place) {
 var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
   switch (target) {
     case exports.ILayoutTargetEnum.ROW:
-      return addToNewRow(layouts, source, dest, place);
+      return addToNewSection(layouts, source, dest, place);
 
     case exports.ILayoutTargetEnum.COL:
       return addToColumn(layouts, source, dest, place);
@@ -1639,20 +1661,6 @@ var LayoutContainer = function LayoutContainer(_a) {
       });
     })));
   })));
-};
-
-var createNewSection = function createNewSection(itemKey, isContainer, defaultWidth) {
-  var row = createNewRow(itemKey);
-  return {
-    id: v4(),
-    className: '',
-    order: 0,
-    backgroundColor: '',
-    backgroundImage: '',
-    width: defaultWidth || '100%',
-    rows: [row],
-    container: isContainer
-  };
 };
 
 //   data: any[],

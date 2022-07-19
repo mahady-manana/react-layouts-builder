@@ -1,12 +1,12 @@
 import { ILayoutTargetEnum } from '../interface/internalType.js';
 import { addToColumn } from './addToNewColumn.js';
-import { addToNewRow } from './addToNewRow.js';
+import { addToNewSection } from './addToNewSection.js';
 import { removeEmptyLayout } from './removeEmptylayout.js';
 
 var reorderLayoutItem = function reorderLayoutItem(layouts, source, dest, place, target) {
   switch (target) {
     case ILayoutTargetEnum.ROW:
-      return addToNewRow(layouts, source, dest, place);
+      return addToNewSection(layouts, source, dest, place);
 
     case ILayoutTargetEnum.COL:
       return addToColumn(layouts, source, dest, place);

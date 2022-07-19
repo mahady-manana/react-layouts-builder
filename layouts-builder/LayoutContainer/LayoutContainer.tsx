@@ -1,4 +1,10 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  FC,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
 import { ILayoutContainer, ILayoutSection } from '../interface';
 import { IRenderableLayout } from '../interface/renderableInterface';
@@ -28,7 +34,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     [],
   );
   const [dragActive, setDragActive] = useState(false);
-const {setCurrentLayouts} = useContext(AppContext)
+  const { setCurrentLayouts } = useContext(AppContext);
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
@@ -46,7 +52,7 @@ const {setCurrentLayouts} = useContext(AppContext)
         actualLayout,
         stableKey,
       );
-      setCurrentLayouts(actualLayout)
+      setCurrentLayouts(actualLayout);
       setRenderableLayout(renderable);
     }
   }, [actualLayout, data]);
@@ -61,7 +67,10 @@ const {setCurrentLayouts} = useContext(AppContext)
 
   if (staticComponent) {
     return (
-      <div className="rlb-static-container" style={{ maxWidth: maxWidth }}>
+      <div
+        className="rlb-static-container"
+        style={{ maxWidth: maxWidth }}
+      >
         {data.map((item, index) => {
           return renderComponent(item, {} as any, index);
         })}
@@ -70,7 +79,10 @@ const {setCurrentLayouts} = useContext(AppContext)
   }
 
   return (
-    <div className="rlb-main-container m-auto" style={{ maxWidth: maxWidth }}>
+    <div
+      className="rlb-main-container m-auto"
+      style={{ maxWidth: maxWidth }}
+    >
       <div
         className="min-h-[100px]"
         ref={containeRef}

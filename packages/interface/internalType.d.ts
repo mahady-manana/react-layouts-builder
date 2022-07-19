@@ -4,9 +4,12 @@ export declare enum TargetPlaceEnum {
     TOP = "TOP",
     BOTTOM = "BOTTOM",
     ROW_TOP = "ROW_TOP",
-    ROW_BOTTOM = "ROW_BOTTOM"
+    ROW_BOTTOM = "ROW_BOTTOM",
+    SECTION_TOP = "SECTION_TOP",
+    SECTION_BOTTOM = "SECTION_BOTTOM"
 }
 export declare enum ILayoutTargetEnum {
+    SECTION = "SECTION",
     ROW = "ROW",
     COL = "COL",
     ITEM = "ITEM"

@@ -1,5 +1,3 @@
-
-
 export enum TargetPlaceEnum {
   LEFT = 'LEFT',
   RIGHT = 'RIGHT',
@@ -7,14 +5,16 @@ export enum TargetPlaceEnum {
   BOTTOM = 'BOTTOM',
   ROW_TOP = 'ROW_TOP',
   ROW_BOTTOM = 'ROW_BOTTOM',
+  SECTION_TOP = 'SECTION_TOP',
+  SECTION_BOTTOM = 'SECTION_BOTTOM',
 }
 
 export enum ILayoutTargetEnum {
+  SECTION = 'SECTION',
   ROW = 'ROW',
   COL = 'COL',
   ITEM = 'ITEM',
 }
-
 
 export interface SourceType {
   sectionId: string;

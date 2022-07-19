@@ -6,7 +6,8 @@ import {
   ILayoutTargetEnum,
 } from 'layouts-builder/interface/internalType';
 import { addToColumn } from './addToNewColumn';
-import { addToNewRow } from './addToNewRow';
+// import { addToNewRow } from './addToNewRow';
+import { addToNewSection } from './addToNewSection';
 import { removeEmptyLayout } from './removeEmptylayout';
 
 const reorderLayoutItem = (
@@ -18,7 +19,7 @@ const reorderLayoutItem = (
 ) => {
   switch (target) {
     case ILayoutTargetEnum.ROW:
-      return addToNewRow(layouts, source, dest, place);
+      return addToNewSection(layouts, source, dest, place);
 
     case ILayoutTargetEnum.COL:
       return addToColumn(layouts, source, dest, place);

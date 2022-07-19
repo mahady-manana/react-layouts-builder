@@ -20,7 +20,8 @@ export const mockData = [
     text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3",
     group: "first",
 
-    bg: "blue"
+    bg: "blue",
+    isCont: true
   },
   {
     id: 4,
@@ -40,7 +41,7 @@ export const mockData = [
     group: "first",
     bg: "rgb(1 161 20)",
     img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg"
-  },
+  }
   // {
   //   id: 7,
   //   text: "bloalbl 7",

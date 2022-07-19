@@ -51,6 +51,7 @@ export interface ILayoutContainer {
   staticComponent?: boolean;
   maxWidth?: number | string;
   maxColumns?: number;
+  pageWidth?: number;
   colResize?: boolean;
   renderComponent: (
     data: any,
