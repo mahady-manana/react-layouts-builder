@@ -22,7 +22,7 @@ export const DraggableItem: FC<DraggableItemProps> = ({
   draggableId,
   children,
 }) => {
-  const { sourceId, point, currentLayouts, onDragStart, setSource } =
+  const { currentLayouts, onDragStart, setSource } =
     useContext(AppContext);
 
   const draggableAttributes: HTMLAttributes<HTMLDivElement> | any = {

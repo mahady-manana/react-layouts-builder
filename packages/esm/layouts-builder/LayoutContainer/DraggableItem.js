@@ -6,10 +6,8 @@ var DraggableItem = function DraggableItem(_a) {
   var draggableId = _a.draggableId,
       children = _a.children;
 
-  var _b = useContext(AppContext);
-      _b.sourceId;
-      _b.point;
-      var currentLayouts = _b.currentLayouts,
+  var _b = useContext(AppContext),
+      currentLayouts = _b.currentLayouts,
       _onDragStart = _b.onDragStart,
       setSource = _b.setSource;
 

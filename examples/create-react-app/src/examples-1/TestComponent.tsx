@@ -62,8 +62,6 @@ export const TestComponent = React.memo((props: Props) => {
               <img
                 src={props.data.img}
                 alt=""
-                width="400"
-                style={{ width: 100 }}
               />
             ) : (
               <p>Data : {props.data.text}</p>

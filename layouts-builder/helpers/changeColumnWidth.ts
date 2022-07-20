@@ -24,7 +24,7 @@ export const changeColumnWidth = (
           const findIndex = row.columns.findIndex(thicol => thicol.id === cols.colId)
           const makeItGrid =
             row.columns.length % 2 === 0
-              ? gridValue(5, cols.width)
+              ? gridValue(2, cols.width)
               : cols.width;
             
           if (!makeItGrid) return col;

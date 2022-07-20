@@ -844,7 +844,7 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
           var findIndex = row.columns.findIndex(function (thicol) {
             return thicol.id === cols.colId;
           });
-          var makeItGrid = row.columns.length % 2 === 0 ? gridValue(5, cols.width) : cols.width;
+          var makeItGrid = row.columns.length % 2 === 0 ? gridValue(2, cols.width) : cols.width;
           if (!makeItGrid) return col;
 
           if (col.id === cols.colId) {
@@ -1807,10 +1807,8 @@ var DraggableItem = function DraggableItem(_a) {
   var draggableId = _a.draggableId,
       children = _a.children;
 
-  var _b = React.useContext(AppContext);
-      _b.sourceId;
-      _b.point;
-      var currentLayouts = _b.currentLayouts,
+  var _b = React.useContext(AppContext),
+      currentLayouts = _b.currentLayouts,
       _onDragStart = _b.onDragStart,
       setSource = _b.setSource;
 
