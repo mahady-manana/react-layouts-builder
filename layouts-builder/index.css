@@ -274,8 +274,10 @@
   margin: auto;
 }
 #clonedElement {
-  max-width: 600px;
+  max-width: 500px;
   z-index: 999;
   background-color: #0003;
+  position: fixed;
+  width: 500px;
   /* display: none; */
 }
