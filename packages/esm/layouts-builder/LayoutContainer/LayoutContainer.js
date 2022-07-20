@@ -77,7 +77,19 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "min-h-[100px]",
-    ref: containeRef
+    ref: containeRef,
+    // onDragOver={(e) => {
+    //   const cloned = document.getElementById(
+    //     'draggedDiv',
+    //   ) as HTMLDivElement;
+    //   if (cloned) {
+    //     cloned.style.pointerEvents = 'none';
+    //     cloned.style.position = 'fixed';
+    //     cloned.style.top = `${e.clientY}px`;
+    //     cloned.style.left = `${e.clientX}px`;
+    //   }
+    // }}
+    id: "layout_container"
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
       key: section.id,

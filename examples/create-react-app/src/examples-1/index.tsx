@@ -134,10 +134,6 @@ export const Layouts1 = () => {
   const handleDelete = (id: number) => {}
   return (
     <div style={{ height: "100vh" }}>
-      <button onClick={() => setDisableChange(!disableChange)}>
-        Toggle Disable change t 000 : {disableChange ? "YES" : "NO"}
-      </button>
-
       <div
         style={{
           display: "flex",

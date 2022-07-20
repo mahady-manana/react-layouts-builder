@@ -3,7 +3,7 @@ import { Layouts1 } from "./examples-1"
 
 function App() {
   return (
-    <div className="flex bg-gray-100 p-5">
+    <div>
       <Layouts1 />
     </div>
   )

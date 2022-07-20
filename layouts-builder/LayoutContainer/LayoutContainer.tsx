@@ -98,6 +98,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         //     cloned.style.left = `${e.clientX}px`;
         //   }
         // }}
+        id="layout_container"
       >
         {renderableLayout.map((section, sectionIndex) => {
           return (

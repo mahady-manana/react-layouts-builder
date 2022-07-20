@@ -1,3 +1,4 @@
+import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import { TargetPlaceEnum } from 'layouts-builder/interface/internalType';
 import React, {
   FC,
@@ -37,6 +38,37 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   const activeDropRef = useRef<HTMLDivElement>(null);
   const [initY, setInitY] = useState<number>(0);
   const [checkAnomalie, setCheckAnomalie] = useState(500);
+  const [position, setPosition] = useState<{
+    x: number;
+    y: number;
+  }>();
+
+  const debounced = useSimpleDebounce(position, 100);
+
+  useEffect(() => {
+    if (debounced) {
+      const winH = window.innerHeight;
+      const container = document.getElementById(
+        'container_layout_scroll',
+      );
+      if (debounced.y < 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 200,
+          left: debounced.x,
+        });
+      }
+      if (debounced.y > winH - 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 200,
+          left: debounced.x,
+        });
+      }
+    }
+  }, [debounced]);
 
   useEffect(() => {
     if (checkAnomalie > 10) {
@@ -56,10 +88,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       return;
     }
 
-    const winH = window.innerHeight;
-    if (e.clientY < 100 || e.clientY > winH - 100)
-      activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-
+    setPosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
     if (!initY) {
       setInitY(e.clientY);
     }

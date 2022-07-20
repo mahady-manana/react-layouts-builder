@@ -1,3 +1,4 @@
+import useSimpleDebounce from '../hooks/useDebounce.js';
 import { TargetPlaceEnum } from '../interface/internalType.js';
 import React, { useRef, useState, useEffect } from 'react';
 
@@ -21,6 +22,35 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       checkAnomalie = _c[0],
       setCheckAnomalie = _c[1];
 
+  var _d = useState(),
+      position = _d[0],
+      setPosition = _d[1];
+
+  var debounced = useSimpleDebounce(position, 100);
+  useEffect(function () {
+    if (debounced) {
+      var winH = window.innerHeight;
+      var container = document.getElementById('container_layout_scroll');
+
+      if (debounced.y < 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 200,
+          left: debounced.x
+        });
+      }
+
+      if (debounced.y > winH - 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 200,
+          left: debounced.x
+        });
+      }
+    }
+  }, [debounced]);
   useEffect(function () {
     if (checkAnomalie > 10) {
       var timer = setTimeout(function () {
@@ -37,17 +67,15 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }, [checkAnomalie]);
 
   var handleDragOver = function handleDragOver(e) {
-    var _a;
-
     e.preventDefault();
 
     if (disableChange) {
       return;
     }
 
-    var winH = window.innerHeight;
-    if (e.clientY < 100 || e.clientY > winH - 100) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
-      behavior: 'smooth'
+    setPosition({
+      x: e.clientX,
+      y: e.clientY
     });
 
     if (!initY) {

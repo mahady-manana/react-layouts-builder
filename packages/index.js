@@ -886,6 +886,22 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
   return w;
 };
 
+function useSimpleDebounce(value, delay) {
+  var _a = React.useState(value),
+      debouncedValue = _a[0],
+      setDebouncedValue = _a[1];
+
+  React.useEffect(function () {
+    var timer = setTimeout(function () {
+      setDebouncedValue(value);
+    }, delay || 500);
+    return function () {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
+
 var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
       disableChange = _a.disableChange,
@@ -906,6 +922,35 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       checkAnomalie = _c[0],
       setCheckAnomalie = _c[1];
 
+  var _d = React.useState(),
+      position = _d[0],
+      setPosition = _d[1];
+
+  var debounced = useSimpleDebounce(position, 100);
+  React.useEffect(function () {
+    if (debounced) {
+      var winH = window.innerHeight;
+      var container = document.getElementById('container_layout_scroll');
+
+      if (debounced.y < 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 200,
+          left: debounced.x
+        });
+      }
+
+      if (debounced.y > winH - 150 && container) {
+        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 200,
+          left: debounced.x
+        });
+      }
+    }
+  }, [debounced]);
   React.useEffect(function () {
     if (checkAnomalie > 10) {
       var timer = setTimeout(function () {
@@ -922,17 +967,15 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }, [checkAnomalie]);
 
   var handleDragOver = function handleDragOver(e) {
-    var _a;
-
     e.preventDefault();
 
     if (disableChange) {
       return;
     }
 
-    var winH = window.innerHeight;
-    if (e.clientY < 100 || e.clientY > winH - 100) (_a = activeDropRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({
-      behavior: 'smooth'
+    setPosition({
+      x: e.clientX,
+      y: e.clientY
     });
 
     if (!initY) {
@@ -1615,7 +1658,19 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "min-h-[100px]",
-    ref: containeRef
+    ref: containeRef,
+    // onDragOver={(e) => {
+    //   const cloned = document.getElementById(
+    //     'draggedDiv',
+    //   ) as HTMLDivElement;
+    //   if (cloned) {
+    //     cloned.style.pointerEvents = 'none';
+    //     cloned.style.position = 'fixed';
+    //     cloned.style.top = `${e.clientY}px`;
+    //     cloned.style.left = `${e.clientX}px`;
+    //   }
+    // }}
+    id: "layout_container"
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,
