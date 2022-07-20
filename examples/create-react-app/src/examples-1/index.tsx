@@ -131,11 +131,9 @@ export const Layouts1 = () => {
   const focus = useCallback((dat: any) => {
     setFocused(dat.id)
   }, [])
-  const handleDelete = (id: number) => {
-    
-  }
+  const handleDelete = (id: number) => {}
   return (
-    <div>
+    <div style={{ height: "100vh" }}>
       <button onClick={() => setDisableChange(!disableChange)}>
         Toggle Disable change t 000 : {disableChange ? "YES" : "NO"}
       </button>
@@ -197,40 +195,6 @@ export const Layouts1 = () => {
             />
           </LayoutProvider>
         )}
-      </div>
-      <div>
-        <div className="bg-gray-200 w-4"></div>
-        <div>
-          Click section :<p>{clickSection?.id}</p>
-          <p>{clickSection?.rows.length}</p>
-          <input type="color" onChange={(e) => changeBg(e.target.value)} />
-          <input type="file" onChange={handleFile} />
-        </div>
-        <div></div>
-        <button onClick={() => addToItemss()}>Add item</button>
-        <div className="flex-grow text-center">Add new item</div>
-        <div className="bg-gray-200 p-2 text-center">
-          <form onSubmit={handleSabmit}>
-            <textarea
-              name="data"
-              cols={30}
-              rows={10}
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value)
-              }}
-            ></textarea>
-            <div>
-              <button
-                className="btn border-2 border-gray-500 p-2"
-                type="submit"
-              >
-                Add new item
-              </button>
-            </div>
-          </form>
-          <button onClick={() => addToRowItem()}>Ad items</button>
-        </div>
       </div>
     </div>
   )
