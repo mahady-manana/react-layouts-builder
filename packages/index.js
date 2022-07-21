@@ -886,209 +886,6 @@ var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthP
   return w;
 };
 
-function useSimpleDebounce(value, delay) {
-  var _a = React.useState(value),
-      debouncedValue = _a[0],
-      setDebouncedValue = _a[1];
-
-  React.useEffect(function () {
-    var timer = setTimeout(function () {
-      setDebouncedValue(value);
-    }, delay || 500);
-    return function () {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-  return debouncedValue;
-}
-
-var LayoutDropContainer = function LayoutDropContainer(_a) {
-  var children = _a.children,
-      disableChange = _a.disableChange,
-      targetDROP = _a.targetDROP,
-      disableSide = _a.disableSide,
-      setTargetDROP = _a.setTargetDROP,
-      onDragOver = _a.onDragOver,
-      onDragLeave = _a.onDragLeave,
-      onDrop = _a.onDrop;
-  var containerRef = React.useRef(null);
-  var activeDropRef = React.useRef(null);
-
-  var _b = React.useState(0),
-      initY = _b[0],
-      setInitY = _b[1];
-
-  var _c = React.useState(500),
-      checkAnomalie = _c[0],
-      setCheckAnomalie = _c[1];
-
-  var _d = React.useState(),
-      position = _d[0],
-      setPosition = _d[1];
-
-  var debounced = useSimpleDebounce(position, 100);
-  React.useEffect(function () {
-    if (debounced) {
-      var winH = window.innerHeight;
-      var container = document.getElementById('container_layout_scroll');
-
-      if (debounced.y < 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y - 200,
-          left: debounced.x
-        });
-      }
-
-      if (debounced.y > winH - 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y + 200,
-          left: debounced.x
-        });
-      }
-    }
-  }, [debounced]);
-  React.useEffect(function () {
-    if (checkAnomalie > 10) {
-      var timer = setTimeout(function () {
-        setCheckAnomalie(function (prev) {
-          return prev - 10;
-        });
-      }, 250);
-      clearTimeout(timer);
-    }
-
-    if (checkAnomalie < 10) {
-      setTargetDROP(undefined);
-    }
-  }, [checkAnomalie]);
-
-  var handleDragOver = function handleDragOver(e) {
-    e.preventDefault();
-
-    if (disableChange) {
-      return;
-    }
-
-    setPosition({
-      x: e.clientX,
-      y: e.clientY
-    });
-
-    if (!initY) {
-      setInitY(e.clientY);
-    }
-
-    setCheckAnomalie(500);
-    var nearest = findNearestTarget(e.clientX, e.clientY);
-
-    if (nearest) {
-      setTargetDROP(nearest);
-      onDragOver(nearest);
-    } else {
-      onDragOver(nearest);
-      setTargetDROP(undefined);
-    } // const cloned = document.getElementById(
-    //   'draggedDiv',
-    // ) as HTMLDivElement;
-    // cloned.style.pointerEvents = 'none';
-    // cloned.style.position = 'fixed';
-    // cloned.style.top = `${e.clientY}px`;
-    // cloned.style.left = `${e.clientX}px`;
-    // cloned.style.maxWidth = `500px`;
-    // cloned.style.maxHeight = `500px`;
-    // cloned.style.overflow = `hidden`;
-    // cloned.style.zIndex = `99`;
-
-  };
-
-  var findNearestTarget = function findNearestTarget(clientX, clientY) {
-    var _a, _b, _c;
-
-    var height = (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetHeight;
-    var width = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth;
-    var boundingClient = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.getBoundingClientRect();
-
-    if (!height || !width || !(boundingClient === null || boundingClient === void 0 ? void 0 : boundingClient.left)) {
-      return;
-    }
-
-    var demi = height / 2;
-    var reference = clientY - boundingClient.top;
-    var left = clientX - boundingClient.left;
-    var shouldRight = width - left < 50 && width - left > 0;
-
-    if (shouldRight && !disableSide) {
-      return exports.TargetPlaceEnum.RIGHT;
-    }
-
-    if (left < 50 && left > 0 && !disableSide) {
-      return exports.TargetPlaceEnum.LEFT;
-    }
-
-    if (reference > demi) return exports.TargetPlaceEnum.BOTTOM;
-    if (reference < demi) return exports.TargetPlaceEnum.TOP;
-  };
-
-  var onExit = function onExit(e) {
-    if (disableChange) {
-      return;
-    }
-
-    onDragLeave();
-    setTargetDROP(undefined);
-  };
-
-  var handleDrop = function handleDrop(e) {
-    e.preventDefault();
-
-    if (disableChange) {
-      return;
-    }
-
-    onDrop(e);
-    setTargetDROP(undefined);
-    var el = document.getElementById('clonedElement');
-    el === null || el === void 0 ? void 0 : el.remove(); // const el = document.getElementById('draggedDiv');
-    // if (el) {
-    //   el.style.position = '';
-    //   el.style.pointerEvents = '';
-    //   el.style.position = '';
-    //   el.style.top = ``;
-    //   el.style.left = ``;
-    //   el.style.width = ``;
-    //   el.style.height = ``;
-    //   el.style.maxWidth = ``;
-    //   el.style.maxHeight = ``;
-    //   el.style.overflow = ``;
-    //   el.removeAttribute('id');
-    // }
-  };
-
-  return /*#__PURE__*/React__default["default"].createElement("div", {
-    ref: containerRef,
-    onDragOver: handleDragOver,
-    onDragLeave: onExit,
-    onDrop: handleDrop,
-    className: disableChange ? 'rbl-vert-spacing' : 'rbl-relative'
-  }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "rbl-drop-item-indicator top",
-    style: {
-      visibility: targetDROP === exports.TargetPlaceEnum.TOP ? 'visible' : 'hidden'
-    },
-    ref: targetDROP === exports.TargetPlaceEnum.TOP ? activeDropRef : null
-  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "rbl-drop-item-indicator bottom",
-    style: {
-      visibility: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
-    },
-    ref: targetDROP === exports.TargetPlaceEnum.BOTTOM ? activeDropRef : null
-  }) : null);
-};
-
 var AppContext = /*#__PURE__*/React.createContext({});
 var LayoutProvider = function LayoutProvider(_a) {
   var children = _a.children;
@@ -1151,6 +948,137 @@ var LayoutProvider = function LayoutProvider(_a) {
   }, children);
 };
 
+var LayoutDropContainer = function LayoutDropContainer(_a) {
+  var children = _a.children,
+      disableChange = _a.disableChange,
+      targetDROP = _a.targetDROP,
+      disableSide = _a.disableSide,
+      setTargetDROP = _a.setTargetDROP,
+      onDragOver = _a.onDragOver,
+      onDragLeave = _a.onDragLeave,
+      onDrop = _a.onDrop;
+  var containerRef = React.useRef(null);
+  var activeDropRef = React.useRef(null);
+
+  var _b = React.useState(0),
+      initY = _b[0],
+      setInitY = _b[1];
+
+  var _c = React.useState(500),
+      checkAnomalie = _c[0],
+      setCheckAnomalie = _c[1];
+
+  var setIsDragStart = React.useContext(AppContext).setIsDragStart;
+  React.useEffect(function () {
+    if (checkAnomalie > 10) {
+      var timer = setTimeout(function () {
+        setCheckAnomalie(function (prev) {
+          return prev - 10;
+        });
+      }, 250);
+      clearTimeout(timer);
+    }
+
+    if (checkAnomalie < 10) {
+      setTargetDROP(undefined);
+    }
+  }, [checkAnomalie]);
+
+  var handleDragOver = function handleDragOver(e) {
+    e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
+    if (!initY) {
+      setInitY(e.clientY);
+    }
+
+    setCheckAnomalie(500);
+    var nearest = findNearestTarget(e.clientX, e.clientY);
+
+    if (nearest) {
+      setTargetDROP(nearest);
+      onDragOver(nearest);
+    } else {
+      onDragOver(nearest);
+      setTargetDROP(undefined);
+    }
+  };
+
+  var findNearestTarget = function findNearestTarget(clientX, clientY) {
+    var _a, _b, _c;
+
+    var height = (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.offsetHeight;
+    var width = (_b = containerRef.current) === null || _b === void 0 ? void 0 : _b.offsetWidth;
+    var boundingClient = (_c = containerRef.current) === null || _c === void 0 ? void 0 : _c.getBoundingClientRect();
+
+    if (!height || !width || !(boundingClient === null || boundingClient === void 0 ? void 0 : boundingClient.left)) {
+      return;
+    }
+
+    var demi = height / 2;
+    var reference = clientY - boundingClient.top;
+    var left = clientX - boundingClient.left;
+    var shouldRight = width - left < 50 && width - left > 0;
+
+    if (shouldRight && !disableSide) {
+      return exports.TargetPlaceEnum.RIGHT;
+    }
+
+    if (left < 50 && left > 0 && !disableSide) {
+      return exports.TargetPlaceEnum.LEFT;
+    }
+
+    if (reference > demi) return exports.TargetPlaceEnum.BOTTOM;
+    if (reference < demi) return exports.TargetPlaceEnum.TOP;
+  };
+
+  var onExit = function onExit(e) {
+    if (disableChange) {
+      return;
+    }
+
+    onDragLeave();
+    setTargetDROP(undefined);
+  };
+
+  var handleDrop = function handleDrop(e) {
+    e.preventDefault();
+
+    if (disableChange) {
+      return;
+    }
+
+    onDrop(e);
+    setIsDragStart(false);
+    setTargetDROP(undefined);
+    var el = document.getElementById('clonedElement');
+    el === null || el === void 0 ? void 0 : el.remove();
+  };
+
+  return /*#__PURE__*/React__default["default"].createElement("div", {
+    ref: containerRef,
+    onDragOver: handleDragOver,
+    onDragLeave: onExit,
+    onDrop: handleDrop,
+    className: disableChange ? 'rbl-vert-spacing' : 'rbl-relative'
+  }, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rbl-drop-item-indicator top",
+    style: {
+      visibility: targetDROP === exports.TargetPlaceEnum.TOP ? 'visible' : 'hidden'
+    },
+    ref: targetDROP === exports.TargetPlaceEnum.TOP ? activeDropRef : null
+  }) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+    className: "rbl-drop-item-indicator bottom",
+    style: {
+      visibility: targetDROP === exports.TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'
+    },
+    ref: targetDROP === exports.TargetPlaceEnum.BOTTOM ? activeDropRef : null
+  }) : null);
+};
+
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
@@ -1161,9 +1089,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive;
-      _a.colResize;
-      var maxColumns = _a.maxColumns,
+      dragActive = _a.dragActive,
+      maxColumns = _a.maxColumns,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -1215,7 +1142,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _m = React.useContext(AppContext),
       source = _m.source,
-      setSource = _m.setSource; // TARGET DROP STATE
+      setSource = _m.setSource,
+      setIsDragStart = _m.setIsDragStart; // TARGET DROP STATE
 
 
   var _o = React.useState(),
@@ -1242,50 +1170,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setTargetDROP(undefined);
-  }; // const handleDragStart = (
-  //   e: DragEvent<HTMLDivElement>,
-  //   sectionId: string,
-  //   columnId: string,
-  //   rowId: any,
-  //   itemkey: any,
-  // ) => {
-  //   e.stopPropagation();
-  //   if (disabled) {
-  //     return;
-  //   }
-  //   const itemKeyType = typeof itemkey;
-  //   e.dataTransfer.setData('itemKey', itemkey);
-  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
-  //   e.dataTransfer.setData('sectionId', sectionId);
-  //   e.dataTransfer.setData('colmunId', columnId);
-  //   e.dataTransfer.setData('rowId', rowId);
-  //   const div = e.target;
-  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
-  //   const timer = setTimeout(() => {
-  //     setDragActive(true);
-  //   }, 500);
-  //   clearTimeout(timer);
-  // };
-  //   // Drop item to create new column or setion or add item to column
+  }; //   // Drop item to create new column or setion or add item to column
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
-    // const sourceItemKey = e.dataTransfer.getData('itemKey');
-    // const isSection = e.dataTransfer.getData('isSection');
-    // const sourceSectionId = e.dataTransfer.getData('sectionId');
-    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
-    // const sourceRowId = e.dataTransfer.getData('rowId');
-    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
-    // const source: SourceType = {
-    //   columnId: sourceColumnKey,
-    //   itemKey:
-    //     itemKeyType === 'number'
-    //       ? parseFloat(sourceItemKey)
-    //       : sourceItemKey,
-    //   sectionId: sourceSectionId,
-    //   isSection: !!isSection,
-    //   rowId: sourceRowId,
-    // };
+    setIsDragStart(false);
     if (!source) return;
 
     if (layoutTarget !== exports.ILayoutTargetEnum.ROW && !destination.itemKey) {
@@ -1585,6 +1474,22 @@ var needRowTarget = function needRowTarget(layouts, currentRow, _a) {
   };
 };
 
+function useSimpleDebounce(value, delay) {
+  var _a = React.useState(value),
+      debouncedValue = _a[0],
+      setDebouncedValue = _a[1];
+
+  React.useEffect(function () {
+    var timer = setTimeout(function () {
+      setDebouncedValue(value);
+    }, delay || 500);
+    return function () {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
+
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,
@@ -1620,6 +1525,33 @@ var LayoutContainer = function LayoutContainer(_a) {
       renderableLayout = _f[0],
       setRenderableLayout = _f[1];
 
+  var _g = React.useState(),
+      position = _g[0],
+      setPosition = _g[1];
+
+  var debounced = useSimpleDebounce(position, 5);
+  React.useEffect(function () {
+    if (debounced) {
+      var winH = window.innerHeight;
+      var container = document.getElementById('container_layout_scroll');
+
+      if (debounced.y < 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 500,
+          left: debounced.x
+        });
+      }
+
+      if (debounced.y > winH - 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 500,
+          left: debounced.x
+        });
+      }
+    }
+  }, [debounced]);
   React.useEffect(function () {
     if (layouts && layouts.length > 0) {
       setActualLayout(layouts);
@@ -1651,6 +1583,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     }));
   }
 
+  var handleDragOverContainer = function handleDragOverContainer(e) {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY
+    });
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
@@ -1659,17 +1598,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "min-h-[100px]",
     ref: containeRef,
-    // onDragOver={(e) => {
-    //   const cloned = document.getElementById(
-    //     'draggedDiv',
-    //   ) as HTMLDivElement;
-    //   if (cloned) {
-    //     cloned.style.pointerEvents = 'none';
-    //     cloned.style.position = 'fixed';
-    //     cloned.style.top = `${e.clientY}px`;
-    //     cloned.style.left = `${e.clientX}px`;
-    //   }
-    // }}
+    onDragOver: handleDragOverContainer,
     id: "layout_container"
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1865,7 +1794,8 @@ var DraggableItem = function DraggableItem(_a) {
   var _b = React.useContext(AppContext),
       currentLayouts = _b.currentLayouts,
       _onDragStart = _b.onDragStart,
-      setSource = _b.setSource;
+      setSource = _b.setSource,
+      setIsDragStart = _b.setIsDragStart;
 
   var draggableAttributes = {
     draggable: true,
@@ -1875,6 +1805,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onDragStart(draggableId);
 
+      setIsDragStart(true);
       var source = findSourceLayout(currentLayouts, draggableId);
 
       if (source) {
@@ -1883,32 +1814,16 @@ var DraggableItem = function DraggableItem(_a) {
 
       var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
       var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
-      cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute("id", "clonedElement");
+      cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute('id', 'clonedElement');
       document.body.appendChild(cloned);
-      e.dataTransfer.setDragImage(cloned, 0, 0); // const el = document.querySelector(
-      //   `div[data-draggable-id='${draggableId}']`,
-      // );
-      // if (el) {
-      //   el.setAttribute('id', 'draggedDiv');
-      // }
+      e.dataTransfer.setDragImage(cloned, 0, 0);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();
       e.stopPropagation();
+      setIsDragStart(false);
       var el = document.getElementById('clonedElement');
-      el === null || el === void 0 ? void 0 : el.remove(); // if (el) {
-      //   el.style.position = '';
-      //   el.style.pointerEvents = '';
-      //   el.style.position = '';
-      //   el.style.top = ``;
-      //   el.style.left = ``;
-      //   el.style.width = ``;
-      //   el.style.height = ``;
-      //   el.style.maxWidth = ``;
-      //   el.style.maxHeight = ``;
-      //   el.style.overflow = ``;
-      //   el.removeAttribute('id');
-      // }
+      el === null || el === void 0 ? void 0 : el.remove();
     }
   };
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, children({

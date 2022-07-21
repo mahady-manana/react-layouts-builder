@@ -1,6 +1,6 @@
-import useSimpleDebounce from '../hooks/useDebounce.js';
+import { AppContext } from '../Context/AppContext.js';
 import { TargetPlaceEnum } from '../interface/internalType.js';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 
 var LayoutDropContainer = function LayoutDropContainer(_a) {
   var children = _a.children,
@@ -22,35 +22,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       checkAnomalie = _c[0],
       setCheckAnomalie = _c[1];
 
-  var _d = useState(),
-      position = _d[0],
-      setPosition = _d[1];
-
-  var debounced = useSimpleDebounce(position, 100);
-  useEffect(function () {
-    if (debounced) {
-      var winH = window.innerHeight;
-      var container = document.getElementById('container_layout_scroll');
-
-      if (debounced.y < 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y - 200,
-          left: debounced.x
-        });
-      }
-
-      if (debounced.y > winH - 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y + 200,
-          left: debounced.x
-        });
-      }
-    }
-  }, [debounced]);
+  var setIsDragStart = useContext(AppContext).setIsDragStart;
   useEffect(function () {
     if (checkAnomalie > 10) {
       var timer = setTimeout(function () {
@@ -73,11 +45,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       return;
     }
 
-    setPosition({
-      x: e.clientX,
-      y: e.clientY
-    });
-
     if (!initY) {
       setInitY(e.clientY);
     }
@@ -91,18 +58,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     } else {
       onDragOver(nearest);
       setTargetDROP(undefined);
-    } // const cloned = document.getElementById(
-    //   'draggedDiv',
-    // ) as HTMLDivElement;
-    // cloned.style.pointerEvents = 'none';
-    // cloned.style.position = 'fixed';
-    // cloned.style.top = `${e.clientY}px`;
-    // cloned.style.left = `${e.clientX}px`;
-    // cloned.style.maxWidth = `500px`;
-    // cloned.style.maxHeight = `500px`;
-    // cloned.style.overflow = `hidden`;
-    // cloned.style.zIndex = `99`;
-
+    }
   };
 
   var findNearestTarget = function findNearestTarget(clientX, clientY) {
@@ -150,22 +106,10 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     }
 
     onDrop(e);
+    setIsDragStart(false);
     setTargetDROP(undefined);
     var el = document.getElementById('clonedElement');
-    el === null || el === void 0 ? void 0 : el.remove(); // const el = document.getElementById('draggedDiv');
-    // if (el) {
-    //   el.style.position = '';
-    //   el.style.pointerEvents = '';
-    //   el.style.position = '';
-    //   el.style.top = ``;
-    //   el.style.left = ``;
-    //   el.style.width = ``;
-    //   el.style.height = ``;
-    //   el.style.maxWidth = ``;
-    //   el.style.maxHeight = ``;
-    //   el.style.overflow = ``;
-    //   el.removeAttribute('id');
-    // }
+    el === null || el === void 0 ? void 0 : el.remove();
   };
 
   return /*#__PURE__*/React.createElement("div", {

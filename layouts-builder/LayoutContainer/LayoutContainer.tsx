@@ -1,4 +1,5 @@
 import React, {
+  DragEvent,
   FC,
   useContext,
   useEffect,
@@ -12,6 +13,7 @@ import '../index.css';
 import { LayoutRowContainer } from './LayoutRowContainer';
 import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
 import { AppContext } from 'layouts-builder/Context/AppContext';
+import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -38,7 +40,35 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
+  const [position, setPosition] = useState<{
+    x: number;
+    y: number;
+  }>();
 
+  const debounced = useSimpleDebounce(position, 5);
+
+  useEffect(() => {
+    if (debounced) {
+      const winH = window.innerHeight;
+      const container = document.getElementById(
+        'container_layout_scroll',
+      );
+      if (debounced.y < 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 500,
+          left: debounced.x,
+        });
+      }
+      if (debounced.y > winH - 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 500,
+          left: debounced.x,
+        });
+      }
+    }
+  }, [debounced]);
   useEffect(() => {
     if (layouts && layouts.length > 0) {
       setActualLayout(layouts);
@@ -78,6 +108,12 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     );
   }
 
+  const handleDragOverContainer = (e: DragEvent<HTMLDivElement>) => {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+  };
   return (
     <div
       className="rlb-main-container m-auto"
@@ -86,18 +122,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       <div
         className="min-h-[100px]"
         ref={containeRef}
-        // onDragOver={(e) => {
-        //   const cloned = document.getElementById(
-        //     'draggedDiv',
-        //   ) as HTMLDivElement;
-
-        //   if (cloned) {
-        //     cloned.style.pointerEvents = 'none';
-        //     cloned.style.position = 'fixed';
-        //     cloned.style.top = `${e.clientY}px`;
-        //     cloned.style.left = `${e.clientX}px`;
-        //   }
-        // }}
+        onDragOver={handleDragOverContainer}
         id="layout_container"
       >
         {renderableLayout.map((section, sectionIndex) => {

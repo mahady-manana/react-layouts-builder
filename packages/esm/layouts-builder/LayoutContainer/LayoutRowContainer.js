@@ -20,9 +20,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive;
-      _a.colResize;
-      var maxColumns = _a.maxColumns,
+      dragActive = _a.dragActive,
+      maxColumns = _a.maxColumns,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -74,7 +73,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
   var _m = useContext(AppContext),
       source = _m.source,
-      setSource = _m.setSource; // TARGET DROP STATE
+      setSource = _m.setSource,
+      setIsDragStart = _m.setIsDragStart; // TARGET DROP STATE
 
 
   var _o = useState(),
@@ -101,50 +101,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setTargetDROP(undefined);
-  }; // const handleDragStart = (
-  //   e: DragEvent<HTMLDivElement>,
-  //   sectionId: string,
-  //   columnId: string,
-  //   rowId: any,
-  //   itemkey: any,
-  // ) => {
-  //   e.stopPropagation();
-  //   if (disabled) {
-  //     return;
-  //   }
-  //   const itemKeyType = typeof itemkey;
-  //   e.dataTransfer.setData('itemKey', itemkey);
-  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
-  //   e.dataTransfer.setData('sectionId', sectionId);
-  //   e.dataTransfer.setData('colmunId', columnId);
-  //   e.dataTransfer.setData('rowId', rowId);
-  //   const div = e.target;
-  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
-  //   const timer = setTimeout(() => {
-  //     setDragActive(true);
-  //   }, 500);
-  //   clearTimeout(timer);
-  // };
-  //   // Drop item to create new column or setion or add item to column
+  }; //   // Drop item to create new column or setion or add item to column
 
 
   var handleDropItem = function handleDropItem(e, layoutTarget) {
-    // const sourceItemKey = e.dataTransfer.getData('itemKey');
-    // const isSection = e.dataTransfer.getData('isSection');
-    // const sourceSectionId = e.dataTransfer.getData('sectionId');
-    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
-    // const sourceRowId = e.dataTransfer.getData('rowId');
-    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
-    // const source: SourceType = {
-    //   columnId: sourceColumnKey,
-    //   itemKey:
-    //     itemKeyType === 'number'
-    //       ? parseFloat(sourceItemKey)
-    //       : sourceItemKey,
-    //   sectionId: sourceSectionId,
-    //   isSection: !!isSection,
-    //   rowId: sourceRowId,
-    // };
+    setIsDragStart(false);
     if (!source) return;
 
     if (layoutTarget !== ILayoutTargetEnum.ROW && !destination.itemKey) {

@@ -1,3 +1,4 @@
+import { AppContext } from 'layouts-builder/Context/AppContext';
 import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import { TargetPlaceEnum } from 'layouts-builder/interface/internalType';
 import React, {
@@ -9,6 +10,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useEffect,
+  useContext,
 } from 'react';
 
 interface DraggableProps {
@@ -38,37 +40,8 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   const activeDropRef = useRef<HTMLDivElement>(null);
   const [initY, setInitY] = useState<number>(0);
   const [checkAnomalie, setCheckAnomalie] = useState(500);
-  const [position, setPosition] = useState<{
-    x: number;
-    y: number;
-  }>();
+  const {setIsDragStart} = useContext(AppContext)
 
-  const debounced = useSimpleDebounce(position, 100);
-
-  useEffect(() => {
-    if (debounced) {
-      const winH = window.innerHeight;
-      const container = document.getElementById(
-        'container_layout_scroll',
-      );
-      if (debounced.y < 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y - 200,
-          left: debounced.x,
-        });
-      }
-      if (debounced.y > winH - 150 && container) {
-        // activeDropRef.current?.scrollIntoView({ behavior: 'smooth' });
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y + 200,
-          left: debounced.x,
-        });
-      }
-    }
-  }, [debounced]);
 
   useEffect(() => {
     if (checkAnomalie > 10) {
@@ -88,10 +61,6 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       return;
     }
 
-    setPosition({
-      x: e.clientX,
-      y: e.clientY,
-    });
     if (!initY) {
       setInitY(e.clientY);
     }
@@ -104,17 +73,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver(nearest);
       setTargetDROP(undefined);
     }
-    // const cloned = document.getElementById(
-    //   'draggedDiv',
-    // ) as HTMLDivElement;
-    // cloned.style.pointerEvents = 'none';
-    // cloned.style.position = 'fixed';
-    // cloned.style.top = `${e.clientY}px`;
-    // cloned.style.left = `${e.clientX}px`;
-    // cloned.style.maxWidth = `500px`;
-    // cloned.style.maxHeight = `500px`;
-    // cloned.style.overflow = `hidden`;
-    // cloned.style.zIndex = `99`;
+   
   };
 
   const findNearestTarget = (
@@ -156,23 +115,10 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       return;
     }
     onDrop(e);
+    setIsDragStart(false)
     setTargetDROP(undefined);
     const el = document.getElementById('clonedElement');
     el?.remove();
-    // const el = document.getElementById('draggedDiv');
-    // if (el) {
-    //   el.style.position = '';
-    //   el.style.pointerEvents = '';
-    //   el.style.position = '';
-    //   el.style.top = ``;
-    //   el.style.left = ``;
-    //   el.style.width = ``;
-    //   el.style.height = ``;
-    //   el.style.maxWidth = ``;
-    //   el.style.maxHeight = ``;
-    //   el.style.overflow = ``;
-    //   el.removeAttribute('id');
-    // }
   };
   return (
     <div

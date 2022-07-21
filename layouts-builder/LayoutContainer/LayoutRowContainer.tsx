@@ -69,7 +69,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   isLastSection,
   needRowTarget,
   dragActive,
-  colResize,
   maxColumns,
   setDragActive,
   imageSizeFnLoader,
@@ -93,7 +92,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [waitBeforeUpdate, setWaitBeforeUpdate] =
     useState<number>(500);
 
-  const { source, setSource } = useContext(AppContext);
+  const { source, setSource, setIsDragStart } =
+    useContext(AppContext);
   // TARGET DROP STATE
   const [targetDROP, setTargetDROP] = useState<TargetPlaceEnum>();
 
@@ -117,57 +117,12 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setTargetDROP(undefined);
   };
 
-  // const handleDragStart = (
-  //   e: DragEvent<HTMLDivElement>,
-  //   sectionId: string,
-  //   columnId: string,
-  //   rowId: any,
-  //   itemkey: any,
-  // ) => {
-  //   e.stopPropagation();
-  //   if (disabled) {
-  //     return;
-  //   }
-  //   const itemKeyType = typeof itemkey;
-  //   e.dataTransfer.setData('itemKey', itemkey);
-  //   e.dataTransfer.setData('itemKeyType', itemKeyType);
-  //   e.dataTransfer.setData('sectionId', sectionId);
-  //   e.dataTransfer.setData('colmunId', columnId);
-  //   e.dataTransfer.setData('rowId', rowId);
-
-  //   const div = e.target;
-
-  //   e.dataTransfer.setDragImage(div as any, 5000, 5000);
-
-  //   const timer = setTimeout(() => {
-  //     setDragActive(true);
-  //   }, 500);
-  //   clearTimeout(timer);
-  // };
-
   //   // Drop item to create new column or setion or add item to column
   const handleDropItem = (
     e: DragEvent<HTMLDivElement>,
     layoutTarget: ILayoutTargetEnum,
   ) => {
-    // const sourceItemKey = e.dataTransfer.getData('itemKey');
-    // const isSection = e.dataTransfer.getData('isSection');
-    // const sourceSectionId = e.dataTransfer.getData('sectionId');
-    // const sourceColumnKey = e.dataTransfer.getData('colmunId');
-    // const sourceRowId = e.dataTransfer.getData('rowId');
-    // const itemKeyType = e.dataTransfer.getData('itemKeyType');
-
-    // const source: SourceType = {
-    //   columnId: sourceColumnKey,
-    //   itemKey:
-    //     itemKeyType === 'number'
-    //       ? parseFloat(sourceItemKey)
-    //       : sourceItemKey,
-    //   sectionId: sourceSectionId,
-    //   isSection: !!isSection,
-    //   rowId: sourceRowId,
-    // };
-
+    setIsDragStart(false);
     if (!source) return;
 
     if (

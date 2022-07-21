@@ -3,6 +3,7 @@ import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 import { AppContext } from '../Context/AppContext.js';
+import useSimpleDebounce from '../hooks/useDebounce.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -39,6 +40,33 @@ var LayoutContainer = function LayoutContainer(_a) {
       renderableLayout = _f[0],
       setRenderableLayout = _f[1];
 
+  var _g = useState(),
+      position = _g[0],
+      setPosition = _g[1];
+
+  var debounced = useSimpleDebounce(position, 5);
+  useEffect(function () {
+    if (debounced) {
+      var winH = window.innerHeight;
+      var container = document.getElementById('container_layout_scroll');
+
+      if (debounced.y < 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y - 500,
+          left: debounced.x
+        });
+      }
+
+      if (debounced.y > winH - 150 && container) {
+        container.scroll({
+          behavior: 'smooth',
+          top: debounced.y + 500,
+          left: debounced.x
+        });
+      }
+    }
+  }, [debounced]);
   useEffect(function () {
     if (layouts && layouts.length > 0) {
       setActualLayout(layouts);
@@ -70,6 +98,13 @@ var LayoutContainer = function LayoutContainer(_a) {
     }));
   }
 
+  var handleDragOverContainer = function handleDragOverContainer(e) {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY
+    });
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
@@ -78,17 +113,7 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, /*#__PURE__*/React.createElement("div", {
     className: "min-h-[100px]",
     ref: containeRef,
-    // onDragOver={(e) => {
-    //   const cloned = document.getElementById(
-    //     'draggedDiv',
-    //   ) as HTMLDivElement;
-    //   if (cloned) {
-    //     cloned.style.pointerEvents = 'none';
-    //     cloned.style.position = 'fixed';
-    //     cloned.style.top = `${e.clientY}px`;
-    //     cloned.style.left = `${e.clientX}px`;
-    //   }
-    // }}
+    onDragOver: handleDragOverContainer,
     id: "layout_container"
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
