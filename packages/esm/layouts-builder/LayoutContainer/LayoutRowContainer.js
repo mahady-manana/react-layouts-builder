@@ -322,7 +322,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onDrop: function onDrop(e) {
             var _a;
 
-            handleDropItem(e, ILayoutTargetEnum.ITEM, columns.length === 1 ? 'SINGLE' : 'MULTI');
+            handleDropItem(e, ILayoutTargetEnum.ITEM, columns.length === 1 && column.items.length === 1 ? 'SINGLE' : 'MULTI');
             (_a = document.getElementById('clonedGhost')) === null || _a === void 0 ? void 0 : _a.remove();
           },
           onDragLeave: resetDrag,

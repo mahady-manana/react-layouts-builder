@@ -161,7 +161,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       destination.targetPlace !== TargetPlaceEnum.RIGHT
         ? ILayoutTargetEnum.ROW
         : layoutTarget;
-        
+
     const newLayout = reorderLayout(
       layouts,
       source,
@@ -386,7 +386,10 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         handleDropItem(
                           e,
                           ILayoutTargetEnum.ITEM,
-                          columns.length === 1 ? 'SINGLE' : 'MULTI',
+                          columns.length === 1 &&
+                            column.items.length === 1
+                            ? 'SINGLE'
+                            : 'MULTI',
                         );
                         document
                           .getElementById('clonedGhost')
