@@ -40,6 +40,7 @@ export interface ILayoutSection {
   backgroundImage?: string;
   container?: boolean;
   styles?: CSSProperties;
+  defaultWidth?: number | string
 }
 
 export interface ILayoutLabels {

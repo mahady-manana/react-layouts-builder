@@ -20,7 +20,11 @@ export const addToNewSection = (
 ) => {
   const newLayouts = layouts.reduce((section, next) => {
     if (next.id === dest.sectionId) {
-      const newSection = createNewSection([source.itemKey], false);
+      const newSection = createNewSection(
+        [source.itemKey],
+        false,
+        layouts[0]?.defaultWidth,
+      );
       if (place === TargetPlaceEnum.ROW_TOP) {
         return [...section, newSection, next];
       }

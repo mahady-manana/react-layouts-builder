@@ -5,7 +5,7 @@ import { createNewRow } from './createNewRow';
 export const createNewSection = (
   itemKey?: any[],
   isContainer?: boolean,
-  defaultWidth?: number,
+  defaultWidth?: number | string,
 ): ILayoutSection => {
   const row = createNewRow(itemKey);
   return {
