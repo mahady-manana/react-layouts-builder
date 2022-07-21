@@ -19,18 +19,29 @@ export const createRenderableLayout = (
       contentWidth: layout.contentWidth,
       width: layout.width,
       container: layout.container,
+      styles: layout.styles,
       rows: layout.rows.map(
-        ({ columns, id, order, width, className, isContainer }) => ({
+        ({
+          columns,
           id,
           order,
           width,
           className,
+          isContainer,
+          styles,
+        }) => ({
+          id,
+          order,
+          width,
+          styles,
+          className,
           isContainer: !!isContainer,
           columns: columns.map(
-            ({ childIds, id, order, width, className }) => ({
+            ({ childIds, id, order, width, className, styles }) => ({
               id,
               className,
               width,
+              styles,
               order,
               items: childIds.map((itemKey) => {
                 if (
@@ -40,7 +51,11 @@ export const createRenderableLayout = (
                   return {
                     id: 'EMPTY_SECTION',
                   };
-                return data.find((dt) => dt[key] === itemKey || dt[key]?.toString() === itemKey.toString());
+                return data.find(
+                  (dt) =>
+                    dt[key] === itemKey ||
+                    dt[key]?.toString() === itemKey.toString(),
+                );
               }),
             }),
           ),

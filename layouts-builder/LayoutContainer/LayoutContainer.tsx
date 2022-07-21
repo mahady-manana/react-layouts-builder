@@ -7,13 +7,19 @@ import React, {
   useState,
 } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout';
-import { ILayoutContainer, ILayoutSection } from '../interface';
+import {
+  ContainerSource,
+  ILayoutContainer,
+  ILayoutSection,
+} from '../interface';
 import { IRenderableLayout } from '../interface/renderableInterface';
 import '../index.css';
 import { LayoutRowContainer } from './LayoutRowContainer';
 import { needRowTarget } from 'layouts-builder/helpers/shouldShowRowTarget';
 import { AppContext } from 'layouts-builder/Context/AppContext';
 import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
+import classNames from 'classnames';
+import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -29,12 +35,15 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   imageSizeFnLoader,
   imageCheckerFn,
   onImageResizeFinished,
+  onClickColumn,
+  onClickSection,
 }) => {
   const containeRef = useRef<HTMLDivElement>(null);
   const [runChange, setRunChange] = useState<boolean>(false);
   const [actualLayout, setActualLayout] = useState<ILayoutSection[]>(
     [],
   );
+  const { isSectionContainer } = useContainerIdentifier();
   const [dragActive, setDragActive] = useState(false);
   const { setCurrentLayouts } = useContext(AppContext);
   const [renderableLayout, setRenderableLayout] = useState<
@@ -114,6 +123,17 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       y: e.clientY,
     });
   };
+  const handleClickSection = (section: IRenderableLayout) => {
+    if (onClickSection) {
+      onClickSection({ sectionId: section.id });
+    }
+  };
+  const handleClickColumn = (source: ContainerSource) => {
+   
+    if (onClickColumn) {
+      onClickColumn(source);
+    }
+  };
   return (
     <div
       className="rlb-main-container m-auto"
@@ -130,55 +150,68 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
             <div
               key={section.id}
               className="rlb-section rlb-section-container"
-              style={{
-                background: section.backgroundImage
-                  ? `url(${section.backgroundImage})`
-                  : section.backgroundColor,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-              }}
             >
               <div
                 className="rlb-section-content"
-                style={{ width: section.width, margin: 'auto' }}
+                style={{
+                  width: section.width,
+                  margin: 'auto',
+                  ...(section.styles || {}),
+                }}
               >
-                {section.rows.map((row, rowIndex) => {
-                  return (
-                    <LayoutRowContainer
-                      key={row.id}
-                      stableKey={stableKey}
-                      dragActive={dragActive}
-                      layouts={actualLayout}
-                      columns={row.columns}
-                      sectionId={section.id}
-                      rowId={row.id}
-                      disabled={disableChange}
-                      maxColumns={maxColumns}
-                      isLastSection={
-                        renderableLayout.length === sectionIndex + 1
-                      }
-                      isFirstSection={sectionIndex === 0}
-                      needRowTarget={needRowTarget(
-                        renderableLayout,
-                        row,
-                        {
-                          rows: section.rows,
-                          sectionIndex,
-                          rowIndex,
-                        },
-                      )}
-                      colResize={colResize}
-                      renderComponent={renderComponent}
-                      setActualLayout={setActualLayout}
-                      onLayoutChange={onLayoutChange}
-                      imageCheckerFn={imageCheckerFn}
-                      imageSizeFnLoader={imageSizeFnLoader}
-                      onImageResizeFinished={onImageResizeFinished}
-                      setDragActive={setDragActive}
-                    />
-                  );
-                })}
+                <div
+                  className={classNames(
+                    isSectionContainer(section)
+                      ? 'p-2'
+                      : '',
+                    section.className,
+                  )}
+                  onClick={(e) => handleClickSection(section)}
+                >
+                  {section.rows.map((row, rowIndex) => {
+                    return (
+                      <LayoutRowContainer
+                        key={row.id}
+                        stableKey={stableKey}
+                        dragActive={dragActive}
+                        layouts={actualLayout}
+                        columns={row.columns}
+                        sectionId={section.id}
+                        rowId={row.id}
+                        disabled={disableChange}
+                        maxColumns={maxColumns}
+                        isLastSection={
+                          renderableLayout.length === sectionIndex + 1
+                        }
+                        isFirstSection={sectionIndex === 0}
+                        needRowTarget={needRowTarget(
+                          renderableLayout,
+                          row,
+                          {
+                            rows: section.rows,
+                            sectionIndex,
+                            rowIndex,
+                          },
+                        )}
+                        colResize={colResize}
+                        renderComponent={renderComponent}
+                        setActualLayout={setActualLayout}
+                        onLayoutChange={onLayoutChange}
+                        imageCheckerFn={imageCheckerFn}
+                        imageSizeFnLoader={imageSizeFnLoader}
+                        onImageResizeFinished={onImageResizeFinished}
+                        setDragActive={setDragActive}
+                        onClickCol={(src) =>
+                          handleClickColumn({
+                            ...src,
+                            rowId: row.id,
+                            sectionId: section.id,
+                          })
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );

@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, MouseEvent, useRef } from 'react';
 
 interface ResizableContainerProps {
   resizable?: boolean;
@@ -9,7 +9,7 @@ interface ResizableContainerProps {
   isLast?: boolean;
   isNextTo?: boolean;
   resizing?: boolean;
-  children?: any
+  children?: any;
 }
 const ResizableContainerComponent: FC<ResizableContainerProps> = ({
   type,
@@ -58,5 +58,6 @@ const ResizableContainerComponent: FC<ResizableContainerProps> = ({
   );
 };
 
-
-export const ResizableContainer = React.memo(ResizableContainerComponent)
+export const ResizableContainer = React.memo(
+  ResizableContainerComponent,
+);

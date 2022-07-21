@@ -8,61 +8,6 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
-var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
-  var dataLayout = layouts.map(function (layout) {
-    var renderedLayout = {
-      id: layout.id,
-      order: layout.order,
-      className: layout.className,
-      backgroundColor: layout.backgroundColor,
-      backgroundImage: layout.backgroundImage,
-      contentWidth: layout.contentWidth,
-      width: layout.width,
-      container: layout.container,
-      rows: layout.rows.map(function (_a) {
-        var columns = _a.columns,
-            id = _a.id,
-            order = _a.order,
-            width = _a.width,
-            className = _a.className,
-            isContainer = _a.isContainer;
-        return {
-          id: id,
-          order: order,
-          width: width,
-          className: className,
-          isContainer: !!isContainer,
-          columns: columns.map(function (_a) {
-            var childIds = _a.childIds,
-                id = _a.id,
-                order = _a.order,
-                width = _a.width,
-                className = _a.className;
-            return {
-              id: id,
-              className: className,
-              width: width,
-              order: order,
-              items: childIds.map(function (itemKey) {
-                if (itemKey === 'EMPTY_SECTION' && childIds.length <= 1) return {
-                  id: 'EMPTY_SECTION'
-                };
-                return data.find(function (dt) {
-                  var _a;
-
-                  return dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
-                });
-              })
-            };
-          })
-        };
-      })
-    };
-    return renderedLayout;
-  });
-  return dataLayout;
-};
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -98,6 +43,66 @@ function __spreadArray(to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 }
+
+var createRenderableLayout = function createRenderableLayout(data, layouts, key) {
+  var dataLayout = layouts.map(function (layout) {
+    var renderedLayout = {
+      id: layout.id,
+      order: layout.order,
+      className: layout.className,
+      backgroundColor: layout.backgroundColor,
+      backgroundImage: layout.backgroundImage,
+      contentWidth: layout.contentWidth,
+      width: layout.width,
+      container: layout.container,
+      styles: layout.styles,
+      rows: layout.rows.map(function (_a) {
+        var columns = _a.columns,
+            id = _a.id,
+            order = _a.order,
+            width = _a.width,
+            className = _a.className,
+            isContainer = _a.isContainer,
+            styles = _a.styles;
+        return {
+          id: id,
+          order: order,
+          width: width,
+          styles: styles,
+          className: className,
+          isContainer: !!isContainer,
+          columns: columns.map(function (_a) {
+            var childIds = _a.childIds,
+                id = _a.id,
+                order = _a.order,
+                width = _a.width,
+                className = _a.className,
+                styles = _a.styles;
+            return {
+              id: id,
+              className: className,
+              width: width,
+              styles: styles,
+              order: order,
+              items: childIds.map(function (itemKey) {
+                if (itemKey === 'EMPTY_SECTION' && childIds.length <= 1) return {
+                  id: 'EMPTY_SECTION'
+                };
+                return data.find(function (dt) {
+                  var _a;
+
+                  return dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
+                });
+              })
+            };
+          })
+        };
+      })
+    };
+    return renderedLayout;
+  });
+  return dataLayout;
+};
 
 function createCommonjsModule(fn) {
   var module = { exports: {} };
@@ -891,38 +896,32 @@ var LayoutProvider = function LayoutProvider(_a) {
   var children = _a.children;
 
   var _b = React.useState(),
-      sourceId = _b[0],
-      setSourceId = _b[1];
+      source = _b[0],
+      setSource = _b[1];
 
-  var _c = React.useState(),
-      source = _c[0],
-      setSource = _c[1];
+  var _c = React.useState([]),
+      currentLayouts = _c[0],
+      setCurrentLayouts = _c[1];
 
-  var _d = React.useState([]),
-      currentLayouts = _d[0],
-      setCurrentLayouts = _d[1];
+  var _d = React.useState(),
+      destination = _d[0],
+      setDestination = _d[1];
 
-  var _e = React.useState(),
-      destination = _e[0],
-      setDestination = _e[1];
+  var _e = React.useState(false),
+      isDragStart = _e[0],
+      setIsDragStart = _e[1];
 
-  var _f = React.useState(false),
-      isDragStart = _f[0],
-      setIsDragStart = _f[1];
-
-  var _g = React.useState({
+  var _f = React.useState({
     init: [],
     current: []
   }),
-      point = _g[0],
-      setPoint = _g[1];
+      point = _f[0],
+      setPoint = _f[1];
 
-  var onDragStart = function onDragStart(id) {
-    setSourceId(id);
+  var onDragStart = function onDragStart(id) {// setSourceId(id);
   };
 
-  var onDragEnd = function onDragEnd() {
-    setSourceId(undefined);
+  var onDragEnd = function onDragEnd() {// setSourceId(undefined);
   };
 
   var context = React.useMemo(function () {
@@ -931,10 +930,8 @@ var LayoutProvider = function LayoutProvider(_a) {
       destination: destination,
       point: point,
       isDragStart: isDragStart,
-      sourceId: sourceId,
       currentLayouts: currentLayouts,
       setCurrentLayouts: setCurrentLayouts,
-      setSourceId: setSourceId,
       setIsDragStart: setIsDragStart,
       setPoint: setPoint,
       setSource: setSource,
@@ -942,7 +939,7 @@ var LayoutProvider = function LayoutProvider(_a) {
       onDragStart: onDragStart,
       onDragEnd: onDragEnd
     };
-  }, [source, destination, point, isDragStart, sourceId, currentLayouts]);
+  }, [source, destination, point, isDragStart, currentLayouts]);
   return /*#__PURE__*/React__default["default"].createElement(AppContext.Provider, {
     value: context
   }, children);
@@ -1079,6 +1076,27 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }) : null);
 };
 
+var useContainerIdentifier = function useContainerIdentifier() {
+  var isSectionContainer = function isSectionContainer(section) {
+    if (section.container) {
+      return true;
+    }
+
+    return section.rows.every(function (row) {
+      return row.columns.length > 1;
+    });
+  };
+
+  var isColumnContainer = function isColumnContainer(cols) {
+    return cols.items.length > 1;
+  };
+
+  return {
+    isSectionContainer: isSectionContainer,
+    isColumnContainer: isColumnContainer
+  };
+};
+
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
@@ -1097,7 +1115,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       renderComponent = _a.renderComponent,
       imageCheckerFn = _a.imageCheckerFn,
       onLayoutChange = _a.onLayoutChange,
-      _onImageResizeFinished = _a.onImageResizeFinished;
+      _onImageResizeFinished = _a.onImageResizeFinished,
+      onClickCol = _a.onClickCol;
   var containerRef = React.useRef(null);
 
   var _b = React.useState(false),
@@ -1173,7 +1192,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   }; //   // Drop item to create new column or setion or add item to column
 
 
-  var handleDropItem = function handleDropItem(e, layoutTarget) {
+  var handleDropItem = function handleDropItem(e, layoutTarget, colNb) {
     setIsDragStart(false);
     if (!source) return;
 
@@ -1183,7 +1202,23 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     }
 
     setDragActive(false);
-    var newLayout = reorderLayout(layouts, source, destination, destination.targetPlace, layoutTarget);
+
+    var destinationPlace = function destinationPlace() {
+      console.log(colNb, destination);
+
+      if (colNb === 'SINGLE' && destination.targetPlace !== exports.TargetPlaceEnum.LEFT && destination.targetPlace !== exports.TargetPlaceEnum.RIGHT) {
+        if (destination.targetPlace === exports.TargetPlaceEnum.BOTTOM) {
+          return exports.TargetPlaceEnum.ROW_BOTTOM;
+        }
+
+        return exports.TargetPlaceEnum.ROW_TOP;
+      }
+
+      return destination.targetPlace;
+    };
+
+    var targetedLayout = colNb === 'SINGLE' && destination.targetPlace !== exports.TargetPlaceEnum.LEFT && destination.targetPlace !== exports.TargetPlaceEnum.RIGHT ? exports.ILayoutTargetEnum.ROW : layoutTarget;
+    var newLayout = reorderLayout(layouts, source, destination, destinationPlace(), targetedLayout);
 
     if (newLayout) {
       setActualLayout(newLayout);
@@ -1316,6 +1351,16 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
+
+  var handleclickCol = function handleclickCol(e, colId) {
+    e.preventDefault();
+    e.stopPropagation();
+    onClickCol({
+      sectionId: '',
+      colId: colId
+    });
+  };
+
   var columnsComonent = React__default["default"].useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
@@ -1333,7 +1378,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         },
         type: "column"
       }, /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "rlb-flex rbl-relative"
+        className: "rlb-flex rbl-relative rbl-col-container",
+        style: column.styles,
+        onClick: function onClick(e) {
+          return handleclickCol(e, column.id);
+        }
       }, !disabled && !columnCountReach ? /*#__PURE__*/React__default["default"].createElement("div", {
         className: "rbl-side-drop-indicator left",
         style: styleSide(column.id, exports.TargetPlaceEnum.LEFT)
@@ -1360,7 +1409,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onDrop: function onDrop(e) {
             var _a;
 
-            handleDropItem(e, exports.ILayoutTargetEnum.ITEM);
+            handleDropItem(e, exports.ILayoutTargetEnum.ITEM, columns.length === 1 ? 'SINGLE' : 'MULTI');
             (_a = document.getElementById('clonedGhost')) === null || _a === void 0 ? void 0 : _a.remove();
           },
           onDragLeave: resetDrag,
@@ -1504,7 +1553,9 @@ var LayoutContainer = function LayoutContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       imageCheckerFn = _a.imageCheckerFn,
-      onImageResizeFinished = _a.onImageResizeFinished;
+      onImageResizeFinished = _a.onImageResizeFinished,
+      onClickColumn = _a.onClickColumn,
+      onClickSection = _a.onClickSection;
   var containeRef = React.useRef(null);
 
   var _c = React.useState(false),
@@ -1514,6 +1565,8 @@ var LayoutContainer = function LayoutContainer(_a) {
   var _d = React.useState([]),
       actualLayout = _d[0],
       setActualLayout = _d[1];
+
+  var isSectionContainer = useContainerIdentifier().isSectionContainer;
 
   var _e = React.useState(false),
       dragActive = _e[0],
@@ -1590,6 +1643,20 @@ var LayoutContainer = function LayoutContainer(_a) {
     });
   };
 
+  var handleClickSection = function handleClickSection(section) {
+    if (onClickSection) {
+      onClickSection({
+        sectionId: section.id
+      });
+    }
+  };
+
+  var handleClickColumn = function handleClickColumn(source) {
+    if (onClickColumn) {
+      onClickColumn(source);
+    }
+  };
+
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
@@ -1603,18 +1670,17 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,
-      className: "rlb-section rlb-section-container",
-      style: {
-        background: section.backgroundImage ? "url(".concat(section.backgroundImage, ")") : section.backgroundColor,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover'
-      }
+      className: "rlb-section rlb-section-container"
     }, /*#__PURE__*/React__default["default"].createElement("div", {
       className: "rlb-section-content",
-      style: {
+      style: __assign({
         width: section.width,
         margin: 'auto'
+      }, section.styles || {})
+    }, /*#__PURE__*/React__default["default"].createElement("div", {
+      className: classnames(isSectionContainer(section) ? 'p-2' : '', section.className),
+      onClick: function onClick(e) {
+        return handleClickSection(section);
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React__default["default"].createElement(LayoutRowContainer, {
@@ -1641,9 +1707,15 @@ var LayoutContainer = function LayoutContainer(_a) {
         imageCheckerFn: imageCheckerFn,
         imageSizeFnLoader: imageSizeFnLoader,
         onImageResizeFinished: onImageResizeFinished,
-        setDragActive: setDragActive
+        setDragActive: setDragActive,
+        onClickCol: function onClickCol(src) {
+          return handleClickColumn(__assign(__assign({}, src), {
+            rowId: row.id,
+            sectionId: section.id
+          }));
+        }
       });
-    })));
+    }))));
   })));
 };
 
@@ -1832,6 +1904,56 @@ var DraggableItem = function DraggableItem(_a) {
   }));
 };
 
+var useContainerStyles = function useContainerStyles() {
+  var changeSectionContainerStyles = function changeSectionContainerStyles(layouts, source, styles) {
+    return layouts.map(function (layout) {
+      if (layout.id === source.sectionId) {
+        return __assign(__assign({}, layout), {
+          styles: styles
+        });
+      }
+
+      return layout;
+    });
+  };
+
+  var changeColumnContainerStyles = function changeColumnContainerStyles(layouts, _a, styles) {
+    var sectionId = _a.sectionId,
+        rowId = _a.rowId,
+        colId = _a.colId;
+    return layouts.map(function (layout) {
+      if (layout.id === sectionId) {
+        return __assign(__assign({}, layout), {
+          rows: layout.rows.map(function (row) {
+            if (row.id === rowId) {
+              return __assign(__assign({}, row), {
+                columns: row.columns.map(function (col) {
+                  if (col.id === colId) {
+                    return __assign(__assign({}, col), {
+                      styles: styles
+                    });
+                  }
+
+                  return col;
+                })
+              });
+            }
+
+            return row;
+          })
+        });
+      }
+
+      return layout;
+    });
+  };
+
+  return {
+    changeSectionContainerStyles: changeSectionContainerStyles,
+    changeColumnContainerStyles: changeColumnContainerStyles
+  };
+};
+
 exports.AppContext = AppContext;
 exports.DraggableItem = DraggableItem;
 exports.LayoutContainer = LayoutContainer;
@@ -1842,3 +1964,4 @@ exports.changeSectionStyles = changeSectionStyles;
 exports.createLayout = createLayout;
 exports.createNewSection = createNewSection;
 exports.removeItemFromLayout = removeItemFromSource;
+exports.useContainerStyles = useContainerStyles;

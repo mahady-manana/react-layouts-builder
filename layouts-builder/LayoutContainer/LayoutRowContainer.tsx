@@ -13,7 +13,7 @@ import React, {
   useState,
 } from 'react';
 import { DraggableItem } from '../components';
-import { ILayoutSection } from '../interface';
+import { ContainerSource, ILayoutSection } from '../interface';
 import {
   DestinationType,
   TargetPlaceEnum,
@@ -29,6 +29,7 @@ import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import classNames from 'classnames';
 import { LayoutDropContainer } from './LayoutDropContainer';
 import { AppContext } from 'layouts-builder/Context/AppContext';
+import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -56,6 +57,7 @@ interface LayoutRowContainerProps {
     items: any,
     sizes: { width?: number; height?: number },
   ) => void;
+  onClickCol: (source: ContainerSource) => void;
 }
 
 export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
@@ -77,6 +79,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   imageCheckerFn,
   onLayoutChange,
   onImageResizeFinished,
+  onClickCol,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [columnCountReach, setColumnCountReach] =
@@ -92,6 +95,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [waitBeforeUpdate, setWaitBeforeUpdate] =
     useState<number>(500);
 
+  const { isColumnContainer } = useContainerIdentifier();
   const { source, setSource, setIsDragStart } =
     useContext(AppContext);
   // TARGET DROP STATE
@@ -121,6 +125,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const handleDropItem = (
     e: DragEvent<HTMLDivElement>,
     layoutTarget: ILayoutTargetEnum,
+    colNb?: 'SINGLE' | 'MULTI',
   ) => {
     setIsDragStart(false);
     if (!source) return;
@@ -134,12 +139,35 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     }
 
     setDragActive(false);
+
+    const destinationPlace = () => {
+      console.log(colNb, destination);
+
+      if (
+        colNb === 'SINGLE' &&
+        destination.targetPlace !== TargetPlaceEnum.LEFT &&
+        destination.targetPlace !== TargetPlaceEnum.RIGHT
+      ) {
+        if (destination.targetPlace === TargetPlaceEnum.BOTTOM) {
+          return TargetPlaceEnum.ROW_BOTTOM;
+        }
+        return TargetPlaceEnum.ROW_TOP;
+      }
+      return destination.targetPlace;
+    };
+    const targetedLayout =
+      colNb === 'SINGLE' &&
+      destination.targetPlace !== TargetPlaceEnum.LEFT &&
+      destination.targetPlace !== TargetPlaceEnum.RIGHT
+        ? ILayoutTargetEnum.ROW
+        : layoutTarget;
+        
     const newLayout = reorderLayout(
       layouts,
       source,
       destination,
-      destination.targetPlace,
-      layoutTarget,
+      destinationPlace(),
+      targetedLayout,
     );
 
     if (newLayout) {
@@ -287,7 +315,13 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const needTop = isFirstSection
     ? needRowTarget?.top
     : needRowTarget?.top && columns.length > 1;
-
+  const handleclickCol = (e: MouseEvent, colId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClickCol({ sectionId: '', colId });
+  };
+  const isSingleColTarget = (isSingle: boolean) =>
+    isSingle ? ILayoutTargetEnum.ROW : ILayoutTargetEnum.ITEM;
   const columnsComonent = React.useMemo(
     () =>
       columns.map((column, index) => {
@@ -308,7 +342,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
             }}
             type="column"
           >
-            <div className="rlb-flex rbl-relative">
+            <div
+              className="rlb-flex rbl-relative rbl-col-container"
+              style={column.styles}
+              onClick={(e) => handleclickCol(e, column.id)}
+            >
               {!disabled && !columnCountReach ? (
                 <div
                   className="rbl-side-drop-indicator left"
@@ -345,7 +383,11 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         })
                       }
                       onDrop={(e) => {
-                        handleDropItem(e, ILayoutTargetEnum.ITEM);
+                        handleDropItem(
+                          e,
+                          ILayoutTargetEnum.ITEM,
+                          columns.length === 1 ? 'SINGLE' : 'MULTI',
+                        );
                         document
                           .getElementById('clonedGhost')
                           ?.remove();

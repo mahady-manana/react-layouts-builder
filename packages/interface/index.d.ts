@@ -1,5 +1,10 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { SourceType } from './internalType';
+export interface ContainerSource {
+    sectionId: string;
+    rowId?: string;
+    colId?: string;
+}
 export declare type ISectionStylesProps = {
     className?: string;
     width?: string | number;
@@ -11,6 +16,7 @@ export interface ILayoutColumn {
     order: number;
     childIds: (string | number)[];
     className?: string;
+    styles?: CSSProperties;
     width: number;
 }
 export interface ILayoutRow {
@@ -20,6 +26,7 @@ export interface ILayoutRow {
     columns: ILayoutColumn[];
     className?: string;
     isContainer?: boolean;
+    styles?: CSSProperties;
 }
 export interface ILayoutSection {
     id: any;
@@ -31,6 +38,7 @@ export interface ILayoutSection {
     backgroundColor?: string;
     backgroundImage?: string;
     container?: boolean;
+    styles?: CSSProperties;
 }
 export interface ILayoutLabels {
     sectionPlaceholder?: string;
@@ -60,7 +68,8 @@ export interface ILayoutContainer {
         width?: number;
         height?: number;
     } | undefined;
-    onClickSection?: (section: ILayoutSection) => void;
+    onClickSection?: (source: ContainerSource) => void;
+    onClickColumn?: (soruce: ContainerSource) => void;
     onFocusItem?: (section: SourceType) => void;
     imageCheckerFn?: (item: any) => boolean;
     onImageResizeFinished?: (items: any, sizes: {

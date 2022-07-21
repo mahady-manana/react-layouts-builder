@@ -9,17 +9,20 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
       contentWidth: layout.contentWidth,
       width: layout.width,
       container: layout.container,
+      styles: layout.styles,
       rows: layout.rows.map(function (_a) {
         var columns = _a.columns,
             id = _a.id,
             order = _a.order,
             width = _a.width,
             className = _a.className,
-            isContainer = _a.isContainer;
+            isContainer = _a.isContainer,
+            styles = _a.styles;
         return {
           id: id,
           order: order,
           width: width,
+          styles: styles,
           className: className,
           isContainer: !!isContainer,
           columns: columns.map(function (_a) {
@@ -27,11 +30,13 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
                 id = _a.id,
                 order = _a.order,
                 width = _a.width,
-                className = _a.className;
+                className = _a.className,
+                styles = _a.styles;
             return {
               id: id,
               className: className,
               width: width,
+              styles: styles,
               order: order,
               items: childIds.map(function (itemKey) {
                 if (itemKey === 'EMPTY_SECTION' && childIds.length <= 1) return {

@@ -2,7 +2,6 @@ import { ILayoutSection } from 'layouts-builder/interface';
 import { DestinationType, SourceType } from 'layouts-builder/interface/internalType';
 import React, { Dispatch, FC, SetStateAction } from 'react';
 interface IAppContext {
-    sourceId?: string;
     source?: SourceType;
     destination?: DestinationType;
     point: {
@@ -12,7 +11,6 @@ interface IAppContext {
     isDragStart: boolean;
     currentLayouts: ILayoutSection[];
     setCurrentLayouts: React.Dispatch<React.SetStateAction<ILayoutSection[]>>;
-    setSourceId: React.Dispatch<React.SetStateAction<string | undefined>>;
     setPoint: Dispatch<SetStateAction<{
         init: number[];
         current: number[];

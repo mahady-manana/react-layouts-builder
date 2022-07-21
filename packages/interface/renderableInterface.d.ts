@@ -2,6 +2,7 @@ import { CSSProperties } from 'react';
 export interface IRenderableLayout {
     id: any;
     className?: string;
+    styles?: CSSProperties;
     order: number;
     rows: IRenderableRow[];
     width?: string | number;
@@ -18,6 +19,7 @@ export interface IRenderableRow {
     columns: IRenderableColumn[];
     width: number | string;
     isContainer?: boolean;
+    styles?: CSSProperties;
 }
 export interface IRenderableColumn {
     id: any;

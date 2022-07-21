@@ -28,7 +28,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       renderComponent = _a.renderComponent,
       imageCheckerFn = _a.imageCheckerFn,
       onLayoutChange = _a.onLayoutChange,
-      _onImageResizeFinished = _a.onImageResizeFinished;
+      _onImageResizeFinished = _a.onImageResizeFinished,
+      onClickCol = _a.onClickCol;
   var containerRef = useRef(null);
 
   var _b = useState(false),
@@ -104,7 +105,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   }; //   // Drop item to create new column or setion or add item to column
 
 
-  var handleDropItem = function handleDropItem(e, layoutTarget) {
+  var handleDropItem = function handleDropItem(e, layoutTarget, colNb) {
     setIsDragStart(false);
     if (!source) return;
 
@@ -114,7 +115,23 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     }
 
     setDragActive(false);
-    var newLayout = reorderLayout(layouts, source, destination, destination.targetPlace, layoutTarget);
+
+    var destinationPlace = function destinationPlace() {
+      console.log(colNb, destination);
+
+      if (colNb === 'SINGLE' && destination.targetPlace !== TargetPlaceEnum.LEFT && destination.targetPlace !== TargetPlaceEnum.RIGHT) {
+        if (destination.targetPlace === TargetPlaceEnum.BOTTOM) {
+          return TargetPlaceEnum.ROW_BOTTOM;
+        }
+
+        return TargetPlaceEnum.ROW_TOP;
+      }
+
+      return destination.targetPlace;
+    };
+
+    var targetedLayout = colNb === 'SINGLE' && destination.targetPlace !== TargetPlaceEnum.LEFT && destination.targetPlace !== TargetPlaceEnum.RIGHT ? ILayoutTargetEnum.ROW : layoutTarget;
+    var newLayout = reorderLayout(layouts, source, destination, destinationPlace(), targetedLayout);
 
     if (newLayout) {
       setActualLayout(newLayout);
@@ -247,6 +264,16 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   };
 
   var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
+
+  var handleclickCol = function handleclickCol(e, colId) {
+    e.preventDefault();
+    e.stopPropagation();
+    onClickCol({
+      sectionId: '',
+      colId: colId
+    });
+  };
+
   var columnsComonent = React.useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React.createElement(ResizableContainer, {
@@ -264,7 +291,11 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         },
         type: "column"
       }, /*#__PURE__*/React.createElement("div", {
-        className: "rlb-flex rbl-relative"
+        className: "rlb-flex rbl-relative rbl-col-container",
+        style: column.styles,
+        onClick: function onClick(e) {
+          return handleclickCol(e, column.id);
+        }
       }, !disabled && !columnCountReach ? /*#__PURE__*/React.createElement("div", {
         className: "rbl-side-drop-indicator left",
         style: styleSide(column.id, TargetPlaceEnum.LEFT)
@@ -291,7 +322,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           onDrop: function onDrop(e) {
             var _a;
 
-            handleDropItem(e, ILayoutTargetEnum.ITEM);
+            handleDropItem(e, ILayoutTargetEnum.ITEM, columns.length === 1 ? 'SINGLE' : 'MULTI');
             (_a = document.getElementById('clonedGhost')) === null || _a === void 0 ? void 0 : _a.remove();
           },
           onDragLeave: resetDrag,

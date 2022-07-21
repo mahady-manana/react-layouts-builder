@@ -1,5 +1,5 @@
 import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
-import { ILayoutSection } from '../interface';
+import { ContainerSource, ILayoutSection } from '../interface';
 import { SourceType } from '../interface/internalType';
 import { IRenderableColumn } from '../interface/renderableInterface';
 import '../index.css';
@@ -33,6 +33,7 @@ interface LayoutRowContainerProps {
         width?: number;
         height?: number;
     }) => void;
+    onClickCol: (source: ContainerSource) => void;
 }
 export declare const LayoutRowContainer: FC<LayoutRowContainerProps>;
 export {};

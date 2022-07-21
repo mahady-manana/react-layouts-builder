@@ -42,32 +42,33 @@ export const TestComponent = React.memo((props: Props) => {
         return (
           <div
             key={props.data.id}
-            className="min-h-[50px] h-full p-2"
+            className="min-h-[50px] h-full relative"
             style={{
               border: props.focused ? "1px solid #000" : ""
             }}
-            onClick={() => props.onClick(props.data)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              props.onClick(props.data)}}
           >
             <div
               style={{
                 border: "1px solid #000",
                 width: 50,
-                height: 50
+                height: 50,
+                position: "absolute",
+                top: 0,
+                left: 0
               }}
               {...draggableProps}
             >
               ...
             </div>
             {props.data.img ? (
-              <img
-                src={props.data.img}
-                alt=""
-              />
+              <img src={props.data.img} alt="" />
             ) : (
               <p>Data : {props.data.text}</p>
             )}
-            <ComponentTestts data={props.data} />
-            <button onClick={() => props.onDelete(props.data.id)}>Delete</button>
           </div>
         )
       }}

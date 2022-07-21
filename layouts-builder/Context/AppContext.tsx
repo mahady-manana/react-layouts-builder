@@ -6,16 +6,13 @@ import {
 import React, {
   createContext,
   Dispatch,
-  DragEvent,
   FC,
   SetStateAction,
-  useCallback,
   useMemo,
   useState,
 } from 'react';
 
 interface IAppContext {
-  sourceId?: string;
   source?: SourceType;
   destination?: DestinationType;
   point: { init: number[]; current: number[] };
@@ -24,10 +21,6 @@ interface IAppContext {
   setCurrentLayouts: React.Dispatch<
     React.SetStateAction<ILayoutSection[]>
   >;
-  setSourceId: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
-
   setPoint: Dispatch<
     SetStateAction<{ init: number[]; current: number[] }>
   >;
@@ -44,7 +37,6 @@ export const AppContext = createContext<IAppContext>(
 );
 
 export const LayoutProvider: FC = ({ children }) => {
-  const [sourceId, setSourceId] = useState<string>();
   const [source, setSource] = useState<SourceType>();
   const [currentLayouts, setCurrentLayouts] = useState<
     ILayoutSection[]
@@ -59,10 +51,10 @@ export const LayoutProvider: FC = ({ children }) => {
     current: [],
   });
   const onDragStart = (id: string) => {
-    setSourceId(id);
+    // setSourceId(id);
   };
   const onDragEnd = () => {
-    setSourceId(undefined);
+    // setSourceId(undefined);
   };
   const context = useMemo<IAppContext>(
     () => ({
@@ -70,10 +62,8 @@ export const LayoutProvider: FC = ({ children }) => {
       destination,
       point,
       isDragStart,
-      sourceId,
       currentLayouts,
       setCurrentLayouts,
-      setSourceId,
       setIsDragStart,
       setPoint,
       setSource,
@@ -86,7 +76,6 @@ export const LayoutProvider: FC = ({ children }) => {
       destination,
       point,
       isDragStart,
-      sourceId,
       currentLayouts,
     ],
   );

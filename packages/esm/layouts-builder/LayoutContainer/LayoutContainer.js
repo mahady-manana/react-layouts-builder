@@ -1,9 +1,12 @@
+import { __assign } from '../../node_modules/tslib/tslib.es6.js';
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 import { AppContext } from '../Context/AppContext.js';
 import useSimpleDebounce from '../hooks/useDebounce.js';
+import classnames from '../../node_modules/classnames/index.js';
+import { useContainerIdentifier } from '../hooks/useContainerIdentifier.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -19,7 +22,9 @@ var LayoutContainer = function LayoutContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       imageCheckerFn = _a.imageCheckerFn,
-      onImageResizeFinished = _a.onImageResizeFinished;
+      onImageResizeFinished = _a.onImageResizeFinished,
+      onClickColumn = _a.onClickColumn,
+      onClickSection = _a.onClickSection;
   var containeRef = useRef(null);
 
   var _c = useState(false),
@@ -29,6 +34,8 @@ var LayoutContainer = function LayoutContainer(_a) {
   var _d = useState([]),
       actualLayout = _d[0],
       setActualLayout = _d[1];
+
+  var isSectionContainer = useContainerIdentifier().isSectionContainer;
 
   var _e = useState(false),
       dragActive = _e[0],
@@ -105,6 +112,20 @@ var LayoutContainer = function LayoutContainer(_a) {
     });
   };
 
+  var handleClickSection = function handleClickSection(section) {
+    if (onClickSection) {
+      onClickSection({
+        sectionId: section.id
+      });
+    }
+  };
+
+  var handleClickColumn = function handleClickColumn(source) {
+    if (onClickColumn) {
+      onClickColumn(source);
+    }
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
@@ -118,18 +139,17 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, renderableLayout.map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
       key: section.id,
-      className: "rlb-section rlb-section-container",
-      style: {
-        background: section.backgroundImage ? "url(".concat(section.backgroundImage, ")") : section.backgroundColor,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover'
-      }
+      className: "rlb-section rlb-section-container"
     }, /*#__PURE__*/React.createElement("div", {
       className: "rlb-section-content",
-      style: {
+      style: __assign({
         width: section.width,
         margin: 'auto'
+      }, section.styles || {})
+    }, /*#__PURE__*/React.createElement("div", {
+      className: classnames(isSectionContainer(section) ? 'p-2' : '', section.className),
+      onClick: function onClick(e) {
+        return handleClickSection(section);
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React.createElement(LayoutRowContainer, {
@@ -156,9 +176,15 @@ var LayoutContainer = function LayoutContainer(_a) {
         imageCheckerFn: imageCheckerFn,
         imageSizeFnLoader: imageSizeFnLoader,
         onImageResizeFinished: onImageResizeFinished,
-        setDragActive: setDragActive
+        setDragActive: setDragActive,
+        onClickCol: function onClickCol(src) {
+          return handleClickColumn(__assign(__assign({}, src), {
+            rowId: row.id,
+            sectionId: section.id
+          }));
+        }
       });
-    })));
+    }))));
   })));
 };
 
