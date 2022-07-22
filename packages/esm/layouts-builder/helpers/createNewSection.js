@@ -10,6 +10,7 @@ var createNewSection = function createNewSection(itemKey, isContainer, defaultWi
     backgroundColor: '',
     backgroundImage: '',
     width: defaultWidth || '100%',
+    defaultWidth: defaultWidth,
     rows: [row],
     container: isContainer
   };

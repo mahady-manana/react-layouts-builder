@@ -15,6 +15,7 @@ export const createNewSection = (
     backgroundColor: '',
     backgroundImage: '',
     width: defaultWidth || '100%',
+    defaultWidth: defaultWidth,
     rows: [row],
     container: isContainer,
   };
