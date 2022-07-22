@@ -476,7 +476,11 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
     style: {
       opacity: resizing ? 1 : undefined
     },
-    "data-resizable-type": type
+    "data-resizable-type": type,
+    onClick: function onClick(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
   }, /*#__PURE__*/React__default["default"].createElement("div", {
     className: resizable ? 'resize-hand' : 'rbl-no-action',
     onMouseDown: function onMouseDown(e) {
@@ -881,16 +885,16 @@ var changeColumnWidth = function changeColumnWidth(layouts, container, cols) {
 var findWidthPercentByPx = function findWidthPercentByPx(initWidthPx, initWidthPrc, currentWidth, multi) {
   var w = currentWidth * initWidthPrc / initWidthPx;
 
-  if (multi && w < 15) {
-    return 15;
+  if (multi && w < 5) {
+    return 5;
   }
 
-  if (multi && w > 85) {
-    return 85;
+  if (multi && w > 95) {
+    return 95;
   }
 
   if (w > 100) return 100;
-  if (w < 15) return 10;
+  if (w < 5) return 5;
   return w;
 };
 
@@ -1207,8 +1211,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setDragActive(false);
 
     var destinationPlace = function destinationPlace() {
-      console.log(colNb, destination);
-
       if (colNb === 'SINGLE' && destination.targetPlace !== exports.TargetPlaceEnum.LEFT && destination.targetPlace !== exports.TargetPlaceEnum.RIGHT) {
         if (destination.targetPlace === exports.TargetPlaceEnum.BOTTOM) {
           return exports.TargetPlaceEnum.ROW_BOTTOM;
@@ -1585,7 +1587,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       position = _g[0],
       setPosition = _g[1];
 
-  var debounced = useSimpleDebounce(position, 5);
+  var debounced = useSimpleDebounce(position, 200);
   React.useEffect(function () {
     if (debounced) {
       var winH = window.innerHeight;

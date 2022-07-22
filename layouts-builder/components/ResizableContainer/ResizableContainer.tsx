@@ -39,6 +39,10 @@ const ResizableContainerComponent: FC<ResizableContainerProps> = ({
           className="rlb-resize-handler"
           style={{ opacity: resizing ? 1 : undefined }}
           data-resizable-type={type}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
         >
           <div
             className={resizable ? 'resize-hand' : 'rbl-no-action'}

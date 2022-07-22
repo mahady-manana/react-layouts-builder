@@ -117,8 +117,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     setDragActive(false);
 
     var destinationPlace = function destinationPlace() {
-      console.log(colNb, destination);
-
       if (colNb === 'SINGLE' && destination.targetPlace !== TargetPlaceEnum.LEFT && destination.targetPlace !== TargetPlaceEnum.RIGHT) {
         if (destination.targetPlace === TargetPlaceEnum.BOTTOM) {
           return TargetPlaceEnum.ROW_BOTTOM;

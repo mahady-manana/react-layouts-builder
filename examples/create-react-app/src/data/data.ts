@@ -41,33 +41,33 @@ export const mockData = [
     group: "first",
     bg: "rgb(1 161 20)",
     img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg"
-  }
-  // {
-  //   id: 7,
-  //   text: "bloalbl 7",
-  //   group: "third",
-  //   bg: "#0005"
-  // },
-  // {
-  //   id: 8,
-  //   text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 8",
-  //   group: "first",
-  //   bg: "yellow"
-  // },
-  // {
-  //   id: 9,
-  //   text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 9",
-  //   group: "third",
-  //   bg: "#444"
-  // },
-  // {
-  //   id: 100,
-  //   text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1",
-  //   group: "first",
-  //   bg: "#4b00ff",
-  //   img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
-  //   size: 50
-  // },
+  },
+  {
+    id: 7,
+    text: "bloalbl 7",
+    group: "third",
+    bg: "#0005"
+  },
+  {
+    id: 8,
+    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 8",
+    group: "first",
+    bg: "yellow"
+  },
+  {
+    id: 9,
+    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 9",
+    group: "third",
+    bg: "#444"
+  },
+  {
+    id: 100,
+    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1",
+    group: "first",
+    bg: "#4b00ff",
+    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
+    size: 50
+  },
   // {
   //   id: 200,
   //   text: "bloalbl 2",

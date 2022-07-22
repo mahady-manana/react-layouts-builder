@@ -5,13 +5,13 @@ export const findWidthPercentByPx = (
   multi?: boolean,
 ) => {
   const w = (currentWidth * initWidthPrc) / initWidthPx;
-  if (multi && w < 15) {
-    return 15;
+  if (multi && w < 5) {
+    return 5;
   }
-  if (multi && w > 85) {
-    return 85;
+  if (multi && w > 95) {
+    return 95;
   }
   if (w > 100) return 100;
-  if (w < 15) return 10;
+  if (w < 5) return 5;
   return w;
 };

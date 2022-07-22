@@ -51,7 +51,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       position = _g[0],
       setPosition = _g[1];
 
-  var debounced = useSimpleDebounce(position, 5);
+  var debounced = useSimpleDebounce(position, 200);
   useEffect(function () {
     if (debounced) {
       var winH = window.innerHeight;

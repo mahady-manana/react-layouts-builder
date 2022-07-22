@@ -141,7 +141,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setDragActive(false);
 
     const destinationPlace = () => {
-      console.log(colNb, destination);
 
       if (
         colNb === 'SINGLE' &&

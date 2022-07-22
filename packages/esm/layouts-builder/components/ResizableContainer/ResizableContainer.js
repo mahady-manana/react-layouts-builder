@@ -23,7 +23,11 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
     style: {
       opacity: resizing ? 1 : undefined
     },
-    "data-resizable-type": type
+    "data-resizable-type": type,
+    onClick: function onClick(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: resizable ? 'resize-hand' : 'rbl-no-action',
     onMouseDown: function onMouseDown(e) {

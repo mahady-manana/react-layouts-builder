@@ -54,7 +54,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     y: number;
   }>();
 
-  const debounced = useSimpleDebounce(position, 5);
+  const debounced = useSimpleDebounce(position, 200);
 
   useEffect(() => {
     if (debounced) {
