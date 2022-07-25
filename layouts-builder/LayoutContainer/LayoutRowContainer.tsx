@@ -354,6 +354,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               ) : null}
               <div key={column.id} className={`rlb-col-inner`}>
                 {column.items.map((items, index) => {
+                  console.log(items);
+                  
                   if (!items) return null;
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)
@@ -408,24 +410,12 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         }
                         oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
-                        isCenter={items[stableKey]?.options?.center}
+                        isCenter={isImage && items?.options?.center}
                         onImageResizeFinished={(w) =>
                           onImageResizeFinished
                             ? onImageResizeFinished(items, w)
                             : undefined
                         }
-                        // onDragStart={(e, el) => {
-                        //   if (disabled) {
-                        //     return;
-                        //   }
-                        //   handleDragStart(
-                        //     e,
-                        //     sectionId,
-                        //     column.id,
-                        //     rowId,
-                        //     items[stableKey],
-                        //   );
-                        // }}
                       >
                         {items['id'] !== 'EMPTY_SECTION'
                           ? renderComponent(items, {

@@ -1396,8 +1396,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         key: column.id,
         className: "rlb-col-inner"
       }, column.items.map(function (items, index) {
-        var _a, _b;
+        var _a;
 
+        console.log(items);
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
         return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
@@ -1429,7 +1430,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
           dndTargetKey: items[stableKey],
-          isCenter: (_b = (_a = items[stableKey]) === null || _a === void 0 ? void 0 : _a.options) === null || _b === void 0 ? void 0 : _b.center,
+          isCenter: isImage && ((_a = items === null || items === void 0 ? void 0 : items.options) === null || _a === void 0 ? void 0 : _a.center),
           onImageResizeFinished: function onImageResizeFinished(w) {
             return _onImageResizeFinished ? _onImageResizeFinished(items, w) : undefined;
           }

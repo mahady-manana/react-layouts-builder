@@ -13,7 +13,10 @@ export const mockData = [
     group: "second",
     bg: "#f10",
     img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
-    size: 100
+    size: 100,
+    options: {
+      center: true
+    }
   },
   {
     id: 3,
