@@ -408,6 +408,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                         }
                         oneCol={columns.length === 1}
                         dndTargetKey={items[stableKey]}
+                        isCenter={items[stableKey]?.options?.center}
                         onImageResizeFinished={(w) =>
                           onImageResizeFinished
                             ? onImageResizeFinished(items, w)

@@ -9,6 +9,7 @@ interface DraggableProps {
         height?: number;
     };
     oneCol?: boolean;
+    isCenter?: boolean;
     onImageResizeFinished?: (sizes: {
         width?: number;
         height?: number;

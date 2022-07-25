@@ -20,6 +20,7 @@ interface DraggableProps {
   isImage?: boolean;
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
+  isCenter?: boolean
   onImageResizeFinished?: (sizes: {
     width?: number;
     height?: number;
@@ -32,6 +33,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   sizes,
   isImage,
   oneCol,
+  isCenter,
   // onDragStart,
   onImageResizeFinished,
 }) => {
@@ -111,7 +113,7 @@ export const DraggableItem: FC<DraggableProps> = ({
 
       const w = diff / percentPX;
       const dir = direction === 'left' ? w : -w;
-      const isOneCol = oneCol ? dir * 2 : dir;
+      const isOneCol = oneCol || isCenter ? dir * 2 : dir;
 
       const final = initWidth + isOneCol;
 
@@ -210,7 +212,7 @@ export const DraggableItem: FC<DraggableProps> = ({
             maxHeight: height
               ? (height || sizes?.height || 0) + 30
               : undefined,
-            margin: oneCol ? 'auto' : undefined,
+            margin: oneCol || isCenter ? 'auto' : undefined,
           }}
         >
           {!disableChange && oneCol ? (

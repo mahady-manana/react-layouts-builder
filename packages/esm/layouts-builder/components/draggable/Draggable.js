@@ -8,6 +8,7 @@ var DraggableItem = function DraggableItem(_a) {
       sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
+      isCenter = _a.isCenter,
       // onDragStart,
   onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
@@ -114,7 +115,7 @@ var DraggableItem = function DraggableItem(_a) {
       var diff = initClientX - newCX;
       var w = diff / percentPX;
       var dir = direction === 'left' ? w : -w;
-      var isOneCol = oneCol ? dir * 2 : dir;
+      var isOneCol = oneCol || isCenter ? dir * 2 : dir;
 
       var _final = initWidth + isOneCol;
 
@@ -212,7 +213,7 @@ var DraggableItem = function DraggableItem(_a) {
     style: {
       width: "".concat(width || 100, "%"),
       maxHeight: height ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,
-      margin: oneCol ? 'auto' : undefined
+      margin: oneCol || isCenter ? 'auto' : undefined
     }
   }, !disableChange && oneCol ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize imr-left",
