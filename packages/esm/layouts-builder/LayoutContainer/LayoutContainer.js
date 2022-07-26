@@ -1,4 +1,4 @@
-import { __assign } from '../../node_modules/tslib/tslib.es6.js';
+import { __assign, __awaiter, __generator } from '../../node_modules/tslib/tslib.es6.js';
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
@@ -51,28 +51,43 @@ var LayoutContainer = function LayoutContainer(_a) {
       position = _g[0],
       setPosition = _g[1];
 
-  var debounced = useSimpleDebounce(position, 200);
+  var debounced = useSimpleDebounce(position, 500);
   useEffect(function () {
-    if (debounced) {
-      var winH = window.innerHeight;
-      var container = document.getElementById('container_layout_scroll');
+    var checkScroll = function checkScroll() {
+      return __awaiter(void 0, void 0, void 0, function () {
+        var winH, container;
+        return __generator(this, function (_a) {
+          winH = window.innerHeight;
+          container = document.getElementById('container_layout_scroll');
 
-      if (debounced.y < 150 && container) {
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y - 500,
-          left: debounced.x
-        });
-      }
+          if (debounced) {
+            if (debounced.y < 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y - winH / 2,
+                left: debounced.x
+              });
+            }
 
-      if (debounced.y > winH - 150 && container) {
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y + 500,
-          left: debounced.x
+            if (debounced.y > winH - 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y + winH / 2,
+                left: debounced.x
+              });
+            }
+          }
+
+          return [2
+          /*return*/
+          ];
         });
-      }
-    }
+      });
+    };
+
+    setTimeout(function () {
+      checkScroll();
+    }, 200);
   }, [debounced]);
   useEffect(function () {
     if (layouts && layouts.length > 0) {

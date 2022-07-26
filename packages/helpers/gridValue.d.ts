@@ -1,1 +1,1 @@
-export declare const gridValue: (coef: number, n?: number | undefined) => number | undefined;
+export declare const gridValue: (coef: number, n?: number) => number | undefined;

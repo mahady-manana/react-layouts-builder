@@ -141,7 +141,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setDragActive(false);
 
     const destinationPlace = () => {
-
       if (
         colNb === 'SINGLE' &&
         destination.targetPlace !== TargetPlaceEnum.LEFT &&
@@ -354,8 +353,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               ) : null}
               <div key={column.id} className={`rlb-col-inner`}>
                 {column.items.map((items, index) => {
-                  console.log(items);
-                  
                   if (!items) return null;
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)

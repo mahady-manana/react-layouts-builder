@@ -54,29 +54,34 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     y: number;
   }>();
 
-  const debounced = useSimpleDebounce(position, 200);
+  const debounced = useSimpleDebounce(position, 500);
 
   useEffect(() => {
-    if (debounced) {
+    const checkScroll = async () => {
       const winH = window.innerHeight;
       const container = document.getElementById(
         'container_layout_scroll',
       );
-      if (debounced.y < 150 && container) {
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y - 500,
-          left: debounced.x,
-        });
+      if (debounced) {
+        if (debounced.y < 150 && container) {
+          container.scroll({
+            behavior: 'smooth',
+            top: debounced.y - winH / 2,
+            left: debounced.x,
+          });
+        }
+        if (debounced.y > winH - 150 && container) {
+          container.scroll({
+            behavior: 'smooth',
+            top: debounced.y + winH / 2,
+            left: debounced.x,
+          });
+        }
       }
-      if (debounced.y > winH - 150 && container) {
-        container.scroll({
-          behavior: 'smooth',
-          top: debounced.y + 500,
-          left: debounced.x,
-        });
-      }
-    }
+    };
+    setTimeout(() => {
+      checkScroll();
+    }, 200);
   }, [debounced]);
   useEffect(() => {
     if (layouts && layouts.length > 0) {
@@ -129,7 +134,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     }
   };
   const handleClickColumn = (source: ContainerSource) => {
-   
     if (onClickColumn) {
       onClickColumn(source);
     }
@@ -161,9 +165,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
               >
                 <div
                   className={classNames(
-                    isSectionContainer(section)
-                      ? 'p-2'
-                      : '',
+                    isSectionContainer(section) ? 'p-2' : '',
                     section.className,
                   )}
                   onClick={(e) => handleClickSection(section)}

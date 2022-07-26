@@ -1,2 +1,2 @@
 import { ILayoutColumn } from 'layouts-builder/interface';
-export declare const createNewColumn: (itemKey?: any[] | undefined) => ILayoutColumn;
+export declare const createNewColumn: (itemKey?: any[]) => ILayoutColumn;

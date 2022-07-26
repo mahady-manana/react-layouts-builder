@@ -59,7 +59,6 @@ export const Layouts1 = () => {
   }
 
   const changeStyle = (color: string) => {
-    console.log(sourceContainer, color)
 
     if (sourceContainer) {
       if (sourceContainer.colId) {
@@ -123,13 +122,11 @@ export const Layouts1 = () => {
               staticComponent={false}
               onLayoutChange={handleLayoutChange}
               onClickSection={(section) => {
-                console.log(section)
-
+               
                 setSourceContainer(section)
               }}
               onClickColumn={(section) => {
-                console.log(section)
-
+            
                 setSourceContainer(section)
               }}
               onFocusItem={onFocus}

@@ -303,7 +303,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       }, column.items.map(function (items, index) {
         var _a;
 
-        console.log(items);
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
         return /*#__PURE__*/React.createElement(LayoutDropContainer, {
