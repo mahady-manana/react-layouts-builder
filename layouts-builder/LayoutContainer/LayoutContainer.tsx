@@ -79,9 +79,9 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         }
       }
     };
-    setTimeout(() => {
-      checkScroll();
-    }, 200);
+    // setTimeout(() => {
+    //   checkScroll();
+    // }, 200);
   }, [debounced]);
   useEffect(() => {
     if (layouts && layouts.length > 0) {
