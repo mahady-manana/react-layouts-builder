@@ -125,7 +125,7 @@ export const Layouts1 = () => {
           </LayoutProvider>
         )}
       </div>
-      <div
+      {/* <div
         className="absolute"
         style={{
           top: 0,
@@ -137,7 +137,7 @@ export const Layouts1 = () => {
       >
         <p>Section bg: </p>
         <input type="color" onChange={(e) => changeStyle(e.target.value)} />
-      </div>
+      </div> */}
     </div>
   )
 }
