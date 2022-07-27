@@ -8,10 +8,5 @@
 
 4. yarn build:w
 
-5. cd example/create-react-app/
+5. yarn storybook
 
-6. yarn 
-
-7. npm link react-layouts-builder
-
-8. yarn start  (start example to ee modifs)
