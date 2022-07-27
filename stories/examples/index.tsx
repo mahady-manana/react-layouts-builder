@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { mockData } from "../data/data"
 import {
@@ -8,9 +8,9 @@ import {
   LayoutProvider,
   ContainerSource,
   useContainerStyles
-} from "react-layouts-builder"
+} from "../../packages"
 import { storage } from "../localSorage"
-import "react-layouts-builder/packages/index.css"
+import "../../packages/index.css"
 import { TestComponent } from "./TestComponent"
 
 export const Layouts1 = () => {

@@ -1,6 +1,6 @@
 import React from "react"
 import { ComponentTestts } from "./ComponentTest"
-import { DraggableItem } from "react-layouts-builder"
+import { DraggableItem } from "../../packages"
 
 interface Props {
   data:
