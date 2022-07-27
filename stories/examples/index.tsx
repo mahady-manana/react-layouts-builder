@@ -12,6 +12,7 @@ import {
 import { storage } from "../localSorage"
 import "../../packages/index.css"
 import { TestComponent } from "./TestComponent"
+import "./style.css"
 
 export const Layouts1 = () => {
   const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([])
@@ -41,7 +42,7 @@ export const Layouts1 = () => {
 
   useEffect(() => {
     if (!loading && nodata && data) {
-      const c = createLayout(data, "id", undefined, { width: 1024 })
+      const c = createLayout(data, "id", undefined, { width: 800 })
       setLayoutTest(c)
     }
   }, [loading, data, nodata])
@@ -82,33 +83,10 @@ export const Layouts1 = () => {
   }
   const handleDelete = (id: number) => {}
   return (
-    <div style={{ height: "100vh" }}>
-      <div
-        style={{
-          display: "flex",
-          position: "relative",
-          left: 334,
-          width: "max-content"
-        }}
-      >
-        {Array.from(Array(10).keys()).map((index) => {
-          return (
-            <div
-              key={index}
-              style={{
-                width: 100,
-                background: `#000${index}`,
-                borderLeft: "1px solid"
-              }}
-            >
-              <span>{index}0 %</span>
-            </div>
-          )
-        })}
-      </div>
+    <div style={{ height: "100vh", width: 800 }} className="containersb" >
       <div
         id="container_layout_scroll"
-        style={{ height: "95vh", overflowY: "scroll", width: 1024, marginInline: "auto" }}
+        style={{ height: "95vh", overflowY: "scroll", width: 800, marginInline: "auto" }}
       >
         {loading ? (
           <div>loading...</div>
