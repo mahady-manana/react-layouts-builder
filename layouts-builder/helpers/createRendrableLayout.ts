@@ -52,9 +52,9 @@ export const createRenderableLayout = (
                     id: 'EMPTY_SECTION',
                   };
                 return data.find(
-                  (dt) => itemKey!== null &&
+                  (dt) => itemKey!== null && (
                     dt[key] === itemKey ||
-                    dt[key]?.toString() === itemKey.toString(),
+                    dt[key]?.toString() === itemKey.toString()),
                 );
               }),
             }),

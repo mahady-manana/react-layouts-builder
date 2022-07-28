@@ -45,7 +45,7 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
                 return data.find(function (dt) {
                   var _a;
 
-                  return itemKey !== null && dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
+                  return itemKey !== null && (dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString());
                 });
               })
             };
