@@ -52,7 +52,7 @@ export const createRenderableLayout = (
                     id: 'EMPTY_SECTION',
                   };
                 return data.find(
-                  (dt) =>
+                  (dt) => itemKey!== null &&
                     dt[key] === itemKey ||
                     dt[key]?.toString() === itemKey.toString(),
                 );
