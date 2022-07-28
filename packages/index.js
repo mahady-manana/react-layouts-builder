@@ -91,7 +91,7 @@ var createRenderableLayout = function createRenderableLayout(data, layouts, key)
                 return data.find(function (dt) {
                   var _a;
 
-                  return dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
+                  return itemKey !== null && dt[key] === itemKey || ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === itemKey.toString();
                 });
               })
             };
@@ -651,9 +651,11 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
           if (col.id !== source.columnId) return col;
           return __assign(__assign({}, col), {
             childIds: col.childIds.filter(function (id) {
+              var _a;
+
               if (!id) return true;
               if (duplicate) return id !== 'DUPLICATE';
-              return id.toString() !== source.itemKey.toString();
+              return source.itemKey !== null && id.toString() !== ((_a = source.itemKey) === null || _a === void 0 ? void 0 : _a.toString());
             })
           });
         }).filter(function (col) {
@@ -1812,7 +1814,9 @@ var addToItem = function addToItem(layouts, itemKey, dest, bottom) {
 
             return __assign(__assign({}, col), {
               childIds: col.childIds.reduce(function (acc, next) {
-                if (next.toString() === dest.itemKey.toString()) {
+                var _a;
+
+                if (dest.itemKey !== null && next.toString() === ((_a = dest.itemKey) === null || _a === void 0 ? void 0 : _a.toString())) {
                   if (bottom) return acc.concat(next, itemKey);
                   return acc.concat(itemKey, next);
                 }

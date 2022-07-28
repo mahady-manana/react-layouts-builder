@@ -15,9 +15,11 @@ var removeItemFromSource = function removeItemFromSource(layouts, source, duplic
           if (col.id !== source.columnId) return col;
           return __assign(__assign({}, col), {
             childIds: col.childIds.filter(function (id) {
+              var _a;
+
               if (!id) return true;
               if (duplicate) return id !== 'DUPLICATE';
-              return id.toString() !== source.itemKey.toString();
+              return source.itemKey !== null && id.toString() !== ((_a = source.itemKey) === null || _a === void 0 ? void 0 : _a.toString());
             })
           });
         }).filter(function (col) {
