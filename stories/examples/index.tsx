@@ -26,6 +26,7 @@ export const Layouts1 = () => {
     useContainerStyles()
   const handleLayoutChange = (layouts: ILayoutSection[]) => {
     setLayoutTest(layouts)
+    storage.set(layouts)
   }
   useEffect(() => {
     const l = storage.get()
@@ -70,6 +71,7 @@ export const Layouts1 = () => {
         )
 
         setLayoutTest(layouts)
+        storage.set(layouts)
         return
       }
       const layouts = changeSectionContainerStyles(
@@ -79,6 +81,7 @@ export const Layouts1 = () => {
       )
 
       setLayoutTest(layouts)
+      storage.set(layouts)
     }
   }
   const handleDelete = (id: number) => {}
@@ -125,7 +128,7 @@ export const Layouts1 = () => {
           </LayoutProvider>
         )}
       </div>
-      {/* <div
+      <div
         className="absolute"
         style={{
           top: 0,
@@ -135,9 +138,9 @@ export const Layouts1 = () => {
           background: "#ffff"
         }}
       >
-        <p>Section bg: </p>
+        <p>Container bg: </p>
         <input type="color" onChange={(e) => changeStyle(e.target.value)} />
-      </div> */}
+      </div>
     </div>
   )
 }

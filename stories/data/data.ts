@@ -8,6 +8,14 @@ export const mockData = [
     size: 250
   },
   {
+    id: 1464161616,
+    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3",
+    group: "first",
+
+    bg: "blue",
+    isCont: true
+  },
+  {
     id: 2,
     text: "bloalbl 2",
     group: "second",

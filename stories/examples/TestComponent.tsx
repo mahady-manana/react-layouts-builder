@@ -44,7 +44,8 @@ export const TestComponent = React.memo((props: Props) => {
             key={props.data.id}
             className="min-h-[50px] h-full relative"
             style={{
-              border: props.focused ? "1px solid #000" : ""
+              border: props.focused ? "1px solid #000" : "",
+              marginBottom: 5
             }}
             onClick={(e) => {
               e.preventDefault()
