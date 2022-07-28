@@ -14,7 +14,9 @@ var addToItem = function addToItem(layouts, itemKey, dest, bottom) {
 
             return __assign(__assign({}, col), {
               childIds: col.childIds.reduce(function (acc, next) {
-                if (next.toString() === dest.itemKey.toString()) {
+                var _a;
+
+                if (dest.itemKey !== null && next.toString() === ((_a = dest.itemKey) === null || _a === void 0 ? void 0 : _a.toString())) {
                   if (bottom) return acc.concat(next, itemKey);
                   return acc.concat(itemKey, next);
                 }
