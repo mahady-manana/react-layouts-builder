@@ -289,3 +289,11 @@
 .rbl-col-container {
   /* height: 100%; */
 }
+.draggable-container {
+  position: relative;
+}
+.draggable-icon {
+  position: absolute;
+  left: -2px;
+  top: 5px;
+}

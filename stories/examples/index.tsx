@@ -103,11 +103,12 @@ export const Layouts1 = () => {
               staticComponent={false}
               onLayoutChange={handleLayoutChange}
               onClickSection={(section) => {
+               console.log("Section click");
                
                 setSourceContainer(section)
               }}
               onClickColumn={(section) => {
-            
+                console.log("Column click");            
                 setSourceContainer(section)
               }}
               onFocusItem={onFocus}

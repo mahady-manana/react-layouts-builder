@@ -9,6 +9,7 @@ import { findWidthPercentByPx } from '../helpers/findWidth.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { LayoutDropContainer } from './LayoutDropContainer.js';
 import { AppContext } from '../Context/AppContext.js';
+import DragIcon from '../components/Icons/DraggableIcon.js';
 
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
@@ -22,6 +23,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       needRowTarget = _a.needRowTarget,
       dragActive = _a.dragActive,
       maxColumns = _a.maxColumns,
+      styles = _a.styles,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -261,7 +263,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     };
   };
 
-  var needTop = isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
+  isFirstSection ? needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top : (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.top) && columns.length > 1;
 
   var handleclickCol = function handleclickCol(e, colId) {
     e.preventDefault();
@@ -308,6 +310,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return /*#__PURE__*/React.createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+          needItemTarget: columns.length > 1,
           disableSide: columnCountReach,
           setTargetDROP: setTargetDROP,
           onDragOver: function onDragOver(target) {
@@ -350,7 +353,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       }) : null));
     });
   }, [columns, targetDROP, widths, renderComponent]);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, needTop && dragActive ? /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: ""
+  }, dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
       e.preventDefault();
@@ -376,16 +381,20 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       visibility: targetDROP === TargetPlaceEnum.ROW_TOP ? 'visible' : 'hidden'
     }
   })) : null, /*#__PURE__*/React.createElement("div", {
-    className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
-    style: {
+    className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : '', 'draggable-container'),
+    style: __assign({
       width: '100%',
-      margin: 'auto'
-    },
+      margin: 'auto',
+      padding: 20
+    }, styles || {}),
     ref: containerRef,
     onMouseMove: onMouseMove,
     onMouseUp: onMouseUp,
     onMouseLeave: onMousLeave
-  }, columnsComonent), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "draggable-icon",
+    draggable: true
+  }, /*#__PURE__*/React.createElement(DragIcon, null)), columnsComonent), isLastSection && (needRowTarget === null || needRowTarget === void 0 ? void 0 : needRowTarget.bottom) && dragActive ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-row-container",
     onDragOver: function onDragOver(e) {
       e.preventDefault();
@@ -411,8 +420,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       visibility: targetDROP === TargetPlaceEnum.ROW_BOTTOM ? 'visible' : 'hidden'
     }
   })) : null));
-}; // export const LayoutRowContainer = React.memo(
-//   LayoutRowContainerComponent,
-// );
+};
 
 export { LayoutRowContainer };

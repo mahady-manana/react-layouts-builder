@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import { CSSProperties, Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { ContainerSource, ILayoutSection } from '../interface';
 import { SourceType } from '../interface/internalType';
 import { IRenderableColumn } from '../interface/renderableInterface';
@@ -19,6 +19,7 @@ interface LayoutRowContainerProps {
         bottom: boolean;
     };
     maxColumns?: number;
+    styles?: CSSProperties;
     imageSizeFnLoader?: (items: any) => {
         width?: number;
         height?: number;

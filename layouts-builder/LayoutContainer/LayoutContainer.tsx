@@ -20,6 +20,7 @@ import { AppContext } from 'layouts-builder/Context/AppContext';
 import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import classNames from 'classnames';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
+import DragIcon from 'layouts-builder/components/Icons/DraggableIcon';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -49,10 +50,11 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
-  const [position, setPosition] = useState<{
-    x: number;
-    y: number;
-  }>();
+  const [position, setPosition] =
+    useState<{
+      x: number;
+      y: number;
+    }>();
 
   const debounced = useSimpleDebounce(position, 500);
 
@@ -160,22 +162,21 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 style={{
                   width: section.width,
                   margin: 'auto',
-                  ...(section.styles || {}),
+                  cursor: 'pointer',
+                  // ...(section.styles || {}),
                 }}
+                onClick={(e) => handleClickSection(section)}
               >
                 <div
-                  className={classNames(
-                    isSectionContainer(section) ? 'p-2' : '',
-                    section.className,
-                  )}
-                  onClick={(e) => handleClickSection(section)}
                 >
+
                   {section.rows.map((row, rowIndex) => {
                     return (
                       <LayoutRowContainer
                         key={row.id}
                         stableKey={stableKey}
                         dragActive={dragActive}
+                        styles={section.styles}
                         layouts={actualLayout}
                         columns={row.columns}
                         sectionId={section.id}

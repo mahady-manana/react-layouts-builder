@@ -18,6 +18,7 @@ export interface ILayoutColumn {
     className?: string;
     styles?: CSSProperties;
     width: number;
+    isContainer?: boolean;
 }
 export interface ILayoutRow {
     id: any;

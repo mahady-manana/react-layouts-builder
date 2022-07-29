@@ -5,8 +5,6 @@ import { LayoutRowContainer } from './LayoutRowContainer.js';
 import { needRowTarget } from '../helpers/shouldShowRowTarget.js';
 import { AppContext } from '../Context/AppContext.js';
 import useSimpleDebounce from '../hooks/useDebounce.js';
-import classnames from '../../node_modules/classnames/index.js';
-import { useContainerIdentifier } from '../hooks/useContainerIdentifier.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -34,8 +32,6 @@ var LayoutContainer = function LayoutContainer(_a) {
   var _d = useState([]),
       actualLayout = _d[0],
       setActualLayout = _d[1];
-
-  var isSectionContainer = useContainerIdentifier().isSectionContainer;
 
   var _e = useState(false),
       dragActive = _e[0],
@@ -125,20 +121,21 @@ var LayoutContainer = function LayoutContainer(_a) {
       className: "rlb-section rlb-section-container"
     }, /*#__PURE__*/React.createElement("div", {
       className: "rlb-section-content",
-      style: __assign({
+      style: {
         width: section.width,
-        margin: 'auto'
-      }, section.styles || {})
-    }, /*#__PURE__*/React.createElement("div", {
-      className: classnames(isSectionContainer(section) ? 'p-2' : '', section.className),
+        margin: 'auto',
+        cursor: 'pointer' // ...(section.styles || {}),
+
+      },
       onClick: function onClick(e) {
         return handleClickSection(section);
       }
-    }, section.rows.map(function (row, rowIndex) {
+    }, /*#__PURE__*/React.createElement("div", null, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React.createElement(LayoutRowContainer, {
         key: row.id,
         stableKey: stableKey,
         dragActive: dragActive,
+        styles: section.styles,
         layouts: actualLayout,
         columns: row.columns,
         sectionId: section.id,

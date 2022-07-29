@@ -17,6 +17,7 @@ interface DraggableProps {
   children: ReactNode;
   isLast?: boolean;
   disableChange?: boolean;
+  needItemTarget?: boolean
   disableSide: boolean;
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
@@ -31,6 +32,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   disableChange,
   targetDROP,
   disableSide,
+  needItemTarget,
   setTargetDROP,
   onDragOver,
   onDragLeave,
@@ -128,7 +130,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDrop={handleDrop}
       className={disableChange ? 'rbl-vert-spacing' : 'rbl-relative'}
     >
-      {!disableChange ? (
+      {!disableChange && needItemTarget ? (
         <div
           className="rbl-drop-item-indicator top"
           style={{
@@ -144,7 +146,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       ) : null}
 
       {children}
-      {!disableChange ? (
+      {!disableChange && needItemTarget ? (
         <div
           className="rbl-drop-item-indicator bottom"
           style={{

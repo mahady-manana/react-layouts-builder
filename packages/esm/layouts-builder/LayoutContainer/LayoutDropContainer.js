@@ -7,6 +7,7 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       disableChange = _a.disableChange,
       targetDROP = _a.targetDROP,
       disableSide = _a.disableSide,
+      needItemTarget = _a.needItemTarget,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -118,13 +119,13 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     onDragLeave: onExit,
     onDrop: handleDrop,
     className: disableChange ? 'rbl-vert-spacing' : 'rbl-relative'
-  }, !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }, !disableChange && needItemTarget ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-item-indicator top",
     style: {
       visibility: targetDROP === TargetPlaceEnum.TOP ? 'visible' : 'hidden'
     },
     ref: targetDROP === TargetPlaceEnum.TOP ? activeDropRef : null
-  }) : null, children, !disableChange ? /*#__PURE__*/React.createElement("div", {
+  }) : null, children, !disableChange && needItemTarget ? /*#__PURE__*/React.createElement("div", {
     className: "rbl-drop-item-indicator bottom",
     style: {
       visibility: targetDROP === TargetPlaceEnum.BOTTOM ? 'visible' : 'hidden'

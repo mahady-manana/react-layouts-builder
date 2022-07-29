@@ -30,6 +30,7 @@ import classNames from 'classnames';
 import { LayoutDropContainer } from './LayoutDropContainer';
 import { AppContext } from 'layouts-builder/Context/AppContext';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
+import DragIcon from 'layouts-builder/components/Icons/DraggableIcon';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -44,6 +45,7 @@ interface LayoutRowContainerProps {
   colResize: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
   maxColumns?: number;
+  styles?: CSSProperties;
   imageSizeFnLoader?: (
     items: any,
   ) => { width?: number; height?: number } | undefined;
@@ -72,6 +74,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   needRowTarget,
   dragActive,
   maxColumns,
+  styles,
   setDragActive,
   imageSizeFnLoader,
   setActualLayout,
@@ -313,6 +316,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const needTop = isFirstSection
     ? needRowTarget?.top
     : needRowTarget?.top && columns.length > 1;
+
   const handleclickCol = (e: MouseEvent, colId: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -369,6 +373,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           ? targetDROP
                           : undefined
                       }
+                      needItemTarget={columns.length > 1}
                       disableSide={columnCountReach}
                       setTargetDROP={setTargetDROP}
                       onDragOver={(target) =>
@@ -441,8 +446,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   );
   return (
     <>
-      <div>
-        {needTop && dragActive ? (
+      <div className="">
+        {dragActive ? (
           <div
             className="rbl-drop-row-container"
             onDragOver={(e) => {
@@ -480,13 +485,22 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
           className={classNames(
             'section-content flex',
             resizeBegin ? 'rbl-resizing' : '',
+            'draggable-container',
           )}
-          style={{ width: '100%', margin: 'auto' }}
+          style={{
+            width: '100%',
+            margin: 'auto',
+            padding: 20,
+            ...(styles || {}),
+          }}
           ref={containerRef}
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onMouseLeave={onMousLeave}
         >
+          <div className="draggable-icon" draggable>
+            <DragIcon />
+          </div>
           {columnsComonent}
         </div>
         {isLastSection && needRowTarget?.bottom && dragActive ? (
@@ -527,6 +541,3 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   );
 };
 
-// export const LayoutRowContainer = React.memo(
-//   LayoutRowContainerComponent,
-// );
