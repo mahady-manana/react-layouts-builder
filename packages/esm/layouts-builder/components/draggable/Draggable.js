@@ -9,6 +9,7 @@ var DraggableItem = function DraggableItem(_a) {
       isImage = _a.isImage,
       oneCol = _a.oneCol,
       isCenter = _a.isCenter,
+      isButton = _a.isButton,
       // onDragStart,
   onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = useRef(null);
@@ -207,7 +208,7 @@ var DraggableItem = function DraggableItem(_a) {
     onMouseMove: onMouseMouve,
     onMouseUp: onMouseLeaveOrUp,
     onMouseLeave: onMouseLeaveOrUp
-  }, isImage ? /*#__PURE__*/React.createElement("div", {
+  }, isImage || isButton ? /*#__PURE__*/React.createElement("div", {
     className: "image_rlb",
     id: "rbl_image_".concat(dndTargetKey),
     style: {
@@ -232,7 +233,7 @@ var DraggableItem = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  })) : null, !disableChange ? /*#__PURE__*/React.createElement("div", {
+  })) : null, !disableChange && !isButton ? /*#__PURE__*/React.createElement("div", {
     className: "image-resize-bottom",
     onClick: function onClick(e) {
       e.preventDefault();

@@ -4,6 +4,7 @@ interface DraggableProps {
     dndTargetKey: string;
     disableChange?: boolean;
     isImage?: boolean;
+    isButton?: boolean;
     sizes?: {
         width?: number;
         height?: number;

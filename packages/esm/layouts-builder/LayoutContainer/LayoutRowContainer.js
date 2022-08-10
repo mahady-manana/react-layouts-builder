@@ -305,6 +305,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
+        var isButton = items.linkType === "link";
         return /*#__PURE__*/React.createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
@@ -330,6 +331,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           key: index
         }, /*#__PURE__*/React.createElement(DraggableItem, {
           isImage: isImage,
+          isButton: isButton,
           disableChange: disabled,
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,

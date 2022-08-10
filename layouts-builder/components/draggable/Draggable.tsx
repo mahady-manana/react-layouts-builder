@@ -18,6 +18,7 @@ interface DraggableProps {
   //   element?: HTMLElement,
   // ) => void;
   isImage?: boolean;
+  isButton?: boolean
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
   isCenter?: boolean
@@ -34,6 +35,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   isImage,
   oneCol,
   isCenter,
+  isButton,
   // onDragStart,
   onImageResizeFinished,
 }) => {
@@ -203,7 +205,7 @@ export const DraggableItem: FC<DraggableProps> = ({
       onMouseUp={onMouseLeaveOrUp}
       onMouseLeave={onMouseLeaveOrUp}
     >
-      {isImage ? (
+      {isImage || isButton ? (
         <div
           className="image_rlb"
           id={`rbl_image_${dndTargetKey}`}
@@ -234,7 +236,7 @@ export const DraggableItem: FC<DraggableProps> = ({
               ></div>
             </div>
           ) : null}
-          {!disableChange ? (
+          {!disableChange && !isButton ? (
             <div
               className="image-resize-bottom"
               onClick={(e) => {

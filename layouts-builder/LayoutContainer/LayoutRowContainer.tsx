@@ -357,7 +357,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)
                     : false;
-
+                  const isButton = items.linkType === "link"
                   return (
                     <LayoutDropContainer
                       isLast={
@@ -399,6 +399,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                     >
                       <DraggableItem
                         isImage={isImage}
+                        isButton={isButton}
                         disableChange={disabled}
                         sizes={
                           imageSizeFnLoader
