@@ -1,83 +1,90 @@
 export const mockData = [
   {
     id: 1,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1",
-    group: "first",
-    bg: "#4b00ff",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
-    size: 250
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1',
+    group: 'first',
+    bg: '#4b00ff',
+    img: 'https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg',
+    size: 250,
+  },
+  {
+    id: 16666,
+    text: 'Button',
+    group: 'first',
+    linkType: 'link',
+    bg: '#4b00ff',
   },
   {
     id: 1464161616,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3",
-    group: "first",
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3',
+    group: 'first',
 
-    bg: "blue",
-    isCont: true
+    bg: 'blue',
+    isCont: true,
   },
   {
     id: 2,
-    text: "bloalbl 2",
-    group: "second",
-    bg: "#f10",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
+    text: 'bloalbl 2',
+    group: 'second',
+    bg: '#f10',
+    img: 'https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg',
     size: 100,
     options: {
-      center: true
-    }
+      center: true,
+    },
   },
   {
     id: 3,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3",
-    group: "first",
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 3',
+    group: 'first',
 
-    bg: "blue",
-    isCont: true
+    bg: 'blue',
+    isCont: true,
   },
   {
     id: 4,
-    text: "bloalbl 4",
-    group: "first",
-    bg: "#950000"
+    text: 'bloalbl 4',
+    group: 'first',
+    bg: '#950000',
   },
   {
     id: 5,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 5",
-    group: "second",
-    bg: "red"
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 5',
+    group: 'second',
+    bg: 'red',
   },
   {
     id: 6,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 6",
-    group: "first",
-    bg: "rgb(1 161 20)",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg"
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 6',
+    group: 'first',
+    bg: 'rgb(1 161 20)',
+    img: 'https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg',
   },
   {
     id: 7,
-    text: "bloalbl 7",
-    group: "third",
-    bg: "#0005"
+    text: 'bloalbl 7',
+    group: 'third',
+    bg: '#0005',
   },
   {
     id: 8,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 8",
-    group: "first",
-    bg: "yellow"
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 8',
+    group: 'first',
+    bg: 'yellow',
   },
   {
     id: 9,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 9",
-    group: "third",
-    bg: "#444"
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 9',
+    group: 'third',
+    bg: '#444',
   },
   {
     id: 100,
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1",
-    group: "first",
-    bg: "#4b00ff",
-    img: "https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg",
-    size: 50
+    text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga quia suscipit quod esse nulla eligendi iusto, vel nihil nemo fugiat minima ducimus blanditiis provident excepturi cumque tenetur obcaecati sed impedit! 1',
+    group: 'first',
+    bg: '#4b00ff',
+    img: 'https://tagdiscount.s3.eu-central-1.amazonaws.com/448bfdeb-d76c-4f2d-8939-23039df7e123-model.jpg',
+    size: 50,
   },
   // {
   //   id: 200,
@@ -371,4 +378,4 @@ export const mockData = [
   //   group: "third",
   //   bg: "#444"
   // }
-]
+];

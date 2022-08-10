@@ -357,7 +357,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)
                     : false;
-                  const isButton = items.linkType === "link"
+                  const isButton = items.linkType === "LINK"
                   return (
                     <LayoutDropContainer
                       isLast={

@@ -1,38 +1,38 @@
-import React from "react"
-import { ComponentTestts } from "./ComponentTest"
-import { DraggableItem } from "../../packages"
+import React from 'react';
+import { ComponentTestts } from './ComponentTest';
+import { DraggableItem } from '../../packages';
 
 interface Props {
   data:
     | {
-        id: number
-        text: string
-        group: string
-        bg: string
-        img: string
-        size: number
+        id: number;
+        text: string;
+        group: string;
+        bg: string;
+        img: string;
+        size: number;
       }
     | {
-        id: number
-        text: string
-        group: string
-        bg: string
-        img?: undefined
-        size?: undefined
+        id: number;
+        text: string;
+        group: string;
+        bg: string;
+        img?: undefined;
+        size?: undefined;
       }
     | {
-        id: number
-        text: string
-        group: string
-        bg: string
-        img: string
-        size?: undefined
-      }
+        id: number;
+        text: string;
+        group: string;
+        bg: string;
+        img: string;
+        size?: undefined;
+      };
 
-  onClick: (data: any) => void
-  focused?: boolean
-  component?: any
-  onDelete: (id: number) => void
+  onClick: (data: any) => void;
+  focused?: boolean;
+  component?: any;
+  onDelete: (id: number) => void;
 }
 
 export const TestComponent = React.memo((props: Props) => {
@@ -44,22 +44,23 @@ export const TestComponent = React.memo((props: Props) => {
             key={props.data.id}
             className="min-h-[50px] h-full relative"
             style={{
-              border: props.focused ? "1px solid #000" : "",
-              marginBottom: 5
+              border: props.focused ? '1px solid #000' : '',
+              marginBottom: 5,
             }}
             onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              props.onClick(props.data)}}
+              e.preventDefault();
+              e.stopPropagation();
+              props.onClick(props.data);
+            }}
           >
             <div
               style={{
-                border: "1px solid #000",
+                border: '1px solid #000',
                 width: 50,
                 height: 50,
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
-                left: 0
+                left: 0,
               }}
               {...draggableProps}
             >
@@ -67,12 +68,14 @@ export const TestComponent = React.memo((props: Props) => {
             </div>
             {props.data.img ? (
               <img src={props.data.img} alt="" />
+            ) : (props.data as any).linkType === 'link' ? (
+              <button>{props.data.text}</button>
             ) : (
               <p>Data : {props.data.text}</p>
             )}
           </div>
-        )
+        );
       }}
     </DraggableItem>
-  )
-})
+  );
+});

@@ -1403,7 +1403,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
-        var isButton = items.linkType === "link";
+        var isButton = items.linkType === "LINK";
         return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
