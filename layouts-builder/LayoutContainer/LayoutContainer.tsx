@@ -107,9 +107,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
       setCurrentLayouts(cleanLayout.layouts);
       setRenderableLayout(renderable);
-      if (cleanLayout.update) {
-        setRunChange(true);
-      }
     }
   }, [actualLayout, data]);
 

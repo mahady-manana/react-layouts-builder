@@ -69,10 +69,6 @@ var LayoutContainer = function LayoutContainer(_a) {
       var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
       setCurrentLayouts(cleanLayout.layouts);
       setRenderableLayout(renderable);
-
-      if (cleanLayout.update) {
-        setRunChange(true);
-      }
     }
   }, [actualLayout, data]); // run layout update
 
