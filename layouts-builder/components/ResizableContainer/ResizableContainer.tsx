@@ -2,7 +2,7 @@ import React, { FC, MouseEvent, useRef } from 'react';
 
 interface ResizableContainerProps {
   resizable?: boolean;
-  colNumber?: number;
+  colNumber: number;
   type?: any;
   width: number | string;
   onMouseDown?: (clienX: number, width: number) => void;
@@ -19,6 +19,7 @@ const ResizableContainerComponent: FC<ResizableContainerProps> = ({
   width,
   isLast,
   isNextTo,
+  colNumber,
   onMouseDown,
 }) => {
   const columnRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,7 @@ const ResizableContainerComponent: FC<ResizableContainerProps> = ({
       <div
         className="rlb-content-container"
         ref={columnRef}
-        style={{ width: width, flexGrow: isNextTo ? 1 : undefined }}
+        style={{ width: colNumber > 1 ? width : "100%", flexGrow: isNextTo ? 1 : undefined }}
         data-resizable-type={type}
       >
         {children}

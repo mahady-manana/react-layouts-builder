@@ -8,13 +8,14 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
       width = _a.width,
       isLast = _a.isLast,
       isNextTo = _a.isNextTo,
+      colNumber = _a.colNumber,
       _onMouseDown = _a.onMouseDown;
   var columnRef = useRef(null);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "rlb-content-container",
     ref: columnRef,
     style: {
-      width: width,
+      width: colNumber > 1 ? width : "100%",
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type

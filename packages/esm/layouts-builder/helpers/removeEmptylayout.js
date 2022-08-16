@@ -1,4 +1,5 @@
 import { __assign } from '../../node_modules/tslib/tslib.es6.js';
+import { keepRowFullWidth } from './keepRowFullWidth.js';
 
 var removeEmptyLayout = function removeEmptyLayout(layouts) {
   var noEmptyChild = layouts.map(function (section) {
@@ -16,13 +17,20 @@ var removeEmptyLayout = function removeEmptyLayout(layouts) {
       })
     });
   });
+
+  var keepKolClean = function keepKolClean(columns) {
+    var cols = columns.filter(function (col) {
+      return col.childIds.length > 0;
+    });
+    var keepWidth = keepRowFullWidth(cols);
+    return keepWidth;
+  };
+
   var noEmptyColumn = noEmptyChild.map(function (section) {
     return __assign(__assign({}, section), {
       rows: section.rows.map(function (row) {
         return __assign(__assign({}, row), {
-          columns: row.columns.filter(function (col) {
-            return col.childIds.length > 0;
-          })
+          columns: keepKolClean(row.columns)
         });
       })
     });

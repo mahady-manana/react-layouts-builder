@@ -1,7 +1,7 @@
 import React from 'react';
 interface ResizableContainerProps {
     resizable?: boolean;
-    colNumber?: number;
+    colNumber: number;
     type?: any;
     width: number | string;
     onMouseDown?: (clienX: number, width: number) => void;

@@ -1,4 +1,5 @@
-import { ILayoutSection } from '../interface';
+import { ILayoutColumn, ILayoutSection } from '../interface';
+import { keepRowFullWidth } from './keepRowFullWidth';
 
 export const removeEmptyLayout = (
   layouts: ILayoutSection[],
@@ -19,15 +20,18 @@ export const removeEmptyLayout = (
       }),
     };
   });
+  const keepKolClean = (columns: ILayoutColumn[]) => {
+    const cols = columns.filter((col) => col.childIds.length > 0);
+    const keepWidth = keepRowFullWidth(cols);
+    return keepWidth;
+  };
   const noEmptyColumn = noEmptyChild.map((section) => {
     return {
       ...section,
       rows: section.rows.map((row) => {
         return {
           ...row,
-          columns: row.columns.filter(
-            (col) => col.childIds.length > 0,
-          ),
+          columns: keepKolClean(row.columns),
         };
       }),
     };

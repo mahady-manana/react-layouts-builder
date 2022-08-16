@@ -7,6 +7,7 @@ import { AppContext } from '../Context/AppContext.js';
 import useSimpleDebounce from '../hooks/useDebounce.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { useContainerIdentifier } from '../hooks/useContainerIdentifier.js';
+import { checkNotFoundData } from '../helpers/checkNotFoundData.js';
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -64,9 +65,14 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [layouts]);
   useEffect(function () {
     if (actualLayout.length > 0) {
-      var renderable = createRenderableLayout(data, actualLayout, stableKey);
-      setCurrentLayouts(actualLayout);
+      var cleanLayout = checkNotFoundData(actualLayout, data, stableKey);
+      var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
+      setCurrentLayouts(cleanLayout.layouts);
       setRenderableLayout(renderable);
+
+      if (cleanLayout.update) {
+        setRunChange(true);
+      }
     }
   }, [actualLayout, data]); // run layout update
 

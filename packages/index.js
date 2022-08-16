@@ -463,13 +463,14 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
       width = _a.width,
       isLast = _a.isLast,
       isNextTo = _a.isNextTo,
+      colNumber = _a.colNumber,
       _onMouseDown = _a.onMouseDown;
   var columnRef = React.useRef(null);
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-content-container",
     ref: columnRef,
     style: {
-      width: width,
+      width: colNumber > 1 ? width : "100%",
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type
@@ -615,13 +616,20 @@ var removeEmptyLayout = function removeEmptyLayout(layouts) {
       })
     });
   });
+
+  var keepKolClean = function keepKolClean(columns) {
+    var cols = columns.filter(function (col) {
+      return col.childIds.length > 0;
+    });
+    var keepWidth = keepRowFullWidth(cols);
+    return keepWidth;
+  };
+
   var noEmptyColumn = noEmptyChild.map(function (section) {
     return __assign(__assign({}, section), {
       rows: section.rows.map(function (row) {
         return __assign(__assign({}, row), {
-          columns: row.columns.filter(function (col) {
-            return col.childIds.length > 0;
-          })
+          columns: keepKolClean(row.columns)
         });
       })
     });
@@ -1553,6 +1561,49 @@ function useSimpleDebounce(value, delay) {
   return debouncedValue;
 }
 
+var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
+  var hasNotFound = false;
+  var noNotFoundChild = layouts.map(function (section) {
+    return __assign(__assign({}, section), {
+      rows: section.rows.map(function (row) {
+        return __assign(__assign({}, row), {
+          columns: row.columns.map(function (col) {
+            return __assign(__assign({}, col), {
+              childIds: col.childIds.map(function (id) {
+                var isFound = data.find(function (dt) {
+                  var _a;
+
+                  return ((_a = dt[key]) === null || _a === void 0 ? void 0 : _a.toString()) === id.toString();
+                });
+
+                if (isFound) {
+                  return id;
+                }
+
+                hasNotFound = true;
+                return '';
+              })
+            });
+          })
+        });
+      })
+    });
+  });
+  var cleanLayouts = removeEmptyLayout(noNotFoundChild);
+
+  if (hasNotFound) {
+    return {
+      layouts: cleanLayouts,
+      update: true
+    };
+  }
+
+  return {
+    layouts: cleanLayouts,
+    update: false
+  };
+};
+
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,
@@ -1609,9 +1660,14 @@ var LayoutContainer = function LayoutContainer(_a) {
   }, [layouts]);
   React.useEffect(function () {
     if (actualLayout.length > 0) {
-      var renderable = createRenderableLayout(data, actualLayout, stableKey);
-      setCurrentLayouts(actualLayout);
+      var cleanLayout = checkNotFoundData(actualLayout, data, stableKey);
+      var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
+      setCurrentLayouts(cleanLayout.layouts);
       setRenderableLayout(renderable);
+
+      if (cleanLayout.update) {
+        setRunChange(true);
+      }
     }
   }, [actualLayout, data]); // run layout update
 

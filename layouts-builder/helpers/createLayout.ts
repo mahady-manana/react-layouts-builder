@@ -1,5 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
-import { ILayoutColumn, ILayoutSection } from '../interface';
+import { ILayoutSection } from '../interface';
 import { createNewSection } from './createNewSection';
 
 // const createNewLayout = (

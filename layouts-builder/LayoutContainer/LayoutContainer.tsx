@@ -20,6 +20,7 @@ import { AppContext } from 'layouts-builder/Context/AppContext';
 import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import classNames from 'classnames';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
+import { checkNotFoundData } from 'layouts-builder/helpers/checkNotFoundData';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -49,10 +50,11 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   const [renderableLayout, setRenderableLayout] = useState<
     IRenderableLayout[]
   >([]);
-  const [position, setPosition] = useState<{
-    x: number;
-    y: number;
-  }>();
+  const [position, setPosition] =
+    useState<{
+      x: number;
+      y: number;
+    }>();
 
   const debounced = useSimpleDebounce(position, 500);
 
@@ -91,13 +93,23 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
 
   useEffect(() => {
     if (actualLayout.length > 0) {
-      const renderable = createRenderableLayout(
-        data,
+      const cleanLayout = checkNotFoundData(
         actualLayout,
+        data,
         stableKey,
       );
-      setCurrentLayouts(actualLayout);
+
+      const renderable = createRenderableLayout(
+        data,
+        cleanLayout.layouts,
+        stableKey,
+      );
+
+      setCurrentLayouts(cleanLayout.layouts);
       setRenderableLayout(renderable);
+      if (cleanLayout.update) {
+        setRunChange(true);
+      }
     }
   }, [actualLayout, data]);
 
