@@ -318,8 +318,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     e.stopPropagation();
     onClickCol({ sectionId: '', colId });
   };
-  const isSingleColTarget = (isSingle: boolean) =>
-    isSingle ? ILayoutTargetEnum.ROW : ILayoutTargetEnum.ITEM;
+  const isButton = (items: any) => {
+    if (!items) {
+      return false;
+    }
+    const buttonType = ['LINK', 'MAIL_BUTTON', 'TEL_BUTTON'];
+    return buttonType.indexOf(items.linkType || '') !== -1;
+  };
+
   const columnsComonent = React.useMemo(
     () =>
       columns.map((column, index) => {
@@ -357,7 +363,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   const isImage = imageCheckerFn
                     ? imageCheckerFn(items)
                     : false;
-                  const isButton = items.linkType === "LINK"
                   return (
                     <LayoutDropContainer
                       isLast={
@@ -399,7 +404,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                     >
                       <DraggableItem
                         isImage={isImage}
-                        isButton={isButton}
+                        isButton={isButton(items)}
                         disableChange={disabled}
                         sizes={
                           imageSizeFnLoader
