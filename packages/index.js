@@ -1378,6 +1378,15 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
     });
   };
 
+  var isButton = function isButton(items) {
+    if (!items) {
+      return false;
+    }
+
+    var buttonType = ['LINK', 'MAIL_BUTTON', 'TEL_BUTTON'];
+    return buttonType.indexOf(items.linkType || '') !== -1;
+  };
+
   var columnsComonent = React__default["default"].useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
@@ -1411,7 +1420,6 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
 
         if (!items) return null;
         var isImage = imageCheckerFn ? imageCheckerFn(items) : false;
-        var isButton = items.linkType === "LINK";
         return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
@@ -1437,7 +1445,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           key: index
         }, /*#__PURE__*/React__default["default"].createElement(DraggableItem$1, {
           isImage: isImage,
-          isButton: isButton,
+          isButton: isButton(items),
           disableChange: disabled,
           sizes: imageSizeFnLoader ? imageSizeFnLoader(items) : undefined,
           oneCol: columns.length === 1,
