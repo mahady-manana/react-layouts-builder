@@ -1,7 +1,8 @@
-import { FC, HTMLAttributes, ReactNode } from 'react';
+import { CSSProperties, FC, HTMLAttributes, ReactNode } from 'react';
 interface IAttributes {
     draggableProps: HTMLAttributes<HTMLDivElement>;
     handleProps: HTMLAttributes<HTMLDivElement>;
+    styles?: CSSProperties;
 }
 interface DraggableItemProps {
     draggableId: string;

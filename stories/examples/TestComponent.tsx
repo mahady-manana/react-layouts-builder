@@ -38,7 +38,7 @@ interface Props {
 export const TestComponent = React.memo((props: Props) => {
   return (
     <DraggableItem draggableId={`${props.data.id}`}>
-      {({ draggableProps }) => {
+      {({ draggableProps, styles }) => {
         return (
           <div
             key={props.data.id}
@@ -46,6 +46,7 @@ export const TestComponent = React.memo((props: Props) => {
             style={{
               border: props.focused ? '1px solid #000' : '',
               marginBottom: 5,
+              ...styles,
             }}
             onClick={(e) => {
               e.preventDefault();
