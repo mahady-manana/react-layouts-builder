@@ -15,6 +15,9 @@
     display: block;
   }
 }
+.column-container-mobile {
+  display: block;
+}
 .flex-col {
   flex-direction: column;
 }

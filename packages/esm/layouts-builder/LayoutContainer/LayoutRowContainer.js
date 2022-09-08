@@ -382,7 +382,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       visibility: targetDROP === TargetPlaceEnum.ROW_TOP ? 'visible' : 'hidden'
     }
   })) : null, /*#__PURE__*/React.createElement("div", {
-    className: classnames('section-content column-container', resizeBegin ? 'rbl-resizing' : ''),
+    className: classnames('section-content', resizeBegin ? 'rbl-resizing' : '', isMobile ? 'column-container-mobile' : 'column-container'),
     style: {
       width: '100%',
       margin: 'auto'

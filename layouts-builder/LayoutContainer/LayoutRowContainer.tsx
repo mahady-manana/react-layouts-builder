@@ -490,8 +490,9 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
         <div
           className={classNames(
-            'section-content column-container',
+            'section-content',
             resizeBegin ? 'rbl-resizing' : '',
+            isMobile ? 'column-container-mobile' : 'column-container',
           )}
           style={{ width: '100%', margin: 'auto' }}
           ref={containerRef}
