@@ -7,7 +7,14 @@
 .flex {
   display: flex;
 }
-
+.column-container {
+  display: flex;
+}
+@media (max-width: 1023px) {
+  .column-container {
+    display: block;
+  }
+}
 .flex-col {
   flex-direction: column;
 }

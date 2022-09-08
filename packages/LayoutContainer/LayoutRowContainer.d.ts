@@ -19,6 +19,7 @@ interface LayoutRowContainerProps {
         bottom: boolean;
     };
     maxColumns?: number;
+    isMobile?: boolean;
     imageSizeFnLoader?: (items: any) => {
         width?: number;
         height?: number;

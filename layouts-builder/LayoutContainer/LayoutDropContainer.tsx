@@ -17,7 +17,7 @@ interface DraggableProps {
   children: ReactNode;
   isLast?: boolean;
   disableChange?: boolean;
-  disableSide: boolean;
+  disableSide?: boolean;
   targetDROP?: TargetPlaceEnum;
   setTargetDROP: Dispatch<
     SetStateAction<TargetPlaceEnum | undefined>

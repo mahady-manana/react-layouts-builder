@@ -21,7 +21,7 @@ import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import classNames from 'classnames';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 import { checkNotFoundData } from 'layouts-builder/helpers/checkNotFoundData';
-import "layouts-builder/LayoutContainer/polyfill.js"
+import 'layouts-builder/LayoutContainer/polyfill.js';
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -31,6 +31,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   staticComponent,
   colResize = true,
   maxColumns,
+  isMobile,
   maxWidth,
   renderComponent,
   onLayoutChange,
@@ -82,9 +83,9 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         }
       }
     };
-    // setTimeout(() => {
-    //   checkScroll();
-    // }, 200);
+    setTimeout(() => {
+      checkScroll();
+    }, 200);
   }, [debounced]);
   useEffect(() => {
     if (layouts && layouts.length > 0) {
@@ -169,6 +170,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                 className="rlb-section-content"
                 style={{
                   width: section.width,
+                  maxWidth: '100%',
                   margin: 'auto',
                   ...(section.styles || {}),
                 }}
@@ -183,6 +185,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                   {section.rows.map((row, rowIndex) => {
                     return (
                       <LayoutRowContainer
+                        isMobile={isMobile}
                         key={row.id}
                         stableKey={stableKey}
                         dragActive={dragActive}

@@ -89,7 +89,7 @@ export const Layouts1 = () => {
   const handleDelete = (id: number) => {};
   return (
     <div
-      style={{ height: '100vh', width: 800 }}
+      // style={{ height: '100vh', width: 800 }}
       className="containersb"
     >
       <script
@@ -102,7 +102,7 @@ export const Layouts1 = () => {
         style={{
           height: '95vh',
           overflowY: 'scroll',
-          width: 800,
+          // width: 800,
           marginInline: 'auto',
         }}
       >
@@ -111,6 +111,7 @@ export const Layouts1 = () => {
         ) : (
           <LayoutProvider>
             <LayoutContainer
+              isMobile
               data={data}
               disableChange={false}
               stableDataKey="id"

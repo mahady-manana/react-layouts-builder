@@ -68,7 +68,7 @@ export const TestComponent = React.memo((props: Props) => {
               ...
             </div>
             {props.data.img ? (
-              <img src={props.data.img} alt="" />
+              <img src={props.data.img} width="100%" alt="" />
             ) : (props.data as any).linkType === 'link' ? (
               <button>{props.data.text}</button>
             ) : (

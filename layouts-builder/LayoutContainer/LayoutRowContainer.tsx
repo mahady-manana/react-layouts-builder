@@ -44,6 +44,7 @@ interface LayoutRowContainerProps {
   colResize: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
   maxColumns?: number;
+  isMobile?: boolean;
   imageSizeFnLoader?: (
     items: any,
   ) => { width?: number; height?: number } | undefined;
@@ -72,6 +73,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   needRowTarget,
   dragActive,
   maxColumns,
+  isMobile,
   setDragActive,
   imageSizeFnLoader,
   setActualLayout,
@@ -82,8 +84,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   onClickCol,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [columnCountReach, setColumnCountReach] =
-    useState<boolean>(false);
+  // const [columnCountReach, setColumnCountReach] =
+  //   useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [resizeBegin, setResizeBegin] = useState<boolean>(false);
   const [widths, setWidths] = useState<number[]>([]);
@@ -183,14 +185,14 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     setSource(undefined);
   };
 
-  useEffect(() => {
-    const isReach = columns.length >= (maxColumns || 15);
-    if (isReach) {
-      setColumnCountReach(true);
-    } else {
-      setColumnCountReach(false);
-    }
-  }, [columns.length, maxColumns]);
+  // useEffect(() => {
+  //   const isReach = columns.length >= (maxColumns || 15);
+  //   if (isReach) {
+  //     setColumnCountReach(true);
+  //   } else {
+  //     setColumnCountReach(false);
+  //   }
+  // }, [columns.length, maxColumns]);
 
   const onMouseMove = (e: MouseEvent<HTMLElement>) => {
     if (resizeBegin) {
@@ -331,9 +333,13 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
       columns.map((column, index) => {
         return (
           <ResizableContainer
-            width={`calc(${widths[index]}% - ${
-              columns.length > 1 ? 20 / columns.length : 0
-            }px)`}
+            width={
+              isMobile
+                ? '100%'
+                : `calc(${widths[index]}% - ${
+                    columns.length > 1 ? 20 / columns.length : 0
+                  }px)`
+            }
             key={column.id}
             isLast={columns.length === index + 1}
             isNextTo={index === indexCol + 1}
@@ -351,7 +357,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
               style={column.styles}
               onClick={(e) => handleclickCol(e, column.id)}
             >
-              {!disabled && !columnCountReach ? (
+              {!disabled && !isMobile ? (
                 <div
                   className="rbl-side-drop-indicator left"
                   style={styleSide(column.id, TargetPlaceEnum.LEFT)}
@@ -374,7 +380,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           ? targetDROP
                           : undefined
                       }
-                      disableSide={columnCountReach}
+                      disableSide={isMobile}
                       setTargetDROP={setTargetDROP}
                       onDragOver={(target) =>
                         handleDragOverItem({
@@ -433,7 +439,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                   );
                 })}
               </div>
-              {!disabled && !columnCountReach ? (
+              {!disabled && !isMobile ? (
                 <div
                   className="rbl-side-drop-indicator right"
                   style={styleSide(column.id, TargetPlaceEnum.RIGHT)}
@@ -484,7 +490,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
 
         <div
           className={classNames(
-            'section-content flex',
+            'section-content column-container',
             resizeBegin ? 'rbl-resizing' : '',
           )}
           style={{ width: '100%', margin: 'auto' }}

@@ -56,6 +56,7 @@ export interface ILayoutLabels {
 
 export interface ILayoutContainer {
   data: any[];
+  isMobile?: boolean
   stableDataKey: string;
   staticComponent?: boolean;
   maxWidth?: number | string;

@@ -34,6 +34,44 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
 function __spreadArray(to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1126,8 +1164,9 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive,
-      maxColumns = _a.maxColumns,
+      dragActive = _a.dragActive;
+      _a.maxColumns;
+      var isMobile = _a.isMobile,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -1136,68 +1175,65 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       _onImageResizeFinished = _a.onImageResizeFinished,
       onClickCol = _a.onClickCol;
-  var containerRef = React.useRef(null);
+  var containerRef = React.useRef(null); // const [columnCountReach, setColumnCountReach] =
+  //   useState<boolean>(false);
 
-  var _b = React.useState(false),
-      columnCountReach = _b[0],
-      setColumnCountReach = _b[1];
+  var _b = React.useState(),
+      currentColumn = _b[0],
+      setCurrentColumn = _b[1];
 
-  var _c = React.useState(),
-      currentColumn = _c[0],
-      setCurrentColumn = _c[1];
+  var _c = React.useState(false),
+      resizeBegin = _c[0],
+      setResizeBegin = _c[1];
 
-  var _d = React.useState(false),
-      resizeBegin = _d[0],
-      setResizeBegin = _d[1];
+  var _d = React.useState([]),
+      widths = _d[0],
+      setWidths = _d[1];
 
-  var _e = React.useState([]),
-      widths = _e[0],
-      setWidths = _e[1];
+  var _e = React.useState(0),
+      indexCol = _e[0],
+      setIndexCol = _e[1];
 
-  var _f = React.useState(0),
-      indexCol = _f[0],
-      setIndexCol = _f[1];
+  var _f = React.useState(),
+      initClientX = _f[0],
+      setInitClientX = _f[1];
 
   var _g = React.useState(),
-      initClientX = _g[0],
-      setInitClientX = _g[1];
+      initWidth = _g[0],
+      setInitWidth = _g[1];
 
   var _h = React.useState(),
-      initWidth = _h[0],
-      setInitWidth = _h[1];
+      newWidth = _h[0],
+      setNewWidth = _h[1];
 
   var _j = React.useState(),
-      newWidth = _j[0],
-      setNewWidth = _j[1];
+      nextWidth = _j[0],
+      setNextWidth = _j[1];
 
-  var _k = React.useState(),
-      nextWidth = _k[0],
-      setNextWidth = _k[1];
+  var _k = React.useState(500),
+      waitBeforeUpdate = _k[0],
+      setWaitBeforeUpdate = _k[1];
 
-  var _l = React.useState(500),
-      waitBeforeUpdate = _l[0],
-      setWaitBeforeUpdate = _l[1];
-
-  var _m = React.useContext(AppContext),
-      source = _m.source,
-      setSource = _m.setSource,
-      setIsDragStart = _m.setIsDragStart; // TARGET DROP STATE
+  var _l = React.useContext(AppContext),
+      source = _l.source,
+      setSource = _l.setSource,
+      setIsDragStart = _l.setIsDragStart; // TARGET DROP STATE
 
 
-  var _o = React.useState(),
-      targetDROP = _o[0],
-      setTargetDROP = _o[1]; // TARGET DESTINATION STATE
+  var _m = React.useState(),
+      targetDROP = _m[0],
+      setTargetDROP = _m[1]; // TARGET DESTINATION STATE
 
 
-  var _p = React.useState({
+  var _o = React.useState({
     columnId: '',
     itemKey: '',
     sectionId: '',
     targetPlace: '',
     rowId: ''
   }),
-      destination = _p[0],
-      setDestination = _p[1];
+      destination = _o[0],
+      setDestination = _o[1];
 
   var resetDrag = function resetDrag() {
     setDestination({
@@ -1251,17 +1287,15 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setSource(undefined);
-  };
+  }; // useEffect(() => {
+  //   const isReach = columns.length >= (maxColumns || 15);
+  //   if (isReach) {
+  //     setColumnCountReach(true);
+  //   } else {
+  //     setColumnCountReach(false);
+  //   }
+  // }, [columns.length, maxColumns]);
 
-  React.useEffect(function () {
-    var isReach = columns.length >= (maxColumns || 15);
-
-    if (isReach) {
-      setColumnCountReach(true);
-    } else {
-      setColumnCountReach(false);
-    }
-  }, [columns.length, maxColumns]);
 
   var onMouseMove = function onMouseMove(e) {
     if (resizeBegin) {
@@ -1390,7 +1424,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
   var columnsComonent = React__default["default"].useMemo(function () {
     return columns.map(function (column, index) {
       return /*#__PURE__*/React__default["default"].createElement(ResizableContainer, {
-        width: "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 20 / columns.length : 0, "px)"),
+        width: isMobile ? '100%' : "calc(".concat(widths[index], "% - ").concat(columns.length > 1 ? 20 / columns.length : 0, "px)"),
         key: column.id,
         isLast: columns.length === index + 1,
         isNextTo: index === indexCol + 1,
@@ -1409,7 +1443,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         onClick: function onClick(e) {
           return handleclickCol(e, column.id);
         }
-      }, !disabled && !columnCountReach ? /*#__PURE__*/React__default["default"].createElement("div", {
+      }, !disabled && !isMobile ? /*#__PURE__*/React__default["default"].createElement("div", {
         className: "rbl-side-drop-indicator left",
         style: styleSide(column.id, exports.TargetPlaceEnum.LEFT)
       }) : null, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -1423,7 +1457,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
-          disableSide: columnCountReach,
+          disableSide: isMobile,
           setTargetDROP: setTargetDROP,
           onDragOver: function onDragOver(target) {
             return handleDragOverItem({
@@ -1460,7 +1494,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           rowId: rowId,
           sectionId: sectionId
         }) : null));
-      })), !disabled && !columnCountReach ? /*#__PURE__*/React__default["default"].createElement("div", {
+      })), !disabled && !isMobile ? /*#__PURE__*/React__default["default"].createElement("div", {
         className: "rbl-side-drop-indicator right",
         style: styleSide(column.id, exports.TargetPlaceEnum.RIGHT)
       }) : null));
@@ -1492,7 +1526,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       visibility: targetDROP === exports.TargetPlaceEnum.ROW_TOP ? 'visible' : 'hidden'
     }
   })) : null, /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('section-content flex', resizeBegin ? 'rbl-resizing' : ''),
+    className: classnames('section-content column-container', resizeBegin ? 'rbl-resizing' : ''),
     style: {
       width: '100%',
       margin: 'auto'
@@ -2187,6 +2221,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       _b = _a.colResize,
       colResize = _b === void 0 ? true : _b,
       maxColumns = _a.maxColumns,
+      isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -2223,9 +2258,41 @@ var LayoutContainer = function LayoutContainer(_a) {
 
   var debounced = useSimpleDebounce(position, 500);
   React.useEffect(function () {
-    //   checkScroll();
-    // }, 200);
+    var checkScroll = function checkScroll() {
+      return __awaiter(void 0, void 0, void 0, function () {
+        var winH, container;
+        return __generator(this, function (_a) {
+          winH = window.innerHeight;
+          container = document.getElementById('container_layout_scroll');
 
+          if (debounced) {
+            if (debounced.y < 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y - winH / 2,
+                left: debounced.x
+              });
+            }
+
+            if (debounced.y > winH - 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y + winH / 2,
+                left: debounced.x
+              });
+            }
+          }
+
+          return [2
+          /*return*/
+          ];
+        });
+      });
+    };
+
+    setTimeout(function () {
+      checkScroll();
+    }, 200);
   }, [debounced]);
   React.useEffect(function () {
     if (layouts && layouts.length > 0) {
@@ -2298,6 +2365,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       className: "rlb-section-content",
       style: __assign({
         width: section.width,
+        maxWidth: '100%',
         margin: 'auto'
       }, section.styles || {})
     }, /*#__PURE__*/React__default["default"].createElement("div", {
@@ -2307,6 +2375,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React__default["default"].createElement(LayoutRowContainer, {
+        isMobile: isMobile,
         key: row.id,
         stableKey: stableKey,
         dragActive: dragActive,

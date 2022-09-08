@@ -1,4 +1,4 @@
-import { __assign } from '../../node_modules/tslib/tslib.es6.js';
+import { __assign, __awaiter, __generator } from '../../node_modules/tslib/tslib.es6.js';
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import { createRenderableLayout } from '../helpers/createRendrableLayout.js';
 import { LayoutRowContainer } from './LayoutRowContainer.js';
@@ -19,6 +19,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       _b = _a.colResize,
       colResize = _b === void 0 ? true : _b,
       maxColumns = _a.maxColumns,
+      isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -55,9 +56,41 @@ var LayoutContainer = function LayoutContainer(_a) {
 
   var debounced = useSimpleDebounce(position, 500);
   useEffect(function () {
-    //   checkScroll();
-    // }, 200);
+    var checkScroll = function checkScroll() {
+      return __awaiter(void 0, void 0, void 0, function () {
+        var winH, container;
+        return __generator(this, function (_a) {
+          winH = window.innerHeight;
+          container = document.getElementById('container_layout_scroll');
 
+          if (debounced) {
+            if (debounced.y < 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y - winH / 2,
+                left: debounced.x
+              });
+            }
+
+            if (debounced.y > winH - 150 && container) {
+              container.scroll({
+                behavior: 'smooth',
+                top: debounced.y + winH / 2,
+                left: debounced.x
+              });
+            }
+          }
+
+          return [2
+          /*return*/
+          ];
+        });
+      });
+    };
+
+    setTimeout(function () {
+      checkScroll();
+    }, 200);
   }, [debounced]);
   useEffect(function () {
     if (layouts && layouts.length > 0) {
@@ -130,6 +163,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       className: "rlb-section-content",
       style: __assign({
         width: section.width,
+        maxWidth: '100%',
         margin: 'auto'
       }, section.styles || {})
     }, /*#__PURE__*/React.createElement("div", {
@@ -139,6 +173,7 @@ var LayoutContainer = function LayoutContainer(_a) {
       }
     }, section.rows.map(function (row, rowIndex) {
       return /*#__PURE__*/React.createElement(LayoutRowContainer, {
+        isMobile: isMobile,
         key: row.id,
         stableKey: stableKey,
         dragActive: dragActive,
