@@ -1646,7 +1646,6 @@ var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
   };
 };
 
-Promise.resolve().then(function () { return require('./polyfill-f6a1312e.js'); });
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,

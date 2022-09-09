@@ -9,7 +9,6 @@ import classnames from '../../node_modules/classnames/index.js';
 import { useContainerIdentifier } from '../hooks/useContainerIdentifier.js';
 import { checkNotFoundData } from '../helpers/checkNotFoundData.js';
 
-import('./polyfill.js');
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,

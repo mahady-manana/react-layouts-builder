@@ -21,7 +21,6 @@ import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import classNames from 'classnames';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 import { checkNotFoundData } from 'layouts-builder/helpers/checkNotFoundData';
-import("./polyfill.js")
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
