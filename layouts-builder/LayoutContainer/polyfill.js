@@ -525,6 +525,4 @@ var DragDropTouch;
   DragDropTouch_1.DragDropTouch = DragDropTouch;
 })(DragDropTouch || (DragDropTouch = {}));
 
-export default function polyfiller() {
-  return DragDropTouch;
-}
+export default DragDropTouch

@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable */
 
 /* tslint-disable */
@@ -566,4 +568,4 @@ var DragDropTouch;
 
 var DragDropTouch$1 = DragDropTouch;
 
-export { DragDropTouch$1 as default };
+exports["default"] = DragDropTouch$1;

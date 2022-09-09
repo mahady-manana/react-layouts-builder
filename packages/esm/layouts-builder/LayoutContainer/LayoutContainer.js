@@ -8,7 +8,10 @@ import useSimpleDebounce from '../hooks/useDebounce.js';
 import classnames from '../../node_modules/classnames/index.js';
 import { useContainerIdentifier } from '../hooks/useContainerIdentifier.js';
 import { checkNotFoundData } from '../helpers/checkNotFoundData.js';
-import './polyfill.js';
+
+if (typeof window !== 'undefined') {
+  import('./polyfill.js');
+}
 
 var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
@@ -55,8 +58,6 @@ var LayoutContainer = function LayoutContainer(_a) {
       setPosition = _g[1];
 
   var debounced = useSimpleDebounce(position, 500);
-  useEffect(function () {
-  }, []);
   useEffect(function () {
     var checkScroll = function checkScroll() {
       return __awaiter(void 0, void 0, void 0, function () {

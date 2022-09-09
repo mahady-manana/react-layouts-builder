@@ -1,1 +1,2 @@
-export default function polyfiller(): any;
+export default DragDropTouch;
+declare var DragDropTouch: any;
