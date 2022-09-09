@@ -1663,6 +1663,10 @@ var DragDropTouch;
    * accessible through the @see:dataTransfer property of all drag events.
    */
 
+  if (!document || typeof document === 'undefined') {
+    return;
+  }
+
   var DataTransfer = function () {
     function DataTransfer() {
       this._dropEffect = 'move';
@@ -1796,10 +1800,6 @@ var DragDropTouch;
     /**
      * Initializes the single instance of the @see:DragDropTouch class.
      */
-    if (!document || typeof document === 'undefined') {
-      return;
-    }
-
     function DragDropTouch() {
       this._lastClick = 0; // enforce singleton pattern
 
