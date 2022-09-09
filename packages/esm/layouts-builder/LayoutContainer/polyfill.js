@@ -22,7 +22,7 @@ var DragDropTouch;
       this._data = {};
     }
 
-    Object.defineProperty(DataTransfer.prototype, "dropEffect", {
+    Object.defineProperty(DataTransfer.prototype, 'dropEffect', {
       /**
        * Gets or sets the type of drag-and-drop operation currently selected.
        * The value must be 'none',  'copy',  'link', or 'move'.
@@ -36,7 +36,7 @@ var DragDropTouch;
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(DataTransfer.prototype, "effectAllowed", {
+    Object.defineProperty(DataTransfer.prototype, 'effectAllowed', {
       /**
        * Gets or sets the types of operations that are possible.
        * Must be one of 'none', 'copy', 'copyLink', 'copyMove', 'link',
@@ -51,7 +51,7 @@ var DragDropTouch;
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(DataTransfer.prototype, "types", {
+    Object.defineProperty(DataTransfer.prototype, 'types', {
       /**
        * Gets an array of strings giving the formats that were set in the @see:dragstart event.
        */
@@ -148,6 +148,10 @@ var DragDropTouch;
     /**
      * Initializes the single instance of the @see:DragDropTouch class.
      */
+    if (!document || typeof document === 'undefined') {
+      return;
+    }
+
     function DragDropTouch() {
       this._lastClick = 0; // enforce singleton pattern
 
