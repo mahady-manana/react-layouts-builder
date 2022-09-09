@@ -21,7 +21,7 @@ import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import classNames from 'classnames';
 import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 import { checkNotFoundData } from 'layouts-builder/helpers/checkNotFoundData';
-import 'layouts-builder/LayoutContainer/polyfill.js';
+import("./polyfill.js")
 
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
@@ -59,6 +59,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     }>();
 
   const debounced = useSimpleDebounce(position, 500);
+
 
   useEffect(() => {
     const checkScroll = async () => {
