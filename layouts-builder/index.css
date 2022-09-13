@@ -291,6 +291,12 @@
   width: 500px;
   /* display: none; */
 }
+@media (max-width: 512px) {
+  #clonedElement {
+    width: 50px;
+    /* display: none; */
+  }
+}
 .section-container-item {
   /* vol */
   /* padding-top: 10px;

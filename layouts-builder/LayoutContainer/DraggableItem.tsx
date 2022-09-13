@@ -36,6 +36,9 @@ export const DraggableItem: FC<DraggableItemProps> = ({
     draggable: true,
     draggableid: draggableId,
     onDragStart: (e: DragEvent<HTMLDivElement>) => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
       e.stopPropagation();
       onDragStart(draggableId);
       setIsDragStart(true);
@@ -43,18 +46,16 @@ export const DraggableItem: FC<DraggableItemProps> = ({
       if (source) {
         setSource(source);
       }
-      if (!touchStart) {
-        const div = document.querySelector(
-          `div[data-draggable-id="${draggableId}"]`,
-        );
+      const div = document.querySelector(
+        `div[data-draggable-id="${draggableId}"]`,
+      );
 
-        const cloned = div?.cloneNode(true) as HTMLElement | null;
-        cloned?.setAttribute('id', 'clonedElement');
+      const cloned = div?.cloneNode(true) as HTMLElement | null;
+      cloned?.setAttribute('id', 'clonedElement');
 
-        document.body.appendChild(cloned as any);
+      document.body.appendChild(cloned as any);
 
-        e.dataTransfer.setDragImage(cloned as any, 0, 0);
-      }
+      e.dataTransfer.setDragImage(cloned as any, 0, 0);
     },
     onDragEnd: (e) => {
       e.preventDefault();

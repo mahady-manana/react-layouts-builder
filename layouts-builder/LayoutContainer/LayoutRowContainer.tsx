@@ -409,6 +409,7 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                       key={index}
                     >
                       <DraggableItem
+                        isMobile={isMobile}
                         isImage={isImage}
                         isButton={isButton(items)}
                         disableChange={disabled}

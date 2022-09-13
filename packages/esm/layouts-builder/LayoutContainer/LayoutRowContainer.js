@@ -334,6 +334,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           disableChange: disabled,
           key: index
         }, /*#__PURE__*/React.createElement(DraggableItem, {
+          isMobile: isMobile,
           isImage: isImage,
           isButton: isButton(items),
           disableChange: disabled,

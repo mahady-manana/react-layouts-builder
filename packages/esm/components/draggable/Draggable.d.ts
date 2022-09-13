@@ -11,6 +11,7 @@ interface DraggableProps {
     };
     oneCol?: boolean;
     isCenter?: boolean;
+    isMobile?: boolean;
     onImageResizeFinished?: (sizes: {
         width?: number;
         height?: number;

@@ -57,8 +57,8 @@ export const TestComponent = React.memo((props: Props) => {
             <div
               style={{
                 border: '1px solid #000',
-                width: 50,
-                height: 50,
+                width: 20,
+                height: 20,
                 position: 'absolute',
                 top: 0,
                 left: 0,

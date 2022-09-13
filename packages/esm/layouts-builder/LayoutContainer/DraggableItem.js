@@ -27,6 +27,10 @@ var DraggableItem = function DraggableItem(_a) {
     draggable: true,
     draggableid: draggableId,
     onDragStart: function onDragStart(e) {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+
       e.stopPropagation();
 
       _onDragStart(draggableId);
@@ -38,13 +42,11 @@ var DraggableItem = function DraggableItem(_a) {
         setSource(source);
       }
 
-      if (!touchStart) {
-        var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
-        var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
-        cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute('id', 'clonedElement');
-        document.body.appendChild(cloned);
-        e.dataTransfer.setDragImage(cloned, 0, 0);
-      }
+      var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
+      var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
+      cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute('id', 'clonedElement');
+      document.body.appendChild(cloned);
+      e.dataTransfer.setDragImage(cloned, 0, 0);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();

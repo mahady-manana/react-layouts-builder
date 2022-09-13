@@ -210,6 +210,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
       sizes = _a.sizes,
       isImage = _a.isImage,
       oneCol = _a.oneCol,
+      isMobile = _a.isMobile,
       isCenter = _a.isCenter,
       isButton = _a.isButton,
       // onDragStart,
@@ -414,11 +415,11 @@ var DraggableItem$1 = function DraggableItem(_a) {
     className: "image_rlb",
     id: "rbl_image_".concat(dndTargetKey),
     style: {
-      width: "".concat(width || 100, "%"),
+      width: isMobile ? '100%' : "".concat(width || 100, "%"),
       maxHeight: height ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,
       margin: oneCol || isCenter ? 'auto' : undefined
     }
-  }, !disableChange && oneCol ? /*#__PURE__*/React__default["default"].createElement("div", {
+  }, !disableChange && oneCol && !isMobile ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-left",
     onClick: function onClick(e) {
       e.preventDefault();
@@ -435,7 +436,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
 
       _onMouseDown(e);
     }
-  })) : null, !disableChange && !isButton ? /*#__PURE__*/React__default["default"].createElement("div", {
+  })) : null, !disableChange && !isButton && !isMobile ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize-bottom",
     onClick: function onClick(e) {
       e.preventDefault();
@@ -452,7 +453,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
 
       _onMouseDown(e, true);
     }
-  })) : null, children, !disableChange ? /*#__PURE__*/React__default["default"].createElement("div", {
+  })) : null, children, !disableChange && !isMobile ? /*#__PURE__*/React__default["default"].createElement("div", {
     className: "image-resize imr-right",
     onClick: function onClick(e) {
       e.preventDefault();
@@ -1478,6 +1479,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
           disableChange: disabled,
           key: index
         }, /*#__PURE__*/React__default["default"].createElement(DraggableItem$1, {
+          isMobile: isMobile,
           isImage: isImage,
           isButton: isButton(items),
           disableChange: disabled,
@@ -1647,7 +1649,7 @@ var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
 };
 
 if (typeof window !== 'undefined') {
-  Promise.resolve().then(function () { return require('./polyfill-383508ea.js'); });
+  Promise.resolve().then(function () { return require('./polyfill-e4cbd2be.js'); });
 }
 
 var LayoutContainer = function LayoutContainer(_a) {
@@ -2016,6 +2018,10 @@ var DraggableItem = function DraggableItem(_a) {
     draggable: true,
     draggableid: draggableId,
     onDragStart: function onDragStart(e) {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+
       e.stopPropagation();
 
       _onDragStart(draggableId);
@@ -2027,13 +2033,11 @@ var DraggableItem = function DraggableItem(_a) {
         setSource(source);
       }
 
-      if (!touchStart) {
-        var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
-        var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
-        cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute('id', 'clonedElement');
-        document.body.appendChild(cloned);
-        e.dataTransfer.setDragImage(cloned, 0, 0);
-      }
+      var div = document.querySelector("div[data-draggable-id=\"".concat(draggableId, "\"]"));
+      var cloned = div === null || div === void 0 ? void 0 : div.cloneNode(true);
+      cloned === null || cloned === void 0 ? void 0 : cloned.setAttribute('id', 'clonedElement');
+      document.body.appendChild(cloned);
+      e.dataTransfer.setDragImage(cloned, 0, 0);
     },
     onDragEnd: function onDragEnd(e) {
       e.preventDefault();

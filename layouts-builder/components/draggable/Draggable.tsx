@@ -18,10 +18,11 @@ interface DraggableProps {
   //   element?: HTMLElement,
   // ) => void;
   isImage?: boolean;
-  isButton?: boolean
+  isButton?: boolean;
   sizes?: { width?: number; height?: number };
   oneCol?: boolean;
-  isCenter?: boolean
+  isCenter?: boolean;
+  isMobile?: boolean;
   onImageResizeFinished?: (sizes: {
     width?: number;
     height?: number;
@@ -34,6 +35,7 @@ export const DraggableItem: FC<DraggableProps> = ({
   sizes,
   isImage,
   oneCol,
+  isMobile,
   isCenter,
   isButton,
   // onDragStart,
@@ -44,9 +46,8 @@ export const DraggableItem: FC<DraggableProps> = ({
   const [finalWidth, setFinalWidth] = useState<number>(0);
   const [initWidth, setInitWidth] = useState<number>();
   const [initClientX, setInitClientX] = useState<number>();
-  const [direction, setDirection] = useState<
-    'left' | 'right' | 'vertical'
-  >();
+  const [direction, setDirection] =
+    useState<'left' | 'right' | 'vertical'>();
   const [height, setHeight] = useState<number>(0);
   const [finalHeight, setFinalHeight] = useState(0);
   const [initHeight, setInitHeight] = useState<number>();
@@ -176,7 +177,6 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   }, [height]);
 
-
   return (
     <div
       // onDragStart={(e) => {
@@ -185,7 +185,7 @@ export const DraggableItem: FC<DraggableProps> = ({
       //     e.currentTarget.setAttribute('id', 'draggedDiv');
       //   }
       // }}
-      
+
       //   // const cloned = e.currentTarget as HTMLDivElement;
       // onDrag={e => {
       //   // cloned.style.position = "fixed"
@@ -210,14 +210,14 @@ export const DraggableItem: FC<DraggableProps> = ({
           className="image_rlb"
           id={`rbl_image_${dndTargetKey}`}
           style={{
-            width: `${width || 100}%`,
+            width: isMobile ? '100%' : `${width || 100}%`,
             maxHeight: height
               ? (height || sizes?.height || 0) + 30
               : undefined,
             margin: oneCol || isCenter ? 'auto' : undefined,
           }}
         >
-          {!disableChange && oneCol ? (
+          {!disableChange && oneCol && !isMobile ? (
             <div
               className="image-resize imr-left"
               onClick={(e) => {
@@ -236,7 +236,7 @@ export const DraggableItem: FC<DraggableProps> = ({
               ></div>
             </div>
           ) : null}
-          {!disableChange && !isButton ? (
+          {!disableChange && !isButton && !isMobile ? (
             <div
               className="image-resize-bottom"
               onClick={(e) => {
@@ -256,7 +256,7 @@ export const DraggableItem: FC<DraggableProps> = ({
             </div>
           ) : null}
           {children}
-          {!disableChange ? (
+          {!disableChange && !isMobile ? (
             <div
               className="image-resize imr-right"
               onClick={(e) => {
