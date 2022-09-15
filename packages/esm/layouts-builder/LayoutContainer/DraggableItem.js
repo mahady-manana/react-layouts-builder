@@ -27,10 +27,9 @@ var DraggableItem = function DraggableItem(_a) {
     draggable: true,
     draggableid: draggableId,
     onDragStart: function onDragStart(e) {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-
+      // if (e.cancelable) {
+      //   e.preventDefault();
+      // }
       e.stopPropagation();
 
       _onDragStart(draggableId);

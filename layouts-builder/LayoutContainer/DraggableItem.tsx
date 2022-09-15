@@ -36,9 +36,9 @@ export const DraggableItem: FC<DraggableItemProps> = ({
     draggable: true,
     draggableid: draggableId,
     onDragStart: (e: DragEvent<HTMLDivElement>) => {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
+      // if (e.cancelable) {
+      //   e.preventDefault();
+      // }
       e.stopPropagation();
       onDragStart(draggableId);
       setIsDragStart(true);
