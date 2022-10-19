@@ -1,15 +1,15 @@
-import React, { FC, MouseEvent, useRef } from 'react';
+import React, { FC, useRef } from 'react';
 
 interface ResizableContainerProps {
   resizable?: boolean;
   colNumber: number;
   type?: any;
   width: number | string;
-  onMouseDown?: (clienX: number, width: number) => void;
   isLast?: boolean;
   isNextTo?: boolean;
   resizing?: boolean;
   children?: any;
+  onMouseDown?: (clienX: number, width: number) => void;
 }
 const ResizableContainerComponent: FC<ResizableContainerProps> = ({
   type,
@@ -29,7 +29,10 @@ const ResizableContainerComponent: FC<ResizableContainerProps> = ({
       <div
         className="rlb-content-container"
         ref={columnRef}
-        style={{ width: colNumber > 1 ? width : "100%", flexGrow: isNextTo ? 1 : undefined }}
+        style={{
+          width: colNumber > 1 ? width : '100%',
+          flexGrow: isNextTo ? 1 : undefined,
+        }}
         data-resizable-type={type}
       >
         {children}

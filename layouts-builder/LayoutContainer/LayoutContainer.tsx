@@ -196,7 +196,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                         sectionId={section.id}
                         rowId={row.id}
                         disabled={disableChange}
-                        maxColumns={maxColumns}
                         isLastSection={
                           renderableLayout.length === sectionIndex + 1
                         }
@@ -210,7 +209,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
                             rowIndex,
                           },
                         )}
-                        colResize={colResize}
                         renderComponent={renderComponent}
                         setActualLayout={setActualLayout}
                         onLayoutChange={onLayoutChange}

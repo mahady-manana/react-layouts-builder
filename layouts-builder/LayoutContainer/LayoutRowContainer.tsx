@@ -6,7 +6,6 @@ import React, {
   MouseEvent,
   ReactNode,
   SetStateAction,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -29,7 +28,6 @@ import { findWidthPercentByPx } from 'layouts-builder/helpers/findWidth';
 import classNames from 'classnames';
 import { LayoutDropContainer } from './LayoutDropContainer';
 import { AppContext } from 'layouts-builder/Context/AppContext';
-import { useContainerIdentifier } from 'layouts-builder/hooks/useContainerIdentifier';
 
 interface LayoutRowContainerProps {
   stableKey: string;
@@ -41,9 +39,7 @@ interface LayoutRowContainerProps {
   isLastSection?: boolean;
   isFirstSection?: boolean;
   dragActive?: boolean;
-  colResize: boolean;
   needRowTarget?: { top: boolean; bottom: boolean };
-  maxColumns?: number;
   isMobile?: boolean;
   imageSizeFnLoader?: (
     items: any,
@@ -72,7 +68,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   isLastSection,
   needRowTarget,
   dragActive,
-  maxColumns,
   isMobile,
   setDragActive,
   imageSizeFnLoader,
@@ -84,8 +79,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   onClickCol,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // const [columnCountReach, setColumnCountReach] =
-  //   useState<boolean>(false);
   const [currentColumn, setCurrentColumn] = useState<string>();
   const [resizeBegin, setResizeBegin] = useState<boolean>(false);
   const [widths, setWidths] = useState<number[]>([]);
@@ -97,7 +90,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
   const [waitBeforeUpdate, setWaitBeforeUpdate] =
     useState<number>(500);
 
-  const { isColumnContainer } = useContainerIdentifier();
   const { source, setSource, setIsDragStart } =
     useContext(AppContext);
   // TARGET DROP STATE
@@ -184,15 +176,6 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
     });
     setSource(undefined);
   };
-
-  // useEffect(() => {
-  //   const isReach = columns.length >= (maxColumns || 15);
-  //   if (isReach) {
-  //     setColumnCountReach(true);
-  //   } else {
-  //     setColumnCountReach(false);
-  //   }
-  // }, [columns.length, maxColumns]);
 
   const onMouseMove = (e: MouseEvent<HTMLElement>) => {
     if (resizeBegin) {

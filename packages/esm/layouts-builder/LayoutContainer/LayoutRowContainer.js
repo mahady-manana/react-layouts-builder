@@ -20,9 +20,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive;
-      _a.maxColumns;
-      var isMobile = _a.isMobile,
+      dragActive = _a.dragActive,
+      isMobile = _a.isMobile,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -31,8 +30,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       _onImageResizeFinished = _a.onImageResizeFinished,
       onClickCol = _a.onClickCol;
-  var containerRef = useRef(null); // const [columnCountReach, setColumnCountReach] =
-  //   useState<boolean>(false);
+  var containerRef = useRef(null);
 
   var _b = useState(),
       currentColumn = _b[0],
@@ -143,15 +141,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setSource(undefined);
-  }; // useEffect(() => {
-  //   const isReach = columns.length >= (maxColumns || 15);
-  //   if (isReach) {
-  //     setColumnCountReach(true);
-  //   } else {
-  //     setColumnCountReach(false);
-  //   }
-  // }, [columns.length, maxColumns]);
-
+  };
 
   var onMouseMove = function onMouseMove(e) {
     if (resizeBegin) {

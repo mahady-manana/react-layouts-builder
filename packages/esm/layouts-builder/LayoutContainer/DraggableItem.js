@@ -1,6 +1,6 @@
 import { AppContext } from '../Context/AppContext.js';
 import { findSourceLayout } from '../helpers/findSource.js';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
 var DraggableItem = function DraggableItem(_a) {
   var draggableId = _a.draggableId,
@@ -12,24 +12,10 @@ var DraggableItem = function DraggableItem(_a) {
       setSource = _b.setSource,
       setIsDragStart = _b.setIsDragStart;
 
-  var _c = useState(false),
-      touchStart = _c[0];
-      _c[1];
-
-  var _d = useState({
-    x: 0,
-    y: 0
-  }),
-      postion = _d[0];
-      _d[1];
-
   var draggableAttributes = {
     draggable: true,
     draggableid: draggableId,
     onDragStart: function onDragStart(e) {
-      // if (e.cancelable) {
-      //   e.preventDefault();
-      // }
       e.stopPropagation();
 
       _onDragStart(draggableId);
@@ -53,52 +39,12 @@ var DraggableItem = function DraggableItem(_a) {
       setIsDragStart(false);
       var el = document.getElementById('clonedElement');
       el === null || el === void 0 ? void 0 : el.remove();
-    } // onTouchStart: (e: TouchEvent<HTMLDivElement>) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   setTouchStart(true);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchMove: (e) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   // const el = document.getElementById('clonedElement');
-    //   // el?.remove();
-    // },
-    // onTouchEnd: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchCancel: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    // },
-
+    }
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, children({
     draggableProps: draggableAttributes,
-    handleProps: {},
-    styles: touchStart ? {
-      position: 'fixed',
-      top: postion.y,
-      left: postion.x,
-      zIndex: 9999
-    } : {}
-  }), touchStart ? /*#__PURE__*/React.createElement("div", {
-    className: "target-it",
-    style: {
-      padding: 25
-    }
-  }, /*#__PURE__*/React.createElement("p", null, "Place here")) : null);
+    handleProps: {}
+  }));
 };
 
 export { DraggableItem };

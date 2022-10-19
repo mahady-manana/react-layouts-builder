@@ -213,8 +213,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
       isMobile = _a.isMobile,
       isCenter = _a.isCenter,
       isButton = _a.isButton,
-      // onDragStart,
-  onImageResizeFinished = _a.onImageResizeFinished;
+      onImageResizeFinished = _a.onImageResizeFinished;
   var containerRef = React.useRef(null);
 
   var _b = React.useState(0),
@@ -391,18 +390,6 @@ var DraggableItem$1 = function DraggableItem(_a) {
     }
   }, [height]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    // onDragStart={(e) => {
-    //   if (!disableChange) {
-    //     onDragStart(e, containerRef.current as any);
-    //     e.currentTarget.setAttribute('id', 'draggedDiv');
-    //   }
-    // }}
-    //   // const cloned = e.currentTarget as HTMLDivElement;
-    // onDrag={e => {
-    //   // cloned.style.position = "fixed"
-    //   // cloned.style.top = `${e.clientY}px`
-    //   // cloned.style.left = `${e.clientX}px`
-    // }}
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
     "data-draggable-id": dndTargetKey,
@@ -509,7 +496,7 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
     className: "rlb-content-container",
     ref: columnRef,
     style: {
-      width: colNumber > 1 ? width : "100%",
+      width: colNumber > 1 ? width : '100%',
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type
@@ -1134,27 +1121,6 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
   }) : null);
 };
 
-var useContainerIdentifier = function useContainerIdentifier() {
-  var isSectionContainer = function isSectionContainer(section) {
-    if (section.container) {
-      return true;
-    }
-
-    return section.rows.every(function (row) {
-      return row.columns.length > 1;
-    });
-  };
-
-  var isColumnContainer = function isColumnContainer(cols) {
-    return cols.items.length > 1;
-  };
-
-  return {
-    isSectionContainer: isSectionContainer,
-    isColumnContainer: isColumnContainer
-  };
-};
-
 var LayoutRowContainer = function LayoutRowContainer(_a) {
   var disabled = _a.disabled,
       isFirstSection = _a.isFirstSection,
@@ -1165,9 +1131,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId = _a.rowId,
       isLastSection = _a.isLastSection,
       needRowTarget = _a.needRowTarget,
-      dragActive = _a.dragActive;
-      _a.maxColumns;
-      var isMobile = _a.isMobile,
+      dragActive = _a.dragActive,
+      isMobile = _a.isMobile,
       setDragActive = _a.setDragActive,
       imageSizeFnLoader = _a.imageSizeFnLoader,
       setActualLayout = _a.setActualLayout,
@@ -1176,8 +1141,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       onLayoutChange = _a.onLayoutChange,
       _onImageResizeFinished = _a.onImageResizeFinished,
       onClickCol = _a.onClickCol;
-  var containerRef = React.useRef(null); // const [columnCountReach, setColumnCountReach] =
-  //   useState<boolean>(false);
+  var containerRef = React.useRef(null);
 
   var _b = React.useState(),
       currentColumn = _b[0],
@@ -1288,15 +1252,7 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
       rowId: ''
     });
     setSource(undefined);
-  }; // useEffect(() => {
-  //   const isReach = columns.length >= (maxColumns || 15);
-  //   if (isReach) {
-  //     setColumnCountReach(true);
-  //   } else {
-  //     setColumnCountReach(false);
-  //   }
-  // }, [columns.length, maxColumns]);
-
+  };
 
   var onMouseMove = function onMouseMove(e) {
     if (resizeBegin) {
@@ -1605,6 +1561,27 @@ function useSimpleDebounce(value, delay) {
   return debouncedValue;
 }
 
+var useContainerIdentifier = function useContainerIdentifier() {
+  var isSectionContainer = function isSectionContainer(section) {
+    if (section.container) {
+      return true;
+    }
+
+    return section.rows.every(function (row) {
+      return row.columns.length > 1;
+    });
+  };
+
+  var isColumnContainer = function isColumnContainer(cols) {
+    return cols.items.length > 1;
+  };
+
+  return {
+    isSectionContainer: isSectionContainer,
+    isColumnContainer: isColumnContainer
+  };
+};
+
 var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
   var hasNotFound = false;
   var noNotFoundChild = layouts.map(function (section) {
@@ -1657,11 +1634,10 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      staticComponent = _a.staticComponent,
-      _b = _a.colResize,
-      colResize = _b === void 0 ? true : _b,
-      maxColumns = _a.maxColumns,
-      isMobile = _a.isMobile,
+      staticComponent = _a.staticComponent;
+      _a.colResize;
+      _a.maxColumns;
+      var isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -1824,7 +1800,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         sectionId: section.id,
         rowId: row.id,
         disabled: disableChange,
-        maxColumns: maxColumns,
         isLastSection: renderableLayout.length === sectionIndex + 1,
         isFirstSection: sectionIndex === 0,
         needRowTarget: needRowTarget(renderableLayout, row, {
@@ -1832,7 +1807,6 @@ var LayoutContainer = function LayoutContainer(_a) {
           sectionIndex: sectionIndex,
           rowIndex: rowIndex
         }),
-        colResize: colResize,
         renderComponent: renderComponent,
         setActualLayout: setActualLayout,
         onLayoutChange: onLayoutChange,
@@ -2003,24 +1977,10 @@ var DraggableItem = function DraggableItem(_a) {
       setSource = _b.setSource,
       setIsDragStart = _b.setIsDragStart;
 
-  var _c = React.useState(false),
-      touchStart = _c[0];
-      _c[1];
-
-  var _d = React.useState({
-    x: 0,
-    y: 0
-  }),
-      postion = _d[0];
-      _d[1];
-
   var draggableAttributes = {
     draggable: true,
     draggableid: draggableId,
     onDragStart: function onDragStart(e) {
-      // if (e.cancelable) {
-      //   e.preventDefault();
-      // }
       e.stopPropagation();
 
       _onDragStart(draggableId);
@@ -2044,52 +2004,12 @@ var DraggableItem = function DraggableItem(_a) {
       setIsDragStart(false);
       var el = document.getElementById('clonedElement');
       el === null || el === void 0 ? void 0 : el.remove();
-    } // onTouchStart: (e: TouchEvent<HTMLDivElement>) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   setTouchStart(true);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchMove: (e) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   // const el = document.getElementById('clonedElement');
-    //   // el?.remove();
-    // },
-    // onTouchEnd: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchCancel: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    // },
-
+    }
   };
   return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, children({
     draggableProps: draggableAttributes,
-    handleProps: {},
-    styles: touchStart ? {
-      position: 'fixed',
-      top: postion.y,
-      left: postion.x,
-      zIndex: 9999
-    } : {}
-  }), touchStart ? /*#__PURE__*/React__default["default"].createElement("div", {
-    className: "target-it",
-    style: {
-      padding: 25
-    }
-  }, /*#__PURE__*/React__default["default"].createElement("p", null, "Place here")) : null);
+    handleProps: {}
+  }));
 };
 
 var useContainerStyles = function useContainerStyles() {

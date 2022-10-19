@@ -15,7 +15,7 @@ var ResizableContainerComponent = function ResizableContainerComponent(_a) {
     className: "rlb-content-container",
     ref: columnRef,
     style: {
-      width: colNumber > 1 ? width : "100%",
+      width: colNumber > 1 ? width : '100%',
       flexGrow: isNextTo ? 1 : undefined
     },
     "data-resizable-type": type

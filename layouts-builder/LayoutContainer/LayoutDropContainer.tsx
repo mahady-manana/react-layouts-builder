@@ -1,5 +1,4 @@
 import { AppContext } from 'layouts-builder/Context/AppContext';
-import useSimpleDebounce from 'layouts-builder/hooks/useDebounce';
 import { TargetPlaceEnum } from 'layouts-builder/interface/internalType';
 import React, {
   FC,

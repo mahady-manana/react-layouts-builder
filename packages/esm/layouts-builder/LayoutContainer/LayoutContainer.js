@@ -18,11 +18,10 @@ var LayoutContainer = function LayoutContainer(_a) {
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
       disableChange = _a.disableChange,
-      staticComponent = _a.staticComponent,
-      _b = _a.colResize,
-      colResize = _b === void 0 ? true : _b,
-      maxColumns = _a.maxColumns,
-      isMobile = _a.isMobile,
+      staticComponent = _a.staticComponent;
+      _a.colResize;
+      _a.maxColumns;
+      var isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
@@ -185,7 +184,6 @@ var LayoutContainer = function LayoutContainer(_a) {
         sectionId: section.id,
         rowId: row.id,
         disabled: disableChange,
-        maxColumns: maxColumns,
         isLastSection: renderableLayout.length === sectionIndex + 1,
         isFirstSection: sectionIndex === 0,
         needRowTarget: needRowTarget(renderableLayout, row, {
@@ -193,7 +191,6 @@ var LayoutContainer = function LayoutContainer(_a) {
           sectionIndex: sectionIndex,
           rowIndex: rowIndex
         }),
-        colResize: colResize,
         renderComponent: renderComponent,
         setActualLayout: setActualLayout,
         onLayoutChange: onLayoutChange,

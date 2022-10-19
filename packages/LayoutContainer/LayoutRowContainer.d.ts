@@ -13,12 +13,10 @@ interface LayoutRowContainerProps {
     isLastSection?: boolean;
     isFirstSection?: boolean;
     dragActive?: boolean;
-    colResize: boolean;
     needRowTarget?: {
         top: boolean;
         bottom: boolean;
     };
-    maxColumns?: number;
     isMobile?: boolean;
     imageSizeFnLoader?: (items: any) => {
         width?: number;

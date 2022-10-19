@@ -111,7 +111,7 @@ export const Layouts1 = () => {
         ) : (
           <LayoutProvider>
             <LayoutContainer
-              isMobile
+              isMobile={false}
               data={data}
               disableChange={false}
               stableDataKey="id"

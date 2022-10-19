@@ -6,9 +6,7 @@ import React, {
   FC,
   HTMLAttributes,
   ReactNode,
-  TouchEvent,
   useContext,
-  useState,
 } from 'react';
 
 interface IAttributes {
@@ -27,18 +25,10 @@ export const DraggableItem: FC<DraggableItemProps> = ({
 }) => {
   const { currentLayouts, onDragStart, setSource, setIsDragStart } =
     useContext(AppContext);
-  const [touchStart, setTouchStart] = useState<boolean>(false);
-  const [postion, setPostion] = useState({
-    x: 0,
-    y: 0,
-  });
   const draggableAttributes: HTMLAttributes<HTMLDivElement> | any = {
     draggable: true,
     draggableid: draggableId,
     onDragStart: (e: DragEvent<HTMLDivElement>) => {
-      // if (e.cancelable) {
-      //   e.preventDefault();
-      // }
       e.stopPropagation();
       onDragStart(draggableId);
       setIsDragStart(true);
@@ -64,55 +54,13 @@ export const DraggableItem: FC<DraggableItemProps> = ({
       const el = document.getElementById('clonedElement');
       el?.remove();
     },
-    // onTouchStart: (e: TouchEvent<HTMLDivElement>) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   setTouchStart(true);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchMove: (e) => {
-    //   const pos = e.changedTouches[0];
-    //   setPostion({
-    //     x: pos.clientX,
-    //     y: pos.clientY,
-    //   });
-    //   // const el = document.getElementById('clonedElement');
-    //   // el?.remove();
-    // },
-    // onTouchEnd: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    //   const el = document.getElementById('clonedElement');
-    //   el?.remove();
-    // },
-    // onTouchCancel: (e) => {
-    //   setTouchStart(false);
-    //   console.log(e);
-    // },
   };
   return (
     <>
       {children({
         draggableProps: draggableAttributes,
         handleProps: {},
-        styles: touchStart
-          ? {
-              position: 'fixed',
-              top: postion.y,
-              left: postion.x,
-              zIndex: 9999,
-            }
-          : {},
       })}
-      {touchStart ? (
-        <div className="target-it" style={{ padding: 25 }}>
-          <p>Place here</p>
-        </div>
-      ) : null}
     </>
   );
 };

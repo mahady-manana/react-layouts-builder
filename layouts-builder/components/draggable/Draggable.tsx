@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import React, {
   FC,
   ReactNode,
-  DragEvent,
   useState,
   useEffect,
   useRef,
@@ -13,10 +12,6 @@ interface DraggableProps {
   children: ReactNode;
   dndTargetKey: string;
   disableChange?: boolean;
-  // onDragStart: (
-  //   e: DragEvent<HTMLDivElement>,
-  //   element?: HTMLElement,
-  // ) => void;
   isImage?: boolean;
   isButton?: boolean;
   sizes?: { width?: number; height?: number };
@@ -38,7 +33,6 @@ export const DraggableItem: FC<DraggableProps> = ({
   isMobile,
   isCenter,
   isButton,
-  // onDragStart,
   onImageResizeFinished,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -179,19 +173,6 @@ export const DraggableItem: FC<DraggableProps> = ({
 
   return (
     <div
-      // onDragStart={(e) => {
-      //   if (!disableChange) {
-      //     onDragStart(e, containerRef.current as any);
-      //     e.currentTarget.setAttribute('id', 'draggedDiv');
-      //   }
-      // }}
-
-      //   // const cloned = e.currentTarget as HTMLDivElement;
-      // onDrag={e => {
-      //   // cloned.style.position = "fixed"
-      //   // cloned.style.top = `${e.clientY}px`
-      //   // cloned.style.left = `${e.clientX}px`
-      // }}
       className={classNames(
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',
