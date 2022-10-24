@@ -1633,10 +1633,8 @@ var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
-      disableChange = _a.disableChange,
-      staticComponent = _a.staticComponent;
-      _a.colResize;
-      _a.maxColumns;
+      disableChange = _a.disableChange;
+      _a.staticComponent;
       var isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
       renderComponent = _a.renderComponent,
@@ -1648,29 +1646,29 @@ var LayoutContainer = function LayoutContainer(_a) {
       onClickSection = _a.onClickSection;
   var containeRef = React.useRef(null);
 
-  var _c = React.useState(false),
-      runChange = _c[0],
-      setRunChange = _c[1];
+  var _b = React.useState(false),
+      runChange = _b[0],
+      setRunChange = _b[1];
 
-  var _d = React.useState([]),
-      actualLayout = _d[0],
-      setActualLayout = _d[1];
+  var _c = React.useState([]),
+      actualLayout = _c[0],
+      setActualLayout = _c[1];
 
   var isSectionContainer = useContainerIdentifier().isSectionContainer;
 
-  var _e = React.useState(false),
-      dragActive = _e[0],
-      setDragActive = _e[1];
+  var _d = React.useState(false),
+      dragActive = _d[0],
+      setDragActive = _d[1];
 
   var setCurrentLayouts = React.useContext(AppContext).setCurrentLayouts;
 
-  var _f = React.useState([]),
-      renderableLayout = _f[0],
-      setRenderableLayout = _f[1];
+  var _e = React.useState([]),
+      renderableLayout = _e[0],
+      setRenderableLayout = _e[1];
 
-  var _g = React.useState(),
-      position = _g[0],
-      setPosition = _g[1];
+  var _f = React.useState(),
+      position = _f[0],
+      setPosition = _f[1];
 
   var debounced = useSimpleDebounce(position, 500);
   React.useEffect(function () {
@@ -1730,17 +1728,6 @@ var LayoutContainer = function LayoutContainer(_a) {
       setRunChange(false);
     }
   }, [runChange]);
-
-  if (staticComponent) {
-    return /*#__PURE__*/React__default["default"].createElement("div", {
-      className: "rlb-static-container",
-      style: {
-        maxWidth: maxWidth
-      }
-    }, data.map(function (item, index) {
-      return renderComponent(item, {}, index);
-    }));
-  }
 
   var handleDragOverContainer = function handleDragOverContainer(e) {
     setPosition({

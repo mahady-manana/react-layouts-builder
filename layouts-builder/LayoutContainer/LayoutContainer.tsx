@@ -31,8 +31,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   layouts,
   disableChange,
   staticComponent,
-  colResize = true,
-  maxColumns,
   isMobile,
   maxWidth,
   renderComponent,
@@ -89,6 +87,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       checkScroll();
     }, 200);
   }, [debounced]);
+
   useEffect(() => {
     if (layouts && layouts.length > 0) {
       setActualLayout(layouts);
@@ -121,19 +120,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       setRunChange(false);
     }
   }, [runChange]);
-
-  if (staticComponent) {
-    return (
-      <div
-        className="rlb-static-container"
-        style={{ maxWidth: maxWidth }}
-      >
-        {data.map((item, index) => {
-          return renderComponent(item, {} as any, index);
-        })}
-      </div>
-    );
-  }
 
   const handleDragOverContainer = (e: DragEvent<HTMLDivElement>) => {
     setPosition({
