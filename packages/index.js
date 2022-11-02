@@ -1766,11 +1766,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef,
     onDragOver: handleDragOverContainer,
     id: "layout_container"
-  }, ssr ? getSSRLayout().map(function (data, index) {
-    return /*#__PURE__*/React__default["default"].createElement("div", {
-      key: index
-    }, /*#__PURE__*/React__default["default"].createElement("p", null, JSON.stringify(data)));
-  }) : null, (ssr ? getSSRLayout() : renderableLayout).map(function (section, sectionIndex) {
+  }, (ssr ? getSSRLayout() : renderableLayout).map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,
       className: "rlb-section rlb-section-container"
