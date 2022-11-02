@@ -1750,7 +1750,11 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   };
 
-  var getSSRLayout = function getSSRLayout() {
+  var getLayout = function getLayout() {
+    if (!ssr) {
+      return renderableLayout;
+    }
+
     var cleanLayout = checkNotFoundData(actualLayout, data, stableKey);
     var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
     return renderable;
@@ -1766,7 +1770,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef,
     onDragOver: handleDragOverContainer,
     id: "layout_container"
-  }, (ssr ? getSSRLayout() : renderableLayout).map(function (section, sectionIndex) {
+  }, getLayout().map(function (section, sectionIndex) {
     return /*#__PURE__*/React__default["default"].createElement("div", {
       key: section.id,
       className: "rlb-section rlb-section-container"

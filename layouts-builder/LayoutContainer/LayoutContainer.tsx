@@ -137,7 +137,10 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       onClickColumn(source);
     }
   };
-  const getSSRLayout = () => {
+  const getLayout = () => {
+    if (!ssr) {
+      return renderableLayout
+    }
     const cleanLayout = checkNotFoundData(
       actualLayout,
       data,
@@ -161,7 +164,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         onDragOver={handleDragOverContainer}
         id="layout_container"
       >
-        {(ssr ? getSSRLayout() : renderableLayout).map(
+        {getLayout().map(
           (section, sectionIndex) => {
             return (
               <div
