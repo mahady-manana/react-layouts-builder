@@ -1755,12 +1755,11 @@ var LayoutContainer = function LayoutContainer(_a) {
       return renderableLayout;
     }
 
-    var cleanLayout = checkNotFoundData(actualLayout, data, stableKey);
+    var cleanLayout = checkNotFoundData(layouts || [], data, stableKey);
     var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
     return renderable;
   };
 
-  console.log('GETLAYOUT', getLayout().length);
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: "rlb-main-container m-auto",
     style: {

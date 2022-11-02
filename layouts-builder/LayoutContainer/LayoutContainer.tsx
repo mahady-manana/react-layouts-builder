@@ -142,7 +142,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
       return renderableLayout;
     }
     const cleanLayout = checkNotFoundData(
-      actualLayout,
+      layouts || [],
       data,
       stableKey,
     );
@@ -153,7 +153,6 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     );
     return renderable;
   };
-  console.log('GETLAYOUT', getLayout().length);
 
   return (
     <div
