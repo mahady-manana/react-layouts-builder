@@ -161,6 +161,15 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         onDragOver={handleDragOverContainer}
         id="layout_container"
       >
+        {ssr
+          ? getSSRLayout().map((data, index) => {
+              return (
+                <div key={index}>
+                  <p>{JSON.stringify(data)}</p>
+                </div>
+              );
+            })
+          : null}
         {(ssr ? getSSRLayout() : renderableLayout).map(
           (section, sectionIndex) => {
             return (
