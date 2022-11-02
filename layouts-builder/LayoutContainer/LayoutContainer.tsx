@@ -139,7 +139,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
   };
   const getLayout = () => {
     if (!ssr) {
-      return renderableLayout
+      return renderableLayout;
     }
     const cleanLayout = checkNotFoundData(
       actualLayout,
@@ -153,6 +153,8 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
     );
     return renderable;
   };
+  console.log('GETLAYOUT', getLayout().length);
+
   return (
     <div
       className="rlb-main-container m-auto"
@@ -164,80 +166,75 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
         onDragOver={handleDragOverContainer}
         id="layout_container"
       >
-        {getLayout().map(
-          (section, sectionIndex) => {
-            return (
+        {getLayout().map((section, sectionIndex) => {
+          return (
+            <div
+              key={section.id}
+              className="rlb-section rlb-section-container"
+            >
               <div
-                key={section.id}
-                className="rlb-section rlb-section-container"
+                className="rlb-section-content"
+                style={{
+                  width: section.width,
+                  maxWidth: '100%',
+                  margin: 'auto',
+                  ...(section.styles || {}),
+                }}
               >
                 <div
-                  className="rlb-section-content"
-                  style={{
-                    width: section.width,
-                    maxWidth: '100%',
-                    margin: 'auto',
-                    ...(section.styles || {}),
-                  }}
+                  className={classNames(
+                    isSectionContainer(section) ? 'p-2' : '',
+                    section.className,
+                  )}
+                  onClick={(e) => handleClickSection(section)}
                 >
-                  <div
-                    className={classNames(
-                      isSectionContainer(section) ? 'p-2' : '',
-                      section.className,
-                    )}
-                    onClick={(e) => handleClickSection(section)}
-                  >
-                    {section.rows.map((row, rowIndex) => {
-                      return (
-                        <LayoutRowContainer
-                          isMobile={isMobile}
-                          key={row.id}
-                          stableKey={stableKey}
-                          dragActive={dragActive}
-                          layouts={actualLayout}
-                          columns={row.columns}
-                          sectionId={section.id}
-                          rowId={row.id}
-                          disabled={disableChange}
-                          isLastSection={
-                            renderableLayout.length ===
-                            sectionIndex + 1
-                          }
-                          isFirstSection={sectionIndex === 0}
-                          needRowTarget={needRowTarget(
-                            renderableLayout,
-                            row,
-                            {
-                              rows: section.rows,
-                              sectionIndex,
-                              rowIndex,
-                            },
-                          )}
-                          renderComponent={renderComponent}
-                          setActualLayout={setActualLayout}
-                          onLayoutChange={onLayoutChange}
-                          imageCheckerFn={imageCheckerFn}
-                          imageSizeFnLoader={imageSizeFnLoader}
-                          onImageResizeFinished={
-                            onImageResizeFinished
-                          }
-                          setDragActive={setDragActive}
-                          onClickCol={(src) =>
-                            handleClickColumn({
-                              ...src,
-                              rowId: row.id,
-                              sectionId: section.id,
-                            })
-                          }
-                        />
-                      );
-                    })}
-                  </div>
+                  {section.rows.map((row, rowIndex) => {
+                    return (
+                      <LayoutRowContainer
+                        isMobile={isMobile}
+                        key={row.id}
+                        stableKey={stableKey}
+                        dragActive={dragActive}
+                        layouts={actualLayout}
+                        columns={row.columns}
+                        sectionId={section.id}
+                        rowId={row.id}
+                        disabled={disableChange}
+                        isLastSection={
+                          renderableLayout.length === sectionIndex + 1
+                        }
+                        isFirstSection={sectionIndex === 0}
+                        needRowTarget={needRowTarget(
+                          renderableLayout,
+                          row,
+                          {
+                            rows: section.rows,
+                            sectionIndex,
+                            rowIndex,
+                          },
+                        )}
+                        renderComponent={renderComponent}
+                        setActualLayout={setActualLayout}
+                        onLayoutChange={onLayoutChange}
+                        imageCheckerFn={imageCheckerFn}
+                        imageSizeFnLoader={imageSizeFnLoader}
+                        onImageResizeFinished={onImageResizeFinished}
+                        setDragActive={setDragActive}
+                        onClickCol={(src) =>
+                          handleClickColumn({
+                            ...src,
+                            rowId: row.id,
+                            sectionId: section.id,
+                          })
+                        }
+                      />
+                    );
+                  })}
                 </div>
               </div>
-            );
-          },
-        )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

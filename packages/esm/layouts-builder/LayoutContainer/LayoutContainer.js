@@ -144,6 +144,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     return renderable;
   };
 
+  console.log('GETLAYOUT', getLayout().length);
   return /*#__PURE__*/React.createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
