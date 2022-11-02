@@ -40,7 +40,7 @@ export interface ILayoutSection {
   backgroundImage?: string;
   container?: boolean;
   styles?: CSSProperties;
-  defaultWidth?: number | string
+  defaultWidth?: number | string;
 }
 
 export interface ILayoutLabels {
@@ -56,13 +56,14 @@ export interface ILayoutLabels {
 
 export interface ILayoutContainer {
   data: any[];
-  isMobile?: boolean
+  isMobile?: boolean;
   stableDataKey: string;
   staticComponent?: boolean;
   maxWidth?: number | string;
   maxColumns?: number;
   pageWidth?: number;
   colResize?: boolean;
+  ssr?: boolean;
   renderComponent: (
     data: any,
     layout: SourceType,

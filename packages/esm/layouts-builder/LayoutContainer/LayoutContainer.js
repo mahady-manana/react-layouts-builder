@@ -17,10 +17,10 @@ var LayoutContainer = function LayoutContainer(_a) {
   var data = _a.data,
       stableKey = _a.stableDataKey,
       layouts = _a.layouts,
-      disableChange = _a.disableChange;
-      _a.staticComponent;
-      var isMobile = _a.isMobile,
+      disableChange = _a.disableChange,
+      isMobile = _a.isMobile,
       maxWidth = _a.maxWidth,
+      ssr = _a.ssr,
       renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange,
       imageSizeFnLoader = _a.imageSizeFnLoader,
@@ -134,6 +134,12 @@ var LayoutContainer = function LayoutContainer(_a) {
     }
   };
 
+  var getSSRLayout = function getSSRLayout() {
+    var cleanLayout = checkNotFoundData(actualLayout, data, stableKey);
+    var renderable = createRenderableLayout(data, cleanLayout.layouts, stableKey);
+    return renderable;
+  };
+
   return /*#__PURE__*/React.createElement("div", {
     className: "rlb-main-container m-auto",
     style: {
@@ -144,7 +150,7 @@ var LayoutContainer = function LayoutContainer(_a) {
     ref: containeRef,
     onDragOver: handleDragOverContainer,
     id: "layout_container"
-  }, renderableLayout.map(function (section, sectionIndex) {
+  }, (ssr ? getSSRLayout() : renderableLayout).map(function (section, sectionIndex) {
     return /*#__PURE__*/React.createElement("div", {
       key: section.id,
       className: "rlb-section rlb-section-container"

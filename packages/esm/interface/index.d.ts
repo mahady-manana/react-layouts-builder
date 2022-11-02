@@ -60,6 +60,7 @@ export interface ILayoutContainer {
     maxColumns?: number;
     pageWidth?: number;
     colResize?: boolean;
+    ssr?: boolean;
     renderComponent: (data: any, layout: SourceType, index?: number) => ReactNode | any;
     onLayoutChange: (data: ILayoutSection[]) => void;
     layouts?: ILayoutSection[];
