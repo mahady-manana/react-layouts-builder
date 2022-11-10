@@ -186,7 +186,7 @@ var DraggableItem = function DraggableItem(_a) {
         (_b = img === null || img === void 0 ? void 0 : img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
-  }, [height]);
+  }, [height, isImage]);
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
@@ -195,10 +195,10 @@ var DraggableItem = function DraggableItem(_a) {
     ref: containerRef,
     onMouseMove: onMouseMouve,
     onMouseUp: onMouseLeaveOrUp,
-    onMouseLeave: onMouseLeaveOrUp
+    onMouseLeave: onMouseLeaveOrUp,
+    id: "rbl_image_".concat(dndTargetKey)
   }, isImage || isButton ? /*#__PURE__*/React.createElement("div", {
     className: "image_rlb",
-    id: "rbl_image_".concat(dndTargetKey),
     style: {
       width: isMobile ? '100%' : "".concat(width || 100, "%"),
       maxHeight: height ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,

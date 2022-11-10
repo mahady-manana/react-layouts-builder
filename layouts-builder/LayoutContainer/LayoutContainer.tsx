@@ -25,6 +25,7 @@ import { checkNotFoundData } from 'layouts-builder/helpers/checkNotFoundData';
 if (typeof window !== 'undefined') {
   import('layouts-builder/LayoutContainer/polyfill.js');
 }
+
 export const LayoutContainer: FC<ILayoutContainer> = ({
   data,
   stableDataKey: stableKey,

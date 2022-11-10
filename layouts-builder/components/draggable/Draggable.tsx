@@ -169,7 +169,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         (img as any)?.style?.setProperty('object-fit', `cover`);
       }
     }
-  }, [height]);
+  }, [height, isImage]);
 
   return (
     <div
@@ -185,11 +185,11 @@ export const DraggableItem: FC<DraggableProps> = ({
       onMouseMove={onMouseMouve}
       onMouseUp={onMouseLeaveOrUp}
       onMouseLeave={onMouseLeaveOrUp}
+      id={`rbl_image_${dndTargetKey}`}
     >
       {isImage || isButton ? (
         <div
           className="image_rlb"
-          id={`rbl_image_${dndTargetKey}`}
           style={{
             width: isMobile ? '100%' : `${width || 100}%`,
             maxHeight: height
