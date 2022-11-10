@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
   MouseEvent,
+  useCallback,
 } from 'react';
 
 interface DraggableProps {
@@ -159,17 +160,27 @@ export const DraggableItem: FC<DraggableProps> = ({
       runIt();
     }
   }, [waitBeforeUpdate]);
-  useEffect(() => {
-    if (height && !isMobile) {
-      const img = document.querySelector(
-        `#rbl_image_${dndTargetKey} img`,
-      );
+
+  const imageSize = useCallback(() => {
+    const img = document.querySelector(
+      `#rbl_image_${dndTargetKey} img`,
+    );
+    if (img && height && !isMobile) {
       if (img) {
         (img as any)?.style?.setProperty('max-height', `${height}px`);
         (img as any)?.style?.setProperty('object-fit', `cover`);
       }
     }
+    if (img && isMobile) {
+      if (img) {
+        (img as any)?.style?.setProperty('max-height', null);
+        (img as any)?.style?.setProperty('object-fit', `cover`);
+      }
+    }
   }, [height, isImage, isMobile]);
+  useEffect(() => {
+    imageSize();
+  }, [imageSize]);
 
   return (
     <div

@@ -1,5 +1,5 @@
 import classnames from '../../../node_modules/classnames/index.js';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 var DraggableItem = function DraggableItem(_a) {
   var children = _a.children,
@@ -175,18 +175,28 @@ var DraggableItem = function DraggableItem(_a) {
       runIt();
     }
   }, [waitBeforeUpdate]);
-  useEffect(function () {
-    var _a, _b;
+  var imageSize = useCallback(function () {
+    var _a, _b, _c, _d;
 
-    if (height && !isMobile) {
-      var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
+    var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
 
+    if (img && height && !isMobile) {
       if (img) {
         (_a = img === null || img === void 0 ? void 0 : img.style) === null || _a === void 0 ? void 0 : _a.setProperty('max-height', "".concat(height, "px"));
         (_b = img === null || img === void 0 ? void 0 : img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
+
+    if (img && isMobile) {
+      if (img) {
+        (_c = img === null || img === void 0 ? void 0 : img.style) === null || _c === void 0 ? void 0 : _c.setProperty('max-height', null);
+        (_d = img === null || img === void 0 ? void 0 : img.style) === null || _d === void 0 ? void 0 : _d.setProperty('object-fit', "cover");
+      }
+    }
   }, [height, isImage, isMobile]);
+  useEffect(function () {
+    imageSize();
+  }, [imageSize]);
   return /*#__PURE__*/React.createElement("div", {
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,
