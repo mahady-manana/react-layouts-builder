@@ -380,7 +380,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
   React.useEffect(function () {
     var _a, _b;
 
-    if (height) {
+    if (height && !isMobile) {
       var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
 
       if (img) {
@@ -388,7 +388,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
         (_b = img === null || img === void 0 ? void 0 : img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
-  }, [height, isImage]);
+  }, [height, isImage, isMobile]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
     "data-draggable": dndTargetKey,

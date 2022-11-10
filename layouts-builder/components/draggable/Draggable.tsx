@@ -160,7 +160,7 @@ export const DraggableItem: FC<DraggableProps> = ({
     }
   }, [waitBeforeUpdate]);
   useEffect(() => {
-    if (height) {
+    if (height && !isMobile) {
       const img = document.querySelector(
         `#rbl_image_${dndTargetKey} img`,
       );
@@ -169,7 +169,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         (img as any)?.style?.setProperty('object-fit', `cover`);
       }
     }
-  }, [height, isImage]);
+  }, [height, isImage, isMobile]);
 
   return (
     <div
