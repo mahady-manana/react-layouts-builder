@@ -198,9 +198,10 @@ export const DraggableItem: FC<DraggableProps> = ({
           className="image_rlb"
           style={{
             width: isMobile ? '100%' : `${width || 100}%`,
-            maxHeight: height
-              ? (height || sizes?.height || 0) + 30
-              : undefined,
+            maxHeight:
+              height && !isMobile
+                ? (height || sizes?.height || 0) + 30
+                : undefined,
             margin: oneCol || isCenter ? 'auto' : undefined,
           }}
         >

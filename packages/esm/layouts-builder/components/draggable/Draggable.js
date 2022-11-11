@@ -204,7 +204,7 @@ var DraggableItem = function DraggableItem(_a) {
     className: "image_rlb",
     style: {
       width: isMobile ? '100%' : "".concat(width || 100, "%"),
-      maxHeight: height ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,
+      maxHeight: height && !isMobile ? (height || (sizes === null || sizes === void 0 ? void 0 : sizes.height) || 0) + 30 : undefined,
       margin: oneCol || isCenter ? 'auto' : undefined
     }
   }, !disableChange && oneCol && !isMobile ? /*#__PURE__*/React.createElement("div", {
