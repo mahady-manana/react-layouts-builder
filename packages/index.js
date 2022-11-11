@@ -378,7 +378,7 @@ var DraggableItem$1 = function DraggableItem(_a) {
     }
   }, [waitBeforeUpdate]);
   var imageSize = React.useCallback(function () {
-    var _a, _b, _c, _d;
+    var _a, _b;
 
     var img = document.querySelector("#rbl_image_".concat(dndTargetKey, " img"));
 
@@ -388,19 +388,12 @@ var DraggableItem$1 = function DraggableItem(_a) {
         (_b = img === null || img === void 0 ? void 0 : img.style) === null || _b === void 0 ? void 0 : _b.setProperty('object-fit', "cover");
       }
     }
-
-    if (img && isMobile) {
-      if (img) {
-        (_c = img === null || img === void 0 ? void 0 : img.style) === null || _c === void 0 ? void 0 : _c.setProperty('max-height', null);
-        (_d = img === null || img === void 0 ? void 0 : img.style) === null || _d === void 0 ? void 0 : _d.setProperty('object-fit', "cover");
-      }
-    }
-  }, [height, isImage, isMobile]);
+  }, [height, isMobile]);
   React.useEffect(function () {
     imageSize();
   }, [imageSize]);
   return /*#__PURE__*/React__default["default"].createElement("div", {
-    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : ''),
+    className: classnames('rlb-draggable-container flex-grow', !disableChange ? 'draggable' : '', startResize ? 'resize-img' : '', isMobile ? 'image_no_max_h' : ''),
     "data-draggable": dndTargetKey,
     "data-draggable-id": dndTargetKey,
     "target-dnd-droppable": "".concat(dndTargetKey),
@@ -1636,7 +1629,7 @@ var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
 };
 
 if (typeof window !== 'undefined') {
-  Promise.resolve().then(function () { return require('./polyfill-e4cbd2be.js'); });
+  Promise.resolve().then(function () { return require('./polyfill-1e83fa0f.js'); });
 }
 
 var LayoutContainer = function LayoutContainer(_a) {

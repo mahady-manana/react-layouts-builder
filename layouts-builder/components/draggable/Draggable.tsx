@@ -171,13 +171,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         (img as any)?.style?.setProperty('object-fit', `cover`);
       }
     }
-    if (img && isMobile) {
-      if (img) {
-        (img as any)?.style?.setProperty('max-height', null);
-        (img as any)?.style?.setProperty('object-fit', `cover`);
-      }
-    }
-  }, [height, isImage, isMobile]);
+  }, [height, isMobile]);
   useEffect(() => {
     imageSize();
   }, [imageSize]);
@@ -188,6 +182,7 @@ export const DraggableItem: FC<DraggableProps> = ({
         'rlb-draggable-container flex-grow',
         !disableChange ? 'draggable' : '',
         startResize ? 'resize-img' : '',
+        isMobile ? 'image_no_max_h' : '',
       )}
       data-draggable={dndTargetKey}
       data-draggable-id={dndTargetKey}

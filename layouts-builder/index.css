@@ -305,3 +305,6 @@
 .rbl-col-container {
   /* height: 100%; */
 }
+.image_no_max_h img {
+  max-height: none !important;
+}
