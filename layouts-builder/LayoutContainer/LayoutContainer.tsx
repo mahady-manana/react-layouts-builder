@@ -183,7 +183,7 @@ export const LayoutContainer: FC<ILayoutContainer> = ({
               >
                 <div
                   className={classNames(
-                    isSectionContainer(section) ? 'p-2' : '',
+                    isSectionContainer(section) ? 'py-2' : '',
                     section.className,
                   )}
                   onClick={(e) => handleClickSection(section)}

@@ -1785,7 +1785,7 @@ var LayoutContainer = function LayoutContainer(_a) {
         margin: 'auto'
       }, section.styles || {})
     }, /*#__PURE__*/React__default["default"].createElement("div", {
-      className: classnames(isSectionContainer(section) ? 'p-2' : '', section.className),
+      className: classnames(isSectionContainer(section) ? 'py-2' : '', section.className),
       onClick: function onClick(e) {
         return handleClickSection(section);
       }
