@@ -363,6 +363,8 @@ export const LayoutRowContainer: FC<LayoutRowContainerProps> = ({
                           ? targetDROP
                           : undefined
                       }
+                      isMobile={isMobile}
+                      data={items}
                       disableSide={isMobile}
                       setTargetDROP={setTargetDROP}
                       onDragOver={(target) =>

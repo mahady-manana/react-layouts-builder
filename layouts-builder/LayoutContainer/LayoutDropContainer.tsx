@@ -18,6 +18,8 @@ interface DraggableProps {
   disableChange?: boolean;
   disableSide?: boolean;
   targetDROP?: TargetPlaceEnum;
+  data?: any;
+  isMobile?: boolean;
   setTargetDROP: Dispatch<
     SetStateAction<TargetPlaceEnum | undefined>
   >;
@@ -30,6 +32,8 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   disableChange,
   targetDROP,
   disableSide,
+  data,
+  isMobile,
   setTargetDROP,
   onDragOver,
   onDragLeave,
@@ -39,8 +43,7 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
   const activeDropRef = useRef<HTMLDivElement>(null);
   const [initY, setInitY] = useState<number>(0);
   const [checkAnomalie, setCheckAnomalie] = useState(500);
-  const {setIsDragStart} = useContext(AppContext)
-
+  const { setIsDragStart } = useContext(AppContext);
 
   useEffect(() => {
     if (checkAnomalie > 10) {
@@ -72,7 +75,6 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       onDragOver(nearest);
       setTargetDROP(undefined);
     }
-   
   };
 
   const findNearestTarget = (
@@ -114,11 +116,21 @@ export const LayoutDropContainer: FC<DraggableProps> = ({
       return;
     }
     onDrop(e);
-    setIsDragStart(false)
+    setIsDragStart(false);
     setTargetDROP(undefined);
     const el = document.getElementById('clonedElement');
     el?.remove();
   };
+
+  const shouldHideEmpty = (itemData: any) => {
+    const isMobileDelete = itemData?.options?.mobile === 'deleted';
+    return isMobileDelete && isMobile;
+  };
+
+  if (shouldHideEmpty(data)) {
+    return null;
+  }
+
   return (
     <div
       ref={containerRef}
