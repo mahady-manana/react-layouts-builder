@@ -303,6 +303,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return /*#__PURE__*/React.createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+          isMobile: isMobile,
+          data: items,
           disableSide: isMobile,
           setTargetDROP: setTargetDROP,
           onDragOver: function onDragOver(target) {

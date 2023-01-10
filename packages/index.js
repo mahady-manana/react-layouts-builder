@@ -998,6 +998,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       disableChange = _a.disableChange,
       targetDROP = _a.targetDROP,
       disableSide = _a.disableSide,
+      data = _a.data,
+      isMobile = _a.isMobile,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -1102,6 +1104,17 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     var el = document.getElementById('clonedElement');
     el === null || el === void 0 ? void 0 : el.remove();
   };
+
+  var shouldHideEmpty = function shouldHideEmpty(itemData) {
+    var _a;
+
+    var isMobileDelete = ((_a = itemData === null || itemData === void 0 ? void 0 : itemData.options) === null || _a === void 0 ? void 0 : _a.mobile) === 'deleted';
+    return isMobileDelete && isMobile;
+  };
+
+  if (shouldHideEmpty(data)) {
+    return null;
+  }
 
   return /*#__PURE__*/React__default["default"].createElement("div", {
     ref: containerRef,
@@ -1417,6 +1430,8 @@ var LayoutRowContainer = function LayoutRowContainer(_a) {
         return /*#__PURE__*/React__default["default"].createElement(LayoutDropContainer, {
           isLast: index + 1 === column.items.length && columns.length > 1,
           targetDROP: destination.itemKey === items[stableKey] ? targetDROP : undefined,
+          isMobile: isMobile,
+          data: items,
           disableSide: isMobile,
           setTargetDROP: setTargetDROP,
           onDragOver: function onDragOver(target) {
@@ -1629,7 +1644,7 @@ var checkNotFoundData = function checkNotFoundData(layouts, data, key) {
 };
 
 if (typeof window !== 'undefined') {
-  Promise.resolve().then(function () { return require('./polyfill-1e83fa0f.js'); });
+  Promise.resolve().then(function () { return require('./polyfill-4846a59c.js'); });
 }
 
 var LayoutContainer = function LayoutContainer(_a) {

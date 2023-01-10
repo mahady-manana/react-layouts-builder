@@ -7,6 +7,8 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
       disableChange = _a.disableChange,
       targetDROP = _a.targetDROP,
       disableSide = _a.disableSide,
+      data = _a.data,
+      isMobile = _a.isMobile,
       setTargetDROP = _a.setTargetDROP,
       onDragOver = _a.onDragOver,
       onDragLeave = _a.onDragLeave,
@@ -111,6 +113,17 @@ var LayoutDropContainer = function LayoutDropContainer(_a) {
     var el = document.getElementById('clonedElement');
     el === null || el === void 0 ? void 0 : el.remove();
   };
+
+  var shouldHideEmpty = function shouldHideEmpty(itemData) {
+    var _a;
+
+    var isMobileDelete = ((_a = itemData === null || itemData === void 0 ? void 0 : itemData.options) === null || _a === void 0 ? void 0 : _a.mobile) === 'deleted';
+    return isMobileDelete && isMobile;
+  };
+
+  if (shouldHideEmpty(data)) {
+    return null;
+  }
 
   return /*#__PURE__*/React.createElement("div", {
     ref: containerRef,

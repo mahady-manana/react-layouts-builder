@@ -6,6 +6,8 @@ interface DraggableProps {
     disableChange?: boolean;
     disableSide?: boolean;
     targetDROP?: TargetPlaceEnum;
+    data?: any;
+    isMobile?: boolean;
     setTargetDROP: Dispatch<SetStateAction<TargetPlaceEnum | undefined>>;
     onDragOver: (target: TargetPlaceEnum | undefined) => void;
     onDrop: (e: DragEvent<HTMLDivElement>) => void;
