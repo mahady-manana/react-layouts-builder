@@ -7,6 +7,8 @@ import React, {
   HTMLAttributes,
   ReactNode,
   useContext,
+  useEffect,
+  useRef,
 } from 'react';
 
 interface IAttributes {
@@ -25,35 +27,62 @@ export const DraggableItem: FC<DraggableItemProps> = ({
 }) => {
   const { currentLayouts, onDragStart, setSource, setIsDragStart } =
     useContext(AppContext);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onDragStart(draggableId);
+    setIsDragStart(true);
+    const source = findSourceLayout(currentLayouts, draggableId);
+    if (source) {
+      setSource(source);
+    }
+    const div = document.querySelector(
+      `div[data-draggable-id="${draggableId}"]`,
+    );
+
+    const cloned = div?.cloneNode(true) as HTMLElement | null;
+    cloned?.setAttribute('id', 'clonedElement');
+
+    document.body.appendChild(cloned as any);
+
+    event.dataTransfer.setDragImage(cloned as any, 0, 0);
+  };
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      node.addEventListener('dragstart', handleDragStart as any);
+    }
+    return () => {
+      if (node) {
+        node.removeEventListener('dragstart', handleDragStart as any);
+      }
+    };
+  }, [ref]);
+
+  const handleEnd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragStart(false);
+    const el = document.getElementById('clonedElement');
+    el?.remove();
+  };
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      node.addEventListener('dragend', handleEnd as any);
+    }
+    return () => {
+      if (node) {
+        node.removeEventListener('dragend', handleEnd as any);
+      }
+    };
+  }, [ref]);
+
   const draggableAttributes: HTMLAttributes<HTMLDivElement> | any = {
     draggable: true,
     draggableid: draggableId,
-    onDragStart: (e: DragEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      onDragStart(draggableId);
-      setIsDragStart(true);
-      const source = findSourceLayout(currentLayouts, draggableId);
-      if (source) {
-        setSource(source);
-      }
-      const div = document.querySelector(
-        `div[data-draggable-id="${draggableId}"]`,
-      );
-
-      const cloned = div?.cloneNode(true) as HTMLElement | null;
-      cloned?.setAttribute('id', 'clonedElement');
-
-      document.body.appendChild(cloned as any);
-
-      e.dataTransfer.setDragImage(cloned as any, 0, 0);
-    },
-    onDragEnd: (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragStart(false);
-      const el = document.getElementById('clonedElement');
-      el?.remove();
-    },
+    ref: ref,
   };
   return (
     <>
