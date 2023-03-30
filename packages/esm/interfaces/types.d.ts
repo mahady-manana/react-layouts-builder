@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 export declare type OptionsDrop = {
     item: LayoutType;
     type?: EnumBlockType;
@@ -15,8 +15,9 @@ export declare type LayoutType = {
 };
 export declare type LayoutBuilderProps = {
     layouts: LayoutType[];
-    onLayoutChange: (layouts: LayoutType[]) => void;
     loading?: ReactNode;
+    renderComponent: (block: any) => ReactNode | JSX.Element;
+    onLayoutChange: (layouts: LayoutType[]) => void;
 };
 export declare enum EnumBlockType {
     CONTAINER = "container",
@@ -29,3 +30,15 @@ export declare enum EnumPosition {
     LEFT = "left",
     RIGHT = "right"
 }
+export declare type CreateBlockOptions = {
+    layouts: LayoutType[];
+    block: any;
+    targetedBlockId?: string;
+};
+export declare type CreateBlock = (options: CreateBlockOptions) => LayoutType[];
+export declare type CreateContainerOptions = {
+    layouts: LayoutType[];
+    block: any;
+    targetedContainerId?: string;
+};
+export declare type CreateContainer = (options: CreateContainerOptions) => LayoutType[];

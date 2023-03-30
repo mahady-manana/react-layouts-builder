@@ -7,11 +7,12 @@ var LayoutRecursive = function LayoutRecursive(_a) {
   var data = _a.data,
       onDrop = _a.onDrop,
       isRow = _a.isRow,
-      type = _a.type;
+      type = _a.type,
+      renderBlock = _a.renderBlock;
   return /*#__PURE__*/React.createElement("div", {
     className: classnames(isRow ? 'lb-row' : '', "lb-".concat(type || 'wrapper'))
   }, data.map(function (container) {
-    var _a, _b, _c, _d;
+    var _a;
 
     return /*#__PURE__*/React.createElement(ContaierDropElement, {
       key: container.id,
@@ -25,12 +26,11 @@ var LayoutRecursive = function LayoutRecursive(_a) {
       isRow: ((_a = container.properties) === null || _a === void 0 ? void 0 : _a.orientation) === 'row',
       data: container.children,
       onDrop: onDrop,
-      type: container.type
+      type: container.type,
+      renderBlock: renderBlock
     }) : /*#__PURE__*/React.createElement("div", {
       className: "lb-block"
-    }, ((_b = container.block) === null || _b === void 0 ? void 0 : _b.type) === 'text' ? /*#__PURE__*/React.createElement("p", null, (_c = container.block) === null || _c === void 0 ? void 0 : _c.textContent) : null, ((_d = container.block) === null || _d === void 0 ? void 0 : _d.type) === 'LINK' ? /*#__PURE__*/React.createElement("button", {
-      className: "btn"
-    }, container.block.buttonText) : null)));
+    }, container.block ? renderBlock(container.block) : null)));
   }));
 };
 

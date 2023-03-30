@@ -4326,11 +4326,12 @@ var LayoutRecursive = function LayoutRecursive(_a) {
   var data = _a.data,
       onDrop = _a.onDrop,
       isRow = _a.isRow,
-      type = _a.type;
+      type = _a.type,
+      renderBlock = _a.renderBlock;
   return /*#__PURE__*/React__default["default"].createElement("div", {
     className: classnames(isRow ? 'lb-row' : '', "lb-".concat(type || 'wrapper'))
   }, data.map(function (container) {
-    var _a, _b, _c, _d;
+    var _a;
 
     return /*#__PURE__*/React__default["default"].createElement(ContaierDropElement, {
       key: container.id,
@@ -4344,17 +4345,17 @@ var LayoutRecursive = function LayoutRecursive(_a) {
       isRow: ((_a = container.properties) === null || _a === void 0 ? void 0 : _a.orientation) === 'row',
       data: container.children,
       onDrop: onDrop,
-      type: container.type
+      type: container.type,
+      renderBlock: renderBlock
     }) : /*#__PURE__*/React__default["default"].createElement("div", {
       className: "lb-block"
-    }, ((_b = container.block) === null || _b === void 0 ? void 0 : _b.type) === 'text' ? /*#__PURE__*/React__default["default"].createElement("p", null, (_c = container.block) === null || _c === void 0 ? void 0 : _c.textContent) : null, ((_d = container.block) === null || _d === void 0 ? void 0 : _d.type) === 'LINK' ? /*#__PURE__*/React__default["default"].createElement("button", {
-      className: "btn"
-    }, container.block.buttonText) : null)));
+    }, container.block ? renderBlock(container.block) : null)));
   }));
 };
 
 var LayoutBuilder = function LayoutBuilder(_a) {
   var layouts = _a.layouts,
+      renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange;
 
   var _b = React.useState([]),
@@ -4382,8 +4383,104 @@ var LayoutBuilder = function LayoutBuilder(_a) {
     backend: HTML5Backend
   }, internalLayouts.length ? /*#__PURE__*/React__default["default"].createElement(LayoutRecursive, {
     data: internalLayouts,
-    onDrop: handleDrop
+    onDrop: handleDrop,
+    renderBlock: renderComponent
   }) : /*#__PURE__*/React__default["default"].createElement("p", null, "Loading..."));
 };
 
+var createLayoutContainer = function createLayoutContainer(block) {
+  return {
+    id: v4(),
+    type: exports.EnumBlockType.CONTAINER,
+    children: [{
+      id: v4(),
+      type: exports.EnumBlockType.CHILDREN,
+      children: [{
+        id: v4(),
+        type: exports.EnumBlockType.BLOCK,
+        block: block
+      }]
+    }]
+  };
+};
+var createLayoutBlock = function createLayoutBlock(block) {
+  return {
+    id: v4(),
+    type: exports.EnumBlockType.BLOCK,
+    block: block
+  };
+};
+
+var createContainer = function createContainer(options) {
+  if (!options) {
+    throw new Error('createContainer(options: CreateContainerOptions): No options was found');
+  }
+
+  if (!options.layouts || !options.block) {
+    throw new Error('createContainer(options: CreateContainerOptions): Missing options: layouts and block  are required');
+  }
+
+  var layouts = options.layouts,
+      block = options.block,
+      targetedContainerId = options.targetedContainerId;
+  var container = createLayoutContainer(block);
+
+  if (!targetedContainerId) {
+    return layouts.concat(container);
+  }
+
+  return layouts.reduce(function (layout, next) {
+    if (next.id === targetedContainerId) {
+      return __spreadArray(__spreadArray([], layout, true), [next, container], false);
+    }
+
+    return layout;
+  }, []);
+};
+
+var createBlock = function createBlock(options) {
+  if (!options) {
+    throw new Error('createBlock(options: CreateBlockOptions): No options was found');
+  }
+
+  if (!options.layouts || !options.block) {
+    throw new Error('createBlock(options: CreateBlockOptions): Missing options: layouts and block  are required');
+  }
+
+  var layouts = options.layouts,
+      block = options.block,
+      targetedBlockId = options.targetedBlockId;
+
+  if (!targetedBlockId) {
+    return createContainer({
+      layouts: layouts,
+      block: block
+    });
+  }
+
+  return layouts.map(function (layout) {
+    var _a;
+
+    return __assign(__assign({}, layout), {
+      children: (_a = layout.children) === null || _a === void 0 ? void 0 : _a.map(function (child) {
+        var _a;
+
+        return __assign(__assign({}, child), {
+          children: (_a = child.children) === null || _a === void 0 ? void 0 : _a.reduce(function (acc, next) {
+            var _a;
+
+            if (((_a = next === null || next === void 0 ? void 0 : next.block) === null || _a === void 0 ? void 0 : _a.id) === targetedBlockId) {
+              return __spreadArray(__spreadArray([], acc, true), [next, createLayoutBlock(block)], false);
+            }
+
+            return acc.concat(next);
+          }, [])
+        });
+      })
+    });
+  });
+};
+
 exports.LayoutBuilder = LayoutBuilder;
+exports.createBlock = createBlock;
+exports.createContainer = createContainer;

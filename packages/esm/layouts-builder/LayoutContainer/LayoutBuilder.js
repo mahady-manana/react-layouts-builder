@@ -6,6 +6,7 @@ import { DndProvider } from '../../node_modules/react-dnd/dist/core/DndProvider.
 
 var LayoutBuilder = function LayoutBuilder(_a) {
   var layouts = _a.layouts,
+      renderComponent = _a.renderComponent,
       onLayoutChange = _a.onLayoutChange;
 
   var _b = useState([]),
@@ -33,7 +34,8 @@ var LayoutBuilder = function LayoutBuilder(_a) {
     backend: HTML5Backend
   }, internalLayouts.length ? /*#__PURE__*/React.createElement(LayoutRecursive, {
     data: internalLayouts,
-    onDrop: handleDrop
+    onDrop: handleDrop,
+    renderBlock: renderComponent
   }) : /*#__PURE__*/React.createElement("p", null, "Loading..."));
 };
 

@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { EnumBlockType, LayoutType } from "../interfaces/types";
 
-export const createContainer = (block: any): LayoutType => {
+export const createLayoutContainer = (block: any): LayoutType => {
   return {
     id: v4(),
     type: EnumBlockType.CONTAINER,
@@ -21,7 +21,7 @@ export const createContainer = (block: any): LayoutType => {
   };
 };
 
-export const createTopChildren = (block: any): LayoutType => {
+export const createLayoutChildren = (block: any): LayoutType => {
   return {
     id: v4(),
     type: EnumBlockType.CHILDREN,
