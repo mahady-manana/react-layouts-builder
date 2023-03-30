@@ -1,8 +1,8 @@
-import { createLayoutBlock } from 'layouts-builder/helpers/create';
+import { createLayoutBlock } from '../helpers/create';
 import {
   CreateBlock,
   LayoutType,
-} from 'layouts-builder/interfaces/types';
+} from '../interfaces/types';
 import { createContainer } from './createContainer';
 
 export const createBlock: CreateBlock = (options) => {

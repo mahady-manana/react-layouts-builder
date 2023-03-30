@@ -1,8 +1,8 @@
-import { createLayoutContainer } from 'layouts-builder/helpers/create';
+import { createLayoutContainer } from '../helpers/create';
 import {
   CreateContainer,
   LayoutType,
-} from 'layouts-builder/interfaces/types';
+} from '../interfaces/types';
 
 export const createContainer: CreateContainer = (options) => {
   if (!options) {

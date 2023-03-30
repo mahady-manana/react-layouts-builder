@@ -37,7 +37,7 @@ export const LayoutBuilder: FC<LayoutBuilderProps> = ({
     <DndProvider backend={HTML5Backend}>
       {internalLayouts.length ? (
         <LayoutRecursive
-          data={internalLayouts}
+          layouts={internalLayouts}
           onDrop={handleDrop}
           renderBlock={renderComponent}
         />
