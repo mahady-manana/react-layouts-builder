@@ -1,8 +1,12 @@
-import classNames from "classnames";
-import React, { FC, ReactNode } from "react";
-import { EnumBlockType, LayoutType, OptionsDrop } from "../interfaces/types";
-import { ContaierDropElement } from "./ContaierDropElement";
-import { ContainerDragElement } from "./ContainerDragElement";
+import classNames from 'classnames';
+import React, { FC, ReactNode } from 'react';
+import {
+  EnumBlockType,
+  LayoutType,
+  OptionsDrop,
+} from '../interfaces/types';
+import { ContaierDropElement } from './ContaierDropElement';
+import { ContainerDragElement } from './ContainerDragElement';
 
 interface LayoutBuilderProps {
   type?: EnumBlockType;
@@ -20,8 +24,8 @@ export const LayoutRecursive: FC<LayoutBuilderProps> = ({
   return (
     <div
       className={classNames(
-        type === "row" ? "lb-row" : "",
-        `lb-${type || "wrapper"}`
+        type === 'row' ? 'lb-row' : '',
+        `lb-${type || 'wrapper'}`,
       )}
     >
       {layouts.map((container) => {
@@ -30,11 +34,10 @@ export const LayoutRecursive: FC<LayoutBuilderProps> = ({
         return (
           <ContaierDropElement
             key={container.id}
-            type={container.type as EnumBlockType}
             data={container}
             onDrop={onDrop}
           >
-            <ContainerDragElement data={container} type={container.type}>
+            <ContainerDragElement data={container}>
               {children ? (
                 <LayoutRecursive
                   layouts={container.children as any}
@@ -44,7 +47,9 @@ export const LayoutRecursive: FC<LayoutBuilderProps> = ({
                 />
               ) : (
                 <div className="lb-block">
-                  {container.block ? renderBlock(container.block) : null}
+                  {container.block
+                    ? renderBlock(container.block)
+                    : null}
                 </div>
               )}
             </ContainerDragElement>
