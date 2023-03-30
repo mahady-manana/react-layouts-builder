@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import { mockData } from '../data/data';
+import { layoutData } from '../data/data';
 import {
   LayoutContainer,
   ILayoutSection,
@@ -15,7 +20,7 @@ import { TestComponent } from './TestComponent';
 import './style.css';
 
 export const Layouts1 = () => {
-  const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>([]);
+  const [layoutTest, setLayoutTest] = useState<ILayoutSection[]>(layoutData as any);
   const [data, setData] = useState<any[]>([]);
   const [nodata, setnodata] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,41 +32,44 @@ export const Layouts1 = () => {
     changeSectionContainerStyles,
     changeColumnContainerStyles,
   } = useContainerStyles();
-  const handleLayoutChange = (layouts: ILayoutSection[]) => {
-    setLayoutTest(layouts);
-    storage.set(layouts);
-  };
-  useEffect(() => {
-    const l = storage.get();
+  const handleLayoutChange = useCallback(
+    (layouts: ILayoutSection[]) => {
+      // setLayoutTest(layouts);
+      // storage.set(layouts);
+    },
+    [],
+  );
+  // useEffect(() => {
+  //   const l = storage.get();
 
-    setTimeout(() => {
-      if (l?.length > 0) {
-        setLayoutTest(l);
-      } else {
-        setnodata(true);
-      }
-      setLoading(false);
-    }, 1000);
-  }, []);
+  //   setTimeout(() => {
+  //     if (l?.length > 0) {
+  //       setLayoutTest(l);
+  //     } else {
+  //       setnodata(true);
+  //     }
+  //     setLoading(false);
+  //   }, 1000);
+  // }, []);
 
-  useEffect(() => {
-    if (!loading && nodata && data) {
-      const c = createLayout(data, 'id', undefined, { width: 800 });
-      setLayoutTest(c);
-    }
-  }, [loading, data, nodata]);
+  // useEffect(() => {
+  //   if (!loading && nodata && data) {
+  //     const c = createLayout(data, 'id', undefined, { width: 800 });
+  //     setLayoutTest(c);
+  //   }
+  // }, [loading, data, nodata]);
 
-  useEffect(() => {
-    setData(mockData);
-  }, []);
+  // useEffect(() => {
+  //   setData(layoutData);
+  // }, []);
 
-  const onFocus = (items: any) => {
+  const onFocus = useCallback((items: any) => {
     setFocusItem(items);
-  };
+  }, []);
 
-  const imageCheckerFn = (items: any) => {
+  const imageCheckerFn = useCallback((items: any) => {
     return items.img ? true : false;
-  };
+  }, []);
 
   const changeStyle = (color: string) => {
     if (sourceContainer) {
@@ -86,7 +94,27 @@ export const Layouts1 = () => {
       storage.set(layouts);
     }
   };
-  const handleDelete = (id: number) => {};
+
+  const rendercomponent = useMemo(
+    () => (data: any) => {
+      return (
+        <TestComponent
+          data={data}
+          onClick={(d) => setFocused(d.id)}
+          focused={data.id === focused}
+        />
+      );
+    },
+    [],
+  );
+  const clicksection = useCallback((section) => {
+    setSourceContainer(section);
+  }, []);
+  const ccl = useCallback((section) => {
+    setSourceContainer(section);
+  }, []);
+  const imLL = useMemo(() => (item) => item.size, []);
+
   return (
     <div
       // style={{ height: '100vh', width: 800 }}
@@ -106,9 +134,9 @@ export const Layouts1 = () => {
           marginInline: 'auto',
         }}
       >
-        {loading ? (
+        {/* {loading ? (
           <div>loading...</div>
-        ) : (
+        ) : ( */}
           <LayoutProvider>
             <LayoutContainer
               isMobile={false}
@@ -118,31 +146,15 @@ export const Layouts1 = () => {
               layouts={layoutTest}
               staticComponent={false}
               onLayoutChange={handleLayoutChange}
-              onClickSection={(section) => {
-                setSourceContainer(section);
-              }}
-              onClickColumn={(section) => {
-                setSourceContainer(section);
-              }}
+              // onClickSection={clicksection}
+              onClickColumn={ccl}
               onFocusItem={onFocus}
               imageCheckerFn={imageCheckerFn}
-              imageSizeFnLoader={(item) => item.size}
-              onImageResizeFinished={(item, w) =>
-                console.log(item, w)
-              }
-              renderComponent={(data) => {
-                return (
-                  <TestComponent
-                    data={data}
-                    onClick={(d) => setFocused(d.id)}
-                    focused={data.id === focused}
-                    onDelete={handleDelete}
-                  />
-                );
-              }}
+              imageSizeFnLoader={imLL}
+              renderComponent={rendercomponent}
             />
           </LayoutProvider>
-        )}
+        {/* )} */}
       </div>
       <div
         className="absolute"

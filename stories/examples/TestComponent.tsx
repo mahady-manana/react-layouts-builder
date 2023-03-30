@@ -1,43 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ComponentTestts } from './ComponentTest';
-import { DraggableItem } from '../../packages';
+import { DraggableWrapper } from '../../packages';
 
 interface Props {
-  data:
-    | {
-        id: number;
-        text: string;
-        group: string;
-        bg: string;
-        img: string;
-        size: number;
-      }
-    | {
-        id: number;
-        text: string;
-        group: string;
-        bg: string;
-        img?: undefined;
-        size?: undefined;
-      }
-    | {
-        id: number;
-        text: string;
-        group: string;
-        bg: string;
-        img: string;
-        size?: undefined;
-      };
-
+  data: any;
   onClick: (data: any) => void;
   focused?: boolean;
   component?: any;
-  onDelete: (id: number) => void;
 }
 
 export const TestComponent = React.memo((props: Props) => {
   return (
-    <DraggableItem draggableId={`${props.data.id}`}>
+    <DraggableWrapper draggableId={`${props.data.id}`}>
       {({ draggableProps, styles }) => {
         return (
           <div
@@ -67,16 +41,21 @@ export const TestComponent = React.memo((props: Props) => {
             >
               ...
             </div>
-            {props.data.img ? (
-              <img src={props.data.img} width="100%" alt="" />
-            ) : (props.data as any).linkType === 'link' ? (
-              <button>{props.data.text}</button>
-            ) : (
-              <p>Data : {props.data.text}</p>
-            )}
+            {props.data.type === 'text' ? (
+              <div className='txt'>
+                <p>{props.data.textContent}</p>
+              </div>
+            ) : null}
+            {props.data.type === 'LINK' ? (
+              <div>
+                <button className="btn bg-primary text-white">
+                  {props.data.buttonText}
+                </button>
+              </div>
+            ) : null}
           </div>
         );
       }}
-    </DraggableItem>
+    </DraggableWrapper>
   );
 });

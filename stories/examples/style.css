@@ -6,3 +6,17 @@ img {
 .containersb {
     padding: 20px;
 }
+
+.btn {
+    background-color: blue;
+    color: white;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+} 
+.txt {
+    padding: 10px;
+    padding-left: 40px;
+    background-color: aliceblue;
+}
