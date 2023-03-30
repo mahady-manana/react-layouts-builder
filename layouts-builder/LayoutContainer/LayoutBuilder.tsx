@@ -11,6 +11,7 @@ import { LayoutRecursive } from './LayoutRecursive';
 
 export const LayoutBuilder: FC<LayoutBuilderProps> = ({
   layouts,
+  renderComponent,
   onLayoutChange,
 }) => {
   const [internalLayouts, setInternalLayouts] = useState<
@@ -35,7 +36,11 @@ export const LayoutBuilder: FC<LayoutBuilderProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       {internalLayouts.length ? (
-        <LayoutRecursive data={internalLayouts} onDrop={handleDrop} />
+        <LayoutRecursive
+          data={internalLayouts}
+          onDrop={handleDrop}
+          renderBlock={renderComponent}
+        />
       ) : (
         <p>Loading...</p>
       )}

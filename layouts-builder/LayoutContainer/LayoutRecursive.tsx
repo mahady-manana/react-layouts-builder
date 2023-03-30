@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import {
   EnumBlockType,
   LayoutType,
@@ -13,6 +13,7 @@ interface LayoutBuilderProps {
   data: LayoutType[];
   isRow?: boolean;
   onDrop: (options: OptionsDrop) => void;
+  renderBlock: (block: any) => ReactNode | JSX.Element;
 }
 
 export const LayoutRecursive: FC<LayoutBuilderProps> = ({
@@ -20,6 +21,7 @@ export const LayoutRecursive: FC<LayoutBuilderProps> = ({
   onDrop,
   isRow,
   type,
+  renderBlock,
 }) => {
   return (
     <div
@@ -46,17 +48,13 @@ export const LayoutRecursive: FC<LayoutBuilderProps> = ({
                   data={container.children as any}
                   onDrop={onDrop}
                   type={container.type}
+                  renderBlock={renderBlock}
                 />
               ) : (
                 <div className="lb-block">
-                  {container.block?.type === 'text' ? (
-                    <p>{container.block?.textContent}</p>
-                  ) : null}
-                  {container.block?.type === 'LINK' ? (
-                    <button className="btn">
-                      {container.block.buttonText}
-                    </button>
-                  ) : null}
+                  {container.block
+                    ? renderBlock(container.block)
+                    : null}
                 </div>
               )}
             </ContainerDragElement>

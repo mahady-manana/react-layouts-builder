@@ -17,8 +17,9 @@ export type LayoutType = {
 
 export type LayoutBuilderProps = {
   layouts: LayoutType[];
-  onLayoutChange: (layouts: LayoutType[]) => void;
   loading?: ReactNode;
+  renderComponent: (block: any) => ReactNode | JSX.Element
+  onLayoutChange: (layouts: LayoutType[]) => void;
 };
 export enum EnumBlockType {
   CONTAINER = "container",
